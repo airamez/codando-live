@@ -24,6 +24,7 @@ public class SortedListApp
     {
       Console.Write($"[{entry.Key}={entry.Value}] ");
     }
+    Console.WriteLine();
 
     Console.WriteLine(sortedlist[1]);
     Console.WriteLine(sortedlist[2]);
