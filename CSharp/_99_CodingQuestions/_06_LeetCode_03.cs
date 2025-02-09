@@ -8,6 +8,42 @@ namespace CodingQuestions;
 
 public class LeetCode_03
 {
+
+  public int LengthOfLongestSubstringWithSlidingWindow(string s)
+  {
+    if (s == null || s.Length == 0)
+    {
+      return 0;
+    }
+    if (s.Length == 1)
+    {
+      return 1;
+    }
+    int left = 0;
+    int right = 1;
+    var set = new HashSet<int>();
+    set.Add(s[0]);
+    int maxLength = 0;
+    while (right < s.Length)
+    {
+      char c = s[right];
+      if (set.Contains(c))
+      {
+        while (s[left] != c)
+        {
+          set.Remove(s[left]);
+          left++;
+        }
+        left++;
+        set.Remove(c);
+      }
+      set.Add(s[right]);
+      maxLength = Math.Max(maxLength, set.Count);
+      right++;
+    }
+    return maxLength;
+  }
+
   public int LengthOfLongestSubstring(string s)
   {
     if (s == null || s.Length == 0)
