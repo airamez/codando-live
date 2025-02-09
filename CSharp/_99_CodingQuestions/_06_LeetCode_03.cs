@@ -9,6 +9,34 @@ namespace CodingQuestions;
 public class LeetCode_03
 {
 
+  public int LengthOfLongestSubstringWithSlidingWindowImproved(string s)
+  {
+    if (s == null || s.Length == 0)
+    {
+      return 0;
+    }
+    if (s.Length == 1)
+    {
+      return 1;
+    }
+    int left = 0;
+    int right = 0;
+    int maxLength = 0;
+    var dict = new Dictionary<char, int>();
+    while (right < s.Length)
+    {
+      char c = s[right];
+      if (dict.ContainsKey(c))
+      {
+        left = Math.Max(left, dict[c] + 1);
+      }
+      dict[c] = right;
+      maxLength = Math.Max(maxLength, right - left + 1);
+      right++;
+    }
+    return maxLength;
+  }
+
   public int LengthOfLongestSubstringWithSlidingWindow(string s)
   {
     if (s == null || s.Length == 0)
