@@ -160,14 +160,20 @@
   * SortedList
   * SortedSet
   * Stack
-
+* Intro to Leetcode and interview
+  * Question resolution and interview tips
 * .Net API
+  * StringBuilder
+  * DateTime
   * Files
     * Text
+    * CSV
     * XML
     * JSON
-  * DateTime
-  * etc
+    * Parquet
+    * Binary
+  * HTTP Request
+  * Send Email
 
 ## Introduction to SQL
 
