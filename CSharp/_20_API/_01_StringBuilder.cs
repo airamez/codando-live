@@ -12,17 +12,17 @@ public class StringBuilderApp
   {
     Stopwatch stopwatch = new Stopwatch();
 
-    const int LENGTH = 200_000;
+    const int LENGTH = 100_000;
     Console.WriteLine($"Length = {LENGTH:N0}");
 
-    //DemoString(stopwatch, LENGTH);
+    DemoString(stopwatch, LENGTH);
 
     DemoStringBuilder(stopwatch, LENGTH);
   }
 
   private static void DemoString(Stopwatch stopwatch, int LENGTH)
   {
-    stopwatch.Start();
+    stopwatch.Restart();
     long memoryBefore = GC.GetTotalMemory(true);
     Console.WriteLine($"Memory before: {memoryBefore / (1024 * 1024):N0} MB");
 
@@ -39,7 +39,7 @@ public class StringBuilderApp
 
   private static void DemoStringBuilder(Stopwatch stopwatch, int LENGTH)
   {
-    stopwatch.Start();
+    stopwatch.Restart();
     long memoryBefore = GC.GetTotalMemory(true);
     Console.WriteLine($"Memory before: {memoryBefore / (1024 * 1024):N0} MB");
 

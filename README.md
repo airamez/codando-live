@@ -285,3 +285,4 @@
 | 241 | [Leetcode 3. Longest Substring Without Repeating Characters (with Sliding Window)](https://youtube.com/live/LvBLowi-Tls) | [CSharp/_99_CodingQuestions/_06_LeetCode_03.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_99_CodingQuestions/_06_LeetCode_03.cs) |
 | 242 | [Leetcode 3. Longest Substring Without Repeating Characters (with Sliding Window - Improved)](https://youtube.com/live/h5S42sLIFPQ) | [CSharp/_99_CodingQuestions/_06_LeetCode_03.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_99_CodingQuestions/_06_LeetCode_03.cs) |
 | 243 | [API - StringBuilder](https://youtube.com/live/AhW0FrCQt18) | [CSharp/_20_API/_01_StringBuilder.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_01_StringBuilder.cs) |
+| 244 | [API - StringBuilder - Demo](https://youtube.com/live/Eg-1mlb2Phk) | [CSharp/_20_API/_01_StringBuilderDemo.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_01_StringBuilderDemo.cs) |
