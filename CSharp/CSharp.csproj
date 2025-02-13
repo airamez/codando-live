@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-		<StartupObject>DotNetAPI.StringBuilderDemoApp</StartupObject>
+		<StartupObject>DotNetAPI.DateTimeApp</StartupObject>
   </PropertyGroup>
   <ItemGroup>
       <PackageReference Include="coverlet.msbuild" Version="6.0.1">
