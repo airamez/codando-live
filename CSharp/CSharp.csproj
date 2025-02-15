@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-		<StartupObject>DotNetAPI.TextFileApp</StartupObject>
+		<StartupObject>DotNetAPI.DirectoryAndFileApp</StartupObject>
   </PropertyGroup>
   <ItemGroup>
       <PackageReference Include="coverlet.msbuild" Version="6.0.1">

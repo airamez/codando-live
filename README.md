@@ -288,3 +288,4 @@
 | 244 | [API - StringBuilder - Demo](https://youtube.com/live/Eg-1mlb2Phk) | [CSharp/_20_API/_01_StringBuilderDemo.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_01_StringBuilderDemo.cs) |
 | 244 | [API - DateTime](https://youtube.com/live/Eg-1mlb2Phk) | [CSharp/_20_API/_02_DateTime.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_02_DateTime.cs) |
 | 245 | [API - Text File](https://youtube.com/live/XjjC-JBy4f0) | [CSharp/_20_API/_03_TextFile.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_03_TextFile.cs) |
+| 246 | [API - Directory and File](https://youtube.com/live/RHa_Cec1CEo) | [CSharp/_20_API/_04_DirectoryAndFile.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_04_DirectoryAndFile.cs) |
