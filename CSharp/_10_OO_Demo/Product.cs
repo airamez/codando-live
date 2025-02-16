@@ -1,3 +1,6 @@
+/*
+
+*/
 using System;
 
 namespace OurStore;
@@ -13,6 +16,12 @@ public class Product
     ID = id;
     Description = description;
     Price = price;
+  }
+
+  // Default constructor required for XML serialization
+  public Product()
+  {
+
   }
 
   public override string ToString()

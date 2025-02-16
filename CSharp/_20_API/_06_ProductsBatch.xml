@@ -1,0 +1,503 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Products>
+  <Product>
+    <ID>1</ID>
+    <Description>Laptop, 16GB RAM</Description>
+    <Price>1299.99</Price>
+  </Product>
+  <Product>
+    <ID>2</ID>
+    <Description>Wireless Mouse</Description>
+    <Price>29.99</Price>
+  </Product>
+  <Product>
+    <ID>3</ID>
+    <Description>Mechanical Keyboard</Description>
+    <Price>89.99</Price>
+  </Product>
+  <Product>
+    <ID>4</ID>
+    <Description>Monitor 24" Full HD</Description>
+    <Price>199.99</Price>
+  </Product>
+  <Product>
+    <ID>5</ID>
+    <Description>External HDD 1TB</Description>
+    <Price>79.99</Price>
+  </Product>
+  <Product>
+    <ID>6</ID>
+    <Description>USB-C Docking Station</Description>
+    <Price>129.49</Price>
+  </Product>
+  <Product>
+    <ID>7</ID>
+    <Description>Gaming Headset</Description>
+    <Price>59.99</Price>
+  </Product>
+  <Product>
+    <ID>8</ID>
+    <Description>Office Chair</Description>
+    <Price>249.99</Price>
+  </Product>
+  <Product>
+    <ID>9</ID>
+    <Description>Smartphone 128GB</Description>
+    <Price>799.99</Price>
+  </Product>
+  <Product>
+    <ID>10</ID>
+    <Description>Bluetooth Speaker</Description>
+    <Price>49.99</Price>
+  </Product>
+  <Product>
+    <ID>11</ID>
+    <Description>Graphics Card RTX 3060</Description>
+    <Price>349.99</Price>
+  </Product>
+  <Product>
+    <ID>12</ID>
+    <Description>Ergonomic Mouse Pad</Description>
+    <Price>14.99</Price>
+  </Product>
+  <Product>
+    <ID>13</ID>
+    <Description>4K UHD Monitor</Description>
+    <Price>499.99</Price>
+  </Product>
+  <Product>
+    <ID>14</ID>
+    <Description>High-Speed HDMI Cable</Description>
+    <Price>9.99</Price>
+  </Product>
+  <Product>
+    <ID>15</ID>
+    <Description>Mechanical Pencil</Description>
+    <Price>2.99</Price>
+  </Product>
+  <Product>
+    <ID>16</ID>
+    <Description>Noise Cancelling Headphones</Description>
+    <Price>299.99</Price>
+  </Product>
+  <Product>
+    <ID>17</ID>
+    <Description>Power Bank 20000mAh</Description>
+    <Price>39.99</Price>
+  </Product>
+  <Product>
+    <ID>18</ID>
+    <Description>Wireless Earbuds</Description>
+    <Price>119.99</Price>
+  </Product>
+  <Product>
+    <ID>19</ID>
+    <Description>USB Flash Drive 128GB</Description>
+    <Price>22.49</Price>
+  </Product>
+  <Product>
+    <ID>20</ID>
+    <Description>Portable SSD 500GB</Description>
+    <Price>89.99</Price>
+  </Product>
+  <Product>
+    <ID>21</ID>
+    <Description>Smartwatch Series 6</Description>
+    <Price>399.99</Price>
+  </Product>
+  <Product>
+    <ID>22</ID>
+    <Description>Adjustable Standing Desk</Description>
+    <Price>499.99</Price>
+  </Product>
+  <Product>
+    <ID>23</ID>
+    <Description>Laptop Stand</Description>
+    <Price>39.99</Price>
+  </Product>
+  <Product>
+    <ID>24</ID>
+    <Description>External GPU Enclosure</Description>
+    <Price>279.99</Price>
+  </Product>
+  <Product>
+    <ID>25</ID>
+    <Description>Surge Protector with USB</Description>
+    <Price>34.99</Price>
+  </Product>
+  <Product>
+    <ID>26</ID>
+    <Description>Smart Light Bulb</Description>
+    <Price>12.99</Price>
+  </Product>
+  <Product>
+    <ID>27</ID>
+    <Description>VR Headset</Description>
+    <Price>599.99</Price>
+  </Product>
+  <Product>
+    <ID>28</ID>
+    <Description>Wireless Charging Pad</Description>
+    <Price>24.99</Price>
+  </Product>
+  <Product>
+    <ID>29</ID>
+    <Description>Electric Scooter</Description>
+    <Price>899.99</Price>
+  </Product>
+  <Product>
+    <ID>30</ID>
+    <Description>Dash Cam</Description>
+    <Price>79.99</Price>
+  </Product>
+  <Product>
+    <ID>31</ID>
+    <Description>Graphics Tablet</Description>
+    <Price>179.99</Price>
+  </Product>
+  <Product>
+    <ID>32</ID>
+    <Description>3D Printer</Description>
+    <Price>449.99</Price>
+  </Product>
+  <Product>
+    <ID>33</ID>
+    <Description>Mechanical Gaming Mouse</Description>
+    <Price>59.99</Price>
+  </Product>
+  <Product>
+    <ID>34</ID>
+    <Description>Compact Mechanical Keyboard</Description>
+    <Price>99.99</Price>
+  </Product>
+  <Product>
+    <ID>35</ID>
+    <Description>Streaming Webcam</Description>
+    <Price>69.99</Price>
+  </Product>
+  <Product>
+    <ID>36</ID>
+    <Description>Tripod Stand</Description>
+    <Price>29.99</Price>
+  </Product>
+  <Product>
+    <ID>37</ID>
+    <Description>Microphone for Podcasting</Description>
+    <Price>149.99</Price>
+  </Product>
+  <Product>
+    <ID>38</ID>
+    <Description>Wireless Presentation Remote</Description>
+    <Price>19.99</Price>
+  </Product>
+  <Product>
+    <ID>39</ID>
+    <Description>Document Scanner</Description>
+    <Price>199.99</Price>
+  </Product>
+  <Product>
+    <ID>40</ID>
+    <Description>High-Speed Portable SSD</Description>
+    <Price>139.99</Price>
+  </Product>
+  <Product>
+    <ID>41</ID>
+    <Description>PC Case with RGB</Description>
+    <Price>109.99</Price>
+  </Product>
+  <Product>
+    <ID>42</ID>
+    <Description>Liquid CPU Cooler</Description>
+    <Price>129.99</Price>
+  </Product>
+  <Product>
+    <ID>43</ID>
+    <Description>PCIe NVMe SSD 1TB</Description>
+    <Price>149.99</Price>
+  </Product>
+  <Product>
+    <ID>44</ID>
+    <Description>WiFi 6 Router</Description>
+    <Price>179.99</Price>
+  </Product>
+  <Product>
+    <ID>45</ID>
+    <Description>External Blu-ray Drive</Description>
+    <Price>79.99</Price>
+  </Product>
+  <Product>
+    <ID>46</ID>
+    <Description>Budget Gaming Mouse</Description>
+    <Price>29.99</Price>
+  </Product>
+  <Product>
+    <ID>47</ID>
+    <Description>Premium Desk Lamp</Description>
+    <Price>49.99</Price>
+  </Product>
+  <Product>
+    <ID>48</ID>
+    <Description>Ergonomic Keyboard Wrist Rest</Description>
+    <Price>19.99</Price>
+  </Product>
+  <Product>
+    <ID>49</ID>
+    <Description>NAS Storage Server</Description>
+    <Price>599.99</Price>
+  </Product>
+  <Product>
+    <ID>50</ID>
+    <Description>Smart Thermostat</Description>
+    <Price>249.99</Price>
+  </Product>
+  <Product>
+    <ID>51</ID>
+    <Description>Compact Power Strip</Description>
+    <Price>21.99</Price>
+  </Product>
+  <Product>
+    <ID>52</ID>
+    <Description>1080p Projector</Description>
+    <Price>399.99</Price>
+  </Product>
+  <Product>
+    <ID>53</ID>
+    <Description>Standing Desk Converter</Description>
+    <Price>129.99</Price>
+  </Product>
+  <Product>
+    <ID>54</ID>
+    <Description>Desktop Microphone</Description>
+    <Price>99.99</Price>
+  </Product>
+  <Product>
+    <ID>55</ID>
+    <Description>Smart Doorbell Camera</Description>
+    <Price>199.99</Price>
+  </Product>
+  <Product>
+    <ID>56</ID>
+    <Description>Noise-Isolating Earbuds</Description>
+    <Price>89.99</Price>
+  </Product>
+  <Product>
+    <ID>57</ID>
+    <Description>Waterproof Bluetooth Speaker</Description>
+    <Price>59.99</Price>
+  </Product>
+  <Product>
+    <ID>58</ID>
+    <Description>Laptop Cooling Pad</Description>
+    <Price>29.99</Price>
+  </Product>
+  <Product>
+    <ID>59</ID>
+    <Description>Home Security Camera</Description>
+    <Price>149.99</Price>
+  </Product>
+  <Product>
+    <ID>60</ID>
+    <Description>Smart Plug with Alexa</Description>
+    <Price>24.99</Price>
+  </Product>
+  <Product>
+    <ID>61</ID>
+    <Description>Gaming Laptop</Description>
+    <Price>1499.99</Price>
+  </Product>
+  <Product>
+    <ID>62</ID>
+    <Description>Wireless Keyboard and Mouse</Description>
+    <Price>69.99</Price>
+  </Product>
+  <Product>
+    <ID>63</ID>
+    <Description>Robot Vacuum Cleaner</Description>
+    <Price>299.99</Price>
+  </Product>
+  <Product>
+    <ID>64</ID>
+    <Description>Mechanical RGB Keyboard</Description>
+    <Price>109.99</Price>
+  </Product>
+  <Product>
+    <ID>65</ID>
+    <Description>Compact Wireless Mouse</Description>
+    <Price>34.99</Price>
+  </Product>
+  <Product>
+    <ID>66</ID>
+    <Description>USB Hub 10 Ports</Description>
+    <Price>49.99</Price>
+  </Product>
+  <Product>
+    <ID>67</ID>
+    <Description>Ultrawide Monitor 34 Inch</Description>
+    <Price>699.99</Price>
+  </Product>
+  <Product>
+    <ID>68</ID>
+    <Description>Portable Charger 10000mAh</Description>
+    <Price>29.99</Price>
+  </Product>
+  <Product>
+    <ID>69</ID>
+    <Description>Smart Ceiling Fan</Description>
+    <Price>199.99</Price>
+  </Product>
+  <Product>
+    <ID>70</ID>
+    <Description>Wireless HDMI Adapter</Description>
+    <Price>79.99</Price>
+  </Product>
+  <Product>
+    <ID>71</ID>
+    <Description>Smartphone Gimbal</Description>
+    <Price>119.99</Price>
+  </Product>
+  <Product>
+    <ID>72</ID>
+    <Description>Smart Alarm Clock</Description>
+    <Price>49.99</Price>
+  </Product>
+  <Product>
+    <ID>73</ID>
+    <Description>Smart Home Hub</Description>
+    <Price>129.99</Price>
+  </Product>
+  <Product>
+    <ID>74</ID>
+    <Description>Cordless Vacuum Cleaner</Description>
+    <Price>249.99</Price>
+  </Product>
+  <Product>
+    <ID>75</ID>
+    <Description>1080p Video Capture Card</Description>
+    <Price>179.99</Price>
+  </Product>
+  <Product>
+    <ID>76</ID>
+    <Description>High-Fidelity Soundbar</Description>
+    <Price>349.99</Price>
+  </Product>
+  <Product>
+    <ID>77</ID>
+    <Description>4K Smart TV 55 Inch</Description>
+    <Price>899.99</Price>
+  </Product>
+  <Product>
+    <ID>78</ID>
+    <Description>WiFi Mesh System</Description>
+    <Price>299.99</Price>
+  </Product>
+  <Product>
+    <ID>79</ID>
+    <Description>Budget Wireless Earbuds</Description>
+    <Price>39.99</Price>
+  </Product>
+  <Product>
+    <ID>80</ID>
+    <Description>Ergonomic Laptop Backpack</Description>
+    <Price>59.99</Price>
+  </Product>
+  <Product>
+    <ID>81</ID>
+    <Description>Noise-Isolating Gaming Headset</Description>
+    <Price>89.99</Price>
+  </Product>
+  <Product>
+    <ID>82</ID>
+    <Description>USB Condenser Microphone</Description>
+    <Price>139.99</Price>
+  </Product>
+  <Product>
+    <ID>83</ID>
+    <Description>Fingerprint Smart Lock</Description>
+    <Price>199.99</Price>
+  </Product>
+  <Product>
+    <ID>84</ID>
+    <Description>Bike Computer with GPS</Description>
+    <Price>169.99</Price>
+  </Product>
+  <Product>
+    <ID>85</ID>
+    <Description>Wireless Surround Sound System</Description>
+    <Price>599.99</Price>
+  </Product>
+  <Product>
+    <ID>86</ID>
+    <Description>Raspberry Pi 4 Model B</Description>
+    <Price>79.99</Price>
+  </Product>
+  <Product>
+    <ID>87</ID>
+    <Description>Mechanical Gaming Chair</Description>
+    <Price>349.99</Price>
+  </Product>
+  <Product>
+    <ID>88</ID>
+    <Description>Portable Air Conditioner</Description>
+    <Price>349.99</Price>
+  </Product>
+  <Product>
+    <ID>89</ID>
+    <Description>Foldable Solar Panel</Description>
+    <Price>149.99</Price>
+  </Product>
+  <Product>
+    <ID>90</ID>
+    <Description>Smart Exercise Bike</Description>
+    <Price>999.99</Price>
+  </Product>
+  <Product>
+    <ID>91</ID>
+    <Description>Electric Standing Desk</Description>
+    <Price>699.99</Price>
+  </Product>
+  <Product>
+    <ID>92</ID>
+    <Description>Smart Indoor Garden</Description>
+    <Price>159.99</Price>
+  </Product>
+  <Product>
+    <ID>93</ID>
+    <Description>Professional DSLR Camera</Description>
+    <Price>1999.99</Price>
+  </Product>
+  <Product>
+    <ID>94</ID>
+    <Description>Digital Drawing Tablet</Description>
+    <Price>249.99</Price>
+  </Product>
+  <Product>
+    <ID>95</ID>
+    <Description>Wireless Smart Glasses</Description>
+    <Price>299.99</Price>
+  </Product>
+  <Product>
+    <ID>96</ID>
+    <Description>USB-C to HDMI Adapter</Description>
+    <Price>19.99</Price>
+  </Product>
+  <Product>
+    <ID>97</ID>
+    <Description>Drone with 4K Camera</Description>
+    <Price>1299.99</Price>
+  </Product>
+  <Product>
+    <ID>98</ID>
+    <Description>Outdoor Camping Solar Generator</Description>
+    <Price>699.99</Price>
+  </Product>
+  <Product>
+    <ID>99</ID>
+    <Description>Bluetooth Car Adapter</Description>
+    <Price>34.99</Price>
+  </Product>
+  <Product>
+    <ID>100</ID>
+    <Description>Portable Espresso Machine</Description>
+    <Price>119.99</Price>
+  </Product>
+</Products>
