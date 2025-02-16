@@ -167,6 +167,7 @@
   * DateTime
   * Files
     * Text
+    * Directory and File
     * CSV
     * XML
     * JSON
@@ -174,6 +175,7 @@
     * Binary
   * HTTP Request
   * Send Email
+* LRU Cache: Least Recently Used Cache
 
 ## Introduction to SQL
 
