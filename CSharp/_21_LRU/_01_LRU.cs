@@ -1,14 +1,20 @@
+// https://leetcode.com/problems/lru-cache
+
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestPlatform.Common.DataCollection;
-using NUnit.Framework;
-
 
 namespace LRU;
 
 public class LRUApp
 {
   public static void Main(string[] args)
+  {
+    Demo();
+
+    //StressTest();
+  }
+
+  private static void Demo()
   {
     var lru = new MyLRUCache<int, string>(5);
     lru.Put(1, "One");
@@ -17,14 +23,14 @@ public class LRUApp
     lru.Put(4, "Four");
     lru.Put(5, "Five");
 
-    Console.WriteLine(lru.ContainsKey(1));
-    Console.WriteLine(lru.Get(1));
-    Console.WriteLine(lru.ContainsKey(6));
-    Console.WriteLine(lru.Get(6));
+    Console.WriteLine("lru.ContainsKey(1): " + lru.ContainsKey(1));
+    Console.WriteLine("lru.Get(1): " + lru.Get(1));
+    Console.WriteLine("lru.ContainsKey(6): " + lru.ContainsKey(6));
+    Console.WriteLine("lru.Get(6): " + lru.Get(6));
 
     for (int i = 1; i <= lru.Count; i++)
     {
-      Console.WriteLine(lru[i]);
+      Console.WriteLine($"Key[{i}]: {lru[i]}");
     }
 
     Console.WriteLine(lru.Get(1));
@@ -36,7 +42,28 @@ public class LRUApp
 
     for (int i = 0; i < 9; i++)
     {
-      Console.WriteLine(lru[i]);
+      Console.WriteLine($"Key[{i}]: {lru[i]}");
+    }
+  }
+
+  private static void StressTest()
+  {
+    Random rnd = new Random();
+    int CAPACITY = 10_000;
+    int ITERATIONS = 1_000_000;
+    MyLRUCache<int, string> lru = new MyLRUCache<int, string>(CAPACITY);
+    for (int i = 0; i < ITERATIONS; i++)
+    {
+      int numberToAdd = rnd.Next();
+      lru.Put(numberToAdd, numberToAdd.ToString());
+
+      int numberToAccess = rnd.Next();
+      var value = lru[numberToAccess];
+
+      if (i % 10_000 == 0)
+      {
+        Console.Write(".");
+      }
     }
   }
 }
@@ -55,14 +82,14 @@ public class MyLRUCacheNode<K, V>
 public class MyLRUCache<K, V>
 {
   private LinkedList<MyLRUCacheNode<K, V>> list;
-  private Dictionary<K, MyLRUCacheNode<K, V>> dict;
+  private Dictionary<K, LinkedListNode<MyLRUCacheNode<K, V>>> dict;
   private readonly int CAPACITY;
   public int Count => dict.Count;
 
   public MyLRUCache(int capacity)
   {
     list = new LinkedList<MyLRUCacheNode<K, V>>();
-    dict = new Dictionary<K, MyLRUCacheNode<K, V>>();
+    dict = new Dictionary<K, LinkedListNode<MyLRUCacheNode<K, V>>>();
     CAPACITY = capacity;
   }
 
@@ -80,11 +107,10 @@ public class MyLRUCache<K, V>
       }
     }
     var existingNode = dict[key];
-    var newNode = new MyLRUCacheNode<K, V>(existingNode.Key, existingNode.Value);
+    var newNode = new MyLRUCacheNode<K, V>(existingNode.Value.Key, existingNode.Value.Value);
     dict.Remove(key);
     list.Remove(existingNode);
-    list.AddLast(newNode);
-    dict[key] = newNode;
+    dict[key] = list.AddLast(newNode);
     return newNode.Value;
   }
 
@@ -96,8 +122,7 @@ public class MyLRUCache<K, V>
       dict.Remove(key);
       list.Remove(existingNode);
       var newNode = new MyLRUCacheNode<K, V>(key, value);
-      dict[key] = newNode;
-      list.AddLast(newNode);
+      dict[key] = list.AddLast(newNode);
     }
     else
     {
@@ -108,8 +133,7 @@ public class MyLRUCache<K, V>
         list.Remove(nodeToEvict.Value);
       }
       var newNode = new MyLRUCacheNode<K, V>(key, value);
-      dict[key] = newNode;
-      list.AddLast(newNode);
+      dict[key] = list.AddLast(newNode);
     }
   }
 
