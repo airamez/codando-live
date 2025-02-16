@@ -1,4 +1,42 @@
 // https://leetcode.com/problems/lru-cache
+/*
+- Definition
+  - An LRU (Least Recently Used) Cache is a data structure that stores a limited number
+    of items and automatically removes the least recently used item when the cache 
+    reaches its capacity. This ensures that frequently accessed elements remain available
+    while efficiently managing memory.
+- An LRU Cache typically consists of:
+  - A HashMap (Dictionary in C#) – for O(1) access to cached items by key.
+  - A Doubly Linked List – to track usage order, allowing fast eviction of the 
+    least recently used item.
+  - Capacity Constraint – ensures the cache does not exceed the predefined limit.
+- How It Works:
+  - When an item is accessed, it is moved to the front (most recently used).
+  - If an item is added and the cache is full, the least recently used item is removed.
+  - This design allows both get and put operations to be performed in O(1) time complexity.  
+- Use Cases
+  - Web Caching (storing recently accessed pages)
+  - Database Query Caching (keeping frequently queried results)
+  - Memory Management (paging systems in OS)
+  - Image Processing (storing recently processed images)
+- Built-in Implementations
+  - Instead of implementing LRU from scratch, you can use existing C# libraries:
+    - Microsoft.Extensions.Caching.Memory
+      - MemoryCache supports eviction policies, including LRU-like behavior.
+      - Example: MemoryCacheOptions allows setting an expiration policy.
+      - https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.caching.memory.memorycache?view=net-9.0-pp
+    - System.Runtime.Caching
+      - Provides MemoryCache for in-memory caching.
+      - Supports time-based expiration and manual removal.
+      - https://learn.microsoft.com/en-us/dotnet/api/system.runtime.caching.memorycache?view=net-9.0-pp
+   - Third-Party Libraries
+     - LazyCache (wraps MemoryCache for easier usage)
+     - CacheManager (multi-layered caching support)
+Conclusion
+LRU Cache is an essential concept for optimizing memory usage and improving performance in applications.
+While custom implementations provide flexibility, built-in APIs and third-party libraries simplify
+its usage, save time and reduce cost.
+*/
 
 using System;
 using System.Collections.Generic;
