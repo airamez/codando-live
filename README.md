@@ -291,3 +291,5 @@
 | 247 | [API - Directory and File](https://youtube.com/live/RHa_Cec1CEo) | [CSharp/_20_API/_04_DirectoryAndFile.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_04_DirectoryAndFile.cs) |
 | 248 | [API - CSV Files](https://youtube.com/live/YXJl-AM1Jc4) | [CSharp/_20_API/_05_CSV.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_05_CSV.cs) |
 | 249 | [API - XML Files](https://youtube.com/live/pQyl6LKkPXk) | [CSharp/_20_API/_06_XML.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_06_XML.cs) |
+| 249 | [API - XML Files](https://youtube.com/live/pQyl6LKkPXk) | [CSharp/_20_API/_06_XML.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_06_XML.cs) |
+| 250 | [API - XML Files](https://youtube.com/live/RTYXJ-zwzvs) | [CSharp/_20_API/_07_JSON.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_07_JSON.cs) |

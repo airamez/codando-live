@@ -1,0 +1,502 @@
+[
+  {
+    "ID": 1,
+    "Description": "Laptop, 16GB RAM",
+    "Price": 1299.99
+  },
+  {
+    "ID": 2,
+    "Description": "Wireless Mouse",
+    "Price": 29.99
+  },
+  {
+    "ID": 3,
+    "Description": "Mechanical Keyboard",
+    "Price": 89.99
+  },
+  {
+    "ID": 4,
+    "Description": "Monitor 24\u0022 Full HD",
+    "Price": 199.99
+  },
+  {
+    "ID": 5,
+    "Description": "External HDD 1TB",
+    "Price": 79.99
+  },
+  {
+    "ID": 6,
+    "Description": "USB-C Docking Station",
+    "Price": 129.49
+  },
+  {
+    "ID": 7,
+    "Description": "Gaming Headset",
+    "Price": 59.99
+  },
+  {
+    "ID": 8,
+    "Description": "Office Chair",
+    "Price": 249.99
+  },
+  {
+    "ID": 9,
+    "Description": "Smartphone 128GB",
+    "Price": 799.99
+  },
+  {
+    "ID": 10,
+    "Description": "Bluetooth Speaker",
+    "Price": 49.99
+  },
+  {
+    "ID": 11,
+    "Description": "Graphics Card RTX 3060",
+    "Price": 349.99
+  },
+  {
+    "ID": 12,
+    "Description": "Ergonomic Mouse Pad",
+    "Price": 14.99
+  },
+  {
+    "ID": 13,
+    "Description": "4K UHD Monitor",
+    "Price": 499.99
+  },
+  {
+    "ID": 14,
+    "Description": "High-Speed HDMI Cable",
+    "Price": 9.99
+  },
+  {
+    "ID": 15,
+    "Description": "Mechanical Pencil",
+    "Price": 2.99
+  },
+  {
+    "ID": 16,
+    "Description": "Noise Cancelling Headphones",
+    "Price": 299.99
+  },
+  {
+    "ID": 17,
+    "Description": "Power Bank 20000mAh",
+    "Price": 39.99
+  },
+  {
+    "ID": 18,
+    "Description": "Wireless Earbuds",
+    "Price": 119.99
+  },
+  {
+    "ID": 19,
+    "Description": "USB Flash Drive 128GB",
+    "Price": 22.49
+  },
+  {
+    "ID": 20,
+    "Description": "Portable SSD 500GB",
+    "Price": 89.99
+  },
+  {
+    "ID": 21,
+    "Description": "Smartwatch Series 6",
+    "Price": 399.99
+  },
+  {
+    "ID": 22,
+    "Description": "Adjustable Standing Desk",
+    "Price": 499.99
+  },
+  {
+    "ID": 23,
+    "Description": "Laptop Stand",
+    "Price": 39.99
+  },
+  {
+    "ID": 24,
+    "Description": "External GPU Enclosure",
+    "Price": 279.99
+  },
+  {
+    "ID": 25,
+    "Description": "Surge Protector with USB",
+    "Price": 34.99
+  },
+  {
+    "ID": 26,
+    "Description": "Smart Light Bulb",
+    "Price": 12.99
+  },
+  {
+    "ID": 27,
+    "Description": "VR Headset",
+    "Price": 599.99
+  },
+  {
+    "ID": 28,
+    "Description": "Wireless Charging Pad",
+    "Price": 24.99
+  },
+  {
+    "ID": 29,
+    "Description": "Electric Scooter",
+    "Price": 899.99
+  },
+  {
+    "ID": 30,
+    "Description": "Dash Cam",
+    "Price": 79.99
+  },
+  {
+    "ID": 31,
+    "Description": "Graphics Tablet",
+    "Price": 179.99
+  },
+  {
+    "ID": 32,
+    "Description": "3D Printer",
+    "Price": 449.99
+  },
+  {
+    "ID": 33,
+    "Description": "Mechanical Gaming Mouse",
+    "Price": 59.99
+  },
+  {
+    "ID": 34,
+    "Description": "Compact Mechanical Keyboard",
+    "Price": 99.99
+  },
+  {
+    "ID": 35,
+    "Description": "Streaming Webcam",
+    "Price": 69.99
+  },
+  {
+    "ID": 36,
+    "Description": "Tripod Stand",
+    "Price": 29.99
+  },
+  {
+    "ID": 37,
+    "Description": "Microphone for Podcasting",
+    "Price": 149.99
+  },
+  {
+    "ID": 38,
+    "Description": "Wireless Presentation Remote",
+    "Price": 19.99
+  },
+  {
+    "ID": 39,
+    "Description": "Document Scanner",
+    "Price": 199.99
+  },
+  {
+    "ID": 40,
+    "Description": "High-Speed Portable SSD",
+    "Price": 139.99
+  },
+  {
+    "ID": 41,
+    "Description": "PC Case with RGB",
+    "Price": 109.99
+  },
+  {
+    "ID": 42,
+    "Description": "Liquid CPU Cooler",
+    "Price": 129.99
+  },
+  {
+    "ID": 43,
+    "Description": "PCIe NVMe SSD 1TB",
+    "Price": 149.99
+  },
+  {
+    "ID": 44,
+    "Description": "WiFi 6 Router",
+    "Price": 179.99
+  },
+  {
+    "ID": 45,
+    "Description": "External Blu-ray Drive",
+    "Price": 79.99
+  },
+  {
+    "ID": 46,
+    "Description": "Budget Gaming Mouse",
+    "Price": 29.99
+  },
+  {
+    "ID": 47,
+    "Description": "Premium Desk Lamp",
+    "Price": 49.99
+  },
+  {
+    "ID": 48,
+    "Description": "Ergonomic Keyboard Wrist Rest",
+    "Price": 19.99
+  },
+  {
+    "ID": 49,
+    "Description": "NAS Storage Server",
+    "Price": 599.99
+  },
+  {
+    "ID": 50,
+    "Description": "Smart Thermostat",
+    "Price": 249.99
+  },
+  {
+    "ID": 51,
+    "Description": "Compact Power Strip",
+    "Price": 21.99
+  },
+  {
+    "ID": 52,
+    "Description": "1080p Projector",
+    "Price": 399.99
+  },
+  {
+    "ID": 53,
+    "Description": "Standing Desk Converter",
+    "Price": 129.99
+  },
+  {
+    "ID": 54,
+    "Description": "Desktop Microphone",
+    "Price": 99.99
+  },
+  {
+    "ID": 55,
+    "Description": "Smart Doorbell Camera",
+    "Price": 199.99
+  },
+  {
+    "ID": 56,
+    "Description": "Noise-Isolating Earbuds",
+    "Price": 89.99
+  },
+  {
+    "ID": 57,
+    "Description": "Waterproof Bluetooth Speaker",
+    "Price": 59.99
+  },
+  {
+    "ID": 58,
+    "Description": "Laptop Cooling Pad",
+    "Price": 29.99
+  },
+  {
+    "ID": 59,
+    "Description": "Home Security Camera",
+    "Price": 149.99
+  },
+  {
+    "ID": 60,
+    "Description": "Smart Plug with Alexa",
+    "Price": 24.99
+  },
+  {
+    "ID": 61,
+    "Description": "Gaming Laptop",
+    "Price": 1499.99
+  },
+  {
+    "ID": 62,
+    "Description": "Wireless Keyboard and Mouse",
+    "Price": 69.99
+  },
+  {
+    "ID": 63,
+    "Description": "Robot Vacuum Cleaner",
+    "Price": 299.99
+  },
+  {
+    "ID": 64,
+    "Description": "Mechanical RGB Keyboard",
+    "Price": 109.99
+  },
+  {
+    "ID": 65,
+    "Description": "Compact Wireless Mouse",
+    "Price": 34.99
+  },
+  {
+    "ID": 66,
+    "Description": "USB Hub 10 Ports",
+    "Price": 49.99
+  },
+  {
+    "ID": 67,
+    "Description": "Ultrawide Monitor 34 Inch",
+    "Price": 699.99
+  },
+  {
+    "ID": 68,
+    "Description": "Portable Charger 10000mAh",
+    "Price": 29.99
+  },
+  {
+    "ID": 69,
+    "Description": "Smart Ceiling Fan",
+    "Price": 199.99
+  },
+  {
+    "ID": 70,
+    "Description": "Wireless HDMI Adapter",
+    "Price": 79.99
+  },
+  {
+    "ID": 71,
+    "Description": "Smartphone Gimbal",
+    "Price": 119.99
+  },
+  {
+    "ID": 72,
+    "Description": "Smart Alarm Clock",
+    "Price": 49.99
+  },
+  {
+    "ID": 73,
+    "Description": "Smart Home Hub",
+    "Price": 129.99
+  },
+  {
+    "ID": 74,
+    "Description": "Cordless Vacuum Cleaner",
+    "Price": 249.99
+  },
+  {
+    "ID": 75,
+    "Description": "1080p Video Capture Card",
+    "Price": 179.99
+  },
+  {
+    "ID": 76,
+    "Description": "High-Fidelity Soundbar",
+    "Price": 349.99
+  },
+  {
+    "ID": 77,
+    "Description": "4K Smart TV 55 Inch",
+    "Price": 899.99
+  },
+  {
+    "ID": 78,
+    "Description": "WiFi Mesh System",
+    "Price": 299.99
+  },
+  {
+    "ID": 79,
+    "Description": "Budget Wireless Earbuds",
+    "Price": 39.99
+  },
+  {
+    "ID": 80,
+    "Description": "Ergonomic Laptop Backpack",
+    "Price": 59.99
+  },
+  {
+    "ID": 81,
+    "Description": "Noise-Isolating Gaming Headset",
+    "Price": 89.99
+  },
+  {
+    "ID": 82,
+    "Description": "USB Condenser Microphone",
+    "Price": 139.99
+  },
+  {
+    "ID": 83,
+    "Description": "Fingerprint Smart Lock",
+    "Price": 199.99
+  },
+  {
+    "ID": 84,
+    "Description": "Bike Computer with GPS",
+    "Price": 169.99
+  },
+  {
+    "ID": 85,
+    "Description": "Wireless Surround Sound System",
+    "Price": 599.99
+  },
+  {
+    "ID": 86,
+    "Description": "Raspberry Pi 4 Model B",
+    "Price": 79.99
+  },
+  {
+    "ID": 87,
+    "Description": "Mechanical Gaming Chair",
+    "Price": 349.99
+  },
+  {
+    "ID": 88,
+    "Description": "Portable Air Conditioner",
+    "Price": 349.99
+  },
+  {
+    "ID": 89,
+    "Description": "Foldable Solar Panel",
+    "Price": 149.99
+  },
+  {
+    "ID": 90,
+    "Description": "Smart Exercise Bike",
+    "Price": 999.99
+  },
+  {
+    "ID": 91,
+    "Description": "Electric Standing Desk",
+    "Price": 699.99
+  },
+  {
+    "ID": 92,
+    "Description": "Smart Indoor Garden",
+    "Price": 159.99
+  },
+  {
+    "ID": 93,
+    "Description": "Professional DSLR Camera",
+    "Price": 1999.99
+  },
+  {
+    "ID": 94,
+    "Description": "Digital Drawing Tablet",
+    "Price": 249.99
+  },
+  {
+    "ID": 95,
+    "Description": "Wireless Smart Glasses",
+    "Price": 299.99
+  },
+  {
+    "ID": 96,
+    "Description": "USB-C to HDMI Adapter",
+    "Price": 19.99
+  },
+  {
+    "ID": 97,
+    "Description": "Drone with 4K Camera",
+    "Price": 1299.99
+  },
+  {
+    "ID": 98,
+    "Description": "Outdoor Camping Solar Generator",
+    "Price": 699.99
+  },
+  {
+    "ID": 99,
+    "Description": "Bluetooth Car Adapter",
+    "Price": 34.99
+  },
+  {
+    "ID": 100,
+    "Description": "Portable Espresso Machine",
+    "Price": 119.99
+  }
+]
