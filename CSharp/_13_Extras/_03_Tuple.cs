@@ -13,7 +13,9 @@
   # Store Multiple Values: Use a tuple to store multiple values in a single data structure.
 */
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using CsvHelper.Configuration.Attributes;
 
 namespace Extras;
 
@@ -40,9 +42,19 @@ public class TupleApp
     Console.WriteLine(person);
     Console.WriteLine($"Name: {person.Name}, Age: {person.Age}, City: {person.City}");
 
+    // Typed Tuple
+    var typedTuple = new Tuple<int, string>(5, "Five");
+    Console.WriteLine($"{typedTuple.Item1}: {typedTuple.Item2}");
+
+
     // Deconstructing Tuples
     var (min, max) = FindMindMax(8, 6, 1, 9, 3, 5, 0, 6);
     Console.WriteLine($"Min: {min}, Max: {max}");
+
+    // Typed Tuple
+    var dictionary = new Dictionary<int, (int ID, string Name)>();
+    dictionary[0] = (ID: 1, Name: "Jose");
+
   }
 
   public static (int, int) FindMindMax(params int[] numbers)
