@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net9.0</TargetFramework>
-		<StartupObject>Async.Async2App</StartupObject>
+		<StartupObject>LINQ.LINQApp</StartupObject>
   </PropertyGroup>
   <ItemGroup>
       <PackageReference Include="coverlet.msbuild" Version="6.0.1">
