@@ -171,11 +171,9 @@
     * CSV
     * XML
     * JSON
-    * Parquet
-    * Binary
   * HTTP Request
-  * Send Email
 * LRU Cache: Least Recently Used Cache
+* Async Programming
 
 ## Introduction to SQL
 
