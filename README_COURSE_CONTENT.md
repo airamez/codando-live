@@ -171,6 +171,7 @@
     * CSV
     * XML
     * JSON
+    * Parquet
   * HTTP Request
 * LRU Cache: Least Recently Used Cache
 * Async Programming
