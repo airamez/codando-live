@@ -293,3 +293,4 @@
 | 249 | [API - XML Files](https://youtube.com/live/pQyl6LKkPXk) | [CSharp/_20_API/_06_XML.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_06_XML.cs) |
 | 249 | [API - XML Files](https://youtube.com/live/pQyl6LKkPXk) | [CSharp/_20_API/_06_XML.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_06_XML.cs) |
 | 250 | [API - XML Files](https://youtube.com/live/RTYXJ-zwzvs) | [CSharp/_20_API/_07_JSON.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_07_JSON.cs) |
+| 251 | [API - XML Files](https://youtube.com/live/WiJNkiN59lA) | [CSharp/_20_API/_08_Parquet.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_08_Parquet.cs) |

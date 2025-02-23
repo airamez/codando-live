@@ -24,7 +24,7 @@ structures and offer efficient data compression and encoding schemes.
   - ParquetViewer: This is a simple Windows desktop application for viewing and querying Apache
     - Parquet files. It is part of the parquet-dotnet repository, which provides a fully managed,
       safe, and fast .NET library to read and write Apache Parquet files.
-    - https://github.com/aloneguid/parquet-dotnet
+    - https://github.com/mukunku/ParquetViewer
 */
 
 using System;
