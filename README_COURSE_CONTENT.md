@@ -173,8 +173,12 @@
     * JSON
     * Parquet
   * HTTP Request
-* LRU Cache: Least Recently Used Cache
-* Async Programming
+* Advanced Programming
+  * LINQ
+  * Delegate
+  * RegEx: Regular Expression
+  * LRU Cache: Least Recently Used Cache
+  * Multi-Threading and Async Programming
 
 ## Introduction to SQL
 

@@ -1,4 +1,5 @@
 /*
+- https://learn.microsoft.com/en-us/dotnet/csharp/linq/
 - What is LINQ?
   - LINQ (Language-Integrated Query) is a feature in C# that allows querying collections
     (like arrays, lists, and databases) using a readable, SQL-like syntax.

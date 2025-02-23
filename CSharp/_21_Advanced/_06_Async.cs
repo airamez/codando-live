@@ -15,8 +15,6 @@
       - The await keyword pauses execution until the awaited task completes.
 */
 using System;
-
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Async;

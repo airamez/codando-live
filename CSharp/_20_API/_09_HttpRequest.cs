@@ -1,4 +1,5 @@
 /*
+- https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/http/httpclient
 - HTTP requests are the foundation of the web. 
   They allow clients (e.g., web browsers) to communicate with servers to fetch resources,
   submit data, and more. In C#, you can make HTTP requests using the HttpClient class 
@@ -32,13 +33,23 @@ public class HttpRequestApp
 {
   static async Task Main(string[] args)
   {
-    // GET
+    //await HttpGet("http://jsonplaceholder.typicode.com/posts/1");
+    //await HttpGet("http://jsonplaceholder.typicode.com/posts", "userId=1");
+    //await HttpGet("http://jsonplaceholder.typicode.com/posts", "id=1");
+    //await HttpGet("http://jsonplaceholder.typicode.com/posts", "userId=1&id=1");
+    //await HttpGet("https://raw.githubusercontent.com/airamez/codando-live/refs/heads/main/README_COURSE_CONTENT.md");
+    //await HttpGet("https://google.com");
+
+    await HttpPost();
+  }
+
+  private static async Task HttpGet(string requestUri, string queryString = null)
+  {
+    if (!string.IsNullOrWhiteSpace(queryString)) requestUri += "?" + queryString;
     using (HttpClient client = new HttpClient())
     {
       try
       {
-        // Set the request URI
-        string requestUri = "http://jsonplaceholder.typicode.com/posts/1";
         // Send the GET request
         HttpResponseMessage response = await client.GetAsync(requestUri);
         // Ensure the response is successful
@@ -53,8 +64,10 @@ public class HttpRequestApp
         Console.WriteLine($"Request error: {e.Message}");
       }
     }
+  }
 
-    // POST
+  private static async Task HttpPost()
+  {
     using (HttpClient client = new HttpClient())
     {
       try
