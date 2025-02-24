@@ -17,8 +17,8 @@ public class WebCrawlerApp
 
     Stopwatch stopwatch = Stopwatch.StartNew();
 
-    await webCrawler.Crawls("https://en.wikipedia.org/wiki/Main_Page", true);
-    //await webCrawler.Crawls("https://en.wikipedia.org/wiki/Main_Page", false);
+    //await webCrawler.Crawls("https://github.com/airamez/codando-live", true);
+    await webCrawler.Crawls("https://github.com/airamez/codando-live", false);
 
     stopwatch.Stop();
     Console.WriteLine($"Completed in {stopwatch.ElapsedMilliseconds / 1000} seconds");
