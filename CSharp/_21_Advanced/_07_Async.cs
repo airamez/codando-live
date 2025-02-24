@@ -21,6 +21,8 @@ public class Async2App
             FetchDataAsync(4)
     };
 
+    //    await Task.WhenAll(fetchDataTasks);
+
     // Keep printing dots while waiting for the tasks to complete
     while (fetchDataTasks.Any(task => !task.IsCompleted))
     {

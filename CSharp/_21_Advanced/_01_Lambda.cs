@@ -23,7 +23,7 @@ public class LambdaApp
     var power = (int _base, int _exponent) => (int)Math.Pow(_base, _exponent);
     for (int i = 0; i <= 10; i++)
     {
-      Console.WriteLine($"{i}^2 = {power(2, i)}");
+      Console.WriteLine($"2^{i} = {power(2, i)}");
     }
 
     var reverseString = (string input) =>
