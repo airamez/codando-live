@@ -37,5 +37,7 @@ public class LambdaApp
     };
     Console.WriteLine(reverseString("abcdedfg"));
     Console.WriteLine(reverseString("I love coding"));
+    Console.WriteLine(reverseString("rotator"));
+    Console.WriteLine(reverseString("madam"));
   }
 }
