@@ -294,4 +294,5 @@
 | 250 | [API - Json Files](https://youtube.com/live/RTYXJ-zwzvs) | [CSharp/_20_API/_07_JSON.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_07_JSON.cs) |
 | 251 | [API - Parquet Files](https://youtube.com/live/WiJNkiN59lA) | [CSharp/_20_API/_08_Parquet.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_08_Parquet.cs) |
 | 252 | [API - HTTP Request](https://youtube.com/live/lS7QERvFgo4) | [CSharp/_20_API/_09_HttpRequest.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_20_API/_09_HttpRequest.cs) |
-| 253 | [API - Lambda Expression](https://youtube.com/live/v=2HrfIn3CloA) | [CSharp/_21_Advanced/_01_Lambda.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_01_Lambda.cs) |
+| 253 | [Advanced - Lambda Expression](https://youtube.com/live/v=2HrfIn3CloA) | [CSharp/_21_Advanced/_01_Lambda.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_01_Lambda.cs) |
+| 254 | [Advanced - Delgate](https://youtube.com/live/v=EW-ojr1COvc) | [CSharp/_21_Advanced/_02_Delegate.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_02_Delegate.cs) |
