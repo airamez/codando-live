@@ -35,6 +35,8 @@ public class ExtensionMethodsApp
     {
       Console.WriteLine($"{c}: {charCounter[c]}");
     }
+
+    Console.WriteLine("acegi".CombineAlternating("bdfh"));
   }
 }
 
