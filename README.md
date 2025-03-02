@@ -298,3 +298,4 @@
 | 254 | [Advanced - Delgate](https://youtube.com/live/EW-ojr1COvc) | [CSharp/_21_Advanced/_02_Delegate.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_02_Delegate.cs) |
 | 255 | [Advanced - LINQ](https://youtube.com/live/V7z7fRj7fK8) | [CSharp/_21_Advanced/_03_LINQ_Intro.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_03_LINQ_Intro.cs) |
 | 256 | [Advanced - Extension Methods](https://youtube.com/live/OnN0nAJe31w) | [CSharp/_21_Advanced/_04_ExtensionMethods.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_04_ExtensionMethods.cs) |
+| 257 | [Advanced - Regular Expression](<https://youtube.com/live/9M2d8zZZkX4> | [CSharp/_21_Advanced/_05_RegEx.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_05_RegEx.cs) |
