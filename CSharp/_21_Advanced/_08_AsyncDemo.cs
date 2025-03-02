@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Async;
 
-public class Async2App
+public class AsyncDemoApp
 {
   static async Task Main()
   {
