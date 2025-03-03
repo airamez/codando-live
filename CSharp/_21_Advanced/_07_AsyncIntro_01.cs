@@ -11,8 +11,10 @@
     - Task-based Asynchronous Pattern (TAP)
       - Uses Task and Task<T> to represent asynchronous operations.
       - Methods returning Task can be awaited.
+      - Declaration
+        async Task[<RETURN_TYPE>] METHOD_NAME (PARAM_LIST)
     - Async and Await
-      - The async keyword enables a method to use await.
+      - The async keyword makes a method asynchonous.
       - The await keyword pauses execution until the awaited task completes.
 */
 using System;
@@ -24,19 +26,16 @@ public class AsyncIntro01App
 {
   public static async Task Main(string[] args) // Note: The main signature changed because of the async
   {
-    // Pay attention this method does not completed as we don't wait for it. We are not using await
-    var something1 = DoSomethingAsync("Something 1", 5000); // Without the await, the return type is a Task (promise)
+    // Pay attention this method does not completed as we don't wait for it. WE ARE NOT USING await!
+    var something1 = DoSomethingAsync("Something 1", 2000); // Without the await, the return type is a Task (promise)
     Console.WriteLine(something1.Id);
     Console.WriteLine(something1.IsCompleted);
     //Console.WriteLine(something1.Result); // Accessing the Result property works like using await
 
-    var something2 = await DoSomethingAsync("Something 2", 3000); // With await, the return type is string
+    var something2 = await DoSomethingAsync("Something 2", 5000); // With await, the return type is string
     Console.WriteLine(something2);
 
-    /*
-    The understanding of the behavior about is fundamental in asynchronous programming, as it allows you to decide whether
-    to wait for the operation to complete or let it run independently while continuing other work.
-    */
+    Console.WriteLine("The End!");
   }
 
   static async Task<string> DoSomethingAsync(string action, int delay)
