@@ -23,7 +23,7 @@ public class AsyncIntro03App
     }
     catch (Exception ex)
     {
-      Console.WriteLine("Exception on Task.WhenAll: " + ex.Message);
+      Console.WriteLine("Exceptions on Task.WhenAll: " + ex.Message);
       foreach (var failedTask in tasks.FindAll(t => t.IsFaulted))
       {
         Console.WriteLine(failedTask.Exception.InnerException.Message); // Check InnerException
