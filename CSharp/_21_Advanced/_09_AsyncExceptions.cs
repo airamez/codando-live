@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Async;
 
-public class AsyncIntro03App
+public class AsyncExceptionsApp
 {
   static async Task Main()
   {
@@ -36,7 +36,9 @@ public class AsyncIntro03App
       Console.WriteLine($"Task ID: {task.Id} failed with exception: {task.Exception?.InnerException?.Message}");
     }
     Console.WriteLine("SUCCESS:");
-    tasks.FindAll(t => t.IsCompletedSuccessfully).ForEach(t => Console.WriteLine($"Task ID: {t.Id} Result: {t.Result}"));
+    tasks
+    .FindAll(t => t.IsCompletedSuccessfully)
+    .ForEach(t => Console.WriteLine($"Task ID: {t.Id} Result: {t.Result}"));
   }
 
   static async Task<string> DoSomethingAsync(string action, int delay, bool withRandomExceptions = false)

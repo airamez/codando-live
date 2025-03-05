@@ -302,3 +302,4 @@
 | 258 | [Advanced - Async Programming - Overview](https://youtube.com/live/w8W8VteHIP0) | [CSharp/_21_Advanced/_06_Async.pdf](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_06_Async.pdf) |
 | 259 | [Advanced - Async Programming - Intro](https://youtube.com/live/4uBtOFpXA8Y) | [CSharp/_21_Advanced/_07_AsyncIntro_01.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_07_AsyncIntro_01.cs) |
 | 260 | [Advanced - Async Programming - Demo](https://youtube.com/live/b4UgJfmMG1w) | [CSharp/_21_Advanced/_08_AsyncIntro_02.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_08_AsyncIntro_02.cs) |
+| 261 | [Advanced - Async Programming - Exceptions](https://youtube.com/live/6AuZ6DQswlg) | [CSharp/_21_Advanced/_09_AsyncExceptions.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_09_AsyncExceptions.cs) |
