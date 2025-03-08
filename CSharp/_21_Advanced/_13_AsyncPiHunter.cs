@@ -18,12 +18,12 @@ public class PiHunterApp
 
 public class PiHunterGame
 {
-  public const int MAP_WIDTH = 20; // Map Width
-  public const int MAP_HEIGHT = 10; // Map Height
+  public const int MAP_WIDTH = 40; // Map Width
+  public const int MAP_HEIGHT = 20; // Map Height
   public const string FLOOR = "░";
   public const string WALL = "▓";
   public const string PI = "π";
-  public const string HUNTER = "☻";
+  public const string PLAYER = "☻";
   public const string MONSTER = "∞";
   static public bool IsGameOver { private set; get; }
   static public int PlayerCol { private set; get; }
@@ -31,15 +31,15 @@ public class PiHunterGame
 
   private int CollectedCounter { set; get; }
   private int TotalToCollectCounter { set; get; }
-  private string[,] map; // 2D array to represent the map
+  private string[,] Map; // 2D array to represent the map
   private readonly object consoleLock = new object(); // Lock object for console synchronization
-  private Stopwatch timer = new Stopwatch();
-  private Random random;
+  private Stopwatch Timer = new Stopwatch();
+  public static Random Random { private set; get; }
   private List<Monster> monsters = new List<Monster>(); // List to hold multiple monsters
 
   public void Start()
   {
-    random = new Random();
+    Random = new Random();
     Console.Clear();
     Console.OutputEncoding = Encoding.UTF8;
     Console.SetBufferSize(Math.Max(MAP_WIDTH, Console.BufferWidth), Math.Max(MAP_HEIGHT + 5, Console.BufferHeight)); // Only works on Windows
@@ -48,9 +48,9 @@ public class PiHunterGame
     TotalToCollectCounter = 0;
     InitializeMap();
     DrawMap();
-    SpawnMonsters(1); // Spawn three monsters
-    timer.Start();
+    Timer.Start();
     Task.Run(() => UpdateStatus());
+    SpawnMonsters(4); // Spawn three monsters
     foreach (var monster in monsters)
     {
       Task.Run(() => monster.Move());
@@ -64,6 +64,7 @@ public class PiHunterGame
       if (key == ConsoleKey.Escape)
       {
         IsGameOver = true;
+        break;
       }
       int newCol = PlayerCol;
       int newRow = PlayerRow;
@@ -86,7 +87,7 @@ public class PiHunterGame
           break;
       }
       // Check if the new position is valid (not a wall)
-      if (map[newRow, newCol] != WALL)
+      if (Map[newRow, newCol] != WALL)
       {
         // Erase the hunter from the current position
         PrintAt(PlayerRow, PlayerCol, FLOOR);
@@ -94,13 +95,13 @@ public class PiHunterGame
         PlayerCol = newCol;
         PlayerRow = newRow;
         // Check if the hunter collected an PI
-        if (map[PlayerRow, PlayerCol] == PI)
+        if (Map[PlayerRow, PlayerCol] == PI)
         {
           CollectedCounter++;
-          map[newRow, newCol] = FLOOR;
+          Map[newRow, newCol] = FLOOR;
         }
-        // Redraw the hunter at the new position
-        PrintAt(PlayerRow, PlayerCol, HUNTER);
+        // Draw the hunter at the new position
+        PrintAt(PlayerRow, PlayerCol, PLAYER);
         // Check for Victory
         if (CollectedCounter == TotalToCollectCounter)
         {
@@ -115,7 +116,7 @@ public class PiHunterGame
     Console.WriteLine("Thanks for playing! Goodbye.");
     if (CollectedCounter == TotalToCollectCounter)
     {
-      TimeSpan elapsedTime = timer.Elapsed;
+      TimeSpan elapsedTime = Timer.Elapsed;
       Console.WriteLine($"CONGRATULATIONS!!! You collected all objects in {elapsedTime:hh\\:mm\\:ss}");
     }
     else
@@ -133,10 +134,10 @@ public class PiHunterGame
         if (row >= 0 && row < MAP_HEIGHT &&
             col >= 0 && col < MAP_WIDTH)
         {
-          if (map[row, col] == WALL)
+          if (Map[row, col] == WALL)
           {
             PrintAt(row, col, FLOOR);
-            map[row, col] = FLOOR;
+            Map[row, col] = FLOOR;
           }
         }
       }
@@ -145,24 +146,23 @@ public class PiHunterGame
 
   private void InitializeMap()
   {
-    map = new string[MAP_HEIGHT, MAP_WIDTH];
-
+    Map = new string[MAP_HEIGHT, MAP_WIDTH];
     for (int row = 0; row < MAP_HEIGHT; row++)
     {
       for (int col = 0; col < MAP_WIDTH; col++)
       {
         // Fill the map with the default character
-        map[row, col] = FLOOR;
+        Map[row, col] = FLOOR;
         // Randomly place walls
-        if (random.Next(100) < 20) // 20% chance for a wall
+        if (Random.Next(100) < 20) // 20% chance for a wall
         {
-          map[row, col] = WALL;
+          Map[row, col] = WALL;
         }
         // Randomly place PIs
-        if (random.Next(100) < 10 &&
-            map[row, col] != WALL) // 10% chance for an PI
+        if (Random.Next(100) < 10 &&
+            Map[row, col] != WALL) // 10% chance for an PI
         {
-          map[row, col] = PI;
+          Map[row, col] = PI;
           TotalToCollectCounter++;
         }
       }
@@ -171,18 +171,18 @@ public class PiHunterGame
     // Ensure the starting position is clear and set it to the middle
     PlayerCol = MAP_WIDTH / 2;
     PlayerRow = MAP_HEIGHT / 2;
-    if (map[PlayerRow, PlayerCol] == PI)
+    if (Map[PlayerRow, PlayerCol] == PI)
     {
       TotalToCollectCounter--;
     }
-    map[PlayerRow, PlayerCol] = HUNTER;
+    Map[PlayerRow, PlayerCol] = PLAYER;
   }
 
   private void SpawnMonsters(int count)
   {
     for (int i = 0; i < count; i++)
     {
-      var monster = new Monster(map, consoleLock);
+      var monster = new Monster(Map, consoleLock);
       monsters.Add(monster);
       monster.Spawn();
     }
@@ -195,7 +195,7 @@ public class PiHunterGame
     {
       for (int col = 0; col < MAP_WIDTH; col++)
       {
-        Console.Write(map[row, col]);
+        Console.Write(Map[row, col]);
       }
       Console.WriteLine();
     }
@@ -206,13 +206,13 @@ public class PiHunterGame
     do
     {
       PrintStatus();
-      Thread.Sleep(200); // Refresh interval
+      Thread.Sleep(1000); // Refresh interval
     } while (!IsGameOver);
   }
 
   private void PrintStatus()
   {
-    TimeSpan elapsedTime = timer.Elapsed;
+    TimeSpan elapsedTime = Timer.Elapsed;
     string status = $"Collected Objects: {CollectedCounter}/{TotalToCollectCounter} | Time Elapsed: {elapsedTime:hh\\:mm\\:ss} [Press 'SPACE BAR' for Bomb and 'ESC' to quit]";
     PrintAt(MAP_HEIGHT + 1, 0, status);
   }
@@ -231,7 +231,6 @@ public class Monster
 {
   private readonly string[,] map;
   private readonly object consoleLock;
-  private Random random;
   private int monsterCol;
   private int monsterRow;
 
@@ -239,32 +238,36 @@ public class Monster
   {
     this.map = map;
     this.consoleLock = consoleLock;
-    this.random = new Random();
   }
 
   public void Spawn()
   {
     do
     {
-      monsterRow = random.Next(PiHunterGame.MAP_HEIGHT);
-      monsterCol = random.Next(PiHunterGame.MAP_WIDTH);
+      monsterRow = PiHunterGame.Random.Next(PiHunterGame.MAP_HEIGHT);
+      monsterCol = PiHunterGame.Random.Next(PiHunterGame.MAP_WIDTH);
     } while (map[monsterRow, monsterCol] != PiHunterGame.FLOOR &&
              map[monsterRow, monsterCol] != PiHunterGame.PI);
-    map[monsterRow, monsterCol] = PiHunterGame.MONSTER;
-    PrintAt(monsterRow, monsterCol, PiHunterGame.MONSTER);
+    lock (consoleLock)
+    {
+      map[monsterRow, monsterCol] = PiHunterGame.MONSTER;
+      PrintAt(monsterRow, monsterCol, PiHunterGame.MONSTER);
+    }
   }
 
   public void Move()
   {
     while (!PiHunterGame.IsGameOver)
     {
-      int newRow = monsterRow + random.Next(-1, 2); // Move up, down, or stay
-      int newCol = monsterCol + random.Next(-1, 2); // Move left, right, or stay
+      int newRow = monsterRow + PiHunterGame.Random.Next(-1, 2); // Move up, down, or stay
+      int newCol = monsterCol + PiHunterGame.Random.Next(-1, 2); // Move left, right, or stay
       if (newRow >= 0 &&
           newRow < PiHunterGame.MAP_HEIGHT &&
           newCol >= 0 &&
-          newCol < PiHunterGame.MAP_WIDTH && map[newRow, newCol] != PiHunterGame.WALL &&
-          newCol < PiHunterGame.MAP_WIDTH && map[newRow, newCol] != PiHunterGame.PI)
+          newCol < PiHunterGame.MAP_WIDTH &&
+          map[newRow, newCol] != PiHunterGame.WALL &&
+          newCol < PiHunterGame.MAP_WIDTH &&
+          map[newRow, newCol] != PiHunterGame.PI)
       {
         // If monster and player are in the same or adjacents positions is GAME OVER
         if (Math.Abs(monsterRow - PiHunterGame.PlayerRow) <= 1 &&
