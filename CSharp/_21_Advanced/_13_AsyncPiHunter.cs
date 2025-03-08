@@ -6,50 +6,65 @@ using System.Threading.Tasks;
 
 namespace Async;
 
-public class PiHuntertApp
+public class PiHunterApp
 {
-  static int currentCol;
-  static int currentRow;
-  static readonly string FLOOR = "▒";
-  static readonly string WALL = "█";
-  static readonly string PI = "π";
-  static readonly string HUNTER = "☻";
-  static readonly string MONSTER = "∞";
-  static int collectedCounter = 0;
-  static int totalToCollectCounter = 0;
-  static int mapWidth = 40; // Width of the map
-  static int mapHeight = 20; // Height of the map
-  static string[,] map; // 2D array to represent the map
-  private static readonly object consoleLock = new object(); // Lock object for console synchronization
-
-
   static void Main(string[] args)
   {
+    PiHunterGame game = new PiHunterGame();
+    game.Start();
+  }
+}
+
+public class PiHunterGame
+{
+  private int currentCol;
+  private int currentRow;
+  private int monsterCol;
+  private int monsterRow;
+  readonly string FLOOR = "▒";
+  readonly string WALL = "█";
+  string PI = "π";
+  readonly string HUNTER = "☻";
+  readonly string MONSTER = "∞";
+  readonly int MONSTER_SLEEP = 300;
+  private int collectedCounter = 0;
+  private int totalToCollectCounter = 0;
+  private int mapWidth = 40; // Width of the map
+  private int mapHeight = 20; // Height of the map
+  private string[,] map; // 2D array to represent the map
+  private readonly object consoleLock = new object(); // Lock object for console synchronization
+  private Stopwatch timer = new Stopwatch();
+  private bool gameOver;
+  private Random random;
+
+  public void Start()
+  {
+    random = new Random();
     Console.Clear();
     Console.OutputEncoding = Encoding.UTF8;
     // This only works in Windows
-    Console.SetBufferSize(Math.Max(mapWidth, Console.BufferWidth), Math.Max(mapHeight + 2, Console.BufferHeight));
+    Console.SetBufferSize(Math.Max(mapWidth, Console.BufferWidth), Math.Max(mapHeight + 5, Console.BufferHeight));
     Console.CursorVisible = false; // Hide the cursor for better presentation
-    // Initialize and draw the map with walls and objects
     InitializeMap();
     DrawMap();
-    Stopwatch timer = new Stopwatch();
+    PlaceMonster();
     timer.Start();
-    // Create a cancellation token source for stopping the background task
-    var cancelationToken = new CancellationTokenSource();
-    // Start the real-time status updater in a background task
-    Task.Run(() => UpdateStatus(timer, cancelationToken.Token));
-    while (true)
+    Task.Run(() => UpdateStatus());
+    Task.Run(() => MoveMonster());
+    gameOver = false;
+    while (!gameOver)
     {
       if (collectedCounter == totalToCollectCounter)
       {
-        break;
+        gameOver = true;
       }
       // Wait for user input
       var key = Console.ReadKey(intercept: true).Key;
       // Exit the program if the user presses 'Q' or Escape
       if (key == ConsoleKey.Q || key == ConsoleKey.Escape)
-        break;
+      {
+        gameOver = true;
+      }
       // Calculate the new position of the "man"
       int newCol = currentCol;
       int newRow = currentRow;
@@ -87,13 +102,13 @@ public class PiHuntertApp
       }
     }
 
-    TimeSpan elapsedTime = timer.Elapsed;
-    PrintStatus(elapsedTime);
+    PrintStatus();
     // Exit message
     Console.WriteLine();
     Console.WriteLine("Thanks for playing! Goodbye.");
     if (collectedCounter == totalToCollectCounter)
     {
+      TimeSpan elapsedTime = timer.Elapsed;
       Console.WriteLine($"CONGRATULATIONS!!! You collected all objects in {elapsedTime:hh\\:mm\\:ss}");
     }
     else
@@ -102,10 +117,9 @@ public class PiHuntertApp
     }
   }
 
-  static void InitializeMap()
+  private void InitializeMap()
   {
     map = new string[mapHeight, mapWidth];
-    Random random = new Random();
 
     for (int row = 0; row < mapHeight; row++)
     {
@@ -141,7 +155,41 @@ public class PiHuntertApp
     map[currentRow, currentCol] = HUNTER;
   }
 
-  static void DrawMap()
+  private void PlaceMonster()
+  {
+    Random random = new Random();
+    do
+    {
+      monsterRow = random.Next(mapHeight);
+      monsterCol = random.Next(mapWidth);
+    } while (map[monsterRow, monsterCol] != FLOOR); // Ensure monster spawns on a valid floor tile
+    map[monsterRow, monsterCol] = MONSTER;
+    PrintAt(monsterRow, monsterCol, MONSTER);
+  }
+
+  private void MoveMonster()
+  {
+    while (!gameOver)
+    {
+      int newRow = monsterRow + random.Next(-1, 2); // Move up, down, or stay
+      int newCol = monsterCol + random.Next(-1, 2); // Move left, right, or stay
+
+      if (newRow >= 0 && newRow < mapHeight && newCol >= 0 && newCol < mapWidth && map[newRow, newCol] != WALL)
+      {
+        PrintAt(monsterRow, monsterCol, FLOOR);
+        monsterRow = newRow;
+        monsterCol = newCol;
+        PrintAt(monsterRow, monsterCol, MONSTER);
+        if (monsterRow == currentRow && monsterCol == currentCol)
+        {
+          PrintAt(mapHeight + 2, 0, "GAME OVER: The monster caught you!");
+          Environment.Exit(0);
+        }
+      }
+    }
+  }
+
+  private void DrawMap()
   {
     Console.SetCursorPosition(0, 0);
     for (int row = 0; row < mapHeight; row++)
@@ -154,23 +202,23 @@ public class PiHuntertApp
     }
   }
 
-  static void UpdateStatus(Stopwatch timer, CancellationToken token)
+  private void UpdateStatus()
   {
     do
     {
-      TimeSpan elapsedTime = timer.Elapsed;
-      PrintStatus(elapsedTime);
+      PrintStatus();
       Thread.Sleep(200); // Refresh interval
-    } while (!token.IsCancellationRequested);
+    } while (!gameOver);
   }
 
-  static void PrintStatus(TimeSpan elapsedTime)
+  private void PrintStatus()
   {
+    TimeSpan elapsedTime = timer.Elapsed;
     string status = $"Collected Objects: {collectedCounter}/{totalToCollectCounter} | Time Elapsed: {elapsedTime:hh\\:mm\\:ss} [Press 'ESC' or 'Q' to quit]";
     PrintAt(mapHeight + 1, 0, status);
   }
 
-  static void PrintAt(int row, int col, string content)
+  private void PrintAt(int row, int col, string content)
   {
     lock (consoleLock)
     {
