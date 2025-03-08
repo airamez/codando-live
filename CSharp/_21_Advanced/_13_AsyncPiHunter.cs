@@ -22,7 +22,7 @@ public class PiHunterGame
   public const int MAP_HEIGHT = 20; // Map Height
   public const string FLOOR = "▒";
   public const string WALL = "█";
-  public const string PI = "π"; q
+  public const string PI = "π";
   public const string HUNTER = "☻";
   public const string MONSTER = "∞";
   static public bool IsGameOver { private set; get; }
