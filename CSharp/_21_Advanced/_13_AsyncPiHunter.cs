@@ -20,8 +20,8 @@ public class PiHunterGame
 {
   public const int MAP_WIDTH = 40; // Map Width
   public const int MAP_HEIGHT = 20; // Map Height
-  public const string FLOOR = "▒";
-  public const string WALL = "█";
+  public const string FLOOR = "░";
+  public const string WALL = "▓";
   public const string PI = "π";
   public const string HUNTER = "☻";
   public const string MONSTER = "∞";
@@ -84,6 +84,9 @@ public class PiHunterGame
         case ConsoleKey.RightArrow:
           newCol = PlayerCurrentCol < MAP_WIDTH - 1 ? PlayerCurrentCol + 1 : PlayerCurrentCol;
           break;
+        case ConsoleKey.Spacebar:
+          UseBomb();
+          break;
       }
       // Check if the new position is valid (not a wall)
       if (map[newRow, newCol] != WALL)
@@ -116,6 +119,24 @@ public class PiHunterGame
     else
     {
       Console.WriteLine($"BOOOOOOOOOOOOO!!! You only collected {collectedCounter} objects");
+    }
+  }
+
+  private void UseBomb()
+  {
+    for (int row = PlayerCurrentRow - 1; row <= PlayerCurrentRow + 1; row++)
+    {
+      for (int col = PlayerCurrentCol - 1; col <= PlayerCurrentCol + 1; col++)
+      {
+        if (row >= 0 && row < MAP_HEIGHT && col >= 0 && col <= MAP_WIDTH)
+        {
+          if (map[row, col] == WALL)
+          {
+            PrintAt(row, col, FLOOR);
+            map[row, col] = FLOOR;
+          }
+        }
+      }
     }
   }
 
