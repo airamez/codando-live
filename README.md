@@ -304,3 +304,5 @@
 | 260 | [Advanced - Async Programming - Demo](https://youtube.com/live/b4UgJfmMG1w) | [CSharp/_21_Advanced/_08_AsyncIntro_02.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_08_AsyncIntro_02.cs) |
 | 261 | [Advanced - Async Programming - Exceptions](https://youtube.com/live/6AuZ6DQswlg) | [CSharp/_21_Advanced/_09_AsyncExceptions.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_09_AsyncExceptions.cs) |
 | 262 | [Advanced - Async Programming - Race Condition](https://youtube.com/live/RkG82ojywnI) | [CSharp/_21_Advanced/_10_AsyncRaceCondition.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_10_AsyncRaceCondition.cs) |
+| 263 | [Advanced - Async Programming - Thread Safe](https://youtube.com/live/YpztILAdNt8) | [CSharp/_21_Advanced/_11_ThreadSafe.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_11_ThreadSafe.cs) |
+| 263 | [Advanced - Async Programming - A Frog Race Game](https://youtube.com/live/U4jdPiAGqWQ) | [CSharp/_21_Advanced/_12_AsyncFrogRace.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_12_AsyncFrogRace.cs) |

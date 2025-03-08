@@ -1,3 +1,5 @@
+// https://www.pucsp.br/~jarakaki/lp4/Threads-Aracaju
+
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -17,14 +19,13 @@ namespace Async
 
     public static async Task race()
     {
-      const int RACE_DISTANCE = 10; // Defines the race length
+      const int RACE_DISTANCE = 100; // Defines the race length
 
-      // Set console encoding to support emojis
       Console.OutputEncoding = Encoding.UTF8;
-      Console.Clear(); // Clears the console screen
+      Console.Clear();
       Console.WriteLine("🐸 Welcome to the Frog Race! 🐸");
       Console.WriteLine($"Race Distance: {RACE_DISTANCE}");
-      Console.WriteLine("".PadLeft(RACE_DISTANCE + 10, '-') + "🏁");
+      Console.WriteLine("".PadLeft(RACE_DISTANCE + 10, '=') + "🏁");
 
       // Create a list of frogs, each with a unique row position in the console
       ConcurrentBag<Frog> frogs = new ConcurrentBag<Frog>();
@@ -43,7 +44,7 @@ namespace Async
       await Task.WhenAll(raceTasks);
 
       // Move the cursor down to print final ranking
-      Console.SetCursorPosition(0, frogs.Count + 5);
+      Console.SetCursorPosition(0, frogs.Count + 3);
       Console.WriteLine("\n🏁 Race Over! Final Ranking:");
 
       int position = 1;
@@ -58,13 +59,16 @@ namespace Async
 
   public class Frog
   {
-    private readonly Random _random; // Each frog gets its own random instance
-
     public string Name { get; } // Frog's name
     private int DistanceCovered { get; set; } // Tracks how far the frog has jumped
     private int ConsoleRow { get; } // Stores the row in which the frog's progress is displayed
     private int JumpDelay { get; set; } // Time delay after each jump
     private int RaceDistance; // The total distance to complete the race
+    private readonly Random _random; // Each frog gets its own random instance
+    public const int JUMP_DELAY_MIN = 500;
+    public const int JUMP_DELAY_MAX = 1000;
+    public const int JUMP_DISTANCE_MIN = 1;
+    public const int JUMP_DISTANCE_Max = 10;
 
     private static readonly object consoleLock = new object(); // Lock object for console synchronization
 
@@ -79,7 +83,7 @@ namespace Async
       _random = new Random(Guid.NewGuid().GetHashCode());
 
       // Initial random delay to add variation at the start of the race
-      JumpDelay = _random.Next(100, 300);
+      JumpDelay = _random.Next(JUMP_DELAY_MIN, JUMP_DELAY_MAX);
     }
 
     /// <summary>
@@ -92,12 +96,12 @@ namespace Async
       // Keep jumping until the frog covers the required distance
       while (DistanceCovered < RaceDistance)
       {
-        int jump = _random.Next(1, 5); // Each jump is between 1 and 4 units
+        int jump = _random.Next(JUMP_DISTANCE_MIN, JUMP_DISTANCE_Max + 1); // Each jump is between 1 and 4 units
         DistanceCovered += jump; // Update the frog's position
         ShowProgress(); // Display updated progress on the console
 
         // Increase delay after each jump to make the race more unpredictable
-        JumpDelay += _random.Next(50, 150);
+        JumpDelay = _random.Next(JUMP_DELAY_MIN, JUMP_DELAY_MAX);
 
         // "await Task.Delay(JumpDelay)" makes the frog pause asynchronously.
         // This means the frog's race continues in the background without blocking other frogs.
@@ -110,7 +114,7 @@ namespace Async
       // Move the cursor to the frog's row and print the rank
       lock (consoleLock)
       {
-        Console.SetCursorPosition(RaceDistance + 10, ConsoleRow + 3);
+        Console.SetCursorPosition(RaceDistance + 10, ConsoleRow + 2);
         Console.WriteLine($"#{ranking.Count}");
       }
     }
@@ -120,8 +124,8 @@ namespace Async
       // Set cursor to the frog's assigned row and display its progress
       lock (consoleLock)
       {
-        Console.SetCursorPosition(0, ConsoleRow + 3);
-        Console.Write($"{Name}: " + new string('=', Math.Min(DistanceCovered, RaceDistance)) + "🐸");
+        Console.SetCursorPosition(0, ConsoleRow + 2);
+        Console.Write($"{Name}: " + new string('-', Math.Min(DistanceCovered, RaceDistance)) + "🐸");
       }
     }
   }

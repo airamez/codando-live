@@ -45,29 +45,46 @@ public class ThreadSafeApp
   public static void Main(string[] args)
   {
     var rnd = new Random();
+
+    // https://learn.microsoft.com/en-us/dotnet/api/system.threading.tasks.parallel.for?view=net-9.0
+    // Executes a for loop in which iterations may run in parallel.
     Parallel.For(0, 10, i =>
     {
       for (int j = 0; j < 10; j++)
       {
-        Thread.Sleep(rnd.Next(5) * 500);
+        Thread.Sleep(rnd.Next(9) * 200);
         Console.Write(i);
       }
     });
+
     Console.WriteLine();
 
     // Race Condition using List
     var list = new List<int>(); // Try a few times to cause exception
-    Parallel.For(0, 1000, i =>
+    Parallel.For(0, 1_000, i =>
     {
-      list.Add(i); // Not thread-safe!
+      for (int j = 0; j < 10; j++)
+      {
+        try
+        {
+          list.Add(i); // Not thread-safe!
+        }
+        catch (Exception ex)
+        {
+          Console.WriteLine(ex.Message);
+        }
+      }
     });
     Console.WriteLine($"List count: {list.Count}");
 
     // Thread Safe using ConcurentBag
     var bag = new ConcurrentBag<int>();
-    Parallel.For(0, 1000, i =>
+    Parallel.For(0, 1_000, i =>
     {
-      bag.Add(i); // Thread-safe
+      for (int j = 0; j < 10; j++)
+      {
+        bag.Add(i); // Thread-safe
+      }
     });
     Console.WriteLine($"Bag count: {bag.Count}");
   }
