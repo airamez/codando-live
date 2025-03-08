@@ -56,12 +56,12 @@ public class PiHunterGame
       Task.Run(() => monster.Move());
     }
     IsGameOver = false;
-    while (!IsGameOver)
+    while (!IsGameOver) // Game loop
     {
       // Wait for user input
       var key = Console.ReadKey(intercept: true).Key;
       // Exit the program if the user presses 'Q' or Escape
-      if (key == ConsoleKey.Q || key == ConsoleKey.Escape)
+      if (key == ConsoleKey.Escape)
       {
         IsGameOver = true;
       }
@@ -130,7 +130,8 @@ public class PiHunterGame
     {
       for (int col = PlayerCol - 1; col <= PlayerCol + 1; col++)
       {
-        if (row >= 0 && row < MAP_HEIGHT && col >= 0 && col <= MAP_WIDTH)
+        if (row >= 0 && row < MAP_HEIGHT &&
+            col >= 0 && col < MAP_WIDTH)
         {
           if (map[row, col] == WALL)
           {
@@ -212,7 +213,7 @@ public class PiHunterGame
   private void PrintStatus()
   {
     TimeSpan elapsedTime = timer.Elapsed;
-    string status = $"Collected Objects: {CollectedCounter}/{TotalToCollectCounter} | Time Elapsed: {elapsedTime:hh\\:mm\\:ss} [Press 'ESC' or 'Q' to quit]";
+    string status = $"Collected Objects: {CollectedCounter}/{TotalToCollectCounter} | Time Elapsed: {elapsedTime:hh\\:mm\\:ss} [Press 'SPACE BAR' for Bomb and 'ESC' to quit]";
     PrintAt(MAP_HEIGHT + 1, 0, status);
   }
 
@@ -265,7 +266,7 @@ public class Monster
           newCol < PiHunterGame.MAP_WIDTH && map[newRow, newCol] != PiHunterGame.WALL &&
           newCol < PiHunterGame.MAP_WIDTH && map[newRow, newCol] != PiHunterGame.PI)
       {
-        // If monster and player are in the same or adjacents positions
+        // If monster and player are in the same or adjacents positions is GAME OVER
         if (Math.Abs(monsterRow - PiHunterGame.PlayerRow) <= 1 &&
             Math.Abs(monsterCol - PiHunterGame.PlayerCol) <= 1)
         {
