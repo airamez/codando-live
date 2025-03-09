@@ -16,7 +16,7 @@ public class WebExplorerApp
   {
     WebExplorer webExplorer = new WebExplorer();
     Stopwatch stopwatch = Stopwatch.StartNew();
-    // await webExplorer.Explore("https://raw.githubusercontent.com/airamez/codando-live/refs/heads/main/README.md", 1);
+    await webExplorer.Explore("https://raw.githubusercontent.com/airamez/codando-live/refs/heads/main/README.md", 1);
     //await webExplorer.Explore("https://github.com/airamez/codando-live", 2);
 
     stopwatch.Stop();
