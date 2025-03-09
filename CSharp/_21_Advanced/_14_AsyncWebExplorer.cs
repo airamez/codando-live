@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,7 +14,9 @@ public class WebExplorerApp
   {
     WebExplorer webExplorer = new WebExplorer();
     Stopwatch stopwatch = Stopwatch.StartNew();
-    await webExplorer.Explore("https://raw.githubusercontent.com/airamez/codando-live/refs/heads/main/README.md", 1);
+
+    await webExplorer.Explore("https://raw.githubusercontent.com/airamez/codando-live/refs/heads/main/README.md", 1, true);
+    //await webExplorer.Explore("https://raw.githubusercontent.com/airamez/codando-live/refs/heads/main/README.md", 1, false);
     //await webExplorer.Explore("https://github.com/airamez/codando-live", 2);
 
     stopwatch.Stop();
@@ -29,19 +29,15 @@ public class WebExplorer
   private ConcurrentDictionary<string, bool> VisitedUrls { set; get; }
   private int DepthLimit { set; get; }
 
-  public WebExplorer()
-  {
-  }
-
-  public async Task Explore(string url, int depth)
+  public async Task Explore(string url, int depth, bool async = true)
   {
     DepthLimit = depth;
     VisitedUrls = new ConcurrentDictionary<string, bool>();
-    await ExploreTask(url, 0);
+    await ExploreTask(url, 0, async);
     Console.WriteLine($"Exploration completed: {VisitedUrls.Count} pages explored!!!");
   }
 
-  public async Task ExploreTask(string url, int depth)
+  private async Task ExploreTask(string url, int depth, bool async)
   {
     if (depth > DepthLimit || VisitedUrls.ContainsKey(url))
     {
@@ -56,12 +52,22 @@ public class WebExplorer
     }
     string UrlPattern = @"https?://[^\s""<>]+";
     MatchCollection matches = Regex.Matches(content, UrlPattern);
-    var tasks = new List<Task>();
-    foreach (Match match in matches)
+    if (async)
     {
-      tasks.Add(ExploreTask(match.Value, depth + 1));
+      var tasks = new List<Task>();
+      foreach (Match match in matches)
+      {
+        tasks.Add(ExploreTask(match.Value, depth + 1, async));
+      }
+      await Task.WhenAll(tasks);
     }
-    await Task.WhenAll(tasks);
+    else
+    {
+      foreach (Match match in matches)
+      {
+        await ExploreTask(match.Value, depth + 1, async);
+      }
+    }
   }
 
   private async Task<string> GetUrlContent(string requestUri)

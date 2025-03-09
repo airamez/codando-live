@@ -307,3 +307,4 @@
 | 263 | [Advanced - Async Programming - Thread Safe](https://youtube.com/live/YpztILAdNt8) | [CSharp/_21_Advanced/_11_AsyncThreadSafe.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_11_AsyncThreadSafe.cs) |
 | 264 | [Advanced - Async Programming - Frog Race Game](https://youtube.com/live/U4jdPiAGqWQ) | [CSharp/_21_Advanced/_12_AsyncFrogRace.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_12_AsyncFrogRace.cs) |
 | 265 | [Advanced - Async Programming - Pi Hunter Game](https://youtube.com/live/kGlnAY9jDek) | [CSharp/_21_Advanced/_13_AsyncPiHunter.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_13_AsyncPiHunter.cs) |
+| 266 | [Advanced - Async Programming - Web Explorer](https://youtube.com/live/huExHY4mwf0) | [CSharp/_21_Advanced/_14_AsyncWebExplorer.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_14_AsyncWebExplorer.cs) |
