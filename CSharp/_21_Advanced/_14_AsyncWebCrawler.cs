@@ -2,75 +2,59 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Advanced;
+namespace Async;
 
-public class WebCrawlerApp
+public class WebExplorerApp
 {
   public static async Task Main(string[] args)
   {
-    WebCrawler webCrawler = new WebCrawler(2);
-
+    WebExplorer webExplorer = new WebExplorer(3);
     Stopwatch stopwatch = Stopwatch.StartNew();
-
-    //await webCrawler.Crawls("https://github.com/airamez/codando-live", true);
-    await webCrawler.Crawls("https://github.com/airamez/codando-live", false);
-
+    await webExplorer.Explorer("https://raw.githubusercontent.com/airamez/codando-live/refs/heads/main/README.md");
+    // await webExplorer.Explorer("https://github.com/airamez/codando-live");
+    //await webExplorer.Explorer("https://google.com");
     stopwatch.Stop();
     Console.WriteLine($"Completed in {stopwatch.ElapsedMilliseconds / 1000} seconds");
   }
 }
 
-public class WebCrawler
+public class WebExplorer
 {
   private ConcurrentDictionary<string, bool> Visited;
   private int Count;
   private int LevelLimit;
 
-  public WebCrawler(int levelLimit)
+  public WebExplorer(int levelLimit)
   {
     LevelLimit = levelLimit;
     Count = 0;
     Visited = new ConcurrentDictionary<string, bool>();
   }
 
-  public async Task Crawls(string url, bool async, int level = 1)
+  public async Task Explorer(string url, int level = 0)
   {
-    if (level > LevelLimit || !Visited.TryAdd(url, true))
+    if (level > LevelLimit || Visited.ContainsKey(url))
     {
       return;
     }
-
+    Console.WriteLine($"{Count++}[{level}]: {url}");
     string content = await GetUrlContent(url);
     if (string.IsNullOrWhiteSpace(content))
     {
       return;
     }
-
-    Console.WriteLine($"{Count++}[{level}]: {url}");
     string pattern = @"https?://[^\s""<>]+";
     MatchCollection matches = Regex.Matches(content, pattern);
-
-    if (async)
+    List<Task> tasks = new List<Task>();
+    foreach (Match match in matches)
     {
-      List<Task> tasks = new List<Task>();
-      foreach (Match match in matches)
-      {
-        tasks.Add(Crawls(match.Value, async, level + 1));
-      }
-      await Task.WhenAll(tasks);
+      tasks.Add(Explorer(match.Value, level + 1));
     }
-    else
-    {
-      foreach (Match match in matches)
-      {
-        await Crawls(match.Value, async, level + 1);
-      }
-    }
+    await Task.WhenAll(tasks);
   }
 
   private async Task<string> GetUrlContent(string requestUri)
