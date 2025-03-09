@@ -22,29 +22,29 @@ public class RaceConditionApp
     /*
      * With Race Conditions
      */
-    // Console.WriteLine("With Race Conditions");
-    // var tasks = new Task[10];
-    // // Start 10 tasks that increment the counter 1000 times
-    // for (int i = 0; i < tasks.Length; i++)
-    // {
-    //   tasks[i] = Run(i);
-    // }
-    // await Task.WhenAll(tasks);
-    // Console.WriteLine($"\nFinal counter value: {counter}");
+    Console.WriteLine("With Race Conditions");
+    var tasks = new Task[10];
+    // Start 10 tasks that increment the counter 1000 times
+    for (int i = 0; i < tasks.Length; i++)
+    {
+      tasks[i] = Run(i);
+    }
+    await Task.WhenAll(tasks);
+    Console.WriteLine($"\nFinal counter value: {counter}");
 
     // counter = 0;
 
-    // /*
-    //  * Without Race Condition using Interlocked
-    //  */
-    // Console.WriteLine(" Without Race Condition using Interlocked");
-    // var tasksSafe1 = new Task[10];
-    // for (int i = 0; i < tasksSafe1.Length; i++)
-    // {
-    //   tasksSafe1[i] = RunSafe1(i);
-    // }
-    // await Task.WhenAll(tasksSafe1);
-    // Console.WriteLine($"\nFinal counter value: {counter}");
+    /*
+     * Without Race Condition using Interlocked
+     */
+    Console.WriteLine(" Without Race Condition using Interlocked");
+    var tasksSafe1 = new Task[10];
+    for (int i = 0; i < tasksSafe1.Length; i++)
+    {
+      tasksSafe1[i] = RunSafe1(i);
+    }
+    await Task.WhenAll(tasksSafe1);
+    Console.WriteLine($"\nFinal counter value: {counter}");
 
     counter = 0;
 

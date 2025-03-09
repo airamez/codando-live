@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,11 +14,11 @@ public class WebExplorerApp
 {
   public static async Task Main(string[] args)
   {
-    WebExplorer webExplorer = new WebExplorer(3);
+    WebExplorer webExplorer = new WebExplorer();
     Stopwatch stopwatch = Stopwatch.StartNew();
-    await webExplorer.Explorer("https://raw.githubusercontent.com/airamez/codando-live/refs/heads/main/README.md");
-    // await webExplorer.Explorer("https://github.com/airamez/codando-live");
-    //await webExplorer.Explorer("https://google.com");
+    // await webExplorer.Explore("https://raw.githubusercontent.com/airamez/codando-live/refs/heads/main/README.md", 1);
+    //await webExplorer.Explore("https://github.com/airamez/codando-live", 2);
+
     stopwatch.Stop();
     Console.WriteLine($"Completed in {stopwatch.ElapsedMilliseconds / 1000} seconds");
   }
@@ -24,35 +26,40 @@ public class WebExplorerApp
 
 public class WebExplorer
 {
-  private ConcurrentDictionary<string, bool> Visited;
-  private int Count;
-  private int LevelLimit;
+  private ConcurrentDictionary<string, bool> VisitedUrls { set; get; }
+  private int DepthLimit { set; get; }
 
-  public WebExplorer(int levelLimit)
+  public WebExplorer()
   {
-    LevelLimit = levelLimit;
-    Count = 0;
-    Visited = new ConcurrentDictionary<string, bool>();
   }
 
-  public async Task Explorer(string url, int level = 0)
+  public async Task Explore(string url, int depth)
   {
-    if (level > LevelLimit || Visited.ContainsKey(url))
+    DepthLimit = depth;
+    VisitedUrls = new ConcurrentDictionary<string, bool>();
+    await ExploreTask(url, 0);
+    Console.WriteLine($"Exploration completed: {VisitedUrls.Count} pages explored!!!");
+  }
+
+  public async Task ExploreTask(string url, int depth)
+  {
+    if (depth > DepthLimit || VisitedUrls.ContainsKey(url))
     {
       return;
     }
-    Console.WriteLine($"{Count++}[{level}]: {url}");
+    VisitedUrls[url] = true;
+    Console.WriteLine($"[{VisitedUrls.Count}:{depth}]={url}");
     string content = await GetUrlContent(url);
     if (string.IsNullOrWhiteSpace(content))
     {
       return;
     }
-    string pattern = @"https?://[^\s""<>]+";
-    MatchCollection matches = Regex.Matches(content, pattern);
-    List<Task> tasks = new List<Task>();
+    string UrlPattern = @"https?://[^\s""<>]+";
+    MatchCollection matches = Regex.Matches(content, UrlPattern);
+    var tasks = new List<Task>();
     foreach (Match match in matches)
     {
-      tasks.Add(Explorer(match.Value, level + 1));
+      tasks.Add(ExploreTask(match.Value, depth + 1));
     }
     await Task.WhenAll(tasks);
   }
@@ -64,25 +71,15 @@ public class WebExplorer
       try
       {
         HttpResponseMessage response = await client.GetAsync(requestUri);
-        if (response.StatusCode != System.Net.HttpStatusCode.OK)
-        {
-          return string.Empty;
-        }
-        if (response.Content.Headers.ContentType != null &&
-            (response.Content.Headers.ContentType.MediaType.StartsWith("text") ||
-             response.Content.Headers.ContentType.MediaType.Contains("json")))
+        if (response.StatusCode == System.Net.HttpStatusCode.OK &&
+            response.Content.Headers.ContentType != null &&
+            response.Content.Headers.ContentType.MediaType.StartsWith("text"))
         {
           return await response.Content.ReadAsStringAsync();
         }
-        else
-        {
-          return string.Empty;
-        }
       }
-      catch
-      {
-        return string.Empty;
-      }
+      catch { }
+      return string.Empty;
     }
   }
 }
