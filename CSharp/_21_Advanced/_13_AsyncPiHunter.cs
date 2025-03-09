@@ -25,10 +25,11 @@ public class PiHunterGame
   public const string PI = "π";
   public const string PLAYER = "☻";
   public const string MONSTER = "∞";
+  public const int BOMB_LIMT = 3;
   static public bool IsGameOver { private set; get; }
   static public int PlayerCol { private set; get; }
   static public int PlayerRow { private set; get; }
-
+  private int BombUsageCount { set; get; }
   private int CollectedCounter { set; get; }
   private int TotalToCollectCounter { set; get; }
   private string[,] Map; // 2D array to represent the map
@@ -127,6 +128,10 @@ public class PiHunterGame
 
   private void UseBomb()
   {
+    if (BombUsageCount >= BOMB_LIMT)
+    {
+      return;
+    }
     for (int row = PlayerRow - 1; row <= PlayerRow + 1; row++)
     {
       for (int col = PlayerCol - 1; col <= PlayerCol + 1; col++)
@@ -142,6 +147,7 @@ public class PiHunterGame
         }
       }
     }
+    BombUsageCount++;
   }
 
   private void InitializeMap()
@@ -213,7 +219,7 @@ public class PiHunterGame
   private void PrintStatus()
   {
     TimeSpan elapsedTime = Timer.Elapsed;
-    string status = $"Collected Objects: {CollectedCounter}/{TotalToCollectCounter} | Time Elapsed: {elapsedTime:hh\\:mm\\:ss} [Press 'SPACE BAR' for Bomb and 'ESC' to quit]";
+    string status = $"PIs left: {TotalToCollectCounter - CollectedCounter} | Bombs Left: {BOMB_LIMT - BombUsageCount}| Time Elapsed: {elapsedTime:hh\\:mm\\:ss} \n[Press 'SPACE BAR' for Bomb and 'ESC' to quit]";
     PrintAt(MAP_HEIGHT + 1, 0, status);
   }
 
@@ -273,7 +279,7 @@ public class Monster
         if (Math.Abs(monsterRow - PiHunterGame.PlayerRow) <= 1 &&
             Math.Abs(monsterCol - PiHunterGame.PlayerCol) <= 1)
         {
-          PrintAt(PiHunterGame.MAP_HEIGHT + 2, 0, "GAME OVER: The monster caught you!");
+          PrintAt(PiHunterGame.MAP_HEIGHT + 3, 0, "GAME OVER: The monster caught you!");
           Environment.Exit(0);
         }
         PrintAt(monsterRow, monsterCol, PiHunterGame.FLOOR);
