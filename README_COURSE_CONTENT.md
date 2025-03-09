@@ -174,11 +174,14 @@
     * Parquet
   * HTTP Request
 * Advanced Programming
-  * LINQ
+  * Lambda Expression
   * Delegate
+  * LINQ
+  * Extension Method
   * RegEx: Regular Expression
-  * LRU Cache: Least Recently Used Cache
   * Multi-Threading and Async Programming
+  * Functional Programming
+  * LRU Cache: Least Recently Used Cache
 
 ## Introduction to SQL
 
