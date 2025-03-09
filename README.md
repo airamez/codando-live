@@ -36,7 +36,7 @@
 
 ## Course Content
 
-  [Content Page](README_COURSE_CONTENT.md)
+  [Course Content Page Here](README_COURSE_CONTENT.md)
 
 ## Classes
 
