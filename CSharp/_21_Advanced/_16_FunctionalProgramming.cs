@@ -1,3 +1,20 @@
+/*
+- Definition: SHOW THE MEMES
+  1. Functional programming is a style of programming that emphasizes using functions to 
+     process data, rather than changing the data itself through state or variables.
+  2. Functional programming is a programming paradigm where computation is treated as the
+     evaluation of mathematical functions, avoiding changing state and mutable data.
+- Core Principles:
+  - Immutability: Data objects are immutable.
+  - First-Class Functions: Functions are treated as first-class citizens; they can be 
+    passed as arguments, returned from other functions, and assigned to variables.
+  - Pure Functions: Functions produce the same output for the same input without side effects.
+  - Higher-Order Functions: Functions that can take other functions as arguments or 
+    return them as results.
+  - Declarative Code: Focuses on "what to do" rather than "how to do it."
+  - Function Composition: Combining simple functions to build more complex ones.
+*/
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +25,33 @@ public class FunctinalProgrammingApp
 {
   static void Main(string[] args)
   {
+    // Example 1
+    List<int> numbers = Enumerable.Range(0, 100).ToList();
+    IEnumerable<int> fivesDoubled = numbers
+            .Where(n => n % 5 == 0)
+            .Select(n => n + n);
+    Console.WriteLine("Squared even numbers:");
+    fivesDoubled.ToList().ForEach(n => Console.Write(n + " "));
+    Console.WriteLine();
+
+    // Example 2
+    /*
+       - Using Func to declare a method
+         - Func is a built-in delegate type that represents a method with a return value.
+         - It allows you to encapsulate methods in a reusable and type-safe way.
+         - The last type parameter always represents the return type.
+         - Declaration
+           Func<parameter1Type, parameter2Type, ..., returnType>
+     */
+
+    Func<int, int, int> add = (a, b) => a + b;
+    Func<int, int, int> power = (a, b) => (int)Math.Pow(a, b);
+    int addResult = PerformOperation(2, 5, add);
+    int powerResult = PerformOperation(2, 5, power);
+    Console.WriteLine($"Sum using higher-order function: {addResult}");
+    Console.WriteLine($"Power using higher-order function: {powerResult}");
+
+    // Example 3
     var rankedProducts = Product.GetSampleData()
         .Select(p => new // Create a new list with products and the calculated Weight
         {
@@ -19,6 +63,29 @@ public class FunctinalProgrammingApp
 
     Console.WriteLine("Top Ranked Products:");
     rankedProducts.ToList().ForEach(p => Console.WriteLine($"{p.Weight:F2}: {p.Product.Name}"));
+
+    // Example 4
+    var salesSummary = Sale.GetSampleData()
+        .Where(s => s.Year == 2023) // Filter sales from 2023
+        .GroupBy(s => s.Region)    // Group sales by region
+        .Where(g => g.Sum(s => s.Amount) > 1_000) // HAVING: total sales > 1000
+        .Select(g => new SalesSummary
+        {
+          Region = g.Key,
+          TotalSales = g.Sum(s => s.Amount) // Calculate total sales per group
+        })
+        .OrderByDescending(summary => summary.TotalSales) // Order by total sales descending
+        .ToList();
+    Console.WriteLine("Sales Summary (2023, Total Sales > $1000):");
+    foreach (var summary in salesSummary)
+    {
+      Console.WriteLine($"Region: {summary.Region}, Total Sales: {summary.TotalSales:C}");
+    }
+  }
+
+  static int PerformOperation(int x, int y, Func<int, int, int> operation)
+  {
+    return operation(x, y);
   }
 }
 
@@ -85,4 +152,34 @@ public class Product
     };
     return products;
   }
+}
+
+public class Sale
+{
+  public string Region { get; set; }
+  public int Year { get; set; }
+  public decimal Amount { get; set; }
+
+  public static List<Sale> GetSampleData()
+  {
+    List<Sale> sales = new List<Sale>
+        {
+            new() { Region = "North", Year = 2023, Amount = 1200 },
+            new() { Region = "North", Year = 2023, Amount = 800 },
+            new() { Region = "North", Year = 2024, Amount = 400 },
+            new() { Region = "South", Year = 2023, Amount = 500 },
+            new() { Region = "South", Year = 2023, Amount = 1500 },
+            new() { Region = "South", Year = 2024, Amount = 200 },
+            new() { Region = "South", Year = 2023, Amount = 500 },
+            new() { Region = "West", Year = 2023, Amount = 1000 },
+            new() { Region = "West", Year = 2024, Amount = 300 },
+        };
+    return sales;
+  }
+}
+
+public class SalesSummary
+{
+  public string Region { get; set; }
+  public decimal TotalSales { get; set; }
 }
