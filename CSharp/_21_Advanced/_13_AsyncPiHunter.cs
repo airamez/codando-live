@@ -26,6 +26,7 @@ public class PiHunterGame
   public const string PLAYER = "☻";
   public const string MONSTER = "∞";
   public const int BOMB_LIMT = 3;
+  public const int MONSTER_COUNT = 4;
   static public bool IsGameOver { private set; get; }
   static public int PlayerCol { private set; get; }
   static public int PlayerRow { private set; get; }
@@ -51,7 +52,7 @@ public class PiHunterGame
     DrawMap();
     Timer.Start();
     Task.Run(() => UpdateStatus());
-    SpawnMonsters(4); // Spawn three monsters
+    SpawnMonsters(MONSTER_COUNT);
     foreach (var monster in monsters)
     {
       Task.Run(() => monster.Move());
@@ -219,7 +220,7 @@ public class PiHunterGame
   private void PrintStatus()
   {
     TimeSpan elapsedTime = Timer.Elapsed;
-    string status = $"PIs left: {TotalToCollectCounter - CollectedCounter} | Bombs Left: {BOMB_LIMT - BombUsageCount}| Time Elapsed: {elapsedTime:hh\\:mm\\:ss} \n[Press 'SPACE BAR' for Bomb and 'ESC' to quit]";
+    string status = $"PIs left: {TotalToCollectCounter - CollectedCounter} | Bombs Left: {BOMB_LIMT - BombUsageCount}| Time Elapsed: {elapsedTime:hh\\:mm\\:ss} \n[Move = Arrows; 'SPACE BAR' = Bomb and 'ESC' = Quit]";
     PrintAt(MAP_HEIGHT + 1, 0, status);
   }
 
