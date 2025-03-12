@@ -309,3 +309,4 @@
 | 265 | [Advanced - Async Programming - Pi Hunter Game](https://youtube.com/live/kGlnAY9jDek) | [CSharp/_21_Advanced/_13_AsyncPiHunter.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_13_AsyncPiHunter.cs) |
 | 266 | [Advanced - Async Programming - Web Explorer](https://youtube.com/live/huExHY4mwf0) | [CSharp/_21_Advanced/_14_AsyncWebExplorer.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_14_AsyncWebExplorer.cs) |
 | 267 | [Advanced - Async Programming - Heavy Processing](https://youtube.com/live/2oCf-v6nf_0) | [CSharp/_21_Advanced/_15_AsyncHeavyProcessing.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_15_AsyncHeavyProcessing.cs) |
+| 268 | [Advanced - Functional Programming](https://youtube.com/live/MdA0iDI2oz0) | [CSharp/_21_Advanced/_16_FunctionalProgramming.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_16_FunctionalProgramming.cs) |

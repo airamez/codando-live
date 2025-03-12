@@ -42,7 +42,7 @@ public class FunctinalProgrammingApp
          - The last type parameter always represents the return type.
          - Declaration
            Func<parameter1Type, parameter2Type, ..., returnType>
-     */
+    */
 
     Func<int, int, int> add = (a, b) => a + b;
     Func<int, int, int> power = (a, b) => (int)Math.Pow(a, b);
