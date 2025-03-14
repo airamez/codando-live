@@ -48,9 +48,9 @@ public class LRUApp
 {
   public static void Main(string[] args)
   {
-    //Demo();
+    Demo();
 
-    StressTest();
+    //StressTest();
   }
 
   private static void Demo()
@@ -73,23 +73,23 @@ public class LRUApp
     PrintCacheState(cache); // Should print: 1 -> 3 -> 2
 
     // Step 4: Add a new item, causing an eviction
-    Console.WriteLine("\nAdding key 4 to the cache...");
+    Console.WriteLine("Adding key 4 to the cache...");
     cache.Put(4, "Four");
     Console.WriteLine("Cache after adding key 4 (eviction should occur): ");
     PrintCacheState(cache); // Should print: 3 -> 2 -> 4 (1 evicted)
 
     // Step 5: Access a non-existent key
-    Console.WriteLine("nTrying to access key 1 (evicted):");
+    Console.WriteLine("Trying to access key 1 (evicted):");
     Console.WriteLine("cache.Get(1)= " + cache.Get(1));
 
     // Step 6: Update an existing key
-    Console.WriteLine("\nUpdating key 3 with a new value...");
+    Console.WriteLine("Updating key 3 with a new value...");
     cache.Put(3, "Three-Updated");
     Console.WriteLine("Cache after updating key 3: ");
     PrintCacheState(cache); // Should print: 2 -> 4 -> 3 (3 moved to the end)
 
     // Step 7: Test capacity limit
-    Console.WriteLine("\nAdding key 5 to test capacity limit...");
+    Console.WriteLine("Adding key 5 to test capacity limit...");
     cache.Put(5, "Five");
     Console.WriteLine("Cache after adding key 5 (eviction should occur): ");
     PrintCacheState(cache); // Should print: 4 -> 3 -> 5 (2 evicted)
@@ -101,7 +101,7 @@ public class LRUApp
     {
       Console.Write($"{node.Value} -> ");
     }
-    Console.WriteLine("null");
+    Console.WriteLine();
   }
   private static void StressTest()
   {
@@ -125,10 +125,28 @@ public class LRUApp
   }
 }
 
+/// <summary>
+/// Represents a single cache node with a generic key-value pair.
+/// </summary>
+/// <typeparam name="K">The type of the key.</typeparam>
+/// <typeparam name="V">The type of the value.</typeparam>
 public class CacheNode<K, V>
 {
+  /// <summary>
+  /// Gets the key of the cache node.
+  /// </summary>
   public K Key { private set; get; }
+
+  /// <summary>
+  /// The value associated with the key.
+  /// </summary>
   public V Value;
+
+  /// <summary>
+  /// Initializes a new instance of the <see cref="CacheNode{K, V}"/> class.
+  /// </summary>
+  /// <param name="key">The key of the cache node.</param>
+  /// <param name="value">The value associated with the key.</param>
   public CacheNode(K key, V value)
   {
     Key = key;
@@ -136,13 +154,39 @@ public class CacheNode<K, V>
   }
 }
 
+/// <summary>
+/// A generic Least Recently Used (LRU) Cache implementation.
+/// </summary>
+/// <typeparam name="K">The type of the key.</typeparam>
+/// <typeparam name="V">The type of the value.</typeparam>
 public class MyLRUCache<K, V> : IEnumerable
 {
+  /// <summary>
+  /// Doubly linked list to maintain the order of cache nodes.
+  /// It is used to remove the LRU entry and to updated the new and recently
+  /// accessed entries in constant time
+  /// </summary>
   private LinkedList<CacheNode<K, V>> list;
+
+  /// <summary>
+  /// Dictionary to map keys to linked list nodes for quick lookup.
+  /// </summary>
   private Dictionary<K, LinkedListNode<CacheNode<K, V>>> dict;
+
+  /// <summary>
+  /// The maximum capacity of the cache.
+  /// </summary>
   private readonly int CAPACITY;
+
+  /// <summary>
+  /// Gets the current number of items in the cache.
+  /// </summary>
   public int Count => dict.Count;
 
+  /// <summary>
+  /// Initializes a new instance of the <see cref="MyLRUCache{K, V}"/> class with a given capacity.
+  /// </summary>
+  /// <param name="capacity">The maximum number of items the cache can hold.</param>
   public MyLRUCache(int capacity)
   {
     list = new LinkedList<CacheNode<K, V>>();
@@ -150,6 +194,14 @@ public class MyLRUCache<K, V> : IEnumerable
     CAPACITY = capacity;
   }
 
+  /// <summary>
+  /// Retrieves a value from the cache using the specified key.
+  /// Update the element as recently used by removing from current position and
+  /// adding to the end of the linked list
+  /// </summary>
+  /// <param name="key">The key of the cache item to retrieve.</param>
+  /// <returns>The value associated with the key.</returns>
+  /// <exception cref="KeyNotFoundException">Thrown when the key is not found in the cache.</exception>
   public V Get(K key)
   {
     if (!dict.ContainsKey(key))
@@ -169,18 +221,22 @@ public class MyLRUCache<K, V> : IEnumerable
     return existingNode.Value.Value;
   }
 
+  /// <summary>
+  /// Adds a new key-value pair or updates an existing one.
+  /// </summary>
+  /// <param name="key">The key to add or update.</param>
+  /// <param name="value">The value associated with the key.</param>
   public void Put(K key, V value)
   {
-    if (dict.ContainsKey(key))
+    if (dict.ContainsKey(key)) // Update existing element
     {
       var existingNode = dict[key];
       list.Remove(existingNode);
-      var newNode = new CacheNode<K, V>(key, value);
-      dict[key] = list.AddLast(newNode);
+      dict[key] = list.AddLast(existingNode.Value);
     }
     else
     {
-      if (dict.Count == CAPACITY)
+      if (dict.Count == CAPACITY) // Eviction required
       {
         dict.Remove(list.First.Value.Key);
         list.RemoveFirst();
@@ -190,24 +246,40 @@ public class MyLRUCache<K, V> : IEnumerable
     }
   }
 
+  /// <summary>
+  /// Gets or sets the value associated with the specified key.
+  /// </summary>
+  /// <param name="key">The key to get or set.</param>
+  /// <returns>The value associated with the key.</returns>
   public V this[K key]
   {
     get => Get(key);
     set => Put(key, value);
   }
 
+  /// <summary>
+  /// Checks if a key exists in the cache.
+  /// </summary>
+  /// <param name="key">The key to check.</param>
+  /// <returns>True if the key exists, otherwise false.</returns>
   public bool ContainsKey(K key)
   {
     return dict.ContainsKey(key);
   }
 
-  // Implementation of the GetEnumerator for IEnumerable
+  /// <summary>
+  /// Gets an enumerator for the cache nodes.
+  /// </summary>
+  /// <returns>An enumerator for the cache nodes.</returns>
   public IEnumerator<CacheNode<K, V>> GetEnumerator()
   {
     return list.GetEnumerator();
   }
 
-  // Explicit implementation for non-generic IEnumerable
+  /// <summary>
+  /// Gets an enumerator for the cache nodes (non-generic version).
+  /// </summary>
+  /// <returns>An enumerator for the cache nodes.</returns>
   IEnumerator IEnumerable.GetEnumerator()
   {
     return GetEnumerator();
