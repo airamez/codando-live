@@ -110,8 +110,8 @@ public class SerpentGame
   {
     while (GameRunning)
     {
-      Cell newHead = Serpent.CalculateNextHead();
-      if (newHead.X == Fruit.Position.X && newHead.Y == Fruit.Position.Y)
+      Cell newHead = Serpent.CalculateNextHead(); // TODO: HERE
+      if (newHead.Col == Fruit.Position.Col && newHead.Row == Fruit.Position.Row)
       {
         Serpent.Grow();
         Score++;
@@ -120,15 +120,15 @@ public class SerpentGame
       }
       else
       {
-        Cell previousTail = Serpent.Body[^1];
+        Cell previousTail = Serpent.Body[^1]; // TODO: HERE
         Serpent.Move();
-        DrawAt(previousTail.Y, previousTail.X, Constants.BACKGROUND); // Clear previous tail with floor character
+        DrawAt(previousTail.Row, previousTail.Col, Constants.BACKGROUND); // Clear previous tail with floor character
       }
       Serpent.CheckCollision();
-      DrawAt(Serpent.Head.Y, Serpent.Head.X, Constants.SERPENT_HEAD); // Serpent head
+      DrawAt(Serpent.Head.Row, Serpent.Head.Col, Constants.SERPENT_HEAD); // Serpent head
       foreach (var part in Serpent.Body.Skip(1))
       {
-        DrawAt(part.Y, part.X, Constants.SERPENT_BODY); // Serpent body
+        DrawAt(part.Row, part.Col, Constants.SERPENT_BODY); // Serpent body
       }
       DrawFruit(); // Ensure the fruit is always drawn
       await Task.Delay(Constants.SERPENT_MOVEMENT_DELAY);
@@ -162,12 +162,12 @@ public class SerpentGame
 
   private void GenerateFruit()
   {
-    Fruit = new Fruit(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Serpent.Body);
+    Fruit = new Fruit(Serpent.Body);
   }
 
   private void DrawFruit()
   {
-    DrawAt(Fruit.Position.Y, Fruit.Position.X, Constants.FRUIT);
+    DrawAt(Fruit.Position.Row, Fruit.Position.Col, Constants.FRUIT);
   }
 
   private void UpdateScoreDisplay()
@@ -192,24 +192,25 @@ public class SerpentGame
 public class Cell
 {
   /// <summary>
-  /// X-coordinate of the point.
+  /// Row of the point.
   /// </summary>
-  public int X { get; set; }
+  public int Row { get; set; }
 
   /// <summary>
-  /// Y-coordinate of the point.
+  /// Column of the point.
   /// </summary>
-  public int Y { get; set; }
+  public int Col { get; set; }
+
 
   /// <summary>
   /// Initializes a new instance of the Point class with specified X and Y coordinates.
   /// </summary>
-  /// <param name="x">The X-coordinate of the point.</param>
-  /// <param name="y">The Y-coordinate of the point.</param>
-  public Cell(int x, int y)
+  /// <param name="col">The Row of the point.</param>
+  /// <param name="row">The Column of the point.</param>
+  public Cell(int col, int row)
   {
-    X = x;
-    Y = y;
+    Col = col;
+    Row = row;
   }
 }
 
@@ -239,7 +240,8 @@ public class Serpent
   /// <param name="startY">The Y-coordinate of the starting position.</param>
   public Serpent(int startX, int startY)
   {
-    Body = new List<Cell> { new Cell(startX, startY) }; // Initialize the body with the starting head position
+    // TODO: HERE
+    Body = new List<Cell> { new Cell(startX, startY) }; // Initialize the body with the starting head position 
     leftRightDirection = 1; // Default horizontal movement
     upDownDirection = 0; // No vertical movement initially
   }
@@ -321,7 +323,8 @@ public class Serpent
   /// <returns>A new Point representing the next head position.</returns>
   public Cell CalculateNextHead()
   {
-    return new Cell(Head.X + leftRightDirection, Head.Y + upDownDirection);
+    // TODO: HERE
+    return new Cell(Head.Col + leftRightDirection, Head.Row + upDownDirection);
   }
 
   /// <summary>
@@ -329,6 +332,7 @@ public class Serpent
   /// </summary>
   public void Move()
   {
+    // TODO: HERE
     Cell newHead = CalculateNextHead();
     Body.Insert(0, newHead); // Add the new head at the front of the body
     Body.RemoveAt(Body.Count - 1); // Remove the last segment (tail)
@@ -339,6 +343,7 @@ public class Serpent
   /// </summary>
   public void Grow()
   {
+    // TODO: HERE
     Cell newHead = CalculateNextHead();
     Body.Insert(0, newHead); // Add the new head at the front of the body
   }
@@ -353,7 +358,7 @@ public class Serpent
   {
     var result = false;
     // Check if the serpent's head collides with the map's borders
-    if (Head.X <= 0 || Head.Y <= 0 || Head.X >= Constants.MAP_WIDTH || Head.Y >= Constants.MAP_HEIGHT)
+    if (Head.Col <= 0 || Head.Row <= 0 || Head.Col >= Constants.MAP_WIDTH || Head.Row >= Constants.MAP_HEIGHT)
     {
       result = true;
     }
@@ -362,7 +367,7 @@ public class Serpent
       // Check if the serpent's head collides with its body
       for (int i = 1; i < Body.Count; i++)
       {
-        if (Head.X == Body[i].X && Head.Y == Body[i].Y)
+        if (Head.Col == Body[i].Col && Head.Row == Body[i].Row)
         {
           result = true;
           break;
@@ -394,12 +399,13 @@ public class Fruit
   /// <param name="width">The width of the map.</param>
   /// <param name="height">The height of the map.</param>
   /// <param name="serpentBody">The list of points representing the serpent's body.</param>
-  public Fruit(int width, int height, List<Cell> serpentBody)
+  public Fruit(List<Cell> serpentBody)
   {
     do
     {
+      // TODO: HERE
       // Generate a random position for the fruit
-      Position = new Cell(SerpentGame.Random.Next(1, width), SerpentGame.Random.Next(1, height));
-    } while (serpentBody.Exists(p => p.X == Position.X && p.Y == Position.Y)); // Ensure it does not overlap with the serpent
+      Position = new Cell(SerpentGame.Random.Next(1, Constants.MAP_WIDTH), SerpentGame.Random.Next(1, Constants.MAP_HEIGHT));
+    } while (serpentBody.Exists(p => p.Col == Position.Col && p.Row == Position.Row)); // Ensure it does not overlap with the serpent
   }
 }
