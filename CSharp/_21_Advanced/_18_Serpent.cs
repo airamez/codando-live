@@ -25,7 +25,7 @@ public class Constants
   public const string SERPENT_BODY = "●";
   public const int MAP_WIDTH = 40;
   public const int MAP_HEIGHT = 20;
-  public const int SERPENT_MOVEMENT_DELAY = 200;
+  public const int SERPENT_MOVEMENT_DELAY = 150;
 }
 
 public class SerpentGame
@@ -110,7 +110,7 @@ public class SerpentGame
   {
     while (GameRunning)
     {
-      Cell newHead = Serpent.CalculateNextHead(); // TODO: HERE
+      Cell newHead = Serpent.CalculateNextHead();
       if (newHead.Col == Fruit.Position.Col && newHead.Row == Fruit.Position.Row)
       {
         Serpent.Grow();
@@ -120,7 +120,7 @@ public class SerpentGame
       }
       else
       {
-        Cell previousTail = Serpent.Body[^1]; // TODO: HERE
+        Cell previousTail = Serpent.Body[^1]; // The elment of the List
         Serpent.Move();
         DrawAt(previousTail.Row, previousTail.Col, Constants.BACKGROUND); // Clear previous tail with floor character
       }
@@ -155,7 +155,7 @@ public class SerpentGame
     {
       for (int x = 1; x < Constants.MAP_WIDTH; x++)
       {
-        DrawAt(y, x, Constants.BACKGROUND); // Fill background with a subtle floor texture
+        DrawAt(y, x, Constants.BACKGROUND);
       }
     }
   }
@@ -207,7 +207,7 @@ public class Cell
   /// </summary>
   /// <param name="col">The Row of the point.</param>
   /// <param name="row">The Column of the point.</param>
-  public Cell(int col, int row)
+  public Cell(int row, int col)
   {
     Col = col;
     Row = row;
@@ -240,8 +240,7 @@ public class Serpent
   /// <param name="startY">The Y-coordinate of the starting position.</param>
   public Serpent(int startX, int startY)
   {
-    // TODO: HERE
-    Body = new List<Cell> { new Cell(startX, startY) }; // Initialize the body with the starting head position 
+    Body = new List<Cell> { new Cell(startY, startX) }; // Initialize the body with the starting head position 
     leftRightDirection = 1; // Default horizontal movement
     upDownDirection = 0; // No vertical movement initially
   }
@@ -323,8 +322,7 @@ public class Serpent
   /// <returns>A new Point representing the next head position.</returns>
   public Cell CalculateNextHead()
   {
-    // TODO: HERE
-    return new Cell(Head.Col + leftRightDirection, Head.Row + upDownDirection);
+    return new Cell(Head.Row + upDownDirection, Head.Col + leftRightDirection);
   }
 
   /// <summary>
@@ -332,7 +330,6 @@ public class Serpent
   /// </summary>
   public void Move()
   {
-    // TODO: HERE
     Cell newHead = CalculateNextHead();
     Body.Insert(0, newHead); // Add the new head at the front of the body
     Body.RemoveAt(Body.Count - 1); // Remove the last segment (tail)
@@ -343,7 +340,6 @@ public class Serpent
   /// </summary>
   public void Grow()
   {
-    // TODO: HERE
     Cell newHead = CalculateNextHead();
     Body.Insert(0, newHead); // Add the new head at the front of the body
   }
@@ -365,16 +361,8 @@ public class Serpent
     else
     {
       // Check if the serpent's head collides with its body
-      for (int i = 1; i < Body.Count; i++)
-      {
-        if (Head.Col == Body[i].Col && Head.Row == Body[i].Row)
-        {
-          result = true;
-          break;
-        }
-      }
+      result = Body.Skip(1).Any(bodyCell => bodyCell.Row == Head.Row && bodyCell.Col == Head.Col);
     }
-
     if (result)
     {
       SerpentGame.EndGame(); // Ends the game if a collision is detected
@@ -396,16 +384,13 @@ public class Fruit
   /// Initializes a new instance of the Fruit class and places it at a random position.
   /// Ensures the fruit does not overlap with the serpent's body.
   /// </summary>
-  /// <param name="width">The width of the map.</param>
-  /// <param name="height">The height of the map.</param>
   /// <param name="serpentBody">The list of points representing the serpent's body.</param>
   public Fruit(List<Cell> serpentBody)
   {
     do
     {
-      // TODO: HERE
       // Generate a random position for the fruit
-      Position = new Cell(SerpentGame.Random.Next(1, Constants.MAP_WIDTH), SerpentGame.Random.Next(1, Constants.MAP_HEIGHT));
-    } while (serpentBody.Exists(p => p.Col == Position.Col && p.Row == Position.Row)); // Ensure it does not overlap with the serpent
+      Position = new Cell(SerpentGame.Random.Next(1, Constants.MAP_HEIGHT), SerpentGame.Random.Next(1, Constants.MAP_WIDTH));
+    } while (serpentBody.Exists(p => p.Row == Position.Row && p.Col == Position.Col)); // Ensure it does not overlap with the serpent
   }
 }
