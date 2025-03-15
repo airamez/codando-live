@@ -1,4 +1,5 @@
 // https://leetcode.com/problems/lru-cache
+// https://www.geeksforgeeks.org/lru-cache-implementation/
 /*
 - Definition
   - An LRU (Least Recently Used) Cache is a data structure that stores a limited number
@@ -48,9 +49,9 @@ public class LRUApp
 {
   public static void Main(string[] args)
   {
-    Demo();
+    // Demo();
 
-    //StressTest();
+    StressTest();
   }
 
   private static void Demo()

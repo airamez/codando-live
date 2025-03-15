@@ -310,3 +310,4 @@
 | 266 | [Advanced - Async Programming - Web Explorer](https://youtube.com/live/huExHY4mwf0) | [CSharp/_21_Advanced/_14_AsyncWebExplorer.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_14_AsyncWebExplorer.cs) |
 | 267 | [Advanced - Async Programming - Heavy Processing](https://youtube.com/live/2oCf-v6nf_0) | [CSharp/_21_Advanced/_15_AsyncHeavyProcessing.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_15_AsyncHeavyProcessing.cs) |
 | 268 | [Advanced - Functional Programming](https://youtube.com/live/MdA0iDI2oz0) | [CSharp/_21_Advanced/_16_FunctionalProgramming.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_16_FunctionalProgramming.cs) |
+| 267 | [Advanced - LRU - Least Recently Used](https://youtube.com/live/ZiO3IBHYYxE) | [CSharp/_21_Advanced/_17_LRU.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_17_LRU.cs) |
