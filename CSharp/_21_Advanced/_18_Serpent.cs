@@ -41,7 +41,7 @@ public class SerpentGame
   {
     Initialize();
     await WaitToStart();
-    Serpent = new Serpent(Constants.MAP_WIDTH / 2, Constants.MAP_HEIGHT / 2);
+    Serpent = new Serpent(Constants.MAP_HEIGHT / 2, Constants.MAP_WIDTH / 2);
     GenerateFruit();
     var movementTask = Movement();
     var inputTask = Task.Run(async () =>
@@ -77,6 +77,7 @@ public class SerpentGame
     }
     DrawBorder(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
     DrawBackground();
+    UpdateScoreDisplay();
   }
 
   private static async Task WaitToStart()
@@ -106,34 +107,50 @@ public class SerpentGame
     Environment.Exit(0);
   }
 
+  /// <summary>
+  /// Handles the core movement logic for the serpent game.
+  /// Moves the serpent in the current direction, handles collisions, 
+  /// grows the serpent when it consumes fruit, and updates the game state.
+  /// </summary>
+  /// <returns>A task representing the asynchronous movement loop of the game.</returns>
   private async Task Movement()
   {
     while (GameRunning)
     {
+      // Calculate the serpent's new head position
       Cell newHead = Serpent.CalculateNextHead();
+
+      // Check if the serpent eats the fruit
       if (newHead.Col == Fruit.Position.Col && newHead.Row == Fruit.Position.Row)
       {
-        Serpent.Grow();
-        Score++;
-        UpdateScoreDisplay();
-        GenerateFruit();
+        Serpent.Grow(); // Grow the serpent
+        Score++; // Increment the score
+        UpdateScoreDisplay(); // Update the score display
+        GenerateFruit(); // Generate a new fruit at a random position
       }
       else
       {
-        Cell previousTail = Serpent.Body[^1]; // The elment of the List
-        Serpent.Move();
-        DrawAt(previousTail.Row, previousTail.Col, Constants.BACKGROUND); // Clear previous tail with floor character
+        // Clear the previous tail position with the background character
+        Cell previousTail = Serpent.Body[^1]; // The last element of the list
+        Serpent.Move(); // Move the serpent
+        DrawAt(previousTail.Row, previousTail.Col, Constants.BACKGROUND);
       }
+      // Check for collisions with walls or the serpent's own body
       Serpent.CheckCollision();
-      DrawAt(Serpent.Head.Row, Serpent.Head.Col, Constants.SERPENT_HEAD); // Serpent head
+      // Draw the serpent's head
+      DrawAt(Serpent.Head.Row, Serpent.Head.Col, Constants.SERPENT_HEAD);
+      // Draw the serpent's body (skipping the head)
       foreach (var part in Serpent.Body.Skip(1))
       {
-        DrawAt(part.Row, part.Col, Constants.SERPENT_BODY); // Serpent body
+        DrawAt(part.Row, part.Col, Constants.SERPENT_BODY);
       }
-      DrawFruit(); // Ensure the fruit is always drawn
+      // Ensure the fruit remains visible on the map
+      DrawFruit();
+      // Pause for a moment to control the serpent's movement speed
       await Task.Delay(Constants.SERPENT_MOVEMENT_DELAY);
     }
   }
+
 
   private void DrawBorder(int width, int height)
   {
@@ -236,11 +253,11 @@ public class Serpent
   /// <summary>
   /// Initializes the serpent at a specific starting position.
   /// </summary>
-  /// <param name="startX">The X-coordinate of the starting position.</param>
-  /// <param name="startY">The Y-coordinate of the starting position.</param>
-  public Serpent(int startX, int startY)
+  /// <param name="startCol">The X-coordinate of the starting position.</param>
+  /// <param name="startRow">The Y-coordinate of the starting position.</param>
+  public Serpent(int startRow, int startCol)
   {
-    Body = new List<Cell> { new Cell(startY, startX) }; // Initialize the body with the starting head position 
+    Body = new List<Cell> { new Cell(startRow, startCol) }; // Initialize the body with the starting head position 
     leftRightDirection = 1; // Default horizontal movement
     upDownDirection = 0; // No vertical movement initially
   }
