@@ -4,7 +4,11 @@
 
 A **Database Server** is a dedicated computer system that provides database services to other computers (clients) over a network. It manages data storage, retrieval and manipulation. A **Database Management System (DBMS)** is the software running on the database server that interacts with the database to perform these operations.
 
-Popular examples of DBMS include **SQL Server, PostgreSQL, Oracle Database, MySQL and MongoDB.**
+* Popular examples of DBMS include:
+  * SQL Server
+  * Postgre
+  * Oracle Database
+  * MySQL
 
 ---
 
@@ -71,8 +75,9 @@ A quick search and you will find a long list of SQL and NoSQL databases servers.
 
 There are several free SQL Server that you can use to practice and each one has different options for clients or IDE:
 
-* Microsoft SQL Server Express (The free version of Microsoft SQL Server)
-  * <https://www.microsoft.com/en-us/download/details.aspx?id=101064>
+* Microsoft SQL Server
+  * <https://www.microsoft.com/en-us/sql-server/sql-server-downloads>
+    * There are two free version: Developer and Express
   * Client: SQL Server Managment Studio (SSMS)
     * <https://learn.microsoft.com/en-us/ssms/sql-server-management-studio-ssms>
 * Postgre SQL
