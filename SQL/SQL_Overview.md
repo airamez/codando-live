@@ -1,4 +1,4 @@
-# SQL - Structed Query Language
+# SQL - Structured Query Language
 
 ## **Database Servers and Database Management Systems (DBMS)**
 
