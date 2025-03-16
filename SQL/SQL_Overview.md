@@ -55,7 +55,7 @@ Usually, a System/Application is devided in 3 tiers:
   * Delete
   * etc
 
-![Application Architecture](ApplicationArchitecture.png)
+![Application Architecture](images/ApplicationArchitecture.png)
 
 ## Introduction to SQL
 
@@ -139,7 +139,7 @@ Data Modeling is the process of creating an abstract representation of the infor
 Data models are built around business needs and contain the data entities (Tables and Field) and their relationships.
 The first step to build the Data Layer is the Data Model.
 
-![Data Model example](DataModel.png)
+![Data Model example](images/DataModel.png)
 
 > ⚠️ **Warning**: SQL Server commands are not case sensitive. This material will use Upper case just to help with visualization
 
