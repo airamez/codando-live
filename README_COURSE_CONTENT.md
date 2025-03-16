@@ -186,7 +186,7 @@
 ## Introduction to SQL
 
 * Database Server
-  * SQL Server
+  * DBMS: Database Managment System
 * Relational Database
   * Table
   * Field
