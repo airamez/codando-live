@@ -455,8 +455,8 @@ SELECT *
   WHERE DepartmentID = 5
 ```
 
-| ID |            Name |                Email |     Salary | DepartmentID |
-|----|-----------------|----------------------|------------|--------------|
+| ID |            Name |                Email   |     Salary | DepartmentID |
+|----|-----------------|------------------------|------------|--------------|
 |  4 |      Bob Marley |      <bob@noemail.com> |  900000.37 |            5 |
 |  5 | Mickael Jackson |  <theking@noemail.com> |    2000000 |            5 |
 |  6 |   Frank Sinatra |  <sinatra@noemail.com> |  700000.67 |            5 |
