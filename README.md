@@ -312,3 +312,4 @@
 | 268 | [Advanced - Functional Programming](https://youtube.com/live/MdA0iDI2oz0) | [CSharp/_21_Advanced/_16_FunctionalProgramming.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_16_FunctionalProgramming.cs) |
 | 269 | [Advanced - LRU - Least Recently Used](https://youtube.com/live/ZiO3IBHYYxE) | [CSharp/_21_Advanced/_17_LRU.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_17_LRU.cs) |
 | 270| [Advanced - Serpent Game](https://youtube.com/live/ozPgE_k96pk) | [CSharp/_21_Advanced/_18_Serpent.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_18_Serpent.cs) |
+| 271| [SQL - Introduction](https://youtube.com/live/eQ3Vwzlhkx8) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |

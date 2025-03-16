@@ -1,4 +1,4 @@
-# SQL - Structed Query language
+# SQL - Structed Query Language
 
 ## **Database Servers and Database Management Systems (DBMS)**
 
@@ -64,7 +64,7 @@ A database server is a software to store and manage data.
 
 ## Some Context
 
-SQL is usually related to Relational Databases. There are many different types of databases and in general, the database types that are relational are called NO SQL DATABASE.
+SQL is usually related to Relational Databases. There are many different types of databases and in general, the database types that are NOT relational are called NO SQL DATABASE.
 A quick search and you will find a long list of SQL and NoSQL databases servers. Each database technology is specialized in something. So there is no such thing as the best database technology for all situations.
 
 ## SQL Servers
