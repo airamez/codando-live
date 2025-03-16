@@ -42,13 +42,6 @@ Popular examples of DBMS include **SQL Server, PostgreSQL, Oracle Database, MySQ
 
 When building software, developers use **SQL (Structured Query Language)** to interact with the database server via the DBMS. For example, when a customer places an order in an e-commerce application, the software sends SQL commands to store the order details in a database, ensuring the data is available for future processing, like generating invoices or tracking orders.
 
-![Application Architecture](ApplicationArchitecture.png)
-
-## Introduction to SQL
-
-SQL stands for Structured Query Language. It is a language to interact with a Database Server.
-A database server is a software to store and manage data.
-
 Usually, a System/Application is devided in 3 tiers:
 
 * Front-end (User Interface): The tier that interacts with the user
@@ -62,12 +55,19 @@ Usually, a System/Application is devided in 3 tiers:
   * Delete
   * etc
 
+![Application Architecture](ApplicationArchitecture.png)
+
+## Introduction to SQL
+
+SQL stands for Structured Query Language. It is a language to interact with a Database Server.
+A database server is a software to store and manage data.
+
 ## Some Context
 
 SQL is usually related to Relational Databases. There are many different types of databases and in general, the database types that are relational are called NO SQL DATABASE.
 A quick search and you will find a long list of SQL and NoSQL databases servers. Each database technology is specialized in something. So there is no such thing as the best database technology for all situations.
 
-## Practices
+## SQL Servers
 
 There are several free SQL Server that you can use to practice and each one has different options for clients or IDE:
 
@@ -88,13 +88,13 @@ There are several free SQL Server that you can use to practice and each one has 
 
 * Each SQL Server has some variation of the SQL syntax.
 * This material will use SQL Syntax for Microsoft SQL Server.
-* This material focuses only on the basic concepts and tries to give a quick intro to SQL.
+* This material focuses only on the basic concepts and tries to give a good intro to SQL.
 
 > **RECOMMENDATION**: I recommend an online SQL IDE called SQL Fiddler.
 You just need a browser and don't need to install anything.
 It supports the SQL Syntax for each one of the listed SQL Servers
 
-* <http://sqlfiddle.com/>
+* SQL Fiddle: <http://sqlfiddle.com/>
 
 ## Database Organization
 
@@ -104,6 +104,7 @@ It supports the SQL Syntax for each one of the listed SQL Servers
     * Customer
     * Product
     * Employee
+    * Order
     * Project
 
 * A field is a unit of data that compose a Table.
@@ -115,21 +116,22 @@ It supports the SQL Syntax for each one of the listed SQL Servers
     * salary
 
 * A record is a row (instance) of data in a table:
-  * Example of a Row:
+  * Example of of Rows:
 
-| ID | first_name | last_name | email | salary |
-| --- | --- | --- | --- | --- |
-| 1 | Jose | Santos | <airamez@gmail.com> | 150,000.00|
+| ID | first_name | last_name  | email                    | salary  |
+|----|------------|------------|--------------------------|---------|
+| 1  | John       | Doe        | <john.doe@example.com>   | $50,000 |
+| 2  | Jane       | Smith      | <jane.smith@example.com> | $55,000 |
+| 3  | Alice      | Johnson    | <alice.j@example.com>    | $60,000 |
+| 4  | Bob        | Williams   | <bob.will@example.com>   | $45,000 |
+| 5  | Charlie    | Brown      | <charlie.b@example.com>  | $48,000 |
 
 ## Operations
 
 SQL defines a sitaxe to execute commands to:
 
-* Create table
-* Insert data
-* Update data
-* Delete data
-* Select data
+* Create, update and delete tables
+* Insert, Update, Delete and Select rows
 
 ## Data Modeling
 
@@ -137,39 +139,49 @@ Data Modeling is the process of creating an abstract representation of the infor
 Data models are built around business needs and contain the data entities (Tables and Field) and their relationships.
 The first step to build the Data Layer is the Data Model.
 
-> **WARNING**: SQL Server commands are not case sensitive. This material will use Upper case just to help with visualization
+![Data Model example](DataModel.png)
+
+> ⚠️ **Warning**: SQL Server commands are not case sensitive. This material will use Upper case just to help with visualization
 
 ## CREATE TABLE
 
 A table is defined by a list of fields and before we create a table it is important to understand the field types (DataType).
 
 ## Fields Data Types
->
-> **ATTENTION**: This is not a full list of data types but the most common ones
 
-Full list: <https://dev.mysql.com/doc/refman/8.0/en/data-types.html>
+Full list: <https://learn.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql?view=sql-server-ver16>
 
-* Numerics (<https://dev.mysql.com/doc/refman/8.0/en/numeric-types.html>):
-  * INTEGER
-  * SMALLINT
-  * DECIMAL
-  * NUMERIC
-* Date and Time (<https://dev.mysql.com/doc/refman/8.0/en/date-and-time-types.html>)
-  * DATE
-  * TIME
-  * DATETIME
-  * TIMESTAMP
-  * YEAR
+* [Numerics](https://learn.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql?view=sql-server-ver16#exact-numerics):
+  * [tinyint](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16)
+  * [smallint](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16)
+  * [int](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16)
+  * [bigint](https://learn.microsoft.com/en-us/sql/t-sql/data-types/int-bigint-smallint-and-tinyint-transact-sql?view=sql-server-ver16)
+  * [bit](https://learn.microsoft.com/en-us/sql/t-sql/data-types/bit-transact-sql?view=sql-server-ver16)
+  * [decimal](https://learn.microsoft.com/en-us/sql/t-sql/data-types/decimal-and-numeric-transact-sql?view=sql-server-ver16)
+  * [numeric](https://learn.microsoft.com/en-us/sql/t-sql/data-types/decimal-and-numeric-transact-sql?view=sql-server-ver16)
+  * [money](https://learn.microsoft.com/en-us/sql/t-sql/data-types/money-and-smallmoney-transact-sql?view=sql-server-ver16)
+  * [smallmoney](https://learn.microsoft.com/en-us/sql/t-sql/data-types/money-and-smallmoney-transact-sql?view=sql-server-ver16)
+  * [float](https://learn.microsoft.com/en-us/sql/t-sql/data-types/float-and-real-transact-sql?view=sql-server-ver16)
+  * [real](https://learn.microsoft.com/en-us/sql/t-sql/data-types/float-and-real-transact-sql?view=sql-server-ver16)
+* [Date and Time](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-types.html)
+  * [date](https://learn.microsoft.com/en-us/sql/t-sql/data-types/date-transact-sql?view=sql-server-ver16)
+  * [time](https://learn.microsoft.com/en-us/sql/t-sql/data-types/time-transact-sql?view=sql-server-ver16)
+  * [datetime](https://learn.microsoft.com/en-us/sql/t-sql/data-types/datetime-transact-sql?view=sql-server-ver16)
+  * [datetime2](https://learn.microsoft.com/en-us/sql/t-sql/data-types/datetime2-transact-sql?view=sql-server-ver16)
+  * [smalldatetime](https://learn.microsoft.com/en-us/sql/t-sql/data-types/smalldatetime-transact-sql?view=sql-server-ver16)
+  * [datetimeoffset](https://learn.microsoft.com/en-us/sql/t-sql/data-types/datetimeoffset-transact-sql?view=sql-server-ver16)
 * String (<https://dev.mysql.com/doc/refman/8.0/en/string-types.html>)
-  * CHAR
-  * VARCHAR
-  * BINARY
-  * VARBINARY
-  * BLOB
-  * TEXT
-  * ENUM
-  * SET
-* JSON (<https://dev.mysql.com/doc/refman/8.0/en/json.html>)
+  * [char](https://learn.microsoft.com/en-us/sql/t-sql/data-types/char-and-varchar-transact-sql?view=sql-server-ver16)
+  * [varchar](https://learn.microsoft.com/en-us/sql/t-sql/data-types/char-and-varchar-transact-sql?view=sql-server-ver16)
+  * [text](https://learn.microsoft.com/en-us/sql/t-sql/data-types/ntext-text-and-image-transact-sql?view=sql-server-ver16)
+  * [nchar](https://learn.microsoft.com/en-us/sql/t-sql/data-types/nchar-and-nvarchar-transact-sql?view=sql-server-ver16)
+  * [nvarchar](https://learn.microsoft.com/en-us/sql/t-sql/data-types/nchar-and-nvarchar-transact-sql?view=sql-server-ver16)
+  * [ntext](https://learn.microsoft.com/en-us/sql/t-sql/data-types/ntext-text-and-image-transact-sql?view=sql-server-ver16)
+* Others
+  * [Unique Identifier (GUID)](https://learn.microsoft.com/en-us/sql/t-sql/data-types/uniqueidentifier-transact-sql?view=sql-server-ver16)
+  * [JSON](https://learn.microsoft.com/en-us/sql/t-sql/data-types/json-data-type?view=sql-server-ver16)
+  * [XML](https://learn.microsoft.com/en-us/sql/t-sql/xml/xml-transact-sql?view=sql-server-ver16)
+  * [Vector](https://learn.microsoft.com/en-us/sql/t-sql/data-types/vector-data-type?view=sql-server-ver16)
 
 ### Primary Key
 
@@ -232,21 +244,21 @@ CREATE TABLE table_name (
 
 ```sql
 CREATE TABLE Department (
-    ID INT NOT NULL AUTO_INCREMENT,
-    Name varchar(100),
-    Abbreviation varchar(5),
+    ID INT NOT NULL IDENTITY(1,1),
+    Name NVARCHAR(100),
+    Abbreviation NVARCHAR(5),
     PRIMARY KEY (ID)
 );
 
 CREATE TABLE Employee (
-    ID INT NOT NULL AUTO_INCREMENT,
-    Name varchar(200),
-    Email varchar(200),
+    ID INT NOT NULL IDENTITY(1,1),
+    Name NVARCHAR(200),
+    Email NVARCHAR(200),
     Salary DECIMAL(13,2),
     DepartmentID INT,
     PRIMARY KEY (ID),
     FOREIGN KEY (DepartmentID) REFERENCES Department(ID)
-)
+);
 ```
 
 > **WARNING**: When executing multiple SQL statements, it is necessary to finish each one ';'.
@@ -272,6 +284,8 @@ INSERT INTO Department (Name, Abbreviation) VALUES ('Finances', 'FIN');
 INSERT INTO Department (Name, Abbreviation) VALUES ('Marketing', 'MARK');
 INSERT INTO Department (Name, Abbreviation) VALUES ('Public Relations', 'PL');
 
+> **ATTENTION**: No need to insert the ID field because it is auto-gerenated (AUTO_INCREMENT)
+
 INSERT INTO Employee (Name, Email, Salary, DepartmentID) VALUES
 ('Jose Santos', 'jose.santos@noemail.com', 15000.15, 2),
 ('Leila Rodrigues', 'leila.rodrigues@noemail.com', 200000.20, 1),
@@ -286,30 +300,26 @@ INSERT INTO Employee (Name, Email, Salary, DepartmentID) VALUES
 ('Oprah Winfrey', 'oprah@noemail.com', 5000000.01,5);
 ```
 
-> **ATTENTION**: No need to insert the ID field because it is auto-gerenated (AUTO_INCREMENT)
-
 > **TIP**: It is possible to insert multiple rows with just one INSERT command. Check the INSERT command on Employee table
 
 ## UPDATE command
 
 The UPDATE command is used to modify existing record(s) in a table.
 
-### Sintaxe
+### Update Sintaxe
 
 ```sql
 UPDATE table_name
-SET column1 = value1, column2 = value2, ...
-[WHERE condition]
+  SET column1 = value1, column2 = value2, ...
+  [WHERE condition]
 ```
 
-> **DANGER**: If you forget to use the ```WHERE``` clause all the records will be updated.
-
-### Example
+>⚠️**DANGER**⚠️: If you forget to use the ```WHERE``` clause all the records will be updated.
 
 ```sql
 UPDATE Department
-SET Abbreviation = 'SA'
-WHERE ID = 3
+  SET Abbreviation = 'SA'
+  WHERE ID = 3
 ```
 
 * Update the Department table, setting the Abbreviation to 'SA' for the record with ID equals 3
@@ -322,15 +332,14 @@ The DELETE statement is used to delete records from a table.
 
 ```sql
 DELETE FROM table_name 
-WHERE condition
+  WHERE condition
 ```
 
-> **DANGER**: If you forget to use the ```WHERE``` clause all the records will be deleted.
-
-### Example
+>⚠️**DANGER**⚠️: If you forget to use the ```WHERE``` clause all the records will be deleted.
 
 ```sql
-DELETE FROM Department WHERE ID = 4
+DELETE FROM Department 
+WHERE ID = 4
 ```
 
 * The row with ID equals 4 will be deleted from the Department table
@@ -383,14 +392,15 @@ INSERT INTO Employee (Name, Email, Salary, DepartmentID) VALUES
 
 The SELECT command is used to select/retrieve data from a database.
 
-## Sintaxe
+### Select Sintaxe
 
 ```sql
-SELECT * FROM table_name;
+SELECT * 
+  FROM table_name;
 
 SELECT column1, column2, ...
-FROM table_name;
-WHERE condition
+  FROM table_name;
+  WHERE condition
 ```
 
 > **TIP**: Using ```SELECT *``` is not recommended as we rarely need all fields. It is better to use a list with only the necessary fields.
@@ -398,13 +408,12 @@ WHERE condition
 ## Select all columns and all rows from Employee table
 
 ```sql
-SELECT * FROM Employee
+SELECT *
+  FROM Employee
 ```
 
-### Result
-
-| ID |            Name |                       Email |     Salary | DepartmentID |
-|----|-----------------|-----------------------------|------------|--------------|
+| ID |            Name |                       Email |     Salary --| DepartmentID |
+|----|-----------------|-----------------------------|--------------|--------------|
 |  1 |     Jose Santos |     <jose.santos@noemail.com> |   15000.15 |            2 |
 |  2 | Leila Rodrigues | <leila.rodrigues@noemail.com> |   200000.2 |            1 |
 |  3 | Artur Rodrigues | <artur.rodrigues@noemail.com> |  100000.45 |            2 |
@@ -420,57 +429,54 @@ SELECT * FROM Employee
 ### Select only ID and Name fields from the Employee table
 
 ```sql
-SELECT ID, Name, Salary FROM Employee
+SELECT ID, Name, Salary 
+  FROM Employee
 ```
 
-#### Result
-
-    | ID |            Name |     Salary |
-    |----|-----------------|------------|
-    |  1 |     Jose Santos |   15000.15 |
-    |  2 | Leila Rodrigues |   200000.2 |
-    |  3 | Artur Rodrigues |  100000.45 |
-    |  4 |      Bob Marley |  900000.37 |
-    |  5 | Mickael Jackson |    2000000 |
-    |  6 |   Frank Sinatra |  700000.67 |
-    |  7 |       Elon Musk |  450000.15 |
-    |  8 |      Steve Jobs | 1000000.67 |
-    |  9 |       Lady Gaga |   650000.9 |
-    | 10 |  Britney Spears |   75000.56 |
-    | 11 |   Oprah Winfrey | 5000000.01 |
+| ID |            Name |     Salary |
+|----|-----------------|------------|
+|  1 |     Jose Santos |   15000.15 |
+|  2 | Leila Rodrigues |   200000.2 |
+|  3 | Artur Rodrigues |  100000.45 |
+|  4 |      Bob Marley |  900000.37 |
+|  5 | Mickael Jackson |    2000000 |
+|  6 |   Frank Sinatra |  700000.67 |
+|  7 |       Elon Musk |  450000.15 |
+|  8 |      Steve Jobs | 1000000.67 |
+|  9 |       Lady Gaga |   650000.9 |
+| 10 |  Britney Spears |   75000.56 |
+| 11 |   Oprah Winfrey | 5000000.01 |
 
 ### Select all fields from employee where the Department ID equals 5
 
 ```sql
-SELECT * FROM Employee
-WHERE DepartmentID = 5
+SELECT * 
+  FROM Employee
+  WHERE DepartmentID = 5
 ```
 
-### Result
-
-    | ID |            Name |                Email |     Salary | DepartmentID |
-    |----|-----------------|----------------------|------------|--------------|
-    |  4 |      Bob Marley |      bob@noemail.com |  900000.37 |            5 |
-    |  5 | Mickael Jackson |  theking@noemail.com |    2000000 |            5 |
-    |  6 |   Frank Sinatra |  sinatra@noemail.com |  700000.67 |            5 |
-    |  9 |       Lady Gaga | ladygaga@noemail.com |   650000.9 |            5 |
-    | 10 |  Britney Spears |  bspears@noemail.com |   75000.56 |            5 |
-    | 11 |   Oprah Winfrey |    oprah@noemail.com | 5000000.01 |            5 |
+| ID |            Name |                Email |     Salary | DepartmentID |
+|----|-----------------|----------------------|------------|--------------|
+|  4 |      Bob Marley |      <bob@noemail.com> |  900000.37 |            5 |
+|  5 | Mickael Jackson |  <theking@noemail.com> |    2000000 |            5 |
+|  6 |   Frank Sinatra |  <sinatra@noemail.com> |  700000.67 |            5 |
+|  9 |       Lady Gaga | <ladygaga@noemail.com> |   650000.9 |            5 |
+| 10 |  Britney Spears |  <bspears@noemail.com> |   75000.56 |            5 |
+| 11 |   Oprah Winfrey |    <oprah@noemail.com> | 5000000.01 |            5 |
 
 ### Select the Email field of all Employees of the IT and HR departments
 
 ```sql
-SELECT Email FROM Employee
-WHERE DepartmentID = 1 OR DepartmentID = 2
+SELECT Email 
+  FROM Employee
+  WHERE DepartmentID = 1 OR DepartmentID = 2
 ```
 
-#### Result
-
-    |                       Email |
-    |-----------------------------|
-    |     jose.santos@noemail.com |
-    | leila.rodrigues@noemail.com |
-    | artur.rodrigues@noemail.com |
+|                       Email |
+|-----------------------------|
+|     <jose.santos@noemail.com> |
+| <leila.rodrigues@noemail.com> |
+| <artur.rodrigues@noemail.com> |
 
 ### Select all columns from Employee and Department tables
 
@@ -482,14 +488,12 @@ WHERE DepartmentID = 1 OR DepartmentID = 2
 
 ```sql
 SELECT * 
-FROM Employee e
-JOIN Department d on d.ID = e.DepartmentID
+  FROM Employee e
+  JOIN Department d on d.ID = e.DepartmentID
 ```
 
-#### Result
-
-| ID |            Name |                       Email |     Salary | DepartmentID | ID |                   Name | Abbreviation |
-|----|-----------------|-----------------------------|------------|--------------|----|------------------------|--------------|
+| ID |            Name |                       Email |       Salary | DepartmentID | ID |                   Name | Abbreviation |
+|----|-----------------|-----------------------------|--------------|--------------|----|------------------------|--------------|
 |  2 | Leila Rodrigues | <leila.rodrigues@noemail.com> |   200000.2 |            1 |  1 |        Human Resources |           HR |
 |  1 |     Jose Santos |     <jose.santos@noemail.com> |   15000.15 |            2 |  2 | Information Technology |           IT |
 |  3 | Artur Rodrigues | <artur.rodrigues@noemail.com> |  100000.45 |            2 |  2 | Information Technology |           IT |
@@ -506,11 +510,9 @@ JOIN Department d on d.ID = e.DepartmentID
 
 ```sql
 SELECT e.Name, d.Name
-FROM Employee e
-JOIN Department d on d.ID = e.DepartmentID
+  FROM Employee e
+  JOIN Department d on d.ID = e.DepartmentID
 ```
-
-#### Result
 
 |            Name |                   Name |
 |-----------------|------------------------|
@@ -531,11 +533,9 @@ JOIN Department d on d.ID = e.DepartmentID
 ```sql
 SELECT e.Name as 'Employee Name', 
        d.Name as 'Department Name'
-FROM Employee e
-JOIN Department d on d.ID = e.DepartmentID
+  FROM Employee e
+  JOIN Department d on d.ID = e.DepartmentID
 ```
-
-#### Result
 
 |   Employee Name |        Department Name |
 |-----------------|------------------------|
@@ -559,14 +559,12 @@ JOIN Department d on d.ID = e.DepartmentID
 ### Sorting Employee by Salary
 
 ```sql
-SELECT FORMAT(Salary,2) as 'Salary', Name
-FROM Employee e
-ORDER BY e.Salary
+SELECT FORMAT(Salary, 'N2') AS Salary, Name
+  FROM Employee e
+  ORDER BY e.Salary;
 ```
 
-> **TIP**: Use the ```FORMAT``` function to formats a decimal value. Every SQL Server offers a lot functions: <https://dev.mysql.com/doc/refman/8.0/en/functions.html>
-
-### Result
+> **TIP**: Use the [FORMAT function](https://learn.microsoft.com/en-us/sql/t-sql/functions/format-transact-sql?view=sql-server-ver16) to formats a decimal value. Every SQL Server offers a lot functions
 
 |       Salary |            Name |
 |--------------|-----------------|
@@ -585,9 +583,9 @@ ORDER BY e.Salary
 ### Sorting Employee by Salary in descending order
 
 ```sql
-SELECT FORMAT(Salary,2) as 'Salary', Name
-FROM Employee e
-ORDER BY e.Salary DESC
+SELECT FORMAT(Salary, 'N2') as 'Salary', Name
+  FROM Employee e
+  ORDER BY e.Salary DESC
 ```
 
 ### Result
@@ -611,14 +609,12 @@ ORDER BY e.Salary DESC
 ```sql
 SELECT d.Name as 'Department Name',
        e.Name as 'Employee Name'
-FROM Employee e
-JOIN Department d on d.ID = e.DepartmentID
-ORDER BY d.Name, e.Name
+  FROM Employee e
+  JOIN Department d on d.ID = e.DepartmentID
+  ORDER BY d.Name, e.Name
 ```
 
 * Sorting by Department and Employee Names
-
-#### Result
 
 |        Department Name |   Employee Name |
 |------------------------|-----------------|
@@ -642,27 +638,25 @@ If it is necessary to return data from one of the tables even if there is no for
 ```sql
 SELECT e.Name as 'Employee Name', 
        d.Name as 'Department Name'
-FROM Employee e
-RIGHT JOIN Department d on d.ID = e.DepartmentID
+  FROM Employee e
+  RIGHT JOIN Department d on d.ID = e.DepartmentID
 ```
 
-#### Result
-
-    |   Employee Name |        Department Name |
-    |-----------------|------------------------|
-    | Leila Rodrigues |        Human Resources |
-    |     Jose Santos | Information Technology |
-    | Artur Rodrigues | Information Technology |
-    |       Elon Musk |                  Sales |
-    |      Steve Jobs |                  Sales |
-    |          (null) |               Finances |
-    |      Bob Marley |              Marketing |
-    | Mickael Jackson |              Marketing |
-    |   Frank Sinatra |              Marketing |
-    |       Lady Gaga |              Marketing |
-    |  Britney Spears |              Marketing |
-    |   Oprah Winfrey |              Marketing |
-    |          (null) |       Public Relations |
+|   Employee Name |        Department Name |
+|-----------------|------------------------|
+| Leila Rodrigues |        Human Resources |
+|     Jose Santos | Information Technology |
+| Artur Rodrigues | Information Technology |
+|       Elon Musk |                  Sales |
+|      Steve Jobs |                  Sales |
+|          (null) |               Finances |
+|      Bob Marley |              Marketing |
+| Mickael Jackson |              Marketing |
+|   Frank Sinatra |              Marketing |
+|       Lady Gaga |              Marketing |
+|  Britney Spears |              Marketing |
+|   Oprah Winfrey |              Marketing |
+|          (null) |       Public Relations |
 
 * ```Employee``` is LEFT and ```Department`` is RIGHT
 * Compare this result to the one from the previous example and observe that this one has two extra rows with no Employee Name for Finance Department and Public Relations.
@@ -683,8 +677,6 @@ SELECT MIN(Salary) as 'Minimum',
 FROM Employee
 ```
 
-#### Result
-
 |  Minimum |    Maximum |         Sum |        Average |
 |----------|------------|-------------|----------------|
 | 15000.15 | 5000000.01 | 11090004.13 | 1008182.193636 |
@@ -695,11 +687,9 @@ FROM Employee
 
 ```
 SELECT COUNT(ID) as 'Employee COUNT'
-FROM Employee
-WHERE DepartmentID = 5
+  FROM Employee
+  WHERE DepartmentID = 5
 ```
-
-#### Result
 
 | Employee COUNT |
 |----------------|
@@ -712,13 +702,11 @@ WHERE DepartmentID = 5
 
 ```sql
 SELECT d.Name, COUNT(e.ID) as 'Employee Count'
-FROM Department d
-JOIN Employee e on e.DepartmentID = d.ID
-GROUP BY d.Name
-ORDER BY d.Name
+  FROM Department d
+  JOIN Employee e on e.DepartmentID = d.ID
+  GROUP BY d.Name
+  ORDER BY d.Name
 ```
-
-#### Result
 
 |                   Name | Employee Count |
 |------------------------|----------------|
@@ -734,13 +722,11 @@ ORDER BY d.Name
 
 ```sql
 SELECT d.Name, COUNT(e.ID) as 'Employee Count'
-FROM Department d
-LEFT JOIN Employee e on e.DepartmentID = d.ID
-GROUP BY d.Name
-ORDER BY d.Name
+  FROM Department d
+  LEFT JOIN Employee e on e.DepartmentID = d.ID
+  GROUP BY d.Name
+  ORDER BY d.Name
 ```
-
-#### Result
 
 |                   Name | Employee Count |
 |------------------------|----------------|
@@ -752,3 +738,22 @@ ORDER BY d.Name
 |                  Sales |              2 |
 
 > **ATTENTION**: Using the left join makes sure the departments without Employees are returned.
+
+## Functions
+
+* [SQL Functions](https://learn.microsoft.com/en-us/sql/t-sql/functions/functions?view=sql-server-ver16)
+  * [String Functions](https://learn.microsoft.com/en-us/sql/t-sql/functions/string-functions-transact-sql?view=sql-server-ver16)
+  * [Mathematical Function](https://learn.microsoft.com/en-us/sql/t-sql/functions/mathematical-functions-transact-sql?view=sql-server-ver16)
+  * [Date & Time Functions](https://learn.microsoft.com/en-us/sql/t-sql/functions/date-and-time-data-types-and-functions-transact-sql?view=sql-server-ver16)
+
+## Transaction SQL (TSQL)
+
+* [Reference](https://learn.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver16)
+
+## Stored Procedure
+
+* [Documentation](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/create-a-stored-procedure?view=sql-server-ver16)
+
+## Triggers
+
+* [Documentation](https://learn.microsoft.com/en-us/sql/t-sql/statements/create-trigger-transact-sql?view=sql-server-ver16)
