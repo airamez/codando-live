@@ -1,3 +1,5 @@
+// https://www.youtube.com/watch?v=7r83N3c2kPw
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,12 +72,13 @@ public class SerpentGame
     Console.Clear();
     Console.OutputEncoding = Encoding.UTF8;
     Console.CursorVisible = false;
+    // Check if the OS is Windows
     if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     {
       Console.SetWindowSize(Constants.MAP_WIDTH + 2, Constants.MAP_HEIGHT + 3);
       Console.SetBufferSize(Constants.MAP_WIDTH + 2, Constants.MAP_HEIGHT + 3);
     }
-    DrawBorder(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
+    DrawBorder();
     DrawBackground();
     UpdateScoreDisplay();
   }
@@ -121,7 +124,8 @@ public class SerpentGame
       Cell newHead = Serpent.CalculateNextHead();
 
       // Check if the serpent eats the fruit
-      if (newHead.Col == Fruit.Position.Col && newHead.Row == Fruit.Position.Row)
+      if (newHead.Row == Fruit.Position.Row &&
+          newHead.Col == Fruit.Position.Col)
       {
         Serpent.Grow(); // Grow the serpent
         Score++; // Increment the score
@@ -152,17 +156,17 @@ public class SerpentGame
   }
 
 
-  private void DrawBorder(int width, int height)
+  private void DrawBorder()
   {
-    for (int x = 0; x <= width; x++)
+    for (int row = 0; row <= Constants.MAP_HEIGHT; row++)
     {
-      DrawAt(0, x, Constants.BORDER);
-      DrawAt(height, x, Constants.BORDER);
+      DrawAt(row, 0, Constants.BORDER);
+      DrawAt(row, Constants.MAP_WIDTH, Constants.BORDER);
     }
-    for (int y = 0; y <= height; y++)
+    for (int col = 0; col <= Constants.MAP_WIDTH; col++)
     {
-      DrawAt(y, 0, Constants.BORDER);
-      DrawAt(y, width, Constants.BORDER);
+      DrawAt(0, col, Constants.BORDER);
+      DrawAt(Constants.MAP_HEIGHT, col, Constants.BORDER);
     }
   }
 
@@ -230,7 +234,6 @@ public class Cell
     Row = row;
   }
 }
-
 
 /// <summary>
 /// Represents the serpent in the game, including its body, movement, and collision logic.
@@ -404,10 +407,13 @@ public class Fruit
   /// <param name="serpentBody">The list of points representing the serpent's body.</param>
   public Fruit(List<Cell> serpentBody)
   {
+    // Ensure it does not overlap with the serpent
     do
     {
       // Generate a random position for the fruit
-      Position = new Cell(SerpentGame.Random.Next(1, Constants.MAP_HEIGHT), SerpentGame.Random.Next(1, Constants.MAP_WIDTH));
-    } while (serpentBody.Exists(p => p.Row == Position.Row && p.Col == Position.Col)); // Ensure it does not overlap with the serpent
+      var newRandomRow = SerpentGame.Random.Next(1, Constants.MAP_HEIGHT);
+      var newRandomCol = SerpentGame.Random.Next(1, Constants.MAP_WIDTH);
+      Position = new Cell(newRandomRow, newRandomCol);
+    } while (serpentBody.Exists(p => p.Row == Position.Row && p.Col == Position.Col));
   }
 }
