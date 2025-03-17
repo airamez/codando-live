@@ -272,14 +272,12 @@ CREATE TABLE Employee (
 
 The insert command is used to add records to a table
 
-### Sintaxe
+### Insert Sintaxe
 
 ```sql
 INSERT INTO table_name (column1, column2, column3, ...)
 VALUES (value1, value2, value3, ...);
 ```
-
-### Example
 
 ```sql
 INSERT INTO Department (Name, Abbreviation) VALUES ('Human Resources', 'HR');
@@ -288,9 +286,11 @@ INSERT INTO Department (Name, Abbreviation) VALUES ('Sales', 'SAL');
 INSERT INTO Department (Name, Abbreviation) VALUES ('Finances', 'FIN');
 INSERT INTO Department (Name, Abbreviation) VALUES ('Marketing', 'MARK');
 INSERT INTO Department (Name, Abbreviation) VALUES ('Public Relations', 'PL');
+```
 
 > **ATTENTION**: No need to insert the ID field because it is auto-gerenated (AUTO_INCREMENT)
 
+```sql
 INSERT INTO Employee (Name, Email, Salary, DepartmentID) VALUES
 ('Jose Santos', 'jose.santos@noemail.com', 15000.15, 2),
 ('Leila Rodrigues', 'leila.rodrigues@noemail.com', 200000.20, 1),
@@ -333,7 +333,7 @@ UPDATE Department
 
 The DELETE statement is used to delete records from a table.
 
-### Sitaxe
+### Delete Sitaxe
 
 ```sql
 DELETE FROM table_name 
@@ -343,8 +343,9 @@ DELETE FROM table_name
 >⚠️**DANGER**⚠️: If you forget to use the ```WHERE``` clause all the records will be deleted.
 
 ```sql
-DELETE FROM Department 
-WHERE ID = 4
+DELETE
+  FROM Department 
+  WHERE ID = 4
 ```
 
 * The row with ID equals 4 will be deleted from the Department table
@@ -357,16 +358,17 @@ WHERE ID = 4
 
 ```sql
 CREATE TABLE Department (
-    ID INT NOT NULL AUTO_INCREMENT,
-    Name varchar(100),
-    Abbreviation varchar(5),
+    ID INT NOT NULL IDENTITY(1,1),
+    Name NVARCHAR(100),
+    Abbreviation NVARCHAR(5),
     PRIMARY KEY (ID)
 );
 
 CREATE TABLE Employee (
-    ID INT NOT NULL AUTO_INCREMENT,
-    Name varchar(200),
-    Email varchar(200),
+    ID INT NOT NULL IDENTITY(1,1),
+    Name NVARCHAR(200),
+    Email NVARCHAR(200),
+    Salary DECIMAL(13,2),
     DepartmentID INT,
     PRIMARY KEY (ID),
     FOREIGN KEY (DepartmentID) REFERENCES Department(ID)
