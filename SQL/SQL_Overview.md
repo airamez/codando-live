@@ -432,7 +432,7 @@ SELECT *
 | 10 |  Britney Spears |         <bspears@noemail.com> |   75000.56 |            5 |
 | 11 |   Oprah Winfrey |           <oprah@noemail.com> | 5000000.01 |            5 |
 
-### Select only ID and Name fields from the Employee table
+### Select only ID Name and salary fields from the Employee table
 
 ```sql
 SELECT ID, Name, Salary 
@@ -453,7 +453,7 @@ SELECT ID, Name, Salary
 | 10 |  Britney Spears |   75000.56 |
 | 11 |   Oprah Winfrey | 5000000.01 |
 
-### Select all fields from employee where the Department ID equals 5
+### Select all fields from employee where the Department ID equals to 5
 
 ```sql
 SELECT * 
