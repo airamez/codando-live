@@ -276,7 +276,7 @@ The insert command is used to add records to a table
 
 ```sql
 INSERT INTO table_name (column1, column2, column3, ...)
-VALUES (value1, value2, value3, ...);
+  VALUES (value1, value2, value3, ...);
 ```
 
 ```sql
@@ -354,7 +354,6 @@ DELETE
 
 * These are the SQL commands to prepare the database for the select examples
 * Execute the commands below into your sandbox database to create the tables and insert records necessary for the following examples
-* If you are using SQL Fiddler, execute these commands on the left side (Build Schema Section) and execute the examples on the right side.
 
 ```sql
 CREATE TABLE Department (
@@ -397,7 +396,7 @@ INSERT INTO Employee (Name, Email, Salary, DepartmentID) VALUES
 
 ## SELECT command
 
-The SELECT command is used to select/retrieve data from a database.
+The SELECT command is used to select/retrieve data.
 
 ### Select Sintaxe
 
