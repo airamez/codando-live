@@ -484,13 +484,15 @@ SELECT Email
 | <leila.rodrigues@noemail.com>  |
 | <artur.rodrigues@noemail.com>  |
 
-### Select all columns from Employee and Department tables
+### INNER JOIN
 
 * To select fields from two or more tables it is necessary to make a relational operation called JOIN
 * A join operation uses foreign keys to relate the records
 * As the Employee table has a foreign key (Department ID) from Department (ID), the select command can join the related records from both tables
 * The rows on the result dataset will be mapped (linked) based on the combination of Department ID on Employee table and ID on Department table.
 * In a join operation is necessary to use alias, identifiers right after the table name, to distinguish fields from different tables.
+
+### Select all columns from Employee and Department tables
 
 ```sql
 SELECT * 
@@ -534,6 +536,8 @@ SELECT e.Name, d.Name
 |  Britney Spears |              Marketing |
 |   Oprah Winfrey |              Marketing |
 
+### Renaming Columns
+
 ### Select 'Employee Name' and 'Department Name' fields but renaming them to 'Employee Name' and 'Department Name' respectively
 
 ```sql
@@ -562,7 +566,7 @@ SELECT e.Name as 'Employee Name',
 * The ```order by``` clause sort the result set.
 * The default order is ascendent, use ```DESC``` for descending order
 
-### Sorting Employee by Salary
+#### Sorting Employee by Salary
 
 ```sql
 SELECT FORMAT(Salary, 'N2') AS Salary, Name
@@ -586,15 +590,13 @@ SELECT FORMAT(Salary, 'N2') AS Salary, Name
 | 2,000,000.00 | Mickael Jackson |
 | 5,000,000.01 |   Oprah Winfrey |
 
-### Sorting Employee by Salary in descending order
+#### Sorting Employee by Salary in descending order
 
 ```sql
 SELECT FORMAT(Salary, 'N2') as 'Salary', Name
   FROM Employee e
   ORDER BY e.Salary DESC
 ```
-
-### Result
 
 |       Salary |            Name |
 |--------------|-----------------|
@@ -610,7 +612,7 @@ SELECT FORMAT(Salary, 'N2') as 'Salary', Name
 |    75,000.56 |  Britney Spears |
 |    15,000.15 |     Jose Santos |
 
-### Sorting 'Employee Name' and 'Department Name' fields from Employee and Department tables
+#### Sorting 'Employee Name' and 'Department Name' fields from Employee and Department tables
 
 ```sql
 SELECT d.Name as 'Department Name',

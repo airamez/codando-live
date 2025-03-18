@@ -314,3 +314,4 @@
 | 270| [Advanced - Serpent Game](https://youtube.com/live/ozPgE_k96pk) | [CSharp/_21_Advanced/_18_Serpent.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_18_Serpent.cs) |
 | 271| [SQL - Introduction](https://youtube.com/live/eQ3Vwzlhkx8) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 272| [SQL - Basic Commands](https://youtube.com/live/MFxT4uWaZBA) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 273| [SQL - Inner Join](https://youtube.com/live/S0K5vdsGt_I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
