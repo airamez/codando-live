@@ -418,8 +418,8 @@ SELECT *
   FROM Employee
 ```
 
-| ID |            Name |                       Email |     Salary --| DepartmentID |
-|----|-----------------|-----------------------------|--------------|--------------|
+| ID |            Name |                         Email |   Salary   | DepartmentID |
+|----|-----------------|-------------------------------|------------|--------------|
 |  1 |     Jose Santos |     <jose.santos@noemail.com> |   15000.15 |            2 |
 |  2 | Leila Rodrigues | <leila.rodrigues@noemail.com> |   200000.2 |            1 |
 |  3 | Artur Rodrigues | <artur.rodrigues@noemail.com> |  100000.45 |            2 |
@@ -478,11 +478,11 @@ SELECT Email
   WHERE DepartmentID = 1 OR DepartmentID = 2
 ```
 
-|                       Email |
-|-----------------------------|
-|     <jose.santos@noemail.com> |
-| <leila.rodrigues@noemail.com> |
-| <artur.rodrigues@noemail.com> |
+|                          Email |
+|--------------------------------|
+|    <jose.santos@noemail.com>   |
+| <leila.rodrigues@noemail.com>  |
+| <artur.rodrigues@noemail.com>  |
 
 ### Select all columns from Employee and Department tables
 
@@ -498,19 +498,19 @@ SELECT *
   JOIN Department d on d.ID = e.DepartmentID
 ```
 
-| ID |            Name |                       Email |       Salary | DepartmentID | ID |                   Name | Abbreviation |
-|----|-----------------|-----------------------------|--------------|--------------|----|------------------------|--------------|
-|  2 | Leila Rodrigues | <leila.rodrigues@noemail.com> |   200000.2 |            1 |  1 |        Human Resources |           HR |
-|  1 |     Jose Santos |     <jose.santos@noemail.com> |   15000.15 |            2 |  2 | Information Technology |           IT |
-|  3 | Artur Rodrigues | <artur.rodrigues@noemail.com> |  100000.45 |            2 |  2 | Information Technology |           IT |
-|  7 |       Elon Musk |            <musk@noemail.com> |  450000.15 |            3 |  3 |                  Sales |          SAL |
-|  8 |      Steve Jobs |            <jobs@noemail.com> | 1000000.67 |            3 |  3 |                  Sales |          SAL |
-|  4 |      Bob Marley |             <bob@noemail.com> |  900000.37 |            5 |  5 |              Marketing |         MARK |
-|  5 | Mickael Jackson |         <theking@noemail.com> |    2000000 |            5 |  5 |              Marketing |         MARK |
-|  6 |   Frank Sinatra |         <sinatra@noemail.com> |  700000.67 |            5 |  5 |              Marketing |         MARK |
-|  9 |       Lady Gaga |        <ladygaga@noemail.com> |   650000.9 |            5 |  5 |              Marketing |         MARK |
-| 10 |  Britney Spears |         <bspears@noemail.com> |   75000.56 |            5 |  5 |              Marketing |         MARK |
-| 11 |   Oprah Winfrey |           <oprah@noemail.com> | 5000000.01 |            5 |  5 |              Marketing |         MARK |
+| ID |            Name |                         Email |       Salary | DepartmentID | ID |                   Name | Abbreviation |
+|----|-----------------|-------------------------------|--------------|--------------|----|------------------------|--------------|
+|  2 | Leila Rodrigues | <leila.rodrigues@noemail.com> |     200000.2 |            1 |  1 |        Human Resources |           HR |
+|  1 |     Jose Santos |     <jose.santos@noemail.com> |     15000.15 |            2 |  2 | Information Technology |           IT |
+|  3 | Artur Rodrigues | <artur.rodrigues@noemail.com> |    100000.45 |            2 |  2 | Information Technology |           IT |
+|  7 |       Elon Musk |            <musk@noemail.com> |    450000.15 |            3 |  3 |                  Sales |          SAL |
+|  8 |      Steve Jobs |            <jobs@noemail.com> |   1000000.67 |            3 |  3 |                  Sales |          SAL |
+|  4 |      Bob Marley |             <bob@noemail.com> |    900000.37 |            5 |  5 |              Marketing |         MARK |
+|  5 | Mickael Jackson |         <theking@noemail.com> |      2000000 |            5 |  5 |              Marketing |         MARK |
+|  6 |   Frank Sinatra |         <sinatra@noemail.com> |    700000.67 |            5 |  5 |              Marketing |         MARK |
+|  9 |       Lady Gaga |        <ladygaga@noemail.com> |     650000.9 |            5 |  5 |              Marketing |         MARK |
+| 10 |  Britney Spears |         <bspears@noemail.com> |     75000.56 |            5 |  5 |              Marketing |         MARK |
+| 11 |   Oprah Winfrey |           <oprah@noemail.com> |   5000000.01 |            5 |  5 |              Marketing |         MARK |
 
 ### Select 'Employee Name' and 'Department Name' fields from Employee and Department tables
 
@@ -751,6 +751,8 @@ SELECT d.Name, COUNT(e.ID) as 'Employee Count'
   * [String Functions](https://learn.microsoft.com/en-us/sql/t-sql/functions/string-functions-transact-sql?view=sql-server-ver16)
   * [Mathematical Function](https://learn.microsoft.com/en-us/sql/t-sql/functions/mathematical-functions-transact-sql?view=sql-server-ver16)
   * [Date & Time Functions](https://learn.microsoft.com/en-us/sql/t-sql/functions/date-and-time-data-types-and-functions-transact-sql?view=sql-server-ver16)
+
+## Transactions (ACID)
 
 ## Transaction SQL (TSQL)
 
