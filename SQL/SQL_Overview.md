@@ -638,10 +638,10 @@ SELECT d.Name as 'Department Name',
 |                  Sales |       Elon Musk |
 |                  Sales |      Steve Jobs |
 
-### LEFT or RIGHT JOIN
+### LEFT, RIGHT and FULL JOIN
 
 The default behavior of a join command (INNER JOIN) is to return only rows with data from both tables.
-If it is necessary to return data from one of the tables even if there is no foreign key mapping, it is necessary to use LEFT or RIGHT join. The table in the ```FROM``` clause is the LEFT one and the table in the ```JOIN``` clause is the RIGHT one.
+If it is necessary to return data from one of the tables even if there is no foreign key mapping, it is necessary to use LEFT or RIGHT join. The table in the ```FROM``` clause is the LEFT one and the table in the ```JOIN``` clause is the RIGHT one. The FULL JOIN will return records from both tables including the ones without a relation
 
 ```sql
 SELECT e.Name as 'Employee Name', 
@@ -669,6 +669,25 @@ SELECT e.Name as 'Employee Name',
 * ```Employee``` is LEFT and ```Department`` is RIGHT
 * Compare this result to the one from the previous example and observe that this one has two extra rows with no Employee Name for Finance Department and Public Relations.
 * As there is no Employee with a Department ID equal to 4 or 5, it is necessary a RIGHT JOIN to retrieve a row for each one of those departments.
+
+> **TIP**: Try each one and pay good attention to the results:
+
+```sql
+SELECT e.Name as 'Employee Name', 
+       d.Name as 'Department Name'
+  FROM Employee e
+  LEFT JOIN Department d on d.ID = e.DepartmentID
+
+SELECT e.Name as 'Employee Name', 
+       d.Name as 'Department Name'
+  FROM Employee e
+  RIGHT JOIN Department d on d.ID = e.DepartmentID
+
+SELECT e.Name as 'Employee Name', 
+       d.Name as 'Department Name'
+  FROM Employee e
+  FULL JOIN Department d on d.ID = e.DepartmentID
+```
 
 ### MAX, MIN, SUM and AVG
 
