@@ -773,6 +773,8 @@ SELECT d.Name, COUNT(e.ID) as 'Employee Count'
   * [Mathematical Function](https://learn.microsoft.com/en-us/sql/t-sql/functions/mathematical-functions-transact-sql?view=sql-server-ver16)
   * [Date & Time Functions](https://learn.microsoft.com/en-us/sql/t-sql/functions/date-and-time-data-types-and-functions-transact-sql?view=sql-server-ver16)
 
+## Indexes
+
 ## Transactions (ACID)
 
 ## Transaction SQL (TSQL)
