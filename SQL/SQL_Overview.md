@@ -775,7 +775,11 @@ SELECT d.Name, COUNT(e.ID) as 'Employee Count'
 
 ## Indexes
 
+## Advacned Queries
+
 ## Transactions (ACID)
+
+## CTE
 
 ## Transaction SQL (TSQL)
 
