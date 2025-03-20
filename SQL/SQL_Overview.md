@@ -796,7 +796,130 @@ SELECT d.Name as 'Department',
   * [Mathematical Function](https://learn.microsoft.com/en-us/sql/t-sql/functions/mathematical-functions-transact-sql?view=sql-server-ver16)
   * [Date & Time Functions](https://learn.microsoft.com/en-us/sql/t-sql/functions/date-and-time-data-types-and-functions-transact-sql?view=sql-server-ver16)
 
+### String Functions
+
+```sql
+SELECT LEN('Hello SQL Server') AS StringLength
+-- Output: 16
+
+SELECT UPPER('hello') AS Uppercase,
+       LOWER('SQL') AS Lowercase
+-- Output: HELLO | sql
+
+SELECT SUBSTRING('Microsoft SQL Server', 11, 3) AS SubString
+-- Output: SQL
+
+SELECT LEFT('Microsoft SQL Server', 9) AS LeftString
+-- Output: Microsoft
+
+SELECT REPLACE('SQL is fun', 'fun', 'awesome') AS ReplacedString
+-- Output: SQL is awesome
+
+SELECT CONCAT('SQL', ' ', 'Server') AS ConcatenatedString
+-- Output: SQL Server
+```
+
+### Math Functions
+
+```sql
+SELECT ABS(-15) AS AbsoluteValue
+-- Output: 15
+
+SELECT POWER(2, 3) AS PowerResult
+-- Output: 8
+
+SELECT ROUND(123.456, 2) AS RoundedNumber
+-- Output: 123.46
+
+SELECT SQRT(16) AS SquareRoot
+-- Output: 4
+
+SELECT CEILING(4.2) AS CeilingResult,
+       FLOOR(4.7) AS FloorResult
+-- Output: 5 | 4
+```
+
+### Date/Time Functions
+
+```sql
+SELECT GETDATE() AS CurrentDateTime
+-- Output: 2025-03-19 20:36:45.000
+
+SELECT DATEADD(DAY, 7, '2025-03-19') AS NewDate
+-- Output: 2025-03-26
+
+SELECT DATEDIFF(DAY, '2025-03-19', '2025-03-26') AS DateDifference
+-- Output: 7
+
+SELECT FORMAT(GETDATE(), 'yyyy-MM-dd') AS FormattedDate
+
+SELECT YEAR(GETDATE()) AS Year, 
+       MONTH(GETDATE()) AS Month, 
+       DAY(GETDATE()) AS Day;
+
+SELECT DATEPART(YEAR, GETDATE()) AS YearPart,
+       DATEPART(MONTH, GETDATE()) AS MonthPart,
+       DATEPART(MONTH, GETDATE()) AS MonthPart
+```
+
 ## Indexes
+
+Indexes in SQL Server are database objects that improve the speed of data retrieval operations on a table by providing quick access to rows. They function like the index of a book, allowing the database engine to find information without scanning the entire table.
+
+### **Types of Indexes**
+
+1. **Clustered Index**
+   * Sorts and stores data rows in the table based on the index key.
+   * A table can have only one clustered index.
+   * When you create a clustered index, SQL Server doesn’t create a separate structure for the index.
+     Instead, the table itself becomes the index.
+   * Example:
+
+     ```sql
+     CREATE CLUSTERED INDEX IX_Orders_CustomerID
+     ON Orders(CustomerID);
+     ```
+
+2. **Non-Clustered Index**
+   * Creates a separate structure from the table data, with a pointer to the actual data rows.
+   * A table can have multiple non-clustered indexes.
+   * Example:
+
+     ```sql
+     CREATE NONCLUSTERED INDEX IX_Orders_OrderDate
+     ON Orders(OrderDate);
+     ```
+
+3. **Unique Index**
+   * Ensures all values in the index key are unique.
+   * Can be clustered or non-clustered.
+   * Example:
+
+     ```sql
+     CREATE UNIQUE NONCLUSTERED INDEX IX_Users_Email
+     ON Users(Email);
+     ```
+
+### **Advantages of Indexes**
+
+* Speeds up SELECT queries and improves search performance.
+* Helps enforce constraints like UNIQUE and PRIMARY KEY.
+* Reduces disk I/O operations during data retrieval.
+
+### **Considerations When Using Indexes**
+
+* **Performance Cost**: Indexes slow down INSERT, UPDATE, and DELETE operations as the index needs to be updated.
+* **Storage Requirement**: Indexes consume additional storage space.
+* **Maintenance**: Indexes should be rebuilt or reorganized periodically to ensure optimal performance.
+
+### **Index Management**
+
+1. **View Existing Indexes**
+
+   ```sql
+   SELECT * 
+   FROM sys.indexes 
+   WHERE object_id = OBJECT_ID('TABLE_NAME');
 
 ## Advacned Queries
 
