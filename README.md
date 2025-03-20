@@ -314,5 +314,7 @@
 | 270| [Advanced - Serpent Game](https://youtube.com/live/ozPgE_k96pk) | [CSharp/_21_Advanced/_18_Serpent.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_18_Serpent.cs) |
 | 271| [SQL - Introduction](https://youtube.com/live/eQ3Vwzlhkx8) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 272| [SQL - Basic Commands](https://youtube.com/live/MFxT4uWaZBA) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 273| [SQL - Inner Join](https://youtube.com/live/S0K5vdsGt_I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 2742| [SQL - Left, Right and Full Join](https://youtube.com/live/D9gjZqWdi38) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 273| [SQL - Using SQL Fiddler](https://youtube.com/live/ASG4xiuxJ-I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 274| [SQL - Inner Join](https://youtube.com/live/S0K5vdsGt_I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 275| [SQL - Left, Right and Full Join](https://youtube.com/live/D9gjZqWdi38) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 276| [SQL - Aggregate Functions and Group By](https://youtube.com/live/giAaEtDQHeU) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
