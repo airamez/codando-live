@@ -864,20 +864,21 @@ SELECT DATEPART(YEAR, GETDATE()) AS YearPart,
 
 ## Indexes
 
-Indexes in SQL Server are database objects that improve the speed of data retrieval operations on a table by providing quick access to rows. They function like the index of a book, allowing the database engine to find information without scanning the entire table.
+Indexes in SQL Server are database objects that improve the speed of data retrieval operations on a table by providing quick access to rows.
+They function like the index of a book, allowing the database engine to find information without scanning the entire table.
 
 ### **Types of Indexes**
 
 1. **Clustered Index**
    * Sorts and stores data rows in the table based on the index key.
    * A table can have only one clustered index.
-   * When you create a clustered index, SQL Server doesn’t create a separate structure for the index.
+   * SQL Server doesn’t create a separate structure a clustered index.
      Instead, the table itself becomes the index.
    * Example:
 
      ```sql
-     CREATE CLUSTERED INDEX IX_Orders_CustomerID
-     ON Orders(CustomerID);
+     CREATE CLUSTERED INDEX INDEX_NAME
+     ON TABLE_NAME(FIELDS_LIST);
      ```
 
 2. **Non-Clustered Index**
@@ -886,8 +887,8 @@ Indexes in SQL Server are database objects that improve the speed of data retrie
    * Example:
 
      ```sql
-     CREATE NONCLUSTERED INDEX IX_Orders_OrderDate
-     ON Orders(OrderDate);
+     CREATE NONCLUSTERED INDEX INDEX_NAME
+     ON TABLE_NAME(FIELDS_LIST);
      ```
 
 3. **Unique Index**
@@ -896,8 +897,8 @@ Indexes in SQL Server are database objects that improve the speed of data retrie
    * Example:
 
      ```sql
-     CREATE UNIQUE NONCLUSTERED INDEX IX_Users_Email
-     ON Users(Email);
+     CREATE UNIQUE NONCLUSTERED INDEX INDEX_NAME
+     ON TABLE_NAME(FIELDS_LIST);
      ```
 
 ### **Advantages of Indexes**
@@ -905,6 +906,7 @@ Indexes in SQL Server are database objects that improve the speed of data retrie
 * Speeds up SELECT queries and improves search performance.
 * Helps enforce constraints like UNIQUE and PRIMARY KEY.
 * Reduces disk I/O operations during data retrieval.
+* We don't need o specify indexes for queries, the DBMS automatically decide which indexes to use
 
 ### **Considerations When Using Indexes**
 
@@ -912,16 +914,38 @@ Indexes in SQL Server are database objects that improve the speed of data retrie
 * **Storage Requirement**: Indexes consume additional storage space.
 * **Maintenance**: Indexes should be rebuilt or reorganized periodically to ensure optimal performance.
 
-### **Index Management**
+### Index Management
 
-1. **View Existing Indexes**
+* View Existing Indexes
 
    ```sql
    SELECT * 
    FROM sys.indexes 
    WHERE object_id = OBJECT_ID('TABLE_NAME');
 
+* Rebuild Indexes
+
+  ```sql
+  ALTER INDEX INDEX_NAME ON TABLE_NAME REBUILD;
+  ```
+
+* Delete Index
+
+  ```sql
+  DROP INDEX INDEX_NAME ON TABLE_NAME;
+  ```
+
+* Monitor Index Usage
+
+  ```sql
+    SELECT * 
+      FROM sys.dm_db_index_usage_stats 
+      WHERE database_id = DB_ID('DATABASE_NAME');
+  ```
+
 ## Advacned Queries
+
+### Create object only if does NOT exist
 
 ## Transactions (ACID)
 
