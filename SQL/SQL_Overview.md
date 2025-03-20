@@ -670,7 +670,7 @@ SELECT e.Name as 'Employee Name',
 * Compare this result to the one from the previous example and observe that this one has two extra rows with no Employee Name for Finance Department and Public Relations.
 * As there is no Employee with a Department ID equal to 4 or 5, it is necessary a RIGHT JOIN to retrieve a row for each one of those departments.
 
-> **TIP**: Try each one and pay good attention to the results:
+> **TIP**: Try each one of the queries below and pay good attention to the results:
 
 ```sql
 SELECT e.Name as 'Employee Name', 
@@ -712,7 +712,7 @@ FROM Employee
 
 * The COUNT clause returns the number of the records in the dataset (result of the SELECT command)
 
-```
+```sql
 SELECT COUNT(ID) as 'Employee COUNT'
   FROM Employee
   WHERE DepartmentID = 5
