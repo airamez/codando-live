@@ -689,7 +689,7 @@ SELECT e.Name as 'Employee Name',
   FULL JOIN Department d on d.ID = e.DepartmentID
 ```
 
-### MAX, MIN, SUM and AVG
+### Aggregate Functions: MAX, MIN, SUM and AVG
 
 * MAX returns the maximum value of a field
 * MIN returns the minimum value of a field
@@ -765,6 +765,29 @@ SELECT d.Name, COUNT(e.ID) as 'Employee Count'
 |                  Sales |              2 |
 
 > **ATTENTION**: Using the left join makes sure the departments without Employees are returned.
+
+### Group BY with Aggregate Functions
+
+```sql
+SELECT d.Name as 'Department',
+       Min(e.Salary) as 'Min Salary',
+       Max(e.Salary) as 'Max Salary',
+       AVG(e.Salary) as 'Salary Average',
+       SUM(e.Salary) as 'Salary Sum'
+  FROM Department d
+  LEFT JOIN Employee e on e.DepartmentID = d.ID
+  GROUP BY d.Name
+  ORDER BY d.Name
+```
+
+| Name                     | Min Salary   | Max Salary   | Salary Average   | Salary Sum   |
+|--------------------------|--------------|--------------|------------------|--------------|
+| Finances                 | NULL         | NULL         | NULL             | NULL         |
+| Human Resources          | 200000.20    | 200000.20    | 200000.200000    | 200000.20    |
+| Information Technology   | 15000.15     | 100000.45    | 57500.300000     | 115000.60    |
+| Marketing                | 15000.15     | 5000000.01   | 1334286.094285   | 9340002.66   |
+| Public Relations         | NULL         | NULL         | NULL             | NULL         |
+| Sales                    | 450000.15    | 1000000.67   | 725000.410000    | 1450000.82   |
 
 ## Functions
 
