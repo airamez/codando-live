@@ -893,6 +893,10 @@ SELECT DATEPART(YEAR, GETDATE()) AS YearPart,
        DATEPART(MONTH, GETDATE()) AS MonthPart
 ```
 
+## Using the Northwind sample database
+
+* <https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/northwind-pubs>
+
 ## Indexes
 
 Indexes in SQL Server are database objects that improve the speed of data retrieval operations on a table by providing quick access to rows.
