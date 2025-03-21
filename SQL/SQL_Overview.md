@@ -799,24 +799,49 @@ SELECT d.Name as 'Department',
 ### String Functions
 
 ```sql
+-- Length
 SELECT LEN('Hello SQL Server') AS StringLength
--- Output: 16
 
+select name, len(name) as 'Name Length'
+  from Employee
+
+-- Upper and Lower Case
 SELECT UPPER('hello') AS Uppercase,
        LOWER('SQL') AS Lowercase
--- Output: HELLO | sql
 
+select upper(name), lower(name)
+  from Employee
+
+-- Substring
 SELECT SUBSTRING('Microsoft SQL Server', 11, 3) AS SubString
--- Output: SQL
 
+select substring(name, 1, 5) 
+  from Employee
+
+-- Left
 SELECT LEFT('Microsoft SQL Server', 9) AS LeftString
--- Output: Microsoft
 
+select left(name, 5)
+  from Employee
+
+-- Replace
 SELECT REPLACE('SQL is fun', 'fun', 'awesome') AS ReplacedString
--- Output: SQL is awesome
 
+select name, replace(name, 'a', 'A') as 'New Name'
+  from Employee
+
+-- Concatenation
 SELECT CONCAT('SQL', ' ', 'Server') AS ConcatenatedString
--- Output: SQL Server
+
+select concat('[', name, ':', email, ';', salary, ']') As 'NameEmail'
+  from Employee
+
+select concat(name, ' length is ', len(name))
+  from Employee
+
+select name as 'FullName',
+       left(name, CHARINDEX (' ', name)) as 'First Name'
+  from Employee
 ```
 
 ### Math Functions
