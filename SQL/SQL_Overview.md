@@ -824,6 +824,12 @@ SELECT LEFT('Microsoft SQL Server', 9) AS LeftString
 select left(name, 5)
   from Employee
 
+-- Right
+SELECT RIGHT('Microsoft SQL Server', 10) AS LeftString
+
+select right(name, 5)
+  from Employee
+
 -- Replace
 SELECT REPLACE('SQL is fun', 'fun', 'awesome') AS ReplacedString
 
