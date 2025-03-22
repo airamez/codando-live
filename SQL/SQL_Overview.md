@@ -819,25 +819,25 @@ select substring(name, 1, 5)
   from Employee
 
 -- Left
-SELECT LEFT('Microsoft SQL Server', 9) AS LeftString
+SELECT LEFT('Microsoft SQL Server', 9) AS 'LeftString'
 
 select left(name, 5)
   from Employee
 
 -- Right
-SELECT RIGHT('Microsoft SQL Server', 10) AS LeftString
+SELECT RIGHT('Microsoft SQL Server', 10) AS 'LeftString'
 
 select right(name, 5)
   from Employee
 
 -- Replace
-SELECT REPLACE('SQL is fun', 'fun', 'awesome') AS ReplacedString
+SELECT REPLACE('SQL is fun', 'fun', 'awesome') AS 'ReplacedString'
 
 select name, replace(name, 'a', 'A') as 'New Name'
   from Employee
 
 -- Concatenation
-SELECT CONCAT('SQL', ' ', 'Server') AS ConcatenatedString
+SELECT CONCAT('SQL', ' ', 'Server') AS 'ConcatenatedString'
 
 select concat('[', name, ':', email, ';', salary, ']') As 'NameEmail'
   from Employee
@@ -848,41 +848,53 @@ select concat(name, ' length is ', len(name))
 select name as 'FullName',
        left(name, CHARINDEX (' ', name)) as 'First Name'
   from Employee
+
+-- Reverse
+SELECT REVERSE('ABCDEFGHIJKLM') AS 'ReversedString'
+
+select name as 'FullName',
+       REVERSE(name) as 'Reversed Name'
+  from Employee
+
+-- First Name
+select name as 'FullName',
+       left(name, CHARINDEX (' ', name)) as 'First Name'
+  from Employee
+
+-- Last Name
+select name as 'FullName',
+       reverse(left(reverse(name), CHARINDEX (' ', reverse(name)) - 1)) as 'Last Name'
+  from Employee
 ```
 
 ### Math Functions
 
 ```sql
-SELECT ABS(-15) AS AbsoluteValue
--- Output: 15
-
-SELECT POWER(2, 3) AS PowerResult
--- Output: 8
-
-SELECT ROUND(123.456, 2) AS RoundedNumber
--- Output: 123.46
-
-SELECT SQRT(16) AS SquareRoot
--- Output: 4
-
-SELECT CEILING(4.2) AS CeilingResult,
-       FLOOR(4.7) AS FloorResult
--- Output: 5 | 4
+SELECT 
+  ABS(-15) AS AbsoluteValue,
+  POWER(2, 3) AS PowerResult,
+  ROUND(123.456, 2) AS RoundedNumber,
+  SQRT(16) AS SquareRoot,
+  CEILING(4.2) AS CeilingResult,
+  FLOOR(4.7) AS FloorResult
 ```
 
 ### Date/Time Functions
 
 ```sql
 SELECT GETDATE() AS CurrentDateTime
--- Output: 2025-03-19 20:36:45.000
-
-SELECT DATEADD(DAY, 7, '2025-03-19') AS NewDate
--- Output: 2025-03-26
-
-SELECT DATEDIFF(DAY, '2025-03-19', '2025-03-26') AS DateDifference
--- Output: 7
 
 SELECT FORMAT(GETDATE(), 'yyyy-MM-dd') AS FormattedDate
+SELECT FORMAT(GETDATE(), 'yyyy/MM/dd') AS FormattedDate
+SELECT FORMAT(GETDATE(), 'MM/dd/yyyy') AS FormattedDate
+SELECT FORMAT(GETDATE(), 'dd/MM/yyyy') AS FormattedDate
+SELECT FORMAT(GETDATE(), 'yyyy-MM-dd hh:mm:ss') AS FormattedDate
+
+SELECT '2025-03-19' AS Date, DATEADD(DAY, 7, '2025-03-19') AS NewDate
+
+SELECT DATEDIFF(DAY, '1972-03-25', GETDATE()) AS DateDifference
+SELECT DATEDIFF(MONTH, '1972-03-25', GETDATE()) AS DateDifference
+SELECT DATEDIFF(YEAR, '1972-03-25', GETDATE()) AS DateDifference
 
 SELECT YEAR(GETDATE()) AS Year, 
        MONTH(GETDATE()) AS Month, 
@@ -890,7 +902,9 @@ SELECT YEAR(GETDATE()) AS Year,
 
 SELECT DATEPART(YEAR, GETDATE()) AS YearPart,
        DATEPART(MONTH, GETDATE()) AS MonthPart,
-       DATEPART(MONTH, GETDATE()) AS MonthPart
+       DATEPART(DAY, GETDATE()) AS DayPart
+
+SELECT EOMONTH(GETDATE()) AS EOMONTH
 ```
 
 ## Using the Northwind sample database
