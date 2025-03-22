@@ -884,32 +884,138 @@ SELECT
 ```sql
 SELECT GETDATE() AS CurrentDateTime
 
-SELECT FORMAT(GETDATE(), 'yyyy-MM-dd') AS FormattedDate
-SELECT FORMAT(GETDATE(), 'yyyy/MM/dd') AS FormattedDate
-SELECT FORMAT(GETDATE(), 'MM/dd/yyyy') AS FormattedDate
-SELECT FORMAT(GETDATE(), 'dd/MM/yyyy') AS FormattedDate
-SELECT FORMAT(GETDATE(), 'yyyy-MM-dd hh:mm:ss') AS FormattedDate
+SELECT FORMAT(GETDATE(), 'yyyy-MM-dd'),
+       FORMAT(GETDATE(), 'yyyy/MM/dd'),
+       FORMAT(GETDATE(), 'MM/dd/yyyy'),
+       FORMAT(GETDATE(), 'dd/MM/yyyy'),
+       FORMAT(GETDATE(), 'yyyy-MM-dd hh:mm:ss')
 
-SELECT '2025-03-19' AS Date, DATEADD(DAY, 7, '2025-03-19') AS NewDate
+SELECT GETDATE(), DATEADD(DAY, 15, GETDATE()),
+       GETDATE(), DATEADD(MONTH, 6, GETDATE()),
+       GETDATE(), DATEADD(YEAR, 2, GETDATE())
 
-SELECT DATEDIFF(DAY, '1972-03-25', GETDATE()) AS DateDifference
-SELECT DATEDIFF(MONTH, '1972-03-25', GETDATE()) AS DateDifference
-SELECT DATEDIFF(YEAR, '1972-03-25', GETDATE()) AS DateDifference
+SELECT DATEDIFF(DAY, '1972-03-25', GETDATE()),
+       DATEDIFF(MONTH, '1972-03-25', GETDATE()),
+       DATEDIFF(YEAR, '1972-03-25', GETDATE())
 
-SELECT YEAR(GETDATE()) AS Year, 
-       MONTH(GETDATE()) AS Month, 
-       DAY(GETDATE()) AS Day;
+SELECT YEAR(GETDATE()), 
+       MONTH(GETDATE()), 
+       DAY(GETDATE());
 
-SELECT DATEPART(YEAR, GETDATE()) AS YearPart,
-       DATEPART(MONTH, GETDATE()) AS MonthPart,
-       DATEPART(DAY, GETDATE()) AS DayPart
+SELECT DATEPART(YEAR, GETDATE()),
+       DATEPART(MONTH, GETDATE()),
+       DATEPART(DAY, GETDATE())
 
-SELECT EOMONTH(GETDATE()) AS EOMONTH
+SELECT EOMONTH(GETDATE()),
+       EOMONTH('2025-02-01'),
+       EOMONTH('2028-02-01')
 ```
 
-## Using the Northwind sample database
+## Sample Databases
 
+Microsoft provides several excellent sample databases for practicing SQL commands. Among the most popular are:
+
+### 1. AdventureWorks
+
+This database simulates a multinational manufacturing company and includes a comprehensive schema with tables for:
+
+* Products
+* Sales
+* Purchasing
+* Production
+* Human Resources
+
+It's ideal for learning advanced SQL concepts like:
+
+* Stored procedures
+* Triggers
+* Indexing
+
+### 2. WideWorldImporters
+
+Designed for SQL Server 2016 and later, this database includes both OLTP (Online Transaction Processing) and OLAP (Online Analytical Processing) versions. It showcases modern database design techniques and is great for exploring features like:
+
+* JSON support
+* Temporal tables
+
+### 3. Northwind
+
+A classic database that represents a small business selling food and beverages. It's simpler than AdventureWorks and is perfect for beginners.
+
+## Documentation
+
+* You can find these databases on Microsoft's [SQL Server samples GitHub repository](https://learn.microsoft.com/en-us/sql/samples/sql-samples-where-are?view=sql-server-ver16) or other trusted sources.
 * <https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/northwind-pubs>
+
+## Introduction to Data Modeling
+
+Data modeling is the process of defining and organizing data elements and their relationships for a specific purpose, usually within a database. It helps to:
+
+* Structure data efficiently.
+* Ensure data integrity.
+* Simplify database management.
+
+### Types of Data Models
+
+#### 1. **Conceptual Data Model**
+
+* High-level representation of the data.
+* Focuses on **what** data is required and its relationships.
+* Example: Entity-Relationship Diagram (ERD).
+
+#### 2. **Logical Data Model**
+
+* Detailed blueprint of data structure.
+* Focuses on **how** data should be organized.
+* Example: Defining attributes, data types, and primary/foreign keys.
+
+#### 3. **Physical Data Model**
+
+* Actual implementation of the database.
+* Focuses on **how and where** data is stored.
+* Example: Tables, columns, indexes, and storage settings.
+
+### Components of a Data Model
+
+* **Entities**:  Objects or concepts that store data (e.g., "Student", "Course").
+
+* **Attributes**: Properties or characteristics of an entity (e.g., "Name", "Age").
+
+* **Relationships**: Connections between entities (e.g., "Student enrolls in Course").
+
+### Example: Entity-Relationship Diagram (ERD)
+
+#### Entities
+
+* **Student** (attributes: StudentID, Name, Age).
+
+* **Course** (attributes: CourseID, Title, Credits).
+
+#### Relationship
+
+* A *Student* can enroll in multiple *Courses*.
+
+### Benefits of Data Modeling
+
+* Improves data quality and consistency.
+* Enhances communication between stakeholders.
+* Provides a clear blueprint for database developers.
+
+### Tools for Data Modeling
+
+* [Lucidchart](https://www.lucidchart.com)
+* [Draw.io](https://app.diagrams.net)
+* Microsoft Visio
+* MySQL Workbench
+* MS SQL Server Management Studio
+
+---
+
+#### Summary
+
+Data modeling is a fundamental step in designing effective databases. It provides a clear structure to manage and retrieve data efficiently, laying the groundwork for successful database implementation.
+
+### Advanced Queries
 
 ## Indexes
 
@@ -991,8 +1097,6 @@ They function like the index of a book, allowing the database engine to find inf
       FROM sys.dm_db_index_usage_stats 
       WHERE database_id = DB_ID('DATABASE_NAME');
   ```
-
-## Advanced Queries
 
 ### Create object only if does NOT exist
 
