@@ -913,7 +913,7 @@ SELECT EOMONTH(GETDATE()),
 
 ## Sample Databases
 
-Microsoft provides several excellent sample databases for practicing SQL commands. Among the most popular are:
+Microsoft provides several excellent sample databases for practicing SQL commands.
 
 ### 1. AdventureWorks
 
@@ -942,7 +942,7 @@ Designed for SQL Server 2016 and later, this database includes both OLTP (Online
 
 A classic database that represents a small business selling food and beverages. It's simpler than AdventureWorks and is perfect for beginners.
 
-## Documentation
+### Documentation
 
 * You can find these databases on Microsoft's [SQL Server samples GitHub repository](https://learn.microsoft.com/en-us/sql/samples/sql-samples-where-are?view=sql-server-ver16) or other trusted sources.
 * <https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/northwind-pubs>
