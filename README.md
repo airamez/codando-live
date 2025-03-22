@@ -320,3 +320,4 @@
 | 276 | [SQL - Aggregate Functions and Group By](https://youtube.com/live/giAaEtDQHeU) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 277 | [SQL - String Functions](https://youtube.com/live/p7Tdtx9lVvM) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 278 | [SQL - MAth and Date Functions](https://youtube.com/live/Kh-9ktLHy3I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 279 | [SQL - Sample Databases](https://youtube.com/live/PYxdULQWhcE) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |

@@ -947,7 +947,50 @@ A classic database that represents a small business selling food and beverages. 
 * You can find these databases on Microsoft's [SQL Server samples GitHub repository](https://learn.microsoft.com/en-us/sql/samples/sql-samples-where-are?view=sql-server-ver16) or other trusted sources.
 * <https://github.com/Microsoft/sql-server-samples/tree/master/samples/databases/northwind-pubs>
 
-## Introduction to Data Modeling
+### NorthWind Sample Database
+
+#### Data Model Diagram
+
+![Application Architecture](/SQL/images/NorthwindDMDiagram.png)
+
+#### Queries
+
+```sql
+select ProductName, UnitPrice, UnitsInStock,
+       CategoryName,
+      CompanyName, ContactName, Phone
+  from Products p
+  inner join Categories c on c.CategoryID = p.CategoryID
+  inner join Suppliers s on s.SupplierID = p.SupplierID
+  where UnitsInStock <= 5
+
+select c.CategoryName, count(ProductID)
+  from Categories c
+  left join Products p on p.CategoryID = c.CategoryID
+  group by c.CategoryName
+
+select CONCAT(FirstName, ' ', LastName) as FullName,
+  t.TerritoryDescription,
+  r.RegionDescription
+  from Employees e
+  inner join EmployeeTerritories et on et.EmployeeID = e.EmployeeID
+  inner join Territories t on t.TerritoryID = et.TerritoryID
+  inner join Region r on r.RegionID = t.RegionID
+
+-- Order for a specific customer
+select o.OrderID, FORMAT(o.OrderDate,'MM-dd-yyyy') as 'Order Date',
+       p.ProductName,
+       od.Quantity, od.UnitPrice, od.Quantity * od.UnitPrice as 'Total Price'
+  from Orders o
+  inner join [Order Details] od on od.OrderID = o.OrderID
+  inner join Products p on p.ProductID = od.ProductID
+  where o.CustomerID = 'ANTON' and o.OrderID = 10535
+  order by o.OrderID
+
+-- Homework: Craete a query to list how employees per region
+```
+
+## More on Data Modeling
 
 Data modeling is the process of defining and organizing data elements and their relationships for a specific purpose, usually within a database. It helps to:
 
