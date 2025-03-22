@@ -319,3 +319,4 @@
 | 275 | [SQL - Left, Right and Full Join](https://youtube.com/live/D9gjZqWdi38) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 276 | [SQL - Aggregate Functions and Group By](https://youtube.com/live/giAaEtDQHeU) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 277 | [SQL - String Functions](https://youtube.com/live/p7Tdtx9lVvM) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 278 | [SQL - MAth and Date Functions](https://youtube.com/live/Kh-9ktLHy3I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |

@@ -992,11 +992,13 @@ They function like the index of a book, allowing the database engine to find inf
       WHERE database_id = DB_ID('DATABASE_NAME');
   ```
 
-## Advacned Queries
+## Advanced Queries
 
 ### Create object only if does NOT exist
 
 ## Transactions (ACID)
+
+## Queries with multiple joins
 
 ## CTE
 
