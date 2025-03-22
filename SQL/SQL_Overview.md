@@ -858,7 +858,7 @@ select name as 'FullName',
 
 -- First Name
 select name as 'FullName',
-       left(name, CHARINDEX (' ', name)) as 'First Name'
+       left(name, CHARINDEX (' ', name) - 1) as 'First Name'
   from Employee
 
 -- Last Name
