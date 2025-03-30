@@ -931,7 +931,7 @@ It's ideal for learning advanced SQL concepts like:
 * Triggers
 * Indexing
 
-### 2. WideWorldImporters
+### 2. Wide World Importers
 
 Designed for SQL Server 2016 and later, this database includes both OLTP (Online Transaction Processing) and OLAP (Online Analytical Processing) versions. It showcases modern database design techniques and is great for exploring features like:
 
@@ -1056,12 +1056,14 @@ Data modeling is the process of defining and organizing data elements and their 
 
 Data modeling is a fundamental step in designing effective databases. It provides a clear structure to manage and retrieve data efficiently, laying the groundwork for successful database implementation.
 
-### Advanced Queries
-
 ## Indexes
 
 Indexes in SQL Server are database objects that improve the speed of data retrieval operations on a table by providing quick access to rows.
 They function like the index of a book, allowing the database engine to find information without scanning the entire table.
+
+### **How Index Works**
+
+![Index](images/HowIndexWorks.png)
 
 ### **Types of Indexes**
 
@@ -1139,9 +1141,19 @@ They function like the index of a book, allowing the database engine to find inf
       WHERE database_id = DB_ID('DATABASE_NAME');
   ```
 
+## Advanced Queries
+
 ### Create object only if does NOT exist
 
+### Filtering by like
+
+### Filtering by between
+
+### Using left/right join to return rows without relationship
+
 ## Transactions (ACID)
+
+### Query with NOLOCK
 
 ## Queries with multiple joins
 
