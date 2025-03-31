@@ -1143,9 +1143,20 @@ They function like the index of a book, allowing the database engine to find inf
 
 ## Advanced Queries
 
-* Create object only if does NOT exist
+* Create table only if does NOT exist
 
 ```sql
+IF NOT EXISTS (
+    SELECT * 
+    FROM INFORMATION_SCHEMA.TABLES 
+    WHERE TABLE_NAME = 'Region'
+)
+BEGIN
+    CREATE TABLE Region (
+        RegionID INT PRIMARY KEY,
+        RegionDescription NVARCHAR(50)
+    );
+END;
 ```
 
 * Return only the Top N rows
