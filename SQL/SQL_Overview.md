@@ -1048,9 +1048,9 @@ Data modeling is the process of defining and organizing data elements and their 
 
 * [Lucidchart](https://www.lucidchart.com)
 * [Draw.io](https://app.diagrams.net)
-* Microsoft Visio
-* MySQL Workbench
-* MS SQL Server Management Studio
+* [Microsoft Visio](https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software)
+* [MySQL Workbench](https://www.mysql.com/products/workbench/)
+* [MS SQL Server Management Studio](https://learn.microsoft.com/en-us/ssms/download-sql-server-management-studio-ssms)
 
 ### Summary
 
@@ -1145,206 +1145,185 @@ They function like the index of a book, allowing the database engine to find inf
 
 * Create table only if does NOT exist
 
-```sql
-IF NOT EXISTS (
-    SELECT * 
-    FROM INFORMATION_SCHEMA.TABLES 
-    WHERE TABLE_NAME = 'Region'
-)
-BEGIN
-    CREATE TABLE Region (
-        RegionID INT PRIMARY KEY,
-        RegionDescription NVARCHAR(50)
-    );
-END;
-```
+  ```sql
+  IF NOT EXISTS (
+      SELECT * 
+      FROM INFORMATION_SCHEMA.TABLES 
+      WHERE TABLE_NAME = 'Region'
+  )
+  BEGIN
+      CREATE TABLE Region (
+          RegionID INT PRIMARY KEY,
+          RegionDescription NVARCHAR(50)
+      );
+  END;
+  ```
 
 * Return only the Top N rows
 
-```sql
-SELECT TOP 5 p.ProductID, p.ProductName
-FROM Products p
-```
+  ```sql
+  SELECT TOP 5 p.ProductID, p.ProductName
+  FROM Products p
+  ```
 
 * Filtering using LIKE
 
-```sql
-SELECT * FROM products
-WHERE ProductName like 'Louis%'
+  ```sql
+  SELECT * FROM products
+  WHERE ProductName like 'Louis%'
 
-SELECT * FROM products
-WHERE ProductName like '%ing'
+  SELECT * FROM products
+  WHERE ProductName like '%ing'
 
-SELECT * FROM products
-WHERE ProductName like '%org%'
-```
+  SELECT * FROM products
+  WHERE ProductName like '%org%'
+  ```
 
 * Filtering using BETWEEN
 
-```sql
-SELECT * FROM products
-WHERE UnitPrice BETWEEN 20 AND 30
-```
-
-* Comparing to NULL
-  * Direct Comparison (= or !=) does NOT work, use IS or IS NOT NULL
-
-```sql
-SELECT EmployeeID, FirstName, LastName, ReportsTo
-FROM Employees
-WHERE ReportsTo IS NULL
-
-SELECT EmployeeID, FirstName, LastName, ReportsTo
-FROM Employees
-WHERE ReportsTo IS NOT NULL
-
--- NEVER use = OR != when testing for NULL
-SELECT EmployeeID, FirstName, LastName, ReportsTo
-FROM Employees
-WHERE ReportsTo = NULL
-
-SELECT EmployeeID, FirstName, LastName, ReportsTo
-FROM Employees
-WHERE ReportsTo != NULL
-```
+  ```sql
+  SELECT * FROM products
+  WHERE UnitPrice BETWEEN 20 AND 30
+  ```
 
 * Filtering using IN
 
-```sql
-SELECT * FROM products
-WHERE CategoryID in (2, 4, 7)
+  ```sql
+  SELECT * FROM products
+  WHERE CategoryID in (2, 4, 7)
 
-SELECT * FROM Orders
-WHERE CustomerID IN (SELECT CustomerID FROM Customers WHERE City = 'Sao Paulo')
+  SELECT * FROM Orders
+  WHERE CustomerID IN (SELECT CustomerID FROM Customers WHERE City = 'Sao Paulo')
 
-SELECT CustomerID, CompanyName
-FROM Customers
-WHERE CustomerID IN (
-    SELECT CustomerID
-    FROM Orders
-    WHERE ShipVia = 1
-)
+  SELECT CustomerID, CompanyName
+  FROM Customers
+  WHERE CustomerID IN (
+      SELECT CustomerID
+      FROM Orders
+      WHERE ShipVia = 1
+  )
 
-SELECT c.CustomerID, c.CompanyName
-FROM Customers c
-WHERE c.CustomerID NOT IN (
-    SELECT DISTINCT o.CustomerID
-    FROM Orders o
-)
-```
+  SELECT c.CustomerID, c.CompanyName
+  FROM Customers c
+  WHERE c.CustomerID NOT IN (
+      SELECT DISTINCT o.CustomerID
+      FROM Orders o
+  )
+  ```
+
+* Comparing to NULL
+  > ⚠️ **Warning**: Direct Comparison (= or !=) with NULL does NOT work, use IS or IS NOT NULL
+
+  ```sql
+  SELECT EmployeeID, FirstName, LastName, ReportsTo
+  FROM Employees
+  WHERE ReportsTo IS NULL
+
+  SELECT EmployeeID, FirstName, LastName, ReportsTo
+  FROM Employees
+  WHERE ReportsTo IS NOT NULL
+
+  -- NEVER use = OR != when testing for NULL
+  SELECT EmployeeID, FirstName, LastName, ReportsTo
+  FROM Employees
+  WHERE ReportsTo = NULL
+
+  SELECT EmployeeID, FirstName, LastName, ReportsTo
+  FROM Employees
+  WHERE ReportsTo != NULL
+
+  ```
 
 * Queries with multiple joins
 
-```sql
-SELECT 
-    o.OrderID,
-    o.OrderDate,
-    c.CustomerID,
-    c.CompanyName AS CustomerName,
-    e.EmployeeID,
-    e.FirstName + ' ' + e.LastName AS EmployeeName,
-    s.ShipperID,
-    s.CompanyName AS ShipperName,
-    od.ProductID,
-    p.ProductName,
-    od.Quantity,
-    od.UnitPrice,
-    od.Discount,
-    sup.SupplierID,
-    sup.CompanyName AS SupplierName,
-    cat.CategoryID,
-    cat.CategoryName
-FROM Orders o
-JOIN Customers c ON o.CustomerID = c.CustomerID
-JOIN Employees e ON o.EmployeeID = e.EmployeeID
-JOIN [Order Details] od ON o.OrderID = od.OrderID
-JOIN Products p ON od.ProductID = p.ProductID
-JOIN Suppliers sup ON p.SupplierID = sup.SupplierID
-JOIN Categories cat ON p.CategoryID = cat.CategoryID
-JOIN Shippers s ON o.ShipVia = s.ShipperID;
-```
+  ```sql
+  SELECT 
+      o.OrderID,
+      o.OrderDate,
+      c.CustomerID,
+      c.CompanyName AS CustomerName,
+      e.EmployeeID,
+      e.FirstName + ' ' + e.LastName AS EmployeeName,
+      s.ShipperID,
+      s.CompanyName AS ShipperName,
+      od.ProductID,
+      p.ProductName,
+      od.Quantity,
+      od.UnitPrice,
+      od.Discount,
+      sup.SupplierID,
+      sup.CompanyName AS SupplierName,
+      cat.CategoryID,
+      cat.CategoryName
+  FROM Orders o
+  JOIN Customers c ON o.CustomerID = c.CustomerID
+  JOIN Employees e ON o.EmployeeID = e.EmployeeID
+  JOIN [Order Details] od ON o.OrderID = od.OrderID
+  JOIN Products p ON od.ProductID = p.ProductID
+  JOIN Suppliers sup ON p.SupplierID = sup.SupplierID
+  JOIN Categories cat ON p.CategoryID = cat.CategoryID
+  JOIN Shippers s ON o.ShipVia = s.ShipperID;
+  ```
 
 * Using left/right join to return rows without relationship
 
-```sql
-SELECT c.CustomerID, c.CompanyName
-FROM Customers c
-LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
-WHERE o.CustomerID IS NULL
-```
+  ```sql
+  SELECT c.CustomerID, c.CompanyName
+  FROM Customers c
+  LEFT JOIN Orders o ON c.CustomerID = o.CustomerID
+  WHERE o.CustomerID IS NULL
+  ```
 
 * Rank Employees by Sales Using Window Functions
 
-```sql
-SELECT e.EmployeeID, e.FirstName, e.LastName,
-       FORMAT(SUM(od.Quantity * od.UnitPrice),'N2') AS TotalSales,
-       RANK() OVER (ORDER BY SUM(od.Quantity * od.UnitPrice) DESC) AS SalesRank
-FROM Employees e
-JOIN Orders o ON e.EmployeeID = o.EmployeeID
-JOIN [Order Details] od ON o.OrderID = od.OrderID
-GROUP BY e.EmployeeID, e.FirstName, e.LastName;
-```
+  ```sql
+  SELECT e.EmployeeID, e.FirstName, e.LastName,
+        FORMAT(SUM(od.Quantity * od.UnitPrice),'N2') AS TotalSales,
+        RANK() OVER (ORDER BY SUM(od.Quantity * od.UnitPrice) DESC) AS SalesRank
+  FROM Employees e
+  JOIN Orders o ON e.EmployeeID = o.EmployeeID
+  JOIN [Order Details] od ON o.OrderID = od.OrderID
+  GROUP BY e.EmployeeID, e.FirstName, e.LastName;
+  ```
 
 * Identify Customers with Orders Above a Certain Amount
 
-```sql
-SELECT c.CustomerID, c.CompanyName,
-       SUM(od.Quantity * od.UnitPrice) AS TotalOrderAmount
-FROM Customers c
-JOIN Orders o ON c.CustomerID = o.CustomerID
-JOIN [Order Details] od ON o.OrderID = od.OrderID
-GROUP BY c.CustomerID, c.CompanyName
-HAVING SUM(od.Quantity * od.UnitPrice) > 15000;
-```
+  ```sql
+  SELECT c.CustomerID, c.CompanyName,
+        SUM(od.Quantity * od.UnitPrice) AS TotalOrderAmount
+  FROM Customers c
+  JOIN Orders o ON c.CustomerID = o.CustomerID
+  JOIN [Order Details] od ON o.OrderID = od.OrderID
+  GROUP BY c.CustomerID, c.CompanyName
+  HAVING SUM(od.Quantity * od.UnitPrice) > 15000;
+  ```
 
 * Find Top 5 Products by Revenue
 
-```sql
-SELECT TOP 5 p.ProductID, p.ProductName,
-       SUM(od.Quantity * od.UnitPrice) AS TotalRevenue
-FROM Products p
-JOIN [Order Details] od ON p.ProductID = od.ProductID
-GROUP BY p.ProductID, p.ProductName
-ORDER BY TotalRevenue DESC;
+  ```sql
+  SELECT TOP 5 p.ProductID, p.ProductName,
+        SUM(od.Quantity * od.UnitPrice) AS TotalRevenue
+  FROM Products p
+  JOIN [Order Details] od ON p.ProductID = od.ProductID
+  GROUP BY p.ProductID, p.ProductName
+  ORDER BY TotalRevenue DESC;
 
-```
+  ```
 
 * List Orders with Details in JSON Format
 
-```sql
-SELECT o.OrderID, o.CustomerID, o.EmployeeID, o.OrderDate
-FROM Orders o
-FOR JSON PATH;
+  ```sql
+  SELECT o.OrderID, o.CustomerID, o.EmployeeID, o.OrderDate
+  FROM Orders o
+  FOR JSON PATH;
 
-SELECT o.OrderID,
-       (SELECT od.ProductID, od.Quantity, od.UnitPrice
-        FROM [Order Details] od
-        WHERE o.OrderID = od.OrderID
-        FOR JSON PATH) AS OrderDetailsJSON
-FROM Orders o;
-```
-
-* Detect Price Changes Using LEAD Function
-
-```sql
-SELECT ProductID, UnitPrice,
-       LEAD(UnitPrice) OVER (PARTITION BY ProductID ORDER BY DateModified) AS NextPrice,
-       CASE WHEN UnitPrice <> LEAD(UnitPrice) OVER (PARTITION BY ProductID ORDER BY DateModified)
-            THEN 'Price Changed'
-            ELSE 'No Change'
-       END AS PriceStatus
-FROM ProductHistory;
-```
-
-*
-
-```sql
-```
-
-*
-
-```sql
-```
+  SELECT o.OrderID,
+        (SELECT od.ProductID, od.Quantity, od.UnitPrice
+          FROM [Order Details] od
+          WHERE o.OrderID = od.OrderID
+          FOR JSON PATH) AS OrderDetailsJSON
+  FROM Orders o;
+  ```
 
 ## Transactions (ACID)
 
