@@ -1164,6 +1164,10 @@ They function like the index of a book, allowing the database engine to find inf
   ```sql
   SELECT TOP 5 p.ProductID, p.ProductName
   FROM Products p
+
+  SELECT TOP 5 ProductID, ProductName, UnitPrice
+  FROM Products
+  ORDER BY UnitPrice
   ```
 
 * Filtering using LIKE
@@ -1188,22 +1192,22 @@ They function like the index of a book, allowing the database engine to find inf
 
 * Filtering by date
 
-```sql
-SELECT *
-FROM Orders
-WHERE OrderDate > '1998-03-01'
-ORDER BY OrderDate
+  ```sql
+  SELECT *
+  FROM Orders
+  WHERE OrderDate > '1998-03-01'
+  ORDER BY OrderDate
 
-SELECT *
-FROM Orders
-WHERE OrderDate >= '1998-03-01' AND OrderDate <= '1998-03-31'
-ORDER BY OrderDate
+  SELECT *
+  FROM Orders
+  WHERE OrderDate >= '1998-03-01' AND OrderDate <= '1998-03-31'
+  ORDER BY OrderDate
 
-SELECT *
-FROM Orders
-WHERE OrderDate BETWEEN '1998-03-01' AND '1998-03-31'
-ORDER BY OrderDate
-```
+  SELECT *
+  FROM Orders
+  WHERE OrderDate BETWEEN '1998-03-01' AND '1998-03-31'
+  ORDER BY OrderDate
+  ```
 
 * Filtering using IN
 
