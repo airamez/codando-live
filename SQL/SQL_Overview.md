@@ -1186,6 +1186,25 @@ They function like the index of a book, allowing the database engine to find inf
   WHERE UnitPrice BETWEEN 20 AND 30
   ```
 
+* Filtering by date
+
+```sql
+SELECT *
+FROM Orders
+WHERE OrderDate > '1998-03-01'
+ORDER BY OrderDate
+
+SELECT *
+FROM Orders
+WHERE OrderDate >= '1998-03-01' AND OrderDate <= '1998-03-31'
+ORDER BY OrderDate
+
+SELECT *
+FROM Orders
+WHERE OrderDate BETWEEN '1998-03-01' AND '1998-03-31'
+ORDER BY OrderDate
+```
+
 * Filtering using IN
 
   ```sql
