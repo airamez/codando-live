@@ -1477,12 +1477,168 @@ SQL Server ensures reliable and consistent transaction management by adhering to
 If rows are participating in transactions, the database lock access to it until the transaction is completed.
 the WITH(NOLOCK) option allow the access of lines particating in trasactions
 
+```sql
+SELECT *
+  FROM ACCOUNT WITH(NOLOCK) -- Ignoring the transaction locking
+```
+
+## Union, Intersect and Except
+
+## CTE - Common Table expression
+
+A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/with-common-table-expression-transact-sql?view=sql-server-ver16) (CTE) is a temporary named result set that can be referenced within a SELECT, INSERT, UPDATE, DELETE, or MERGE statement and it is used to break down big queries in small parts.
+
+### Benefits
+
+* Simplifies complex queries.
+* Improves readability and maintainability.
+* Enables recursive queries.
+
+### Sintaxe
+
   ```sql
-  SELECT *
-    FROM ACCOUNT WITH(NOLOCK) -- Ignoring the transaction locking
+    -- Single CTE
+    WITH CTE_Name (Column1, Column2, ...)
+    AS (
+        SELECT Column1, Column2, ...
+        FROM TableName
+        WHERE Conditions
+    )
+    SELECT * FROM CTE_Name;
+
+    -- Chain of CTEs
+    WITH CTE1 AS (
+    SELECT Column1, Column2
+    FROM Table1
+    WHERE Conditions1
+    ),
+    CTE2 AS (
+        SELECT Column1, Column3
+        FROM CTE1
+        WHERE Conditions2
+    ),
+    CTE3 AS (
+        SELECT Column3, Column4
+        FROM CTE1
+        INNER JOIN CTE3 ...
+        WHERE Conditions3
+    )
+    SELECT *
+    FROM CTE3;
   ```
 
-## CTE
+  > ⚠️ **Attention**: There is no comma after the last CTE
+
+### Examples
+
+* Customers and order data
+
+  ```sql
+  WITH CustomerOrders AS (
+      SELECT Customers.CustomerID, Customers.CompanyName, Orders.OrderID, Orders.OrderDate
+      FROM Customers
+      JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+  )
+  SELECT * FROM CustomerOrders;
+
+  -- with columns renaming
+  WITH CustomerOrders (customer_id, company_name, order_id, order_date) AS (
+      SELECT Customers.CustomerID, Customers.CompanyName, Orders.OrderID, Orders.OrderDate
+      FROM Customers
+      JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+  )
+  SELECT * FROM CustomerOrders;
+  ```
+
+* Customers with more than 15 orders
+
+  ```sql
+  -- Customer with more than 15 orders
+  select c.CompanyName, count(o.CustomerId)
+    from Customers c
+    join Orders o on o.CustomerID = c.CustomerID
+    group by c.CompanyName
+    having count(o.CustomerId) > 15
+    order by count(o.CustomerId) desc
+
+  with CustomerOrderCounts as (
+      select c.CompanyName, count(o.CustomerID) as OrderCount
+        from Customers c
+        join Orders o on o.CustomerID = c.CustomerID
+        group by c.CompanyName
+  )
+  select CompanyName, OrderCount
+    from CustomerOrderCounts
+    where OrderCount > 15
+    order by OrderCount desc;
+  ```
+
+* Products with top 5 frequency in orders
+
+  ```sql
+  with topFiveFrequency as (
+  select distinct top 5 od.Quantity
+    from [Order Details] od
+    inner join Products p on  p.ProductID = od.ProductID
+    order by od.Quantity desc
+  )
+  select p.ProductID, p.ProductName, od.Quantity
+    from [Order Details] od
+    inner join Products p on p.ProductID = od.ProductID
+    where od.Quantity in (select Quantity from topFiveFrequency)
+    order by od.Quantity desc
+  ```
+  
+* Using recursion to get a hierarchical report to list
+
+  ```sql
+  select e.EmployeeID, e.FirstName, manager.FirstName
+    from Employees e
+    join Employees manager on manager.EmployeeID = e.ReportsTo
+  ```
+
+  ```sql
+    with ReportingChain as (
+      -- Base case
+        select EmployeeID, FirstName, ReportsTo
+        from Employees
+        where EmployeeID = 7 -- Robert
+
+        union all
+
+      -- Recursion using the CTE
+        select e.EmployeeID, e.FirstName, e.ReportsTo
+        from Employees e
+        inner join ReportingChain rc ON e.EmployeeID = rc.ReportsTo
+      -- Try left join
+    )
+    select FirstName
+      from ReportingChain;
+  ```
+
+* Customers from Sao Paulo that ordered sea food
+
+  ```sql
+  with productsSeafood as (
+    select ProductID, ProductName
+      from Products
+    where CategoryID = 1 -- sea food
+  ),
+  customersFromSaoPaulo as (
+    select CustomerID, CompanyName
+      from Customers
+    where City = 'Sao Paulo'
+  )
+  select cfsp.CompanyName, pss.ProductName
+    from [Order Details] od
+    inner join Orders o on o.OrderID = od.OrderID
+    inner join productsSeafood pss on pss.ProductID = od.ProductID
+    inner join customersFromSaoPaulo cfsp on cfsp.CustomerID = o.CustomerID
+    where od.ProductID in (select ProductID from productsSeafood)
+      and o.CustomerID in (select CustomerID from customersFromSaoPaulo)
+  ```
+
+## Views
 
 ## Transaction SQL (TSQL)
 
