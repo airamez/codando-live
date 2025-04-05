@@ -324,3 +324,4 @@
 | 280 | [SQL - Sample Databases](https://youtube.com/live/nS6xdZ-pYS0) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 281 | [SQL - Advanced Queries](https://youtube.com/live/i27m4Xd50jc) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 282 | [SQL - Database Transaction](https://youtube.com/live/KBwmswqpJzY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 283 | [SQL - Set Operations - UNION, INTERSET and EXCEPT](https://youtube.com/live/n4HekhcndoQ) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
