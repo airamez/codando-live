@@ -1406,29 +1406,26 @@ The most typical example of database transaction: Bank account transfer operatio
 ### Transfer Transaction
 
   ```sql
-  -- Declare variables
   DECLARE @SourceAccount INT = 123456;  -- Source Account
   DECLARE @TargetAccount INT = 654321;  -- Target Account
   DECLARE @TransferAmount DECIMAL(10, 2) = 200.00; -- Amount to transfer
-
-  BEGIN TRANSACTION;
+    
+  BEGIN TRANSACTION
 
   -- Withdraw from souce account
   UPDATE Account
     SET balance = balance - @TransferAmount
     WHERE account_number = @SourceAccount;
-
-  -- THROW 50000, 'Simulated exception: Error during transaction', 1;
-
   -- Deposit into target account
   UPDATE Account
     SET balance = balance + @TransferAmount
-    WHERE account_number = @TargetAccount;
-
+    WHERE account_number = @TargetAccount
   -- Commit the transaction
-  COMMIT TRANSACTION;
 
-  PRINT 'Transaction Successful!';
+  COMMIT
+  -- ROLLBACK
+
+  PRINT 'Transaction Successful!'
   ```
 
 ## How SQL Server Implements Transactions
@@ -1475,14 +1472,14 @@ SQL Server ensures reliable and consistent transaction management by adhering to
 * SQL Server uses **locking** and **versioning** strategies to manage concurrent transactions.
 * These mechanisms ensure efficiency while upholding the ACID properties.
 
-### Query with NOLOCK
+### Query WITH(NOLOCK)
 
 If rows are participating in transactions, the database lock access to it until the transaction is completed.
 the WITH(NOLOCK) option allow the access of lines particating in trasactions
 
   ```sql
-  SELECT * 
-    FROM bank_transaction WITH (NOLOCK) -- Ignoring the transaction locking
+  SELECT *
+    FROM ACCOUNT WITH(NOLOCK) -- Ignoring the transaction locking
   ```
 
 ## CTE
