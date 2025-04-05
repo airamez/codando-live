@@ -1381,7 +1381,7 @@ ROLLBACK -- If the transaction failed
 
 ### Links
 
-* [SQL Server Transaction]([transactions](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/transactions-transact-sql?view=sql-server-ver16))
+* [SQL Server Transaction](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/transactions-transact-sql?view=sql-server-ver16)
 * [SQL Server, Locks object](https://learn.microsoft.com/en-us/sql/relational-databases/performance-monitor/sql-server-locks-object?view=sql-server-ver16)
 * [Server configuration: locks](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-locks-server-configuration-option?view=sql-server-ver16)
 
