@@ -1392,13 +1392,13 @@ The most typical example of database transaction: Bank account transfer operatio
 ### Account table
 
   ```sql
-  CREATE TABLE bank_transaction (
+  CREATE TABLE Account (
       id INT PRIMARY KEY,
       account_number INT NOT NULL,
       balance DECIMAL(10, 2) NOT NULL
   );
 
-  INSERT INTO bank_transaction (id, account_number, balance)
+  INSERT INTO Account (id, account_number, balance)
   VALUES (1, 123456, 1000.00),
          (2, 654321, 2000.00);
   ```
@@ -1414,14 +1414,14 @@ The most typical example of database transaction: Bank account transfer operatio
   BEGIN TRANSACTION;
 
   -- Withdraw from souce account
-  UPDATE bank_transaction
+  UPDATE Account
     SET balance = balance - @TransferAmount
     WHERE account_number = @SourceAccount;
 
   -- THROW 50000, 'Simulated exception: Error during transaction', 1;
 
   -- Deposit into target account
-  UPDATE bank_transaction
+  UPDATE Account
     SET balance = balance + @TransferAmount
     WHERE account_number = @TargetAccount;
 
