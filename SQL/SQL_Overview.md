@@ -1499,7 +1499,7 @@ The [UNION](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/set-op
   QUERY 2
   ```
 
-* Example: Cities frm Customers and Employees
+* Example: Cities from Customers and Employees
 
   ```sql
   SELECT Country, City FROM Customers
