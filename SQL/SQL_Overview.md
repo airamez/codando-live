@@ -1482,7 +1482,80 @@ SELECT *
   FROM ACCOUNT WITH(NOLOCK) -- Ignoring the transaction locking
 ```
 
-## Union, Intersect and Except
+## Set Operations: Union, Intersect and Except
+
+Set operations allow you to combine results from multiple queries.
+The cobined queries must have the same columns (number, order and types)
+
+### Union
+
+The [UNION](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/set-operators-union-transact-sql?view=sql-server-ver16) operator combines the results of two or more SELECT statements. It eliminates duplicate rows by default.
+
+* Sintaxe
+
+  ```sql
+  QUERY 1
+  UNION [ALL] -- ALL returns duplicates
+  QUERY 2
+  ```
+
+* Example: Cities frm Customers and Employees
+
+  ```sql
+  SELECT Country, City FROM Customers
+  UNION
+  SELECT Country, City FROM Employees
+  ORDER BY CITY
+
+  SELECT Country, City FROM Customers
+  UNION ALL
+  SELECT Country, City FROM Employees
+  ORDER BY CITY
+  ```
+
+### Intersect
+
+The [INTERSECT](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/set-operators-except-and-intersect-transact-sql?view=sql-server-ver16) operator returns rows that are common to both SELECT statements.
+
+* Sintaxe
+
+  ```sql
+  QUERY 1
+  INTERSECT
+  QUERY 2
+  ```
+
+* Example: Cities with Customers and Employees
+
+  ```sql
+  SELECT Country, City FROM Customers
+  INTERSECT
+  SELECT Country, City FROM Employees
+  ```
+
+### Except
+
+The [EXCEPT](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/set-operators-except-and-intersect-transact-sql?view=sql-server-ver16) operator returns rows from the first query that are not present in the second query.
+
+* Sintaxe
+
+  ```sql
+  QUERY 1
+  EXCEPT
+  QUERY 2
+  ```
+
+* Example: Cities from Customers without Employees and Cites from Employee without Custmers
+
+  ```sql
+  SELECT Country, City FROM Customers
+  EXCEPT
+  SELECT Country, City FROM Employees
+
+  SELECT Country, City FROM Employees
+  EXCEPT
+  SELECT Country, City FROM Customers
+  ```
 
 ## CTE - Common Table expression
 
