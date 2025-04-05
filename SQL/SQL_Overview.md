@@ -1348,11 +1348,142 @@ They function like the index of a book, allowing the database engine to find inf
   FROM Orders o;
   ```
 
-## Transactions (ACID)
+## Database Transactions
 
-### COMMIT/ROLLBACK
+A **transaction** in a database is a sequence of operations performed as a single unit of work.
+The key idea is that either **all operations** within a transaction succeed or **none** do,
+ensuring consistency.
+
+### Transactions follow the **ACID properties**
+
+1. **Atomicity**: All operations in a transaction complete successfully, or none of them do.
+2. **Consistency**: The database moves from one valid state to another.
+3. **Isolation**: Transactions do not interfere with each other.
+4. **Durability**: Once a transaction is committed, it is permanently recorded.
+
+### SQL Server Transaction implementation
+
+In SQL server the commands below are used to manage transactions
+
+* BEGIN TRAN  : initialize a transaction
+* COMMIT      : finalize the transaction confirming all commands
+* ROLL BACK   : cancel the transaction undoing all executed commands
+
+```sql
+BEGIN TRAN
+
+-- SQL COMMANDS
+
+COMMIT -- If everything is good
+
+ROLLBACK -- If the transaction failed
+```
+
+### Links
+
+* [SQL Server Transaction]([transactions](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/transactions-transact-sql?view=sql-server-ver16))
+* [SQL Server, Locks object](https://learn.microsoft.com/en-us/sql/relational-databases/performance-monitor/sql-server-locks-object?view=sql-server-ver16)
+* [Server configuration: locks](https://learn.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-locks-server-configuration-option?view=sql-server-ver16)
+
+### Example: Bank Transactions
+
+The most typical example of database transaction: Bank account transfer operation.
+
+### Account table
+
+  ```sql
+  CREATE TABLE bank_transaction (
+      id INT PRIMARY KEY,
+      account_number INT NOT NULL,
+      balance DECIMAL(10, 2) NOT NULL
+  );
+
+  INSERT INTO bank_transaction (id, account_number, balance)
+  VALUES (1, 123456, 1000.00),
+         (2, 654321, 2000.00);
+  ```
+
+### Transfer Transaction
+
+  ```sql
+  -- Declare variables
+  DECLARE @SourceAccount INT = 123456;  -- Source Account
+  DECLARE @TargetAccount INT = 654321;  -- Target Account
+  DECLARE @TransferAmount DECIMAL(10, 2) = 200.00; -- Amount to transfer
+
+  BEGIN TRANSACTION;
+
+  -- Withdraw from souce account
+  UPDATE bank_transaction
+    SET balance = balance - @TransferAmount
+    WHERE account_number = @SourceAccount;
+
+  -- THROW 50000, 'Simulated exception: Error during transaction', 1;
+
+  -- Deposit into target account
+  UPDATE bank_transaction
+    SET balance = balance + @TransferAmount
+    WHERE account_number = @TargetAccount;
+
+  -- Commit the transaction
+  COMMIT TRANSACTION;
+
+  PRINT 'Transaction Successful!';
+  ```
+
+## How SQL Server Implements Transactions
+
+SQL Server ensures reliable and consistent transaction management by adhering to the ACID properties through several mechanisms:
+
+### 1. Transaction Log
+
+* SQL Server maintains a **transaction log** that records every modification made during a transaction.
+* This log ensures **Durability**, as committed transactions can be recovered even in case of a crash.
+
+### 2. Locks
+
+* **Locks** are used to enforce **Isolation**, preventing conflicts between simultaneous transactions.
+* SQL Server applies different types of locks (shared, exclusive, etc.) based on the operation being performed.
+
+### 3. Write-Ahead Logging (WAL)
+
+* Changes are written to the transaction log **before** being applied to the database.
+* This principle ensures **Atomicity**, allowing rollback if a failure occurs mid-transaction.
+
+### 4. TempDB Usage
+
+* SQL Server uses the `tempdb` system database for temporary storage during operations such as sorting or versioning.
+* This is especially relevant in **Snapshot Isolation**, where versioned data is stored temporarily.
+
+### 5. Savepoints
+
+* Users can define **savepoints** within a transaction, which act as checkpoints.
+* Savepoints allow partial rollbacks without undoing the entire transaction.
+
+### 6. Isolation Levels
+
+* SQL Server provides multiple **isolation levels** (e.g., Read Committed, Serializable, Snapshot) to control how transactions interact.
+* Each level balances **Isolation** and performance differently.
+
+### 7. Automatic Rollback on Failure
+
+* If an error occurs, SQL Server automatically rolls back the transaction to maintain **Consistency**.
+* This prevents partial updates from corrupting the database state.
+
+### 8. Concurrency Control
+
+* SQL Server uses **locking** and **versioning** strategies to manage concurrent transactions.
+* These mechanisms ensure efficiency while upholding the ACID properties.
 
 ### Query with NOLOCK
+
+If rows are participating in transactions, the database lock access to it until the transaction is completed.
+the WITH(NOLOCK) option allow the access of lines particating in trasactions
+
+  ```sql
+  SELECT * 
+    FROM bank_transaction WITH (NOLOCK) -- Ignoring the transaction locking
+  ```
 
 ## CTE
 
