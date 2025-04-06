@@ -1235,7 +1235,7 @@ They function like the index of a book, allowing the database engine to find inf
   ```
 
 * Comparing to NULL
-  > ⚠️ **Warning**: Direct Comparison (= or !=) with NULL does NOT work, use IS or IS NOT NULL
+  > ⚠️ **Warning**: Direct Comparison (= or !=) with NULL does NOT work, the expressions **IS NULL** or **IS NOT NULL** must be used
 
   ```sql
   SELECT EmployeeID, FirstName, LastName, ReportsTo
@@ -1484,12 +1484,13 @@ SELECT *
 
 ## Set Operations: Union, Intersect and Except
 
-Set operations allow you to combine results from multiple queries.
-The cobined queries must have the same columns (number, order and types)
+Set operations allow the combination of results from multiple queries.
+The combined queries must have the same columns (number, order and types)
 
 ### Union
 
-The [UNION](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/set-operators-union-transact-sql?view=sql-server-ver16) operator combines the results of two or more SELECT statements. It eliminates duplicate rows by default.
+The [UNION](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/set-operators-union-transact-sql?view=sql-server-ver16) operator combines the results of two or more SELECT statements. It eliminates duplicate rows by default,
+if duplicates are desired **UNION ALL** must be used.
 
 * Sintaxe
 
@@ -1581,10 +1582,11 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
 
     -- Chain of CTEs
     WITH CTE1 AS (
-    SELECT Column1, Column2
-    FROM Table1
-    WHERE Conditions1
+      SELECT Column1, Column2
+      FROM Table1
+      WHERE Conditions1
     ),
+    -- No need to repeat WITH
     CTE2 AS (
         SELECT Column1, Column3
         FROM CTE1
@@ -1604,7 +1606,7 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
 
 ### Examples
 
-* Customers and order data
+* Customers and orders data
 
   ```sql
   WITH CustomerOrders AS (
@@ -1647,6 +1649,7 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
   ```
 
 * Products with top 5 frequency in orders
+  * It is necessary to find the top 5 frquency first
 
   ```sql
   with topFiveFrequency as (
@@ -1662,32 +1665,95 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
     order by od.Quantity desc
   ```
   
-* Using recursion to get a hierarchical report to list
+* Using [CTE recursion](https://learn.microsoft.com/en-us/sql/t-sql/queries/with-common-table-expression-transact-sql?view=sql-server-ver16#guidelines-for-defining-and-using-recursive-common-table-expressions)
+ to get a hierarchical report to list
 
-  ```sql
-  select e.EmployeeID, e.FirstName, manager.FirstName
-    from Employees e
-    join Employees manager on manager.EmployeeID = e.ReportsTo
-  ```
+  * Preparing the data for a better example
 
-  ```sql
-    with ReportingChain as (
-      -- Base case
-        select EmployeeID, FirstName, ReportsTo
-        from Employees
-        where EmployeeID = 7 -- Robert
+    ```sql
+    INSERT INTO Employees (LastName, FirstName, Title, ReportsTo)
+      VALUES ('Smith', 'Alice', 'CEO', 7);
+    INSERT INTO Employees (LastName, FirstName, Title, ReportsTo)
+      VALUES ('Johnson', 'Bob', 'VP', SCOPE_IDENTITY());
+    INSERT INTO Employees (LastName, FirstName, Title, ReportsTo)
+      VALUES ('Davis', 'Carol', 'Manager', SCOPE_IDENTITY());
+    INSERT INTO Employees (LastName, FirstName, Title, ReportsTo)
+      VALUES ('Brown', 'Dave', 'Supervisor', SCOPE_IDENTITY());
+    INSERT INTO Employees (LastName, FirstName, Title, ReportsTo)
+      VALUES ('Williams', 'Eve', 'Team Lead', SCOPE_IDENTITY());
+    ```
 
-        union all
+    >**TIP:** The SCOPE_IDENTITY() returns the auto generated ID from the previous insert
 
-      -- Recursion using the CTE
-        select e.EmployeeID, e.FirstName, e.ReportsTo
-        from Employees e
-        inner join ReportingChain rc ON e.EmployeeID = rc.ReportsTo
-      -- Try left join
-    )
-    select FirstName
-      from ReportingChain;
-  ```
+    ![Report to hierarch](images/ReportToHierarch.png)
+
+    ```sql
+    select e.EmployeeID, e.FirstName, manager.FirstName
+      from Employees e
+      join Employees manager on manager.EmployeeID = e.ReportsTo
+    ```
+
+  * Query 1 returning the result as a table
+
+    ```sql
+      declare @eveId int = (select EmployeeId from Employees where FirstName = 'Eve');
+      with ReportingChain as (
+        -- Base case
+          select EmployeeID, FirstName, ReportsTo
+          from Employees
+          where EmployeeID = @eveId
+
+          union all
+
+        -- Recursion using the CTE
+          select e.EmployeeID, e.FirstName, e.ReportsTo
+          from Employees e
+          inner join ReportingChain rc ON e.EmployeeID = rc.ReportsTo
+        -- Try left join
+      )
+      select FirstName
+        from ReportingChain;
+
+      DECLARE @eveId INT = (SELECT EmployeeId FROM Employees WHERE FirstName = 'Eve');
+      WITH ReportingChain AS (
+          -- Base case
+          SELECT EmployeeID, FirstName, ReportsTo
+          FROM Employees
+          WHERE EmployeeID = @eveId
+
+          UNION ALL
+
+          -- Recursive case
+          SELECT e.EmployeeID, e.FirstName, e.ReportsTo
+          FROM Employees e
+          INNER JOIN ReportingChain rc ON e.EmployeeID = rc.ReportsTo
+      )
+      -- Use STRING_AGG to concatenate names
+      SELECT STRING_AGG(FirstName, ', ') AS NamesInChain
+      FROM ReportingChain;
+    ```
+
+  * Query 2 returning the result as a string
+
+    ```sql
+      DECLARE @eveId INT = (SELECT EmployeeId FROM Employees WHERE FirstName = 'Eve');
+      WITH ReportingChain AS (
+          -- Base case
+          SELECT EmployeeID, FirstName, ReportsTo
+          FROM Employees
+          WHERE EmployeeID = @eveId
+
+          UNION ALL
+
+          -- Recursive case
+          SELECT e.EmployeeID, e.FirstName, e.ReportsTo
+          FROM Employees e
+          INNER JOIN ReportingChain rc ON e.EmployeeID = rc.ReportsTo
+      )
+      -- Use STRING_AGG to concatenate names
+      SELECT STRING_AGG(FirstName, ', ') AS NamesInChain
+      FROM ReportingChain;
+    ```
 
 * Customers from Sao Paulo that ordered sea food
 
