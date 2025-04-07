@@ -1558,7 +1558,7 @@ The [EXCEPT](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/set-o
   SELECT Country, City FROM Customers
   ```
 
-## CTE - Common Table expression
+## CTE - Common Table Expression
 
 A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/with-common-table-expression-transact-sql?view=sql-server-ver16) (CTE) is a temporary named result set that can be referenced within a SELECT, INSERT, UPDATE, DELETE, or MERGE statement and it is used to break down big queries in small parts.
 
@@ -1586,7 +1586,6 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
       FROM Table1
       WHERE Conditions1
     ),
-    -- No need to repeat WITH
     CTE2 AS (
         SELECT Column1, Column3
         FROM CTE1
@@ -1628,14 +1627,17 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
 * Customers with more than 15 orders
 
   ```sql
-  -- Customer with more than 15 orders
+  -- without CTE
   select c.CompanyName, count(o.CustomerId)
     from Customers c
     join Orders o on o.CustomerID = c.CustomerID
     group by c.CompanyName
     having count(o.CustomerId) > 15
     order by count(o.CustomerId) desc
+  ```
 
+  ```sql
+  -- With CTE
   with CustomerOrderCounts as (
       select c.CompanyName, count(o.CustomerID) as OrderCount
         from Customers c
@@ -1649,7 +1651,7 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
   ```
 
 * Products with top 5 frequency in orders
-  * It is necessary to find the top 5 frquency first
+  * It is necessary to find the top 5 frequency first
 
   ```sql
   with topFiveFrequency as (
@@ -1688,16 +1690,18 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
     ![Report to hierarch](images/ReportToHierarch.png)
 
     ```sql
-    select e.EmployeeID, e.FirstName, manager.FirstName
-      from Employees e
-      join Employees manager on manager.EmployeeID = e.ReportsTo
+      select e.EmployeeID, e.FirstName, 
+        m.EmployeeID as 'ManagerID', m.FirstName as 'ManagerFirstName'
+        from Employees e
+        join Employees m on m.EmployeeID = e.ReportsTo
     ```
 
-  * Query 1 returning the result as a table
+  * Query 1: returning the result as a table
 
     ```sql
       declare @eveId int = (select EmployeeId from Employees where FirstName = 'Eve');
       with ReportingChain as (
+        
         -- Base case
           select EmployeeID, FirstName, ReportsTo
           from Employees
@@ -1709,31 +1713,12 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
           select e.EmployeeID, e.FirstName, e.ReportsTo
           from Employees e
           inner join ReportingChain rc ON e.EmployeeID = rc.ReportsTo
-        -- Try left join
       )
       select FirstName
         from ReportingChain;
-
-      DECLARE @eveId INT = (SELECT EmployeeId FROM Employees WHERE FirstName = 'Eve');
-      WITH ReportingChain AS (
-          -- Base case
-          SELECT EmployeeID, FirstName, ReportsTo
-          FROM Employees
-          WHERE EmployeeID = @eveId
-
-          UNION ALL
-
-          -- Recursive case
-          SELECT e.EmployeeID, e.FirstName, e.ReportsTo
-          FROM Employees e
-          INNER JOIN ReportingChain rc ON e.EmployeeID = rc.ReportsTo
-      )
-      -- Use STRING_AGG to concatenate names
-      SELECT STRING_AGG(FirstName, ', ') AS NamesInChain
-      FROM ReportingChain;
     ```
 
-  * Query 2 returning the result as a string
+  * Query 2: returning the result as a string using STRING_AGG function
 
     ```sql
       DECLARE @eveId INT = (SELECT EmployeeId FROM Employees WHERE FirstName = 'Eve');
@@ -1761,7 +1746,7 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
   with productsSeafood as (
     select ProductID, ProductName
       from Products
-    where CategoryID = 1 -- sea food
+    where CategoryID = 8 -- sea food
   ),
   customersFromSaoPaulo as (
     select CustomerID, CompanyName
