@@ -1603,7 +1603,7 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
 
   > ⚠️ **Attention**: There is no comma after the last CTE
 
-### Examples
+### CTE Examples
 
 * Customers and orders data
 
@@ -1763,6 +1763,79 @@ A [Common Table Expression](https://learn.microsoft.com/en-us/sql/t-sql/queries/
   ```
 
 ## Views
+
+A [**view**](https://learn.microsoft.com/en-us/sql/relational-databases/views/views?view=sql-server-ver16)
+is a virtual table in a relational database. It is created by a query and does not store data itself.
+Instead, it dynamically displays data from one or more tables.
+
+### Key Characteristics of Views
+
+1. **Virtual Table:** Acts as a table but does not physically store data.
+2. **Dynamic Content:** Updates automatically when the underlying table data changes.
+3. **Simplified Queries:** Simplifies complex queries by encapsulating them into reusable views.
+4. **Security:** Can limit access to specific data by selecting only the required columns or rows.
+5. **Reusability:** Queries used to define views can be reused by simply querying the view.
+
+### View Sintaxe
+
+  ```sql
+  CREATE VIEW [SchemaName].[ViewName] AS
+    SELECT Column1, Column2, ...
+    FROM TableName
+    WHERE Condition;
+  ```
+
+### View Examples
+
+* Customer Order details
+
+  ```sql
+  CREATE VIEW vwCustomerOrderDetails AS
+  SELECT c.CustomerID, c.CompanyName AS CustomerName,
+         o.OrderID, o.OrderDate,
+         p.ProductID, p.ProductName,
+         od.Quantity, od.UnitPrice, (od.Quantity * od.UnitPrice) AS TotalPrice
+  FROM Customers c
+  INNER JOIN Orders o ON c.CustomerID = o.CustomerID
+  INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
+  INNER JOIN Products p ON od.ProductID = p.ProductID;
+  ```
+
+  ```sql
+  -- Using the view 
+  SELECT * FROM vwCustomerOrderDetails;
+  ```
+
+* Customer Order details with parameter
+
+  ```sql
+  CREATE FUNCTION vwCustomerOrderDetailsByID (@CustomerID NVARCHAR(5))
+  RETURNS TABLE
+  AS
+  RETURN
+  (
+      SELECT 
+          c.CustomerID,
+          c.CompanyName AS CustomerName,
+          o.OrderID,
+          o.OrderDate,
+          p.ProductID,
+          p.ProductName,
+          od.Quantity,
+          od.UnitPrice,
+          (od.Quantity * od.UnitPrice) AS TotalPrice
+      FROM Customers c
+      INNER JOIN Orders o ON c.CustomerID = o.CustomerID
+      INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
+      INNER JOIN Products p ON od.ProductID = p.ProductID
+      WHERE c.CustomerID = @CustomerID
+  );
+  ```
+
+  ```sql
+  -- Using the view with parameter
+  SELECT * FROM vwCustomerOrderDetailsByID('ALFKI');
+  ```
 
 ## Transaction SQL (TSQL)
 
