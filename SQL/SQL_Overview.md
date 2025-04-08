@@ -1863,11 +1863,11 @@ A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user
 
     -- Using the function in a query 
     SELECT c.CustomerID, c.CompanyName AS CustomerName,
-      o.OrderID, o.OrderDate,
-      p.ProductID, p.ProductName,
-      od.Quantity, od.UnitPrice,
-      dbo.CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
-      cat.CategoryID, cat.CategoryName
+           o.OrderID, o.OrderDate,
+           p.ProductID, p.ProductName,
+           od.Quantity, od.UnitPrice,
+           dbo.CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
+           cat.CategoryID, cat.CategoryName
     FROM Customers c
     INNER JOIN Orders o ON c.CustomerID = o.CustomerID
     INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
