@@ -1859,14 +1859,14 @@ A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user
 
   ```sql
     -- Using the function
-    SELECT CalculateTotalPrice(10, 15.50) AS TotalPrice;
+    SELECT dbo.CalculateTotalPrice(10, 15.50) AS TotalPrice;
 
     -- Using the function in a query 
     SELECT c.CustomerID, c.CompanyName AS CustomerName,
       o.OrderID, o.OrderDate,
       p.ProductID, p.ProductName,
       od.Quantity, od.UnitPrice,
-      CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
+      dbo.CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
       cat.CategoryID, cat.CategoryName
     FROM Customers c
     INNER JOIN Orders o ON c.CustomerID = o.CustomerID
@@ -1887,7 +1887,7 @@ A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user
            o.OrderID, o.OrderDate,
            p.ProductID, p.ProductName,
            od.Quantity, od.UnitPrice, 
-           CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
+           dbo.CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
            cat.CategoryID, cat.CategoryName
     FROM Customers c
     INNER JOIN Orders o ON c.CustomerID = o.CustomerID
