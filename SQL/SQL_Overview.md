@@ -789,7 +789,7 @@ SELECT d.Name as 'Department',
 | Public Relations         | NULL         | NULL         | NULL             | NULL         |
 | Sales                    | 450000.15    | 1000000.67   | 725000.410000    | 1450000.82   |
 
-## Functions
+## SQL Server Functions
 
 * [SQL Functions](https://learn.microsoft.com/en-us/sql/t-sql/functions/functions?view=sql-server-ver16)
   * [String Functions](https://learn.microsoft.com/en-us/sql/t-sql/functions/string-functions-transact-sql?view=sql-server-ver16)
@@ -1785,56 +1785,122 @@ Instead, it dynamically displays data from one or more tables.
     WHERE Condition;
   ```
 
-### View Examples
+### View Example
 
 * Customer Order details
 
   ```sql
-  CREATE VIEW vwCustomerOrderDetails AS
+  CREATE VIEW CustomerOrderDetails AS
   SELECT c.CustomerID, c.CompanyName AS CustomerName,
-         o.OrderID, o.OrderDate,
-         p.ProductID, p.ProductName,
-         od.Quantity, od.UnitPrice, (od.Quantity * od.UnitPrice) AS TotalPrice
+        o.OrderID, o.OrderDate,
+        p.ProductID, p.ProductName,
+        od.Quantity, od.UnitPrice, (od.Quantity * od.UnitPrice) AS TotalPrice,
+      cat.CategoryID, cat.CategoryName
   FROM Customers c
   INNER JOIN Orders o ON c.CustomerID = o.CustomerID
   INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
-  INNER JOIN Products p ON od.ProductID = p.ProductID;
+  INNER JOIN Products p ON od.ProductID = p.ProductID
+  INNER JOIN Categories cat on cat.CategoryID = p.CategoryID
   ```
 
   ```sql
   -- Using the view 
-  SELECT * FROM vwCustomerOrderDetails;
+  SELECT * FROM CustomerOrderDetails;
+  ```
+
+## Functions
+
+A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user-defined-functions/user-defined-functions?view=sql-server-ver16) in SQL is a reusable code block that performs operations and returns a single value or table. Functions can be used for various tasks, such as calculations, string manipulation, or filtering data.
+
+### Key Characteristics of Functions
+
+1. **Reusability:** Functions can be called multiple times, simplifying code and reducing redundancy.
+2. **Modularity:** Encapsulates specific logic into a single callable unit.
+3. **Parameterization:** Accepts input parameters for dynamic processing.
+4. **Return Values:** Provides a single scalar value or table result, depending on the function type.
+5. **Type:** Functions can be either scalar (returning a single value) or table-valued (returning a table).
+6. **Optimized Execution:** Functions streamline complex calculations and operations.
+
+### Function Syntax
+
+  ```sql
+  CREATE FUNCTION [SchemaName].[FunctionName] (@ParameterName DataType, ...)
+  RETURNS ReturnType
+  AS
+  BEGIN
+      -- Function logic
+      RETURN Expression;
+  END;
+  ```
+
+### Function Examples
+
+* Function to calculate the total price of a product: Quantity x UnitPrice
+
+  ```sql
+  CREATE FUNCTION dbo.CalculateTotalPrice 
+  (
+      @Quantity INT, 
+      @UnitPrice DECIMAL(10, 2)
+  )
+  RETURNS DECIMAL(10, 2)
+  AS
+  BEGIN
+      -- Declare a variable to store the total price
+      DECLARE @TotalPrice DECIMAL(10, 2);
+      
+      -- Calculate the total price
+      SET @TotalPrice = @Quantity * @UnitPrice;
+      
+      -- Return the result
+      RETURN @TotalPrice;
+  END;
+  ```
+
+  ```sql
+    -- Using the function
+    SELECT CalculateTotalPrice(10, 15.50) AS TotalPrice;
+
+    -- Using the function in a query 
+    SELECT c.CustomerID, c.CompanyName AS CustomerName,
+      o.OrderID, o.OrderDate,
+      p.ProductID, p.ProductName,
+      od.Quantity, od.UnitPrice,
+      CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
+      cat.CategoryID, cat.CategoryName
+    FROM Customers c
+    INNER JOIN Orders o ON c.CustomerID = o.CustomerID
+    INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
+    INNER JOIN Products p ON od.ProductID = p.ProductID
+    INNER JOIN Categories cat on cat.CategoryID = p.CategoryID
   ```
 
 * Customer Order details with parameter
 
   ```sql
-  CREATE FUNCTION vwCustomerOrderDetailsByID (@CustomerID NVARCHAR(5))
+  CREATE FUNCTION CustomerOrderDetailsByID (@CustomerID NVARCHAR(5))
   RETURNS TABLE
   AS
   RETURN
   (
-      SELECT 
-          c.CustomerID,
-          c.CompanyName AS CustomerName,
-          o.OrderID,
-          o.OrderDate,
-          p.ProductID,
-          p.ProductName,
-          od.Quantity,
-          od.UnitPrice,
-          (od.Quantity * od.UnitPrice) AS TotalPrice
-      FROM Customers c
-      INNER JOIN Orders o ON c.CustomerID = o.CustomerID
-      INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
-      INNER JOIN Products p ON od.ProductID = p.ProductID
-      WHERE c.CustomerID = @CustomerID
+    SELECT c.CustomerID, c.CompanyName AS CustomerName,
+           o.OrderID, o.OrderDate,
+           p.ProductID, p.ProductName,
+           od.Quantity, od.UnitPrice, 
+           CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
+           cat.CategoryID, cat.CategoryName
+    FROM Customers c
+    INNER JOIN Orders o ON c.CustomerID = o.CustomerID
+    INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
+    INNER JOIN Products p ON od.ProductID = p.ProductID
+    INNER JOIN Categories cat on cat.CategoryID = p.CategoryID
+    WHERE c.CustomerID = @CustomerID
   );
   ```
 
   ```sql
   -- Using the view with parameter
-  SELECT * FROM vwCustomerOrderDetailsByID('ALFKI');
+  SELECT * FROM CustomerOrderDetailsByID('ALFKI');
   ```
 
 ## Transaction SQL (TSQL)
