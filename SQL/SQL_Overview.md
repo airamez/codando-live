@@ -1903,14 +1903,191 @@ A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user
   SELECT * FROM CustomerOrderDetailsByID('ALFKI');
   ```
 
-## Transaction SQL (TSQL)
+## Transaction SQL ([TSQL](https://learn.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver16))
 
-* [Reference](https://learn.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver16)
+T-SQL (Transact-SQL) is an extension of SQL developed by Microsoft for SQL Server. It adds procedural programming features, allowing developers to handle variables, control-of-flow, and advanced functionality for database scripting.
 
-## Stored Procedure
+### 2. Variables
 
-* [Documentation](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/create-a-stored-procedure?view=sql-server-ver16)
+Variables in T-SQL are used to store and manipulate data temporarily.
 
-## Triggers
+* Example:
 
-* [Documentation](https://learn.microsoft.com/en-us/sql/t-sql/statements/create-trigger-transact-sql?view=sql-server-ver16)
+  ```sql
+  DECLARE @fullName NVARCHAR(50);
+  DECLARE @salary NUMERIC(10, 2);
+  DECLARE @age INT;
+  DECLARE @birthday DATETIME;
+
+  -- Assign values to the variables
+  SET @fullName = 'Emerson Ceara';
+  SET @salary = 275000.50;
+  SET @age = 35;
+  SET @birthday = '1990-04-08';
+
+  -- Print the variable values
+  PRINT 'Full Name: ' + @fullName;
+  PRINT 'Salary: ' + CAST(@salary AS NVARCHAR);
+  PRINT 'Age: ' + CAST(@age AS NVARCHAR);
+  PRINT 'Birthday: ' + CAST(@birthday AS NVARCHAR);
+  ```
+
+### 3. Common Data Types
+
+T-SQL supports a variety of data types for different kinds of data.
+
+#### Examples of Data Types
+
+| **Category**      | **Data Types**                | **Examples**                   |
+|-------------------|-------------------------------|--------------------------------|
+| Integer Types     | `INT`, `BIGINT`, `SMALLINT`   | Whole numbers (e.g., 100, -50) |
+| Decimal Types     | `DECIMAL`, `FLOAT`            | Decimal values (e.g., 3.14)    |
+| String Types      | `CHAR`, `VARCHAR`, `NVARCHAR` | Text values (`'Hello'`)        |
+| Date/Time Types   | `DATE`, `DATETIME`, `TIME`    | Date or time (`2025-04-08`)   |
+
+### 4. [IF...ELSE](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/if-else-transact-sql?view=sql-server-ver16)
+
+* Sintaxe
+
+  ```sql
+  IF Condition
+      BEGIN
+          -- Statements to execute if the condition is true
+      END
+  ELSE
+      BEGIN
+          -- Statements to execute if the condition is false
+      END  
+  ```
+
+* Example:
+
+  ```sql
+  DECLARE @Score INT = 85;
+
+  IF @Score >= 90
+    BEGIN
+        PRINT 'Excellent! You scored an A.';
+    END
+  ELSE IF @Score >= 75
+    BEGIN
+        PRINT 'Good job! You scored a B.';
+    END
+  ELSE
+    BEGIN
+        PRINT 'Keep trying! You scored below B.';
+    END
+  ```
+
+### 5. [WHILE](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/while-transact-sql?view=sql-server-ver16)
+
+* Sintaxe
+
+```sql
+  WHILE Condition
+  BEGIN
+          -- Statements
+  END
+```
+
+> Tip: BREAK and CONTINUE can be used like in C#
+
+* Example
+
+```sql
+DECLARE @Counter INT = 0;
+
+WHILE @Counter <= 1000
+BEGIN
+    SET @Counter = @Counter + 1;
+    IF (@Counter > 15)
+    BEGIN
+        BREAK;
+    END;
+    IF (@Counter % 2 = 0)
+    BEGIN
+        CONTINUE;
+    END;
+    PRINT 'Iteration: ' + CAST(@Counter AS NVARCHAR);
+END;
+```
+
+* Example 1: Calculates the total sales amount for each employee and categorizes their performance based on the total sales.
+
+  ```sql
+  -- Declare variables for loop and storing results
+  DECLARE @EmployeeID INT;
+  DECLARE @TotalSales MONEY;
+  DECLARE @PerformanceCategory NVARCHAR(50);
+
+  -- Initialize the EmployeeID with the first employee's ID
+  SET @EmployeeID = (SELECT MIN(EmployeeID) FROM Employees);
+
+  -- Loop through all employees
+  WHILE @EmployeeID IS NOT NULL
+  BEGIN
+      -- Calculate the total sales for the current employee
+      SELECT @TotalSales = SUM(OD.UnitPrice * OD.Quantity)
+        FROM [Order Details] OD
+        INNER JOIN Orders O ON OD.OrderID = O.OrderID
+        WHERE O.EmployeeID = @EmployeeID;
+      -- Categorize the employee based on their total sales
+      IF @TotalSales >= 100000
+          SET @PerformanceCategory = 'Top Performer';
+      ELSE IF @TotalSales >= 50000
+          SET @PerformanceCategory = 'Average Performer';
+      ELSE
+          SET @PerformanceCategory = 'Needs Improvement';
+      -- Print the employee's performance
+      PRINT 'EmployeeID: ' + CAST(@EmployeeID AS NVARCHAR) + 
+            ', Total Sales: ' + CAST(ISNULL(@TotalSales, 0) AS NVARCHAR) + 
+            ', Category: ' + @PerformanceCategory;
+      -- Move to the next employee
+      SET @EmployeeID = (
+        SELECT MIN(EmployeeID)
+        FROM Employees 
+        WHERE EmployeeID > @EmployeeID
+      );
+  END;
+  ```sql
+
+* Example 2:
+
+  ```sql
+  DECLARE @CurrentEmployeeID INT = (select EmployeeId from Employees where FirstName = 'Eve');
+  DECLARE @ManagerID INT;
+  DECLARE @Hierarchy NVARCHAR(MAX) = '';
+
+  WHILE @CurrentEmployeeID IS NOT NULL
+  BEGIN
+      -- Get the manager (ReportsTo) for the current employee
+      SELECT @ManagerID = ReportsTo
+        FROM Employees
+        WHERE EmployeeID = @CurrentEmployeeID;
+      -- Check if the manager exists
+      IF @ManagerID IS NULL
+      BEGIN
+          BREAK;
+      END
+      ELSE
+      BEGIN
+          -- Add the manager's name to the hierarchy
+          SELECT @Hierarchy = @Hierarchy + FirstName + ' ' + LastName + ' -> '
+          FROM Employees
+          WHERE EmployeeID = @ManagerID;
+
+          -- Update the current employee to the manager for the next iteration
+          SET @CurrentEmployeeID = @ManagerID;
+      END
+  END;
+
+  PRINT 'Hierarchy: ' + @Hierarchy;
+  ```
+
+## [Stored Procedure](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/create-a-stored-procedure?view=sql-server-ver16)
+
+* [Documentation]
+
+## Cursor
+
+## [Triggers]((https://learn.microsoft.com/en-us/sql/t-sql/statements/create-trigger-transact-sql?view=sql-server-ver16))
