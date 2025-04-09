@@ -2051,7 +2051,7 @@ END;
   END;
   ```sql
 
-* Example 2:
+* Example 2: Get the list of report to from an Employee
 
   ```sql
   DECLARE @CurrentEmployeeID INT = (select EmployeeId from Employees where FirstName = 'Eve');
