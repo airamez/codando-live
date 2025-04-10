@@ -2082,6 +2082,133 @@ END;
 
 ### [TRY-CATCH](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/try-catch-transact-sql?view=sql-server-ver16)
 
+Implements error handling for Transact-SQL that is similar to the exception handling in the C# and Visual C++ languages.
+
+* Sintaxe
+
+  ```sql
+  BEGIN TRY
+      -- SQL statements that might cause an error
+  END TRY
+  BEGIN CATCH
+      -- SQL statements to handle the error
+  END CATCH
+  ```
+
+* Example 1: Update am invalid table
+
+  ```sql
+  BEGIN TRY
+      -- Attempt to update a non-existent table
+      UPDATE NonExistentTable
+        SET Column1 = 'Value';
+  END TRY
+  BEGIN CATCH
+      -- Retrieve error details
+      SELECT 
+          ERROR_MESSAGE() AS ErrorMessage,
+          ERROR_NUMBER() AS ErrorNumber,
+          ERROR_SEVERITY() AS Severity,
+          ERROR_STATE() AS State,
+          ERROR_LINE() AS ErrorLine
+  END CATCH
+  ```
+
+* Example 2: Calculate and ppdate the Order Category
+
+  ```sql
+  -- Error Log Table
+  IF OBJECT_ID('ErrorLog', 'U') IS NULL
+  BEGIN
+  CREATE TABLE ErrorLog (
+    ErrorID INT IDENTITY(1,1) PRIMARY KEY,
+    ErrorMessage NVARCHAR(4000),
+    ErrorNumber INT,
+    Severity INT,
+    State INT,
+    ErrorLine INT,
+    OrderID INT,
+    ErrorDateTime DATETIME DEFAULT GETDATE()
+  )
+  END
+
+  -- Add a new column to the Orders table (if not exists)
+  IF COL_LENGTH('Orders', 'OrderCategory') IS NULL
+  BEGIN
+    ALTER TABLE Orders ADD OrderCategory NVARCHAR(20)
+  END
+  ELSE
+  BEGIN
+    -- In case the column alread exist, update all categories to null
+    UPDATE Orders SET OrderCategory = NULL
+  END
+
+  -- Start processing orders with WHILE TRUE
+  DECLARE @OrderID INT
+  DECLARE @TotalOrderValue DECIMAL(18, 2)
+  DECLARE @OrderCategory NVARCHAR(20)
+
+  WHILE 1 = 1 -- Infinite loop
+  BEGIN
+    BEGIN TRY
+        -- Get the next OrderID with NULL OrderCategory
+        SET @OrderID = (SELECT TOP 1 OrderID FROM Orders WHERE OrderCategory IS NULL)
+        -- Break the loop if no more NULL values are found
+        IF @OrderID IS NULL
+        BEGIN
+            PRINT 'No more orders to process. Exiting loop.'
+            BREAK
+        END
+
+        -- Introduce a random failure
+        IF RAND() < 0.3  -- 30% chance to simulate a failure
+        BEGIN
+            RAISERROR ('Simulated random failure for OrderID: %d', 16, 1, @OrderID)
+        END
+
+        -- Calculate TotalOrderValue for the current OrderID
+        SELECT @TotalOrderValue = SUM(UnitPrice * Quantity)
+          FROM [Order Details]
+          WHERE OrderID = @OrderID
+
+        -- Determine the OrderCategory based on TotalOrderValue
+        SET @OrderCategory = CASE
+          WHEN @TotalOrderValue < 100 THEN 'Small'
+          WHEN @TotalOrderValue < 500 THEN 'Medium'
+          WHEN @TotalOrderValue < 1000 THEN 'Large'
+          ELSE 'Very Large'
+        END
+
+        -- Update the Orders table with the calculated OrderCategory
+        UPDATE Orders
+          SET OrderCategory = @OrderCategory
+            WHERE OrderID = @OrderID
+
+        PRINT 'Successfully updated OrderID: ' + CAST(@OrderID AS NVARCHAR(10)) + 
+              ' with category: ' + @OrderCategory
+    END TRY
+    BEGIN CATCH
+        -- Log the error details in the ErrorLog table
+        INSERT INTO ErrorLog (ErrorMessage, ErrorNumber, Severity, State, ErrorLine, OrderID)
+        SELECT 
+            ERROR_MESSAGE(),
+            ERROR_NUMBER(),
+            ERROR_SEVERITY(),
+            ERROR_STATE(),
+            ERROR_LINE(),
+            @OrderID
+        PRINT 'An error occurred while processing OrderID: ' + CAST(@OrderID AS NVARCHAR(10))
+        PRINT 'Error details logged to ErrorLog table.'
+    END CATCH
+  END
+
+  -- View the Error Log
+  SELECT * FROM ErrorLog
+
+  -- Verify updates in the Orders table
+  SELECT OrderID, CustomerID, OrderCategory FROM Orders
+  ```
+
 ## Functions
 
 A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user-defined-functions/user-defined-functions?view=sql-server-ver16) in SQL is a reusable code block that performs operations and returns a single value or table. Functions can be used for various tasks, such as calculations, string manipulation, or filtering data.
