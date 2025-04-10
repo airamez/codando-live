@@ -1956,20 +1956,23 @@ T-SQL supports a variety of data types for different kinds of data.
 
   ```sql
   DECLARE @Score INT = FLOOR(RAND() * 101)
-
   PRINT('Score = ' + CAST(@Score AS VARCHAR(3)))
 
   IF @Score >= 90
     BEGIN
-        PRINT 'Excellent! You scored an A.'
+        PRINT('A')
     END
   ELSE IF @Score >= 75
     BEGIN
-        PRINT 'Good job! You scored a B.'
+        PRINT('B')
+    END
+  ELSE IF @Score >= 60
+    BEGIN
+      PRINT('C')
     END
   ELSE
     BEGIN
-        PRINT 'Keep trying! You scored below B.'
+        PRINT 'F'
     END
   ```
 
@@ -2041,7 +2044,7 @@ END;
           FROM Employees 
           WHERE EmployeeID > @EmployeeID
       )
-  END;
+  END
   ```sql
 
 * Example 2: Get the list of `report to` from an Employee
@@ -2076,6 +2079,8 @@ END;
 
   PRINT 'Eve managers: ' + LEFT(@Hierarchy, LEN(@Hierarchy) - 3)
   ```
+
+### [TRY-CATCH](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/try-catch-transact-sql?view=sql-server-ver16)
 
 ## Functions
 

@@ -327,3 +327,4 @@
 | 283 | [SQL: Set Operations - UNION, INTERSET and EXCEPT](https://youtube.com/live/n4HekhcndoQ) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 284 | [SQL: CTE - Commong Table Expression](https://youtube.com/live/J3CKgQMVyWY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 285 | [SQL: Views](https://youtube.com/live/ff-IozImLjY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 286 | [SQL: Transact SQL (T-SQL)](https://youtube.com/live/6X_FCvTUp_I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
