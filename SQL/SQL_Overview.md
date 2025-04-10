@@ -1785,9 +1785,7 @@ Instead, it dynamically displays data from one or more tables.
     WHERE Condition;
   ```
 
-### View Example
-
-* Customer Order details
+* View Example: Customer Order details
 
   ```sql
   CREATE VIEW CustomerOrderDetails AS
@@ -1806,6 +1804,277 @@ Instead, it dynamically displays data from one or more tables.
   ```sql
   -- Using the view 
   SELECT * FROM CustomerOrderDetails;
+  ```
+
+## Transact SQL ([T-SQL](https://learn.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver16))
+
+T-SQL (Transact-SQL) is Microsoft's proprietary extension to SQL, specifically designed for SQL Server. It empowers developers to perform more than just basic data retrieval and manipulation. T-SQL introduces procedural programming capabilities, allowing for complex logic, variable handling, control-of-flow, and advanced database scripting.
+
+### Key Concepts
+
+* **Procedural Programming**: T-SQL enables you to write scripts that execute step-by-step, similar to traditional programming languages.
+* **Variables**: Temporary storage for data within a script's execution.
+* **Control-of-Flow Statements**: IF...ELSE, WHILE, and CASE statements for conditional execution and looping.
+* **Error Handling**: TRY...CATCH blocks for robust error management.
+* **Stored Procedures and Functions**: Reusable blocks of T-SQL code.
+* **Transactions**: Grouping multiple operations into a single unit of work for data integrity.
+
+### [Variables](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/variables-transact-sql?view=sql-server-ver16)
+
+A Transact-SQL variable is an object that can hold a single data value of a specific type.
+
+#### [Data Types](https://learn.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql?view=sql-server-ver16)
+
+T-SQL supports a variety of data types for different kinds of data.
+
+##### Common of Data Types
+
+  | **Category**     | **Data Types**                | **Examples**   |
+  |------------------|-------------------------------|----------------|
+  | Integer          | `INT`, `BIGINT`, `SMALLINT`   | Whole numbers  |
+  | Decimal          | `DECIMAL`, `FLOAT`            | Decimal values |
+  | String           | `CHAR`, `VARCHAR`, `NVARCHAR` | Text values    |
+  | Date/Time        | `DATETIME`, `DATE` , `TIME`   | Date or time   |
+  | UNIQUEIDENTIFIER | `GUID`                        | 6AB11177-E636-47C4-9E62-395649208D18 |
+
+* Example:
+
+  ```sql
+  DECLARE @fullName NVARCHAR(50)
+  DECLARE @salary NUMERIC(10, 2)
+  DECLARE @age INT
+  DECLARE @birthday DATETIME
+
+  -- Assign values to the variables
+  SET @fullName = 'Emerson Ceara'
+  SET @salary = 275000.50
+  SET @age = 35
+  SET @birthday = '1990-04-08'
+
+  -- Print the variable values
+  PRINT 'Full Name: ' + @fullName
+  PRINT 'Salary: ' + CAST(@salary AS NVARCHAR)
+  PRINT 'Age: ' + CAST(@age AS NVARCHAR)
+  PRINT 'Birthday: ' + CAST(@birthday AS NVARCHAR)
+
+  DECLARE @NewId UNIQUEIDENTIFIER = NEWID()
+  PRINT(@NewId)
+  ```
+
+### [CASE](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/case-transact-sql?view=sql-server-ver16)
+
+* Sintaxe
+
+  ```sql
+  -- Using expression
+  CASE expression
+      WHEN value1 THEN result1
+      WHEN value2 THEN result2
+      ...
+      ELSE resultN
+  END
+
+  -- Using condition
+  CASE
+    WHEN condition1 THEN result1
+    WHEN condition2 THEN result2
+    ...
+    ELSE resultN
+  END
+  ```
+
+* Example 1: Translating the ShipVia
+
+  ```sql
+  SELECT 
+    OrderID, CustomerID,
+    ShipVia,
+    CASE ShipVia
+      WHEN 1 THEN 'FEDEX'
+    WHEN 2 THEN 'UPS'
+    WHEN 3 THEN 'USPS'
+    ELSE 'Other'
+    END
+    FROM Orders
+  ```
+
+* Example 2: Classifying Products by Price Range
+
+  ```sql
+  SELECT
+    ProductID,
+    ProductName,
+    UnitPrice,
+    CASE
+      WHEN UnitPrice < 20 THEN 'Budget-Friendly'
+      WHEN UnitPrice < 50 THEN 'Mid-Range'
+      ELSE 'Premium'
+    END AS PriceCategory
+  FROM Products
+  ```
+
+* Example 3: Classifying Orders
+
+  ```sql
+  WITH OrderTotals AS (
+      SELECT
+          OrderID,
+          SUM(UnitPrice * Quantity) AS TotalOrderValue
+      FROM [Order Details]
+      GROUP BY OrderID
+  )
+  SELECT
+      O.OrderID,
+      O.CustomerID,
+      OT.TotalOrderValue,
+      CASE
+          WHEN OT.TotalOrderValue < 100 THEN 'Small'
+          WHEN OT.TotalOrderValue < 500 THEN 'Medium'
+          WHEN OT.TotalOrderValue < 1000 THEN 'Large'
+          ELSE 'Very Large'
+      END AS OrderCategory
+  FROM Orders O
+  JOIN OrderTotals OT ON O.OrderID = OT.OrderID
+  ```
+
+### [IF...ELSE](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/if-else-transact-sql?view=sql-server-ver16)
+
+* Sintaxe
+
+  ```sql
+  IF Condition
+      BEGIN
+          -- Statements to execute if the condition is true
+      END
+  ELSE
+      BEGIN
+          -- Statements to execute if the condition is false
+      END  
+  ```
+
+* Example:
+
+  ```sql
+  DECLARE @Score INT = FLOOR(RAND() * 101)
+
+  PRINT('Score = ' + CAST(@Score AS VARCHAR(3)))
+
+  IF @Score >= 90
+    BEGIN
+        PRINT 'Excellent! You scored an A.'
+    END
+  ELSE IF @Score >= 75
+    BEGIN
+        PRINT 'Good job! You scored a B.'
+    END
+  ELSE
+    BEGIN
+        PRINT 'Keep trying! You scored below B.'
+    END
+  ```
+
+### [WHILE](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/while-transact-sql?view=sql-server-ver16)
+
+* Sintaxe
+
+```sql
+  WHILE Condition
+  BEGIN
+          -- Statements
+  END
+```
+
+> Warning: BREAK and CONTINUE can be used like in C#
+
+* Example
+
+```sql
+DECLARE @Counter INT = 0
+
+WHILE @Counter <= 1000
+BEGIN
+    SET @Counter = @Counter + 1
+    IF (@Counter > 15)
+    BEGIN
+        BREAK
+    END
+    IF (@Counter % 2 = 0)
+    BEGIN
+        CONTINUE
+    END
+    PRINT 'Iteration: ' + CAST(@Counter AS NVARCHAR)
+END;
+```
+
+* Example 1: Calculates the total sales amount for each employee and categorizes their performance based on the total sales.
+
+  ```sql
+  DECLARE @EmployeeID INT
+  DECLARE @TotalSales MONEY
+  DECLARE @PerformanceCategory NVARCHAR(50)
+
+  -- Initialize the EmployeeID with the first employee's ID
+  SET @EmployeeID = (SELECT MIN(EmployeeID) FROM Employees)
+
+  -- Loop through all employees
+  WHILE @EmployeeID IS NOT NULL
+  BEGIN
+      -- Calculate the total sales for the current employee
+      SELECT @TotalSales = SUM(OD.UnitPrice * OD.Quantity)
+        FROM [Order Details] OD
+        INNER JOIN Orders O ON OD.OrderID = O.OrderID
+        WHERE O.EmployeeID = @EmployeeID
+      -- Categorize the employee based on their total sales
+      IF @TotalSales >= 100000
+          SET @PerformanceCategory = 'Top Performer'
+      ELSE IF @TotalSales >= 50000
+          SET @PerformanceCategory = 'Average Performer'
+      ELSE
+          SET @PerformanceCategory = 'Needs Improvement'
+      -- Print the employee's performance
+      PRINT 'EmployeeID: ' + CAST(@EmployeeID AS NVARCHAR) + 
+            ', Total Sales: ' + CAST(ISNULL(@TotalSales, 0) AS NVARCHAR) + 
+            ', Category: ' + @PerformanceCategory
+      -- Move to the next employee
+      SET @EmployeeID = (
+        SELECT MIN(EmployeeID)
+          FROM Employees 
+          WHERE EmployeeID > @EmployeeID
+      )
+  END;
+  ```sql
+
+* Example 2: Get the list of `report to` from an Employee
+
+  ```sql
+  DECLARE @CurrentEmployeeID INT = (select EmployeeId from Employees where FirstName = 'Eve')
+  DECLARE @ManagerID INT
+  DECLARE @Hierarchy NVARCHAR(MAX) = ''
+
+  WHILE @CurrentEmployeeID IS NOT NULL
+  BEGIN
+      -- Get the manager (ReportsTo) for the current employee
+      SELECT @ManagerID = ReportsTo
+        FROM Employees
+        WHERE EmployeeID = @CurrentEmployeeID
+      -- Check if the manager exists
+      IF @ManagerID IS NULL
+      BEGIN
+          BREAK
+      END
+      ELSE
+      BEGIN
+          -- Add the manager's name to the hierarchy
+          SELECT @Hierarchy = @Hierarchy + FirstName + ' ' + LastName + ' -> '
+          FROM Employees
+          WHERE EmployeeID = @ManagerID
+
+          -- Update the current employee to the manager for the next iteration
+          SET @CurrentEmployeeID = @ManagerID
+      END
+  END
+
+  PRINT 'Eve managers: ' + LEFT(@Hierarchy, LEN(@Hierarchy) - 3)
   ```
 
 ## Functions
@@ -1895,7 +2164,7 @@ A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user
     INNER JOIN Products p ON od.ProductID = p.ProductID
     INNER JOIN Categories cat on cat.CategoryID = p.CategoryID
     WHERE c.CustomerID = @CustomerID
-  );
+  )
   ```
 
   ```sql
@@ -1903,191 +2172,8 @@ A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user
   SELECT * FROM CustomerOrderDetailsByID('ALFKI');
   ```
 
-## Transaction SQL ([TSQL](https://learn.microsoft.com/en-us/sql/t-sql/language-reference?view=sql-server-ver16))
-
-T-SQL (Transact-SQL) is an extension of SQL developed by Microsoft for SQL Server. It adds procedural programming features, allowing developers to handle variables, control-of-flow, and advanced functionality for database scripting.
-
-### 2. Variables
-
-Variables in T-SQL are used to store and manipulate data temporarily.
-
-* Example:
-
-  ```sql
-  DECLARE @fullName NVARCHAR(50);
-  DECLARE @salary NUMERIC(10, 2);
-  DECLARE @age INT;
-  DECLARE @birthday DATETIME;
-
-  -- Assign values to the variables
-  SET @fullName = 'Emerson Ceara';
-  SET @salary = 275000.50;
-  SET @age = 35;
-  SET @birthday = '1990-04-08';
-
-  -- Print the variable values
-  PRINT 'Full Name: ' + @fullName;
-  PRINT 'Salary: ' + CAST(@salary AS NVARCHAR);
-  PRINT 'Age: ' + CAST(@age AS NVARCHAR);
-  PRINT 'Birthday: ' + CAST(@birthday AS NVARCHAR);
-  ```
-
-### 3. Common Data Types
-
-T-SQL supports a variety of data types for different kinds of data.
-
-#### Examples of Data Types
-
-| **Category**      | **Data Types**                | **Examples**                   |
-|-------------------|-------------------------------|--------------------------------|
-| Integer Types     | `INT`, `BIGINT`, `SMALLINT`   | Whole numbers (e.g., 100, -50) |
-| Decimal Types     | `DECIMAL`, `FLOAT`            | Decimal values (e.g., 3.14)    |
-| String Types      | `CHAR`, `VARCHAR`, `NVARCHAR` | Text values (`'Hello'`)        |
-| Date/Time Types   | `DATE`, `DATETIME`, `TIME`    | Date or time (`2025-04-08`)   |
-
-### 4. [IF...ELSE](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/if-else-transact-sql?view=sql-server-ver16)
-
-* Sintaxe
-
-  ```sql
-  IF Condition
-      BEGIN
-          -- Statements to execute if the condition is true
-      END
-  ELSE
-      BEGIN
-          -- Statements to execute if the condition is false
-      END  
-  ```
-
-* Example:
-
-  ```sql
-  DECLARE @Score INT = 85;
-
-  IF @Score >= 90
-    BEGIN
-        PRINT 'Excellent! You scored an A.';
-    END
-  ELSE IF @Score >= 75
-    BEGIN
-        PRINT 'Good job! You scored a B.';
-    END
-  ELSE
-    BEGIN
-        PRINT 'Keep trying! You scored below B.';
-    END
-  ```
-
-### 5. [WHILE](https://learn.microsoft.com/en-us/sql/t-sql/language-elements/while-transact-sql?view=sql-server-ver16)
-
-* Sintaxe
-
-```sql
-  WHILE Condition
-  BEGIN
-          -- Statements
-  END
-```
-
-> Tip: BREAK and CONTINUE can be used like in C#
-
-* Example
-
-```sql
-DECLARE @Counter INT = 0;
-
-WHILE @Counter <= 1000
-BEGIN
-    SET @Counter = @Counter + 1;
-    IF (@Counter > 15)
-    BEGIN
-        BREAK;
-    END;
-    IF (@Counter % 2 = 0)
-    BEGIN
-        CONTINUE;
-    END;
-    PRINT 'Iteration: ' + CAST(@Counter AS NVARCHAR);
-END;
-```
-
-* Example 1: Calculates the total sales amount for each employee and categorizes their performance based on the total sales.
-
-  ```sql
-  -- Declare variables for loop and storing results
-  DECLARE @EmployeeID INT;
-  DECLARE @TotalSales MONEY;
-  DECLARE @PerformanceCategory NVARCHAR(50);
-
-  -- Initialize the EmployeeID with the first employee's ID
-  SET @EmployeeID = (SELECT MIN(EmployeeID) FROM Employees);
-
-  -- Loop through all employees
-  WHILE @EmployeeID IS NOT NULL
-  BEGIN
-      -- Calculate the total sales for the current employee
-      SELECT @TotalSales = SUM(OD.UnitPrice * OD.Quantity)
-        FROM [Order Details] OD
-        INNER JOIN Orders O ON OD.OrderID = O.OrderID
-        WHERE O.EmployeeID = @EmployeeID;
-      -- Categorize the employee based on their total sales
-      IF @TotalSales >= 100000
-          SET @PerformanceCategory = 'Top Performer';
-      ELSE IF @TotalSales >= 50000
-          SET @PerformanceCategory = 'Average Performer';
-      ELSE
-          SET @PerformanceCategory = 'Needs Improvement';
-      -- Print the employee's performance
-      PRINT 'EmployeeID: ' + CAST(@EmployeeID AS NVARCHAR) + 
-            ', Total Sales: ' + CAST(ISNULL(@TotalSales, 0) AS NVARCHAR) + 
-            ', Category: ' + @PerformanceCategory;
-      -- Move to the next employee
-      SET @EmployeeID = (
-        SELECT MIN(EmployeeID)
-        FROM Employees 
-        WHERE EmployeeID > @EmployeeID
-      );
-  END;
-  ```sql
-
-* Example 2: Get the list of report to from an Employee
-
-  ```sql
-  DECLARE @CurrentEmployeeID INT = (select EmployeeId from Employees where FirstName = 'Eve');
-  DECLARE @ManagerID INT;
-  DECLARE @Hierarchy NVARCHAR(MAX) = '';
-
-  WHILE @CurrentEmployeeID IS NOT NULL
-  BEGIN
-      -- Get the manager (ReportsTo) for the current employee
-      SELECT @ManagerID = ReportsTo
-        FROM Employees
-        WHERE EmployeeID = @CurrentEmployeeID;
-      -- Check if the manager exists
-      IF @ManagerID IS NULL
-      BEGIN
-          BREAK;
-      END
-      ELSE
-      BEGIN
-          -- Add the manager's name to the hierarchy
-          SELECT @Hierarchy = @Hierarchy + FirstName + ' ' + LastName + ' -> '
-          FROM Employees
-          WHERE EmployeeID = @ManagerID;
-
-          -- Update the current employee to the manager for the next iteration
-          SET @CurrentEmployeeID = @ManagerID;
-      END
-  END;
-
-  PRINT 'Hierarchy: ' + @Hierarchy;
-  ```
-
 ## [Stored Procedure](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/create-a-stored-procedure?view=sql-server-ver16)
 
-* [Documentation]
-
-## Cursor
+## [Cursor](https://learn.microsoft.com/en-us/sql/relational-databases/cursors?view=sql-server-ver16)
 
 ## [Triggers]((https://learn.microsoft.com/en-us/sql/t-sql/statements/create-trigger-transact-sql?view=sql-server-ver16))
