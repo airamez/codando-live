@@ -2143,9 +2143,8 @@ Implements error handling for Transact-SQL that is similar to the exception hand
     UPDATE Orders SET OrderCategory = NULL
   END
 
-  -- Start processing orders with WHILE TRUE
-  DECLARE @OrderID INT
-  DECLARE @TotalOrderValue DECIMAL(18, 2)
+  DECLARE @OrderID INT -- Current order id
+  DECLARE @TotalOrderValue DECIMAL(18, 2) -- Total amount of the order
   DECLARE @OrderCategory NVARCHAR(20)
 
   WHILE 1 = 1 -- Infinite loop
