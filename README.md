@@ -328,3 +328,4 @@
 | 284 | [SQL: CTE - Commong Table Expression](https://youtube.com/live/J3CKgQMVyWY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 285 | [SQL: Views](https://youtube.com/live/ff-IozImLjY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 286 | [SQL: Transact SQL (T-SQL)](https://youtube.com/live/6X_FCvTUp_I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 287 | [SQL: T-SQL - TRY-CATCH](https://youtube.com/live/Dskk_-buYI8) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |

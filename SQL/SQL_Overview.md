@@ -2095,7 +2095,7 @@ Implements error handling for Transact-SQL that is similar to the exception hand
   END CATCH
   ```
 
-* Example 1: Update am invalid table
+* Example 1: Update an invalid table
 
   ```sql
   BEGIN TRY
@@ -2114,7 +2114,7 @@ Implements error handling for Transact-SQL that is similar to the exception hand
   END CATCH
   ```
 
-* Example 2: Calculate and ppdate the Order Category
+* Example 2: Calculate and update the Order Category
 
   ```sql
   -- Error Log Table
@@ -2150,8 +2150,12 @@ Implements error handling for Transact-SQL that is similar to the exception hand
   WHILE 1 = 1 -- Infinite loop
   BEGIN
     BEGIN TRY
-        -- Get the next OrderID with NULL OrderCategory
-        SET @OrderID = (SELECT TOP 1 OrderID FROM Orders WHERE OrderCategory IS NULL)
+        -- Get the next OrderID with NULL OrderCategory and haven't failed
+        SET @OrderID = (
+        SELECT TOP 1 OrderID 
+        FROM Orders 
+        WHERE OrderCategory IS NULL and 
+              OrderID NOT IN (select OrderId from ErrorLog))
         -- Break the loop if no more NULL values are found
         IF @OrderID IS NULL
         BEGIN
@@ -2308,3 +2312,5 @@ A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user
 ## [Cursor](https://learn.microsoft.com/en-us/sql/relational-databases/cursors?view=sql-server-ver16)
 
 ## [Triggers]((https://learn.microsoft.com/en-us/sql/t-sql/statements/create-trigger-transact-sql?view=sql-server-ver16))
+
+## Calculated Fields
