@@ -2214,7 +2214,9 @@ Implements error handling for Transact-SQL that is similar to the exception hand
 
 ## Functions
 
-A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user-defined-functions/user-defined-functions?view=sql-server-ver16) in SQL is a reusable code block that performs operations and returns a single value or table. Functions can be used for various tasks, such as calculations, string manipulation, or filtering data.
+A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user-defined-functions/user-defined-functions?view=sql-server-ver16)
+in SQL is a reusable code block that performs operations and returns a single value or table.
+Functions can be used for various tasks, such as calculations, string manipulation, or filtering data.
 
 ### Key Characteristics of Functions
 
@@ -2225,7 +2227,7 @@ A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user
 5. **Type:** Functions can be either scalar (returning a single value) or table-valued (returning a table).
 6. **Optimized Execution:** Functions streamline complex calculations and operations.
 
-### Function Syntax
+* Syntax
 
   ```sql
   CREATE FUNCTION [SchemaName].[FunctionName] (@ParameterName DataType, ...)
@@ -2237,75 +2239,75 @@ A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user
   END;
   ```
 
-### Function Examples
+* Examples
 
-* Function to calculate the total price of a product: Quantity x UnitPrice
+  * Function to calculate the total price of a product: Quantity x UnitPrice
 
-  ```sql
-  CREATE FUNCTION dbo.CalculateTotalPrice 
-  (
-      @Quantity INT, 
-      @UnitPrice DECIMAL(10, 2)
-  )
-  RETURNS DECIMAL(10, 2)
-  AS
-  BEGIN
-      -- Declare a variable to store the total price
-      DECLARE @TotalPrice DECIMAL(10, 2);
-      
-      -- Calculate the total price
-      SET @TotalPrice = @Quantity * @UnitPrice;
-      
-      -- Return the result
-      RETURN @TotalPrice;
-  END;
-  ```
+    ```sql
+    CREATE FUNCTION dbo.CalculateTotalPrice 
+    (
+        @Quantity INT, 
+        @UnitPrice DECIMAL(10, 2)
+    )
+    RETURNS DECIMAL(10, 2)
+    AS
+    BEGIN
+        -- Declare a variable to store the total price
+        DECLARE @TotalPrice DECIMAL(10, 2);
+        
+        -- Calculate the total price
+        SET @TotalPrice = @Quantity * @UnitPrice;
+        
+        -- Return the result
+        RETURN @TotalPrice;
+    END;
+    ```
 
-  ```sql
-    -- Using the function
-    SELECT dbo.CalculateTotalPrice(10, 15.50) AS TotalPrice;
+    ```sql
+      -- Using the function
+      SELECT dbo.CalculateTotalPrice(10, 15.50) AS TotalPrice;
 
-    -- Using the function in a query 
-    SELECT c.CustomerID, c.CompanyName AS CustomerName,
-           o.OrderID, o.OrderDate,
-           p.ProductID, p.ProductName,
-           od.Quantity, od.UnitPrice,
-           dbo.CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
-           cat.CategoryID, cat.CategoryName
-    FROM Customers c
-    INNER JOIN Orders o ON c.CustomerID = o.CustomerID
-    INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
-    INNER JOIN Products p ON od.ProductID = p.ProductID
-    INNER JOIN Categories cat on cat.CategoryID = p.CategoryID
-  ```
+      -- Using the function in a query 
+      SELECT c.CustomerID, c.CompanyName AS CustomerName,
+            o.OrderID, o.OrderDate,
+            p.ProductID, p.ProductName,
+            od.Quantity, od.UnitPrice,
+            dbo.CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
+            cat.CategoryID, cat.CategoryName
+      FROM Customers c
+      INNER JOIN Orders o ON c.CustomerID = o.CustomerID
+      INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
+      INNER JOIN Products p ON od.ProductID = p.ProductID
+      INNER JOIN Categories cat on cat.CategoryID = p.CategoryID
+    ```
 
-* Customer Order details with parameter
+  * Customer Order details with parameter
 
-  ```sql
-  CREATE FUNCTION CustomerOrderDetailsByID (@CustomerID NVARCHAR(5))
-  RETURNS TABLE
-  AS
-  RETURN
-  (
-    SELECT c.CustomerID, c.CompanyName AS CustomerName,
-           o.OrderID, o.OrderDate,
-           p.ProductID, p.ProductName,
-           od.Quantity, od.UnitPrice, 
-           dbo.CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
-           cat.CategoryID, cat.CategoryName
-    FROM Customers c
-    INNER JOIN Orders o ON c.CustomerID = o.CustomerID
-    INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
-    INNER JOIN Products p ON od.ProductID = p.ProductID
-    INNER JOIN Categories cat on cat.CategoryID = p.CategoryID
-    WHERE c.CustomerID = @CustomerID
-  )
-  ```
+    ```sql
+    CREATE FUNCTION CustomerOrderDetailsByID (@CustomerID NVARCHAR(5))
+    RETURNS TABLE
+    AS
+    RETURN
+    (
+      SELECT c.CustomerID, c.CompanyName AS CustomerName,
+            o.OrderID, o.OrderDate,
+            p.ProductID, p.ProductName,
+            od.Quantity, od.UnitPrice, 
+            dbo.CalculateTotalPrice(od.Quantity, od.UnitPrice) AS TotalPrice,
+            cat.CategoryID, cat.CategoryName
+      FROM Customers c
+      INNER JOIN Orders o ON c.CustomerID = o.CustomerID
+      INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
+      INNER JOIN Products p ON od.ProductID = p.ProductID
+      INNER JOIN Categories cat on cat.CategoryID = p.CategoryID
+      WHERE c.CustomerID = @CustomerID
+    )
+    ```
 
-  ```sql
-  -- Using the view with parameter
-  SELECT * FROM CustomerOrderDetailsByID('ALFKI');
-  ```
+    ```sql
+    -- Using the view with parameter
+    SELECT * FROM CustomerOrderDetailsByID('ALFKI');
+    ```
 
 ## [Stored Procedure](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/create-a-stored-procedure?view=sql-server-ver16)
 
