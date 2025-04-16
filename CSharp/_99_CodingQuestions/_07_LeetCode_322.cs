@@ -3,6 +3,8 @@
 using System;
 using System.Linq;
 
+namespace CodingQuestions;
+
 public class LeetCode_322
 {
   public static void Main(string[] args)
