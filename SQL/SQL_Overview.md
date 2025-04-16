@@ -2413,11 +2413,9 @@ in SQL Server is a precompiled set of SQL statements that can be executed as a s
                   WHERE OrderCategory IS NULL AND 
                         OrderID NOT IN (SELECT OrderID FROM ErrorLog)
               );
-
               -- Break the loop if no more NULL values are found
               IF @OrderID IS NULL
               BEGIN
-                  PRINT 'No more orders to process. Exiting loop.';
                   BREAK;
               END;
 
@@ -2429,9 +2427,8 @@ in SQL Server is a precompiled set of SQL statements that can be executed as a s
 
               -- Calculate TotalOrderValue for the current OrderID
               SELECT @TotalOrderValue = SUM(UnitPrice * Quantity)
-              FROM [Order Details]
-              WHERE OrderID = @OrderID;
-
+               FROM [Order Details]
+               WHERE OrderID = @OrderID;
               -- Determine the OrderCategory based on TotalOrderValue
               SET @OrderCategory = CASE
                   WHEN @TotalOrderValue < 100 THEN 'Small'
@@ -2442,11 +2439,8 @@ in SQL Server is a precompiled set of SQL statements that can be executed as a s
 
               -- Update the Orders table with the calculated OrderCategory
               UPDATE Orders
-              SET OrderCategory = @OrderCategory
-              WHERE OrderID = @OrderID;
-
-              PRINT 'Successfully updated OrderID: ' + CAST(@OrderID AS NVARCHAR(10)) +
-                    ' with category: ' + @OrderCategory;
+               SET OrderCategory = @OrderCategory
+               WHERE OrderID = @OrderID;
           END TRY
           BEGIN CATCH
               -- Log the error details in the ErrorLog table
@@ -2458,9 +2452,6 @@ in SQL Server is a precompiled set of SQL statements that can be executed as a s
                   ERROR_STATE(),
                   ERROR_LINE(),
                   @OrderID;
-
-              PRINT 'An error occurred while processing OrderID: ' + CAST(@OrderID AS NVARCHAR(10));
-              PRINT 'Error details logged to ErrorLog table.';
           END CATCH;
       END;
   END;
