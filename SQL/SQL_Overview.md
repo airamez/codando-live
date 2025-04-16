@@ -2309,7 +2309,193 @@ Functions can be used for various tasks, such as calculations, string manipulati
     SELECT * FROM CustomerOrderDetailsByID('ALFKI');
     ```
 
-## [Stored Procedure](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/create-a-stored-procedure?view=sql-server-ver16)
+## Stored Procedures
+
+A [**Stored Procedure**](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/stored-procedures?view=sql-server-ver16)
+in SQL Server is a precompiled set of SQL statements that can be executed as a single unit. Stored procedures are commonly used to encapsulate complex operations, improve performance, and simplify database management.
+
+### Key Characteristics of Stored Procedures
+
+1. **Encapsulation:** Groups a series of SQL commands into a single callable unit, simplifying execution.
+2. **Parameterization:** Accepts input and output parameters for dynamic and flexible processing.
+3. **Precompilation:** Improves execution speed by precompiling SQL statements.
+4. **Error Handling:** Supports robust mechanisms like TRY...CATCH for managing exceptions.
+5. **Type:** Procedures can return data (result sets) or simply perform actions (such as updating data).
+
+* Syntax
+
+  ```sql
+  CREATE PROCEDURE [SchemaName].[ProcedureName] 
+    @ParameterName DataType, ...
+  AS
+  BEGIN
+      -- Procedure logic
+  END;
+
+* Examples
+
+  * Procedure to update product price based on category
+
+  ```sql
+  CREATE PROCEDURE dbo.UpdateProductPriceByCategory
+  (
+      @CategoryID INT,
+      @PercentageChange DECIMAL(10, 2)
+  )
+  AS
+  BEGIN
+      -- Update product price
+      UPDATE Products
+      SET UnitPrice = UnitPrice + (UnitPrice * @PercentageChange / 100)
+      WHERE CategoryID = @CategoryID;
+  END;
+  ```
+
+  ```sql
+  -- Listing the prices before updating the prices
+  select ProductID, ProductName, CategoryID, UnitPrice from Products where CategoryID = 3
+
+  -- Executing the procedure
+  EXEC dbo.UpdateProductPriceByCategory @CategoryID = 3, @PercentageChange = 10.00;
+
+  -- Listing the prices after updating the prices
+  select ProductID, ProductName, CategoryID, UnitPrice from Products where CategoryID = 3
+  ```
+
+  * Procedure to fetch customer order details:
+
+  ```sql
+  CREATE PROCEDURE GetCustomerOrderDetailsByID
+  (
+      @CustomerID NVARCHAR(5)
+  )
+  AS
+  BEGIN
+      SELECT c.CustomerID, c.CompanyName AS CustomerName,
+            o.OrderID, o.OrderDate,
+            p.ProductID, p.ProductName,
+            od.Quantity, od.UnitPrice,
+            od.Quantity * od.UnitPrice AS TotalPrice,
+            cat.CategoryID, cat.CategoryName
+      FROM Customers c
+      INNER JOIN Orders o ON c.CustomerID = o.CustomerID
+      INNER JOIN [Order Details] od ON o.OrderID = od.OrderID
+      INNER JOIN Products p ON od.ProductID = p.ProductID
+      INNER JOIN Categories cat ON cat.CategoryID = p.CategoryID
+      WHERE c.CustomerID = @CustomerID;
+  END;
+  ```
+
+  ```sql
+  -- Using the procedure
+  EXEC GetCustomerOrderDetailsByID @CustomerID = 'ALFKI';
+  ```
+
+  * Procedure
+
+  ```sql
+  CREATE PROCEDURE dbo.UpdateOrderCategories
+  AS
+  BEGIN
+      DELETE FROM ErrorLog -- Clear the logs before execution
+
+      DECLARE @OrderID INT; -- Current order ID
+      DECLARE @TotalOrderValue DECIMAL(18, 2); -- Total amount of the order
+      DECLARE @OrderCategory NVARCHAR(20); -- Category of the order
+
+      WHILE 1 = 1 -- Infinite loop
+      BEGIN
+          BEGIN TRY
+              -- Get the next OrderID with NULL OrderCategory and not logged in ErrorLog
+              SET @OrderID = (
+                  SELECT TOP 1 OrderID
+                  FROM Orders
+                  WHERE OrderCategory IS NULL AND 
+                        OrderID NOT IN (SELECT OrderID FROM ErrorLog)
+              );
+
+              -- Break the loop if no more NULL values are found
+              IF @OrderID IS NULL
+              BEGIN
+                  PRINT 'No more orders to process. Exiting loop.';
+                  BREAK;
+              END;
+
+              -- Simulate a random failure with 30% probability
+              IF RAND() < 0.3
+              BEGIN
+                  RAISERROR('Simulated random failure for OrderID: %d', 16, 1, @OrderID);
+              END;
+
+              -- Calculate TotalOrderValue for the current OrderID
+              SELECT @TotalOrderValue = SUM(UnitPrice * Quantity)
+              FROM [Order Details]
+              WHERE OrderID = @OrderID;
+
+              -- Determine the OrderCategory based on TotalOrderValue
+              SET @OrderCategory = CASE
+                  WHEN @TotalOrderValue < 100 THEN 'Small'
+                  WHEN @TotalOrderValue < 500 THEN 'Medium'
+                  WHEN @TotalOrderValue < 1000 THEN 'Large'
+                  ELSE 'Very Large'
+              END;
+
+              -- Update the Orders table with the calculated OrderCategory
+              UPDATE Orders
+              SET OrderCategory = @OrderCategory
+              WHERE OrderID = @OrderID;
+
+              PRINT 'Successfully updated OrderID: ' + CAST(@OrderID AS NVARCHAR(10)) +
+                    ' with category: ' + @OrderCategory;
+          END TRY
+          BEGIN CATCH
+              -- Log the error details in the ErrorLog table
+              INSERT INTO ErrorLog (ErrorMessage, ErrorNumber, Severity, State, ErrorLine, OrderID)
+              SELECT 
+                  ERROR_MESSAGE(),
+                  ERROR_NUMBER(),
+                  ERROR_SEVERITY(),
+                  ERROR_STATE(),
+                  ERROR_LINE(),
+                  @OrderID;
+
+              PRINT 'An error occurred while processing OrderID: ' + CAST(@OrderID AS NVARCHAR(10));
+              PRINT 'Error details logged to ErrorLog table.';
+          END CATCH;
+      END;
+  END;
+  ```
+
+  ```sql
+  UPDATE Orders SET OrderCategory = NULL
+  SELECT * FROM ErrorLog;
+  SELECT OrderID, CustomerID, OrderCategory FROM Orders;
+
+  EXEC UpdateOrderCategories
+
+  SELECT * FROM ErrorLog;
+  SELECT OrderID, CustomerID, OrderCategory FROM Orders;
+  ```
+
+## Functions vs. Stored Procedures in SQL Server
+
+| **Aspect**                 | **Functions**                                                                                     | **Stored Procedures**                                                                                      |
+|----------------------------|---------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| **Purpose**                | Perform calculations or return data (scalar or table).                                            | Encapsulate a series of SQL operations that may return data or simply perform actions.                     |
+| **Return Value**           | Always returns a value (scalar or table).                                                         | Can return result sets or no output (actions-only).                                                        |
+| **Input Parameters**       | Accepts input parameters only.                                                                    | Can accept input and output parameters.                                                                    |
+| **Execution**              | Must be used within SQL statements like `SELECT`, `WHERE`, or `JOIN`.                             | Executed independently using `EXEC` or `EXECUTE`.                                                          |
+| **Precompilation**         | Compiled as part of the query execution plan.                                                     | Precompiled with its own execution plan for better performance.                                            |
+| **Error Handling**         | Limited error handling; cannot use `TRY...CATCH`.                                                 | Robust error handling with `TRY...CATCH`.                                                                  |
+| **Side Effects**           | Cannot modify database objects (read-only operations); deterministic logic.                       | Can perform actions like inserting, updating, or deleting data; non-deterministic logic.                   |
+| **Use in Queries**         | Must be embedded within queries (e.g., `SELECT`, `JOIN`, or `WHERE`).                             | Cannot be directly used in queries; must be invoked using `EXEC`.                                          |
+| **Transaction Control**    | Cannot manage transactions.                                                                       | Can manage transactions, including nested transactions (e.g., `BEGIN TRANSACTION`, `COMMIT`, `ROLLBACK`).  |
+| **Dependencies**           | Used as part of views, computed columns, or constraints.                                          | Used for complex operations that may span across multiple statements or procedures.                        |
+| **Return Type Restriction**| Must return a single data type or table (deterministic logic).                                    | Can return multiple result sets or none (non-deterministic logic).                                         |
+
+* Summary
+  * **Use Functions**: When you need reusable, side-effect-free logic for calculations or returning specific data types.
+  * **Use Stored Procedures**: When encapsulating complex operations, Batch processing, performing actions on the database, or managing transactions.
 
 ## [Cursor](https://learn.microsoft.com/en-us/sql/relational-databases/cursors?view=sql-server-ver16)
 
