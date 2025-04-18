@@ -2539,32 +2539,36 @@ While generally not as efficient as set-based operations, cursors are useful for
   * Example 1: Cursor to Process Employee Salaries
 
   ```sql
-  DECLARE @EmployeeID INT, @NewSalary MONEY;
+  DECLARE @EmployeeID INT = 1
+  
+  DECLARE @OrderID INT;
+  DECLARE @OrderTotal DECIMAL(18, 2);
+  DECLARE @OrdersSummary NVARCHAR(MAX) = '';
 
-  -- Define Cursor
-  DECLARE EmployeeCursor CURSOR FOR
-  SELECT EmployeeID, Salary
-  FROM Employees
-  WHERE DepartmentID = 2;
+  DECLARE OrdersCursor CURSOR FOR
+  SELECT o.OrderID, SUM(UnitPrice * Quantity) AS TotalAmount
+  FROM [Order Details] od
+  INNER JOIN Orders o ON od.OrderID = o.OrderID
+  WHERE o.EmployeeID = @EmployeeID
+  GROUP BY o.OrderID;
 
-  -- Open Cursor
-  OPEN EmployeeCursor;
+  OPEN OrdersCursor;
 
-  FETCH NEXT FROM EmployeeCursor INTO @EmployeeID, @NewSalary;
+  FETCH NEXT FROM OrdersCursor INTO @OrderID, @OrderTotal;
 
   WHILE @@FETCH_STATUS = 0
   BEGIN
-      -- Update Salary Logic
-      UPDATE Employees
-      SET Salary = @NewSalary * 1.1
-      WHERE EmployeeID = @EmployeeID;
+      SET @OrdersSummary = @OrdersSummary +
+          'OrderID: ' + CAST(@OrderID AS NVARCHAR) +
+          ', TotalAmount: ' + CAST(@OrderTotal AS NVARCHAR) + '; ';
 
-      FETCH NEXT FROM EmployeeCursor INTO @EmployeeID, @NewSalary;
+      FETCH NEXT FROM OrdersCursor INTO @OrderID, @OrderTotal;
   END;
 
-  -- Close and Deallocate Cursor
-  CLOSE EmployeeCursor;
-  DEALLOCATE EmployeeCursor;
+  CLOSE OrdersCursor;
+  DEALLOCATE OrdersCursor;
+
+  PRINT 'Orders Summary: ' + @OrdersSummary;
   ```
 
   * Example 2:
