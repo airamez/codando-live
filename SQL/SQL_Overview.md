@@ -2311,7 +2311,7 @@ Functions can be used for various tasks, such as calculations, string manipulati
 
 ## Stored Procedures
 
-A [**Stored Procedure**](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/stored-procedures?view=sql-server-ver16)
+A [**Stored Procedure**](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/stored-procedures-database-engine?view=sql-server-ver16)
 in SQL Server is a precompiled set of SQL statements that can be executed as a single unit. Stored procedures are commonly used to encapsulate complex operations, improve performance, and simplify database management.
 
 ### Key Characteristics of Stored Procedures
@@ -2488,7 +2488,180 @@ in SQL Server is a precompiled set of SQL statements that can be executed as a s
   * **Use Functions**: When you need reusable, side-effect-free logic for calculations or returning specific data types.
   * **Use Stored Procedures**: When encapsulating complex operations, Batch processing, performing actions on the database, or managing transactions.
 
-## [Cursor](https://learn.microsoft.com/en-us/sql/relational-databases/cursors?view=sql-server-ver16)
+## Cursor
+
+A [Cursor](https://learn.microsoft.com/en-us/sql/relational-databases/cursors?view=sql-server-ver16)
+in SQL Server is a database object used to retrieve, manipulate, and process rows in a result set one at a time.
+While generally not as efficient as set-based operations, cursors are useful for handling row-by-row logic.
+
+### Key Characteristics of Cursors
+
+* Sequential Access: Allows processing of result set rows individually.
+* Flexibility: Enables complex operations not easily achievable with pure SQL statements.
+* Fetch Operations: Provides mechanisms like FETCH NEXT, FETCH PRIOR, etc., for controlled traversal.
+* Resource-Intensive: Requires careful usage due to potential performance overhead.
+* Scope: Operates within a specific connection and is tied to a defined result set.
+
+* Sintaxe
+
+  ```sql
+  -- Declare variables
+  DECLARE @Variable1, @Variable2
+
+  -- Declare a Cursor
+  DECLARE CursorName CURSOR FOR
+  SELECT Column1, Column2
+  FROM TableName
+  WHERE Condition;
+
+  -- Open and Use the Cursor
+  OPEN CursorName;
+
+  -- Fetch current row
+  FETCH NEXT FROM CursorName INTO @Variable1, @Variable2;
+
+  WHILE @@FETCH_STATUS = 0
+  BEGIN
+      -- Perform operations
+
+
+
+      -- Fetch current row
+      FETCH NEXT FROM CursorName INTO @Variable1, @Variable2;
+  END;
+
+  -- Close and Deallocate the Cursor
+  CLOSE CursorName;
+  DEALLOCATE CursorName;
+  ```
+
+* Examples
+  * Example 1: Cursor to Process Employee Salaries
+
+  ```sql
+  DECLARE @EmployeeID INT, @NewSalary MONEY;
+
+  -- Define Cursor
+  DECLARE EmployeeCursor CURSOR FOR
+  SELECT EmployeeID, Salary
+  FROM Employees
+  WHERE DepartmentID = 2;
+
+  -- Open Cursor
+  OPEN EmployeeCursor;
+
+  FETCH NEXT FROM EmployeeCursor INTO @EmployeeID, @NewSalary;
+
+  WHILE @@FETCH_STATUS = 0
+  BEGIN
+      -- Update Salary Logic
+      UPDATE Employees
+      SET Salary = @NewSalary * 1.1
+      WHERE EmployeeID = @EmployeeID;
+
+      FETCH NEXT FROM EmployeeCursor INTO @EmployeeID, @NewSalary;
+  END;
+
+  -- Close and Deallocate Cursor
+  CLOSE EmployeeCursor;
+  DEALLOCATE EmployeeCursor;
+  ```
+
+  * Example 2:
+
+  ```sql
+  CREATE PROCEDURE dbo.UpdateOrderCategoriesWithCursor
+  AS
+  BEGIN
+      -- Clear the logs before execution
+      DELETE FROM ErrorLog;
+
+      -- Declare variables for processing
+      DECLARE @OrderID INT;
+      DECLARE @TotalOrderValue DECIMAL(18, 2);
+      DECLARE @OrderCategory NVARCHAR(20);
+
+      -- Declare a cursor for processing OrderIDs with NULL OrderCategory
+      DECLARE OrderCursor CURSOR FOR
+      SELECT OrderID
+        FROM Orders
+        WHERE OrderCategory IS NULL;
+
+      -- Open the cursor
+      OPEN OrderCursor;
+
+      FETCH NEXT FROM OrderCursor INTO @OrderID;
+
+      WHILE @@FETCH_STATUS = 0
+      BEGIN
+          BEGIN TRY
+              -- Simulate a random failure with 30% probability
+              IF RAND() < 0.3
+              BEGIN
+                  RAISERROR('Simulated random failure for OrderID: %d', 16, 1, @OrderID);
+              END;
+
+              -- Calculate TotalOrderValue for the current OrderID
+              SELECT @TotalOrderValue = SUM(UnitPrice * Quantity)
+                FROM [Order Details]
+                WHERE OrderID = @OrderID;
+
+              -- Determine the OrderCategory based on TotalOrderValue
+              SET @OrderCategory = CASE
+                  WHEN @TotalOrderValue < 100 THEN 'Small'
+                  WHEN @TotalOrderValue < 500 THEN 'Medium'
+                  WHEN @TotalOrderValue < 1000 THEN 'Large'
+                  ELSE 'Very Large'
+              END;
+
+              -- Update the Orders table with the calculated OrderCategory
+              UPDATE Orders
+                SET OrderCategory = @OrderCategory
+                WHERE OrderID = @OrderID;
+          END TRY
+          BEGIN CATCH
+              -- Log the error details in the ErrorLog table
+              INSERT INTO ErrorLog (ErrorMessage, ErrorNumber, Severity, State, ErrorLine, OrderID)
+              SELECT 
+                  ERROR_MESSAGE(),
+                  ERROR_NUMBER(),
+                  ERROR_SEVERITY(),
+                  ERROR_STATE(),
+                  ERROR_LINE(),
+                  @OrderID;
+          END CATCH;
+
+          -- Fetch the next OrderID from the cursor
+          FETCH NEXT FROM OrderCursor INTO @OrderID;
+      END;
+
+      -- Close and deallocate the cursor
+      CLOSE OrderCursor;
+      DEALLOCATE OrderCursor;
+  END;
+  ```
+
+  ```sql
+  UPDATE Orders SET OrderCategory = NULL
+  SELECT * FROM ErrorLog;
+  SELECT OrderID, CustomerID, OrderCategory FROM Orders;
+
+  EXEC UpdateOrderCategoriesWithCursor
+
+  SELECT * FROM ErrorLog;
+  SELECT OrderID, CustomerID, OrderCategory FROM Orders;
+  ```
+
+* Advantages of Cursors
+  * Ideal for row-by-row processing that is not easily done with standard SQL operations.
+  * Offers fine-grained control over data manipulation.
+* Disadvantages of Cursors
+  * High resource consumption, making them less efficient than set-based processing.
+  * Potential for slower performance, especially with large result sets.
+* Summary
+
+  Cursors should be used carefuly and only when necessary for row-by-row logic.
+  Where possible, prefer set-based operations for better performance and scalability.
 
 ## [Triggers]((https://learn.microsoft.com/en-us/sql/t-sql/statements/create-trigger-transact-sql?view=sql-server-ver16))
 
