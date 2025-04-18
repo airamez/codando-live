@@ -2536,11 +2536,11 @@ While generally not as efficient as set-based operations, cursors are useful for
   ```
 
 * Examples
-  * Example 1: Cursor to Process Employee Salaries
+  * Example 1: Cursor to generate an string with details from all orders of a employee
 
   ```sql
   DECLARE @EmployeeID INT = 1
-  
+
   DECLARE @OrderID INT;
   DECLARE @OrderTotal DECIMAL(18, 2);
   DECLARE @OrdersSummary NVARCHAR(MAX) = '';
