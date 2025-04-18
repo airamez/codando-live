@@ -331,3 +331,4 @@
 | 287 | [SQL: TRY-CATCH](https://youtube.com/live/Dskk_-buYI8) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 288 | [SQL: Functions](https://youtube.com/live/cgUfNEhvQAc) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 289 | [SQL: Stored Procedure](https://youtube.com/live/oNzYCuOUgrU) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 290 | [SQL: Cursor](https://youtube.com/live/pnINpM5ZcCk) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |

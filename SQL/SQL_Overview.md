@@ -2571,7 +2571,7 @@ While generally not as efficient as set-based operations, cursors are useful for
   PRINT 'Orders Summary: ' + @OrdersSummary;
   ```
 
-  * Example 2:
+  * Example 2: Store procedure to update the Orders Category
 
   ```sql
   CREATE PROCEDURE dbo.UpdateOrderCategoriesWithCursor
