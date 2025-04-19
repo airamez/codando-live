@@ -196,16 +196,26 @@
       * Primary Key
       * Foreign Key
 * SQL
-  * Create Table
-  * Insert
-  * Update
-  * Delete
-  * Select
-    * Sorting
-    * Join
-    * MAX, MIN, SUM and AVG
-    * Count
-    * Group By
+  * Basic Commands
+  * Using SQL Fiddler
+  * Inner Join
+  * Left, Right and Full Join
+  * Aggregate Functions and Group By
+  * String Functions
+  * Math and Date Functions
+  * Data Modeling and Sample Databases
+  * Sample Databases
+  * Advanced Queries
+  * Database Transaction
+  * Set Operations - UNION, INTERSET and EXCEPT
+  * CTE - Commong Table Expression
+  * Views
+  * Transact SQL (T-SQL)
+  * TRY-CATCH
+  * Functions
+  * Stored Procedure
+  * Cursor
+  * Triggers
 
 ## .NET Data Access
 

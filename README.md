@@ -313,23 +313,23 @@
 | 269 | [Advanced - LRU - Least Recently Used](https://youtube.com/live/ZiO3IBHYYxE) | [CSharp/_21_Advanced/_17_LRU.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_17_LRU.cs) |
 | 270 | [Advanced - Serpent Game](https://youtube.com/live/ozPgE_k96pk) | [CSharp/_21_Advanced/_18_Serpent.cs](https://github.com/airamez/codando-live/blob/main/CSharp/_21_Advanced/_18_Serpent.cs) |
 | 271 | [SQL: Introduction](https://youtube.com/live/eQ3Vwzlhkx8) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 272 | [SQL: Basic Commands](https://youtube.com/live/MFxT4uWaZBA) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 272 | [SQL: Basic Commands](https://youtube.com/live/MFxT4uWaZBA) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#create-table) |
 | 273 | [SQL: Using SQL Fiddler](https://youtube.com/live/ASG4xiuxJ-I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 274 | [SQL: Inner Join](https://youtube.com/live/S0K5vdsGt_I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 275 | [SQL: Left, Right and Full Join](https://youtube.com/live/D9gjZqWdi38) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 276 | [SQL: Aggregate Functions and Group By](https://youtube.com/live/giAaEtDQHeU) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 277 | [SQL: String Functions](https://youtube.com/live/p7Tdtx9lVvM) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 278 | [SQL: Math and Date Functions](https://youtube.com/live/Kh-9ktLHy3I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 279 | [SQL: Data Modeling and Sample Databases](https://youtube.com/live/PYxdULQWhcE) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 280 | [SQL: Sample Databases](https://youtube.com/live/nS6xdZ-pYS0) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 281 | [SQL: Advanced Queries](https://youtube.com/live/i27m4Xd50jc) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 282 | [SQL: Database Transaction](https://youtube.com/live/KBwmswqpJzY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 283 | [SQL: Set Operations - UNION, INTERSET and EXCEPT](https://youtube.com/live/n4HekhcndoQ) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 284 | [SQL: CTE - Commong Table Expression](https://youtube.com/live/J3CKgQMVyWY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 285 | [SQL: Views](https://youtube.com/live/ff-IozImLjY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 274 | [SQL: Inner Join](https://youtube.com/live/S0K5vdsGt_I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#inner-join) |
+| 275 | [SQL: Left, Right and Full Join](https://youtube.com/live/D9gjZqWdi38) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#left-right-and-full-join) |
+| 276 | [SQL: Aggregate Functions and Group By](https://youtube.com/live/giAaEtDQHeU) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#aggregate-functions-max-min-sum-and-avg) |
+| 277 | [SQL: String Functions](https://youtube.com/live/p7Tdtx9lVvM) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#string-functions) |
+| 278 | [SQL: Math and Date Functions](https://youtube.com/live/Kh-9ktLHy3I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#math-functions) |
+| 279 | [SQL: Data Modeling and Sample Databases](https://youtube.com/live/PYxdULQWhcE) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#more-on-data-modeling) |
+| 280 | [SQL: Sample Databases](https://youtube.com/live/nS6xdZ-pYS0) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#sample-databases) |
+| 281 | [SQL: Advanced Queries](https://youtube.com/live/i27m4Xd50jc) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#advanced-queries) |
+| 282 | [SQL: Database Transaction](https://youtube.com/live/KBwmswqpJzY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#database-transactions) |
+| 283 | [SQL: Set Operations - UNION, INTERSET and EXCEPT](https://youtube.com/live/n4HekhcndoQ) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#set-operations-union-intersect-and-except) |
+| 284 | [SQL: CTE - Common Table Expression](https://youtube.com/live/J3CKgQMVyWY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#cte---common-table-expression) |
+| 285 | [SQL: Views](https://youtube.com/live/ff-IozImLjY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#views) |
 | 286 | [SQL: Transact SQL (T-SQL)](https://youtube.com/live/6X_FCvTUp_I) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 287 | [SQL: TRY-CATCH](https://youtube.com/live/Dskk_-buYI8) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 288 | [SQL: Functions](https://youtube.com/live/cgUfNEhvQAc) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 289 | [SQL: Stored Procedure](https://youtube.com/live/oNzYCuOUgrU) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 290 | [SQL: Cursor](https://youtube.com/live/pnINpM5ZcCk) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
-| 291 | [SQL: Cursor](https://youtube.com/live/O7gyQ3d9EG0) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 287 | [SQL: TRY-CATCH](https://youtube.com/live/Dskk_-buYI8) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#try-catch) |
+| 288 | [SQL: Functions](https://youtube.com/live/cgUfNEhvQAc) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#functions) |
+| 289 | [SQL: Stored Procedure](https://youtube.com/live/oNzYCuOUgrU) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#stored-procedures) |
+| 290 | [SQL: Cursor](https://youtube.com/live/pnINpM5ZcCk) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#cursor) |
+| 291 | [SQL: Triggers](https://youtube.com/live/O7gyQ3d9EG0) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#triggers) |
