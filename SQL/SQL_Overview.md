@@ -10,8 +10,6 @@ A **Database Server** is a dedicated computer system that provides database serv
   * Oracle Database
   * MySQL
 
----
-
 ### **Key Concepts of Database Servers**
 
 1. **Centralized Data Storage:**  
@@ -24,8 +22,6 @@ A **Database Server** is a dedicated computer system that provides database serv
    A DBMS ensures data integrity, prevents unauthorized access, and provides role-based access controls.
 5. **Backup and Recovery:**  
    Database servers often include automated tools to back up data regularly and recover it in case of failures.
-
----
 
 ### **Importance of Database Servers in Software**
 
@@ -2218,14 +2214,14 @@ A [**function**](https://learn.microsoft.com/en-us/sql/relational-databases/user
 in SQL is a reusable code block that performs operations and returns a single value or table.
 Functions can be used for various tasks, such as calculations, string manipulation, or filtering data.
 
-### Key Characteristics of Functions
+* Key Characteristics of Functions
 
-1. **Reusability:** Functions can be called multiple times, simplifying code and reducing redundancy.
-2. **Modularity:** Encapsulates specific logic into a single callable unit.
-3. **Parameterization:** Accepts input parameters for dynamic processing.
-4. **Return Values:** Provides a single scalar value or table result, depending on the function type.
-5. **Type:** Functions can be either scalar (returning a single value) or table-valued (returning a table).
-6. **Optimized Execution:** Functions streamline complex calculations and operations.
+  1. **Reusability:** Functions can be called multiple times, simplifying code and reducing redundancy.
+  2. **Modularity:** Encapsulates specific logic into a single callable unit.
+  3. **Parameterization:** Accepts input parameters for dynamic processing.
+  4. **Return Values:** Provides a single scalar value or table result, depending on the function type.
+  5. **Type:** Functions can be either scalar (returning a single value) or table-valued (returning a table).
+  6. **Optimized Execution:** Functions streamline complex calculations and operations.
 
 * Syntax
 
@@ -2314,13 +2310,13 @@ Functions can be used for various tasks, such as calculations, string manipulati
 A [**Stored Procedure**](https://learn.microsoft.com/en-us/sql/relational-databases/stored-procedures/stored-procedures-database-engine?view=sql-server-ver16)
 in SQL Server is a precompiled set of SQL statements that can be executed as a single unit. Stored procedures are commonly used to encapsulate complex operations, improve performance, and simplify database management.
 
-### Key Characteristics of Stored Procedures
+* Key Characteristics of Stored Procedures
 
-1. **Encapsulation:** Groups a series of SQL commands into a single callable unit, simplifying execution.
-2. **Parameterization:** Accepts input and output parameters for dynamic and flexible processing.
-3. **Precompilation:** Improves execution speed by precompiling SQL statements.
-4. **Error Handling:** Supports robust mechanisms like TRY...CATCH for managing exceptions.
-5. **Type:** Procedures can return data (result sets) or simply perform actions (such as updating data).
+  1. **Encapsulation:** Groups a series of SQL commands into a single callable unit, simplifying execution.
+  2. **Parameterization:** Accepts input and output parameters for dynamic and flexible processing.
+  3. **Precompilation:** Improves execution speed by precompiling SQL statements.
+  4. **Error Handling:** Supports robust mechanisms like TRY...CATCH for managing exceptions.
+  5. **Type:** Procedures can return data (result sets) or simply perform actions (such as updating data).
 
 * Syntax
 
@@ -2494,13 +2490,12 @@ A [Cursor](https://learn.microsoft.com/en-us/sql/relational-databases/cursors?vi
 in SQL Server is a database object used to retrieve, manipulate, and process rows in a result set one at a time.
 While generally not as efficient as set-based operations, cursors are useful for handling row-by-row logic.
 
-### Key Characteristics of Cursors
-
-* Sequential Access: Allows processing of result set rows individually.
-* Flexibility: Enables complex operations not easily achievable with pure SQL statements.
-* Fetch Operations: Provides mechanisms like FETCH NEXT, FETCH PRIOR, etc., for controlled traversal.
-* Resource-Intensive: Requires careful usage due to potential performance overhead.
-* Scope: Operates within a specific connection and is tied to a defined result set.
+* Key Characteristics of Cursors
+  * Sequential Access: Allows processing of result set rows individually.
+  * Flexibility: Enables complex operations not easily achievable with pure SQL statements.
+  * Fetch Operations: Provides mechanisms like FETCH NEXT, FETCH PRIOR, etc., for controlled traversal.
+  * Resource-Intensive: Requires careful usage due to potential performance overhead.
+  * Scope: Operates within a specific connection and is tied to a defined result set.
 
 * Sintaxe
 
@@ -2667,6 +2662,119 @@ While generally not as efficient as set-based operations, cursors are useful for
   Cursors should be used carefuly and only when necessary for row-by-row logic.
   Where possible, prefer set-based operations for better performance and scalability.
 
-## [Triggers]((https://learn.microsoft.com/en-us/sql/t-sql/statements/create-trigger-transact-sql?view=sql-server-ver16))
+## Triggers
+
+A [**SQL Trigger**]((https://learn.microsoft.com/en-us/sql/t-sql/statements/create-trigger-transact-sql?view=sql-server-ver16))
+is a special type of stored procedure that automatically executes in response to certain events on a table or view. Triggers are primarily used for enforcing business rules, maintaining audit trails, and replicating data.
+
+* Types of SQL Triggers in SQL Server
+
+  * **AFTER Triggers**:
+    * Executed after the triggering SQL statement (INSERT, UPDATE, DELETE) has completed.
+    * Commonly used for enforcing data integrity.
+
+  * **INSTEAD OF Triggers**:
+    * Executed in place of the triggering SQL statement.
+    * Useful for complex business rules and operations that override the default behavior.
+
+* Key Features of Triggers
+  * Automatic execution when specified events occur.
+  * Can access the **Inserted** and **Deleted** pseudo-tables to inspect the data affected by the triggering operation.
+  * Cannot be invoked directly; they are tied to specific table events.
+
+* Syntax
+
+  ```sql
+  CREATE TRIGGER trigger_name
+  ON table_name
+  AFTER | INSTEAD OF [INSERT, UPDATE, DELETE]
+  AS
+  BEGIN
+      -- Trigger logic here
+  END
+  ```
+
+* Examples
+  * Example 1: Trigger to save the DateTime, Previous and new Price of a product
+  
+  ```sql
+  CREATE TABLE PriceChangeHistory (
+    HistoryID INT IDENTITY(1,1) PRIMARY KEY,
+    ProductID INT NOT NULL,
+    ChangeDate DATETIME DEFAULT GETDATE(),
+    OldPrice MONEY NOT NULL,
+    NewPrice MONEY NOT NULL,
+    FOREIGN KEY (ProductID) REFERENCES Products(ProductID)
+  );
+  ```
+
+  ```sql
+  CREATE TRIGGER trg_PriceChange
+  ON Products
+  AFTER UPDATE
+  AS
+  BEGIN
+    IF UPDATE(UnitPrice)
+    BEGIN
+      INSERT INTO PriceChangeHistory (ProductID, OldPrice, NewPrice)
+      SELECT
+          d.ProductID,
+          d.UnitPrice AS OldPrice,
+          i.UnitPrice AS NewPrice
+      FROM
+          Deleted d
+      INNER JOIN
+          Inserted i
+      ON
+          d.ProductID = i.ProductID;
+    END
+  END;
+  ```
+
+  ```sql
+  UPDATE Products
+    SET UnitPrice = UnitPrice + 5
+    WHERE ProductID = 1;
+
+  SELECT * FROM PriceChangeHistory;
+  ```
+
+* Example 2: Trigger to make sure that the unit price of a product can't be less than 1.00
+
+  ```sql
+  CREATE TRIGGER trg_CustomInsert
+  ON Products
+  INSTEAD OF INSERT
+  AS
+  BEGIN
+      DECLARE @MinPrice MONEY = 1.00;
+
+      INSERT INTO Products (ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued)
+      SELECT 
+          ProductName,
+          SupplierID,
+          CategoryID,
+          QuantityPerUnit,
+          CASE WHEN UnitPrice >= @MinPrice 
+            THEN UnitPrice 
+            ELSE @MinPrice 
+          END AS UnitPrice,
+          UnitsInStock,
+          UnitsOnOrder,
+          ReorderLevel,
+          Discontinued
+      FROM Inserted;
+  END;
+  ```
+
+  ```sql
+  INSERT INTO Products (ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued)
+  VALUES ('Premium Coffee', 1, 1, '10 packets', 5.00, 50, 10, 5, 0);
+
+  INSERT INTO Products (ProductName, SupplierID, CategoryID, QuantityPerUnit, UnitPrice, UnitsInStock, UnitsOnOrder, ReorderLevel, Discontinued)
+  VALUES ('Cheap Candy', 2, 2, '5 packs', 0.50, 100, 20, 10, 0);
+
+  SELECT * FROM Products WHERE ProductName IN ('Premium Coffee', 'Cheap Candy');
+  ```
 
 ## Calculated Fields
