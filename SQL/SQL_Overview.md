@@ -2777,4 +2777,47 @@ is a special type of stored procedure that automatically executes in response to
   SELECT * FROM Products WHERE ProductName IN ('Premium Coffee', 'Cheap Candy');
   ```
 
-## Calculated Fields
+## Computed Columns / Calculated Fields
+
+Calculated fields, also known as [computed columns](https://learn.microsoft.com/en-us/sql/relational-databases/tables/specify-computed-columns-in-a-table?view=sql-server-ver16), are virtual columns that derive their values from other columns in the table. They are helpful in scenarios where derived data is needed without additional storage.
+
+* Properties of Computed Columns
+  * Virtual Columns: Values are calculated at runtime.
+  * Persisted Columns: If declared as PERSISTED, values are stored and indexed.
+  * Data Integrity: Computed columns cannot use nondeterministic functions like GETDATE() unless the column is PERSISTED
+
+* Syntax
+
+  ```sql
+  -- As part of the table creation
+  CREATE TABLE TableName (
+      Column1 DataType,
+      Column2 DataType,
+      ComputedColumnName AS (Expression) [PERSISTED]
+  );
+
+  -- Adding to a existing table
+  ALTER TABLE TableName
+    ADD ComputedColumnName AS (Expression) [PERSISTED];
+
+  ```
+
+* Examples
+
+  * Example 1: Adding a Total Price column to Order Details
+
+  ```sql
+  ALTER TABLE [Order Details]
+    ADD TotalPrice AS (UnitPrice * Quantity) PERSISTED;
+  ```
+
+  * Example 2: Adding a Full Name column to Employees
+
+  ```sql
+  ALTER TABLE [Employees]
+    ADD FullName AS (FirstName + ' ' + LastName) PERSISTED;
+  ```
+
+## You did it :)
+
+![Report to hierarch](images/SQLCelebration.png)
