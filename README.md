@@ -332,3 +332,4 @@
 | 288 | [SQL: Functions](https://youtube.com/live/cgUfNEhvQAc) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 289 | [SQL: Stored Procedure](https://youtube.com/live/oNzYCuOUgrU) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
 | 290 | [SQL: Cursor](https://youtube.com/live/pnINpM5ZcCk) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |
+| 291 | [SQL: Cursor](https://youtube.com/live/O7gyQ3d9EG0) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md) |

@@ -2664,7 +2664,7 @@ While generally not as efficient as set-based operations, cursors are useful for
 
 ## Triggers
 
-A [**SQL Trigger**]((https://learn.microsoft.com/en-us/sql/t-sql/statements/create-trigger-transact-sql?view=sql-server-ver16))
+A [**SQL Trigger**](https://learn.microsoft.com/en-us/sql/t-sql/statements/create-trigger-transact-sql?view=sql-server-ver16)
 is a special type of stored procedure that automatically executes in response to certain events on a table or view. Triggers are primarily used for enforcing business rules, maintaining audit trails, and replicating data.
 
 * Types of SQL Triggers in SQL Server
