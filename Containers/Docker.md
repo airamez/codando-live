@@ -58,7 +58,7 @@ Make sure Docker is installed and configured before proceeding.
       ```
 
 2. **Pull the SQL Server Image**:
-    - Search for the official SQL Server image:
+    - Search for the official SQL Server:
       ```bash
       sudo docker search mssql-server
       ```
@@ -70,7 +70,7 @@ Make sure Docker is installed and configured before proceeding.
 3. **Run the Container**:
     - Start a container with SQL Server:
       ```bash
-      docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=YourPassword123' -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server
+      sudo docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=YourPassword123' -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server
       ```
     - Replace `YourPassword123` with a strong password for the SQL Server `sa` user.
 
