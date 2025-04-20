@@ -1,8 +1,12 @@
 # Introduction to Docker Containers
 
-## What is [Docker](https://www.docker.com/)
+## Container
 
-[Docker is](https://www.docker.com/resources/what-container/) a platform for developing, shipping, and running applications in lightweight, portable containers. Containers bundle the application, along with all its dependencies and environment configurations, into a single package. This ensures consistency across development, testing, and production environments.
+A [container](https://www.docker.com/resources/what-container/) is a lightweight, portable, and efficient software package that encapsulates an application's code, dependencies, and runtime environment. It operates independently of the underlying infrastructure, ensuring consistent behavior across different systems and platforms. Containers are foundational to modern software development, enabling faster deployment, scalability, and flexibility.
+
+## Docker
+
+[Docker is](https://www.docker.com/) a platform for developing, shipping, and running applications in lightweight, portable containers. Containers bundle the application, along with all its dependencies and environment configurations, into a single package. This ensures consistency across development, testing, and production environments.
 
 ### Key Concepts
 
@@ -35,13 +39,6 @@
 - **Isolation**: Process-level isolation; less isolated than VMs but sufficient for most use cases.
 - **Startup Time**: Containers start almost instantly due to their lightweight structure.
 
-### Key Takeaway
-
-- Virtual machines are best suited for applications requiring strong isolation and compatibility with multiple OS types.
-- Containers, on the other hand, are ideal for lightweight, scalable, and resource-efficient applications.
-
----
-
 ## Using Docker on Linux
 
 Most Linux distributions include all necessary tools to run Docker containers.
@@ -56,13 +53,13 @@ Make sure Docker is installed and configured before proceeding.
       docker --version
       ```
 
-  - Update the package repository:
+  - Update the package repository
 
     ```bash
     sudo dnf update
     ```
 
-  - Install Docker:
+  - Install Docker
 
     ```bash
     sudo dnf install docker
@@ -70,15 +67,22 @@ Make sure Docker is installed and configured before proceeding.
 
     ![Docker Install](images/docker_install.png)
 
-  - Start the Docker service:
+  - Start the Docker service
 
     ```bash
     sudo systemctl start docker
     sudo systemctl enable docker
     ```
 
-- **Create SQL Server Container**:
-  - Search for the official SQL Server:
+- **Create SQL Server Container**
+
+  - Advantages of Using SQL Server Containers
+    - Rapid setup of SQL Server instances for development and testing.
+    - Easy removal and recreation of containers for clean environments.
+    - Simplified dependency management.
+    - Platform independency (No windows machine required).
+
+  - Search for the official SQL Server
 
     ```bash
     sudo docker search mssql-server
@@ -90,8 +94,8 @@ Make sure Docker is installed and configured before proceeding.
     sudo docker pull mcr.microsoft.com/mssql/server
     ```
 
-- **Run the Container**:
-  - Create a container with SQL Server:
+- **Run the Container**
+  - Create a SQL Server container
 
     ```bash
     sudo docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=YourPassword123' -p 1433:1433 --name sqlserver -d mcr.microsoft.com/mssql/server
@@ -99,7 +103,7 @@ Make sure Docker is installed and configured before proceeding.
 
   - Replace `YourPassword123` with a strong password for the SQL Server `sa` user.
 
-- **Access SQL Server with VSCODE**:
+- **Access SQL Server from VSCODE**
   - Verify it's running:
 
     ```bash
@@ -113,15 +117,15 @@ Make sure Docker is installed and configured before proceeding.
     ![SQL Server Extension](images/sql_vs_extension.png)
 
   - Connect to the SQL Server local container
-    -- After the SQL Server Extension installation two new icons appear on the left side menu.
-       Use the one called "SQL Server".
+    - After the SQL Server Extension installation two new icons will appear on the left side menu.
+      Use the one called "SQL Server".
   
-       > Hokeys: CONTROL + ALT + D
+    > Hokeys: CONTROL + ALT + D
   
-      ![SQL Connection](images/sql_connection.png)
+    ![SQL Connection](images/sql_connection.png)
 
 - **Create the NorthWind database**
-  -- Right click at the Connect and select "New Query"
+  -- Right click on the Connection and select "New Query" or Create a new .sql file
 
   ```sql
   -- Create the database
@@ -137,28 +141,34 @@ Make sure Docker is installed and configured before proceeding.
 
   ```
 
+  - Copy and execute the NortWind scripts from [here](https://github.com/microsoft/sql-server-samples/blob/master/samples/databases/northwind-pubs/instnwnd.sql)
+
+  - Test some SQL queries
+    ![Query execution](images/query-execution.png)
+  - Basic Commands:
+    - List all installed containers: ```sudo docker ps -a```
+    - List all RUNNING installed containers: ```sudo docker ps```
+    - Start the container: ```sudo docker start sqlserver```
+    - Stop the container: ```sudo docker stop sqlserver```
+    - Remove the container: ```sudo docker rm sqlserver```
+
 - **Basic Container Operations**:
 
-  - Start the container:
-
-    ```bash
-    docker start sqlserver
-    ```
-
-  - Stop the container:
-
-    ```bash
-    docker stop sqlserver
-    ```
-
-  - Remove the container:
-
-    ```bash
-    docker rm sqlserver
-    ```
-
-### Advantages of Using SQL Server Containers
-
-- Rapid setup of SQL Server instances for development and testing.
-- Easy removal and recreation of containers for clean environments.
-- Simplified dependency management.
+  | **Command**                 | **Description**                                                                      |
+  |-----------------------------|--------------------------------------------------------------------------------------|
+  | `docker run <image>`        | Creates and runs a container from the specified Docker image.                        |
+  | `docker ps`                 | Lists all running containers.                                                        |
+  | `docker ps -a`              | Lists all containers.                                                                |
+  | `docker images`             | Displays a list of all locally available Docker images.                              |
+  | `docker build -t <name> .`  | Builds a Docker image from a Dockerfile in the current directory and tags it.        |
+  | `docker stop <container>`   | Stops a running container.                                                           |
+  | `docker rm <container>`     | Removes a stopped container.                                                         |
+  | `docker rmi <image>`        | Deletes a Docker image from the local repository.                                    |
+  | `docker exec -it <container> <command>` | Executes a command inside a running container (e.g., open a bash shell). |
+  | `docker pull <image>`       | Downloads a Docker image from a registry like Docker Hub.                            |
+  | `docker push <image>`       | Uploads a Docker image to a registry.                                                |
+  | `docker logs <container>`   | Fetches logs from a container.                                                       |
+  | `docker-compose up`         | Starts services defined in a `docker-compose.yml` file.                              |
+  | `docker-compose down`       | Stops and removes services defined in `docker-compose.yml`.                          |
+  | `docker network ls`         | Lists all Docker networks.                                                           |
+  | `docker volume ls`          | Lists all Docker volumes.                                                            |
