@@ -333,4 +333,5 @@
 | 289 | [SQL: Stored Procedure](https://youtube.com/live/oNzYCuOUgrU) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#stored-procedures) |
 | 290 | [SQL: Cursor](https://youtube.com/live/pnINpM5ZcCk) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#cursor) |
 | 291 | [SQL: Triggers](https://youtube.com/live/O7gyQ3d9EG0) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#triggers) |
-| 292 | [SQL: Triggers](https://youtube.com/live/Z8mewqNfgZY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#computed-columns--calculated-fields) |
+| 292 | [SQL: Computed Columns (Calculated Fields)](https://youtube.com/live/Z8mewqNfgZY) | [SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/SQL/SQL_Overview.md#computed-columns--calculated-fields) |
+| 293 | [SQL: Intro to Containers and Docker](https://youtube.com/live/Y9WVTP-RDWY) | [Containers/Docker.md](https://github.com/airamez/codando-live/blob/main/Containers/Docker.md) |
