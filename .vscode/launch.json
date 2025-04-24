@@ -8,11 +8,11 @@
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "build-DataAccess",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/CSharp/bin/Debug/net9.0/CSharp.dll",
+            "program": "${workspaceFolder}/_05_DataAccess/bin/Debug/net9.0/DataAccess.dll",
             "args": [],
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/_05_DataAccess",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "integratedTerminal",
             "stopAtEntry": false
