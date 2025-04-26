@@ -1,4 +1,5 @@
 {
     "dotnet.defaultSolution": "IntroToCode_CSharp01.sln",
     "editor.formatOnSave": true,
+    "editor.tabSize": 2,
 }

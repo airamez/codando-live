@@ -4,4 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <StartupObject>ADO.NET.BasicQueryApp</StartupObject>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
+  </ItemGroup>
 </Project>
