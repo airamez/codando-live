@@ -334,4 +334,5 @@
 | 290 | [SQL: Cursor](https://youtube.com/live/pnINpM5ZcCk) | [_03_SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/_03_SQL/SQL_Overview.md#cursor) |
 | 291 | [SQL: Triggers](https://youtube.com/live/O7gyQ3d9EG0) | [_03_SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/_03_SQL/SQL_Overview.md#triggers) |
 | 292 | [SQL: Computed Columns (Calculated Fields)](https://youtube.com/live/Z8mewqNfgZY) | [_03_SQL/SQL_Overview.md](https://github.com/airamez/codando-live/blob/main/_03_SQL/SQL_Overview.md#computed-columns--calculated-fields) |
-| 293 | [SQL: Intro to Containers and Docker](https://youtube.com/live/Y9WVTP-RDWY) | [_04_Containers/Docker.md](https://github.com/airamez/codando-live/blob/main/_04_Containers/Docker.md) |
+| 293 | [Intro to Containers and Docker](https://youtube.com/live/Y9WVTP-RDWY) | [_04_Containers/Docker.md](https://github.com/airamez/codando-live/blob/main/_04_Containers/Docker.md) |
+| 294 | [ADO.NET: Intro](https://youtube.com/live/LKcr_8Gy8xc) | [_05_DataAccess/_01_ADO.NET/_00_ADO.NET.md](https://github.com/airamez/codando-live/blob/main/_05_DataAccess/_01_ADO.NET/_00_ADO.NET.md) <br> [_05_DataAccess/_01_ADO.NET/_01_BasicQuery.cs](https://github.com/airamez/codando-live/blob/main/_05_DataAccess/_01_ADO.NET/_01_BasicQuery.cs) |

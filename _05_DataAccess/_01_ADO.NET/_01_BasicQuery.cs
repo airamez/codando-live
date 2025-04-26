@@ -20,7 +20,7 @@ namespace ADO.NET
             while (reader.Read())
             {
               Console.Write($"ID: {reader["ProductID"]}; ");
-              Console.Write($"Name: {reader["ProductName"]}");
+              Console.Write($"Name: {reader["ProductName"]}; ");
               Console.WriteLine($"Price: {reader["UnitPrice"]}");
             }
           }
