@@ -63,7 +63,7 @@ ADO.NET uses the SqlCommand object to execute any type of SQL statements from qu
   * `DELETE`: Remove records.
   * `CREATE`, `ALTER`, `DROP` database objects,
   * Execute: Functions and Stored Procedures
-* Example
+* Example: Executing a query to read data from Products table
 
   ```csharp
   string query = "SELECT ProductID, ProductName, UnitPrice FROM Products";
@@ -93,45 +93,11 @@ dotnet add package Microsoft.Data.SqlClient
 
 > ⚠️ **Warning**: This `System.Data.SqlClient` was the most common package in the paste, but it is depracated
 
-### Executing a Non-Query Command
+### Executing SQL commands with parameters
 
-Non-Query commands are used to execute operations like `INSERT`, `UPDATE`, and `DELETE`. They do not return any data but indicate the number of rows affected.
+> 🚨 **Alert**: This class is about what we should NOT do. We must eliminate this type of vulneralibity.
 
-```csharp
-    connection.Open();
-    SqlCommand command = new SqlCommand("UPDATE Employees SET Name = 'John' WHERE Id = 1", connection);
-    int rowsAffected = command.ExecuteNonQuery();
-    Console.WriteLine($"{rowsAffected} row(s) updated.");
-```
-
-### Executing a Scalar Query
-
-Scalar commands return a single value, such as a count, a sum, or a specific column value.
-
-```csharp
-SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM Employees", connection);
-int employeeCount = (int)command.ExecuteScalar();
-Console.WriteLine($"Total employees: {employeeCount}");
-```
-
-### Executing Functions and Stored Procedure
-
-Functions and stored procedures help encapsulate SQL logic for reuse and can return results or perform operations.
-
-```csharp
-SqlCommand command = new SqlCommand("GetEmployeeById", connection);
-command.CommandType = CommandType.StoredProcedure;
-command.Parameters.AddWithValue("@Id", 1);
-using (SqlDataReader reader = command.ExecuteReader())
-{
-    while (reader.Read())
-    {
-        Console.WriteLine($"Name: {reader["Name"]}, Age: {reader["Age"]}");
-    }
-}
-```
-
-## SQL Injection
+### SQL Injection
 
 SQL Injection is a vulnerability where attackers manipulate SQL queries to gain unauthorized access to the database.
 I happens when the parameters for the queries are obtain from user input added to the SQL string by concatenation.
@@ -202,10 +168,9 @@ Always use parameterized queries or stored procedures to protect your applicatio
       SELECT * FROM Users WHERE Username = 'admin' OR '1'='1' AND Password = '123454321'
       ```
 
-### How to prevent SQL Injection
+### Executing SQL commands with parameters (How to prevent SQL Injection)
 
-* Use Parameterized Queries
-  * Parameterized queries ensure that user input is treated as data, not executable SQL.
+  Parameterized queries ensure that user input is treated as data, not executable SQL.
 
   ```csharp
   int supplierStart = 1;
@@ -239,3 +204,41 @@ Always use parameterized queries or stored procedures to protect your applicatio
       }
   }
   ```
+
+### Executing a Non-Query Command
+
+Non-Query commands are used to execute operations like `INSERT`, `UPDATE`, and `DELETE`. They do not return any data but indicate the number of rows affected.
+
+```csharp
+    connection.Open();
+    SqlCommand command = new SqlCommand("UPDATE Employees SET Name = 'John' WHERE Id = 1", connection);
+    int rowsAffected = command.ExecuteNonQuery();
+    Console.WriteLine($"{rowsAffected} row(s) updated.");
+```
+
+### Executing a Scalar Query
+
+Scalar commands return a single value, such as a count, a sum, or a specific column value.
+
+```csharp
+SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM Employees", connection);
+int employeeCount = (int)command.ExecuteScalar();
+Console.WriteLine($"Total employees: {employeeCount}");
+```
+
+### Executing Functions and Stored Procedure
+
+Functions and stored procedures help encapsulate SQL logic for reuse and can return results or perform operations.
+
+```csharp
+SqlCommand command = new SqlCommand("GetEmployeeById", connection);
+command.CommandType = CommandType.StoredProcedure;
+command.Parameters.AddWithValue("@Id", 1);
+using (SqlDataReader reader = command.ExecuteReader())
+{
+    while (reader.Read())
+    {
+        Console.WriteLine($"Name: {reader["Name"]}, Age: {reader["Age"]}");
+    }
+}
+```
