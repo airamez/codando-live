@@ -85,13 +85,79 @@ ADO.NET uses the SqlCommand object to execute any type of SQL statements from qu
   }
   ```
 
-> ⚠️ **Warning**: You need to add the ADO.NET package to your project
+> ⚠️ **Warning**: It is necessary to add this package to the project
 
 ```bash
 dotnet add package Microsoft.Data.SqlClient
 ```
 
-> ⚠️ **Warning**: This `System.Data.SqlClient` was the most common package in the paste, but it is depracated
+> ⚠️ **Warning**: This `System.Data.SqlClient` was the most common package but now it is deprecated
+
+### Defining the Connection String in a configuration file
+
+#### Configuration Files in .NET Core
+
+* [Configuration management](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration) is a critical part of building applications, as it allows developers to manage settings and secrets outside of the source code.
+In .NET Core, configuration is highly flexible, enabling you to load configurations.
+* Configuration in .NET Core allows applications to:
+  * Read settings from various sources (JSON files, environment variables, command-line arguments, etc.).
+  * Adapt to different environments (development, E2E, staging, production).
+* `appsettings.json` file
+  * The `appsettings.json` file is the primary configuration file in .NET Core projects and it is used to store application-level settings in a key-value pair format.
+* Example:
+
+  ```json
+  {
+    "ConnectionStrings": {
+      "PrimaryDatabase": "Server=remotehost1,1433;Database=NorthWind;User Id=sa;Password=Password!",
+      "SecondaryDatabase": "Server=remotehost2,1434;Database=Products;User Id=admin;Password=SecurePassword!"
+    },
+    "WebApis": {
+      "UserApi": "https://api.myapp.com/users",
+      "OrderApi": "https://api.myapp.com/orders",
+      "InventoryApi": "https://api.myapp.com/inventory"
+    },
+    "Constants": {
+      "TimeoutSeconds": 30,
+      "ReadFolderPath": "C:\\MyApp\\InputFiles",
+      "WriteFolderPath": "C:\\MyApp\\OutputFiles"
+    }
+  }
+  ```
+
+* How to use from C#
+
+  ```csharp
+  var configuration = new ConfigurationBuilder()
+      .SetBasePath(AppContext.BaseDirectory)directory
+      .AddJsonFile("appsettingsDEMO.json", optional: false, reloadOnChange: true)
+      .Build();
+
+  string primaryDb = configuration.GetConnectionString("PrimaryDatabase");
+  string secondaryDb = configuration.GetConnectionString("SecondaryDatabase");
+  string userApi = configuration["WebApis:UserApi"];
+  string orderApi = configuration["WebApis:OrderApi"];
+  string inventoryApi = configuration["WebApis:InventoryApi"];
+  int timeout = int.Parse(configuration["Constants:TimeoutSeconds"]);
+  string readFolder = configuration["Constants:ReadFolderPath"];
+  string writeFolder = configuration["Constants:WriteFolderPath"];
+
+  Console.WriteLine($"Primary Database: {primaryDb}");
+  Console.WriteLine($"Secondary Database: {secondaryDb}");
+  Console.WriteLine($"User API: {userApi}");
+  Console.WriteLine($"Order API: {orderApi}");
+  Console.WriteLine($"Inventory API: {inventoryApi}");
+  Console.WriteLine($"Timeout: {timeout} seconds");
+  Console.WriteLine($"Read Folder Path: {readFolder}");
+  Console.WriteLine($"Write Folder Path: {writeFolder}");
+  ```
+
+> ⚠️ **Warning**: It is necessary to add these packages to the project
+
+```bash
+dotnet add package Microsoft.Extensions.Configuration
+dotnet add package Microsoft.Extensions.Configuration.Json
+```
 
 ### Executing SQL commands with parameters
 
@@ -99,16 +165,16 @@ dotnet add package Microsoft.Data.SqlClient
 
 ### SQL Injection
 
-SQL Injection is a vulnerability where attackers manipulate SQL queries to gain unauthorized access to the database.
-I happens when the parameters for the queries are obtain from user input added to the SQL string by concatenation.
+* [SQL Injection](https://www.w3schools.com/sql/sql_injection.asp) is a vulnerability where attackers manipulate SQL queries to gain 'unauthorized' access to the database and execute SQL commands.
+* It happens when the parameters for the queries are obtained from user input and added to the SQL commanda string by concatenation or interpolation.
 
 > 🚨 **Alert**: SQL injection is one of the most common and dangerous security vulnerabilities.
-Always use parameterized queries or stored procedures to protect your applications from this threat.
 
-* Open Web Application Security Project
-  * (<https://owasp.org/>)
-  * [OWASP TOP Ten](https://owasp.org/www-project-top-ten/)
-  * [Injection](https://owasp.org/Top10/A03_2021-Injection/)
+#### Open Web Application Security Project (OWASP)
+
+* <https://owasp.org/>
+* [OWASP TOP Ten](https://owasp.org/www-project-top-ten/)
+* [Injection](https://owasp.org/Top10/A03_2021-Injection/)
 
 ### Examples of SQL Injection
 
@@ -120,17 +186,10 @@ Always use parameterized queries or stored procedures to protect your applicatio
     ```
 
   * If attacker provides: ```"'; DROP TABLE Employees;--"```
-    * from:
 
-      ```sql
-      SELECT * FROM Employees WHERE Name = '1'
-      ```
-
-    * to:
-
-      ```sql
-      SELECT * FROM Employees WHERE Name = ''; DROP TABLE Employees;--'
-      ```
+    ```sql
+    SELECT * FROM Employees WHERE Name = ''; DROP TABLE Employees;--'
+    ```
 
 * Example 2
 
@@ -141,32 +200,18 @@ Always use parameterized queries or stored procedures to protect your applicatio
   * If the attacker provides:
     * username: ```admin'--```
     * password: ```anything```
-    * from:
 
-      ```sql
-      SELECT * FROM Users WHERE Username = 'jose' AND Password = '12345'
-      ```
-
-    * to:
-
-      ```sql
-      SELECT * FROM Users WHERE Username = 'admin' -- AND Password = '12345'
-      ```
+    ```sql
+    SELECT * FROM Users WHERE Username = 'admin' -- AND Password = ''
+    ```
 
   * If the attacker provides:
     * username: ```admin' OR '1'='1```
     * password: ```anything```
-    * from:
 
-      ```sql
-      SELECT * FROM Users WHERE Username = 'jose' AND Password = '12345'
-      ```
-
-    * to:
-
-      ```sql
-      SELECT * FROM Users WHERE Username = 'admin' OR '1'='1' AND Password = '123454321'
-      ```
+    ```sql
+    SELECT * FROM Users WHERE Username = 'admin' OR '1'='1' AND Password = ''
+    ```
 
 ### Executing SQL commands with parameters (How to prevent SQL Injection)
 

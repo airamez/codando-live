@@ -22,12 +22,12 @@ public class SqlInjectionApp
     string query = @$"SELECT ProductID, ProductName, UnitPrice 
                       FROM Products 
                       WHERE ProductID = {productId}";
-    using (SqlConnection connection = new SqlConnection(ConnectionString.Value))
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
     {
       connection.Open();
-      using (SqlCommand command = new SqlCommand(query, connection))
+      using (var command = new SqlCommand(query, connection))
       {
-        using (SqlDataReader reader = command.ExecuteReader())
+        using (var reader = command.ExecuteReader())
         {
           while (reader.Read())
           {
