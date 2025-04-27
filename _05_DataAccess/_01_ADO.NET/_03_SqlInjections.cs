@@ -19,7 +19,7 @@ public class SqlInjectionApp
       }
 
       // What is the attacker type:
-      // 1; UPDATE Products SET UnitPrice = 1 WHERE ProductId = 1; --
+      // 1; UPDATE Products SET UnitPrice = 18 WHERE ProductId = 1; --
 
       PrintProdcutData(productId);
     }
@@ -27,6 +27,7 @@ public class SqlInjectionApp
 
   private static void PrintProdcutData(string productId)
   {
+    // Never do this. This is open to SQL Injection
     string query = @$"SELECT ProductID, ProductName, UnitPrice 
                       FROM Products 
                       WHERE ProductID = {productId}";

@@ -190,7 +190,7 @@ dotnet add package Microsoft.Extensions.Configuration.Json
 ### SQL Injection
 
 * [SQL Injection](https://www.w3schools.com/sql/sql_injection.asp) is a vulnerability where attackers manipulate SQL queries to gain 'unauthorized' access to the database and execute SQL commands.
-* It happens when the parameters for the queries are obtained from user input and added to the SQL commanda string by concatenation or interpolation.
+* It happens when the parameters for the queries are obtained from user input and added to the SQL command as string by concatenation or interpolation.
 
 > 🚨 **Alert**: SQL injection is one of the most common and dangerous security vulnerabilities.
 
@@ -200,19 +200,19 @@ dotnet add package Microsoft.Extensions.Configuration.Json
 * [OWASP TOP Ten](https://owasp.org/www-project-top-ten/)
 * [Injection](https://owasp.org/Top10/A03_2021-Injection/)
 
-### Examples of SQL Injection
+#### Examples of SQL Injection
 
 * Example 1
   * Consider the following insecure code, where the userInput is a content provided by the user:
 
     ```csharp
-    string query = $"SELECT * FROM Employees WHERE Name = '{userInput}'";
+    string query = $"SELECT * FROM Employees WHERE FirstName = '{userInput}'";
     ```
 
-  * If attacker provides: ```"'; DROP TABLE Employees;--"```
+  * If attacker provides: ```"bye bye'; DROP TABLE Employees;--"```
 
     ```sql
-    SELECT * FROM Employees WHERE Name = ''; DROP TABLE Employees;--'
+    SELECT * FROM Employees WHERE FirstName = 'bye bye'; DROP TABLE Employees;--'
     ```
 
 * Example 2
