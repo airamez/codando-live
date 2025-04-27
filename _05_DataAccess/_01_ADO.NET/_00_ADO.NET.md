@@ -125,7 +125,31 @@ In .NET Core, configuration is highly flexible, enabling you to load configurati
   }
   ```
 
-* How to use from C#
+* Configuration file location
+  * The configuration files can be stored anywhere in the file system.
+  * In a console application, usually they are copied to the target folder.
+  * It can be added to the project file (.csproj)
+
+    ```xml
+    <Project Sdk="Microsoft.NET.Sdk">
+      <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <StartupObject>AppSettingsApp</StartupObject>
+      </PropertyGroup>
+      <ItemGroup>
+        ...
+        <None Update="appsettings.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="appsettingsDEMO.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+      </ItemGroup>
+    </Project>
+    ```
+
+* How to read (load or build) the configurations from C#
 
   ```csharp
   var configuration = new ConfigurationBuilder()
