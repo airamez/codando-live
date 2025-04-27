@@ -8,13 +8,21 @@ public class SqlInjectionApp
 
   public static void Main(string[] args)
   {
-    Console.Write("Product ID: ");
-    string productId = Console.ReadLine();
+    while (true)
+    {
+      Console.Write("Product ID: ");
+      string productId = Console.ReadLine();
 
-    // What is the attacker type:
-    // 1; UPDATE Products SET UnitPrice = 1 WHERE ProductId = 1; --
+      if (string.IsNullOrWhiteSpace(productId))
+      {
+        break;
+      }
 
-    PrintProdcutData(productId);
+      // What is the attacker type:
+      // 1; UPDATE Products SET UnitPrice = 1 WHERE ProductId = 1; --
+
+      PrintProdcutData(productId);
+    }
   }
 
   private static void PrintProdcutData(string productId)

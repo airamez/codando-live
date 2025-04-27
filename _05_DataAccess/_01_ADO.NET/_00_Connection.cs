@@ -5,13 +5,13 @@ namespace ADO.NET;
 
 public class ConnectionString
 {
+  private static IConfigurationRoot Configurations => new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .Build();
+
   public static string GetConnectionString()
   {
-    var configuration = new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json")
-        .Build();
-    var connectionString = configuration.GetConnectionString("MySQLConnection");
-    return connectionString;
+    return Configurations.GetConnectionString("MySQLConnection");
   }
 }
