@@ -21,12 +21,12 @@ public class SqlInjectionApp
       // What if the attacker type:
       // 1; UPDATE Products SET UnitPrice = 18 WHERE ProductId = 1; --
 
-      PrintProdcutDataWRONG(productId);
-      // PrintProdcutData(productId);
+      PrintProductDataWRONG(productId);
+      //PrintProductData(productId);
     }
   }
 
-  private static void PrintProdcutDataWRONG(string productId)
+  private static void PrintProductDataWRONG(string productId)
   {
     // Never do this. This is open to SQL Injection
     string query = @$"SELECT ProductID, ProductName, UnitPrice 
@@ -50,7 +50,7 @@ public class SqlInjectionApp
     }
   }
 
-  private static void PrintProdcutData(string productId)
+  private static void PrintProductData(string productId)
   {
     try
     {
