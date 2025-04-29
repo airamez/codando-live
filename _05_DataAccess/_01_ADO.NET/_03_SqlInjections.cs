@@ -50,7 +50,7 @@ public class SqlInjectionApp
     }
   }
 
-  private static void PrintProductData(string productId)
+  public static void PrintProductData(string productId)
   {
     try
     {

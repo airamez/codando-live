@@ -276,14 +276,76 @@ dotnet add package Microsoft.Extensions.Configuration.Json
 
 ### Executing a Non-Query Command
 
-Non-Query commands are used to execute operations like `INSERT`, `UPDATE`, and `DELETE`. They do not return any data but indicate the number of rows affected.
+Non-Query commands are used to execute operations like `INSERT`, `UPDATE`, and `DELETE`.
+They do not return any data but indicate the number of rows affected.
 
-```csharp
-    connection.Open();
-    SqlCommand command = new SqlCommand("UPDATE Employees SET Name = 'John' WHERE Id = 1", connection);
-    int rowsAffected = command.ExecuteNonQuery();
-    Console.WriteLine($"{rowsAffected} row(s) updated.");
-```
+* Example 1: Update product price based on a percentage
+
+  ```csharp
+  public static bool UpdateProductPrice(int productId, double percentage)
+  {
+    string query = @"UPDATE Products
+                    SET UnitPrice = UnitPrice * (1 + @UnitPrice  / 100)
+                    WHERE ProductID = @productId";
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    {
+      connection.Open();
+      using (var command = new SqlCommand(query, connection))
+      {
+        command.Parameters.AddWithValue("@productId", productId);
+        command.Parameters.AddWithValue("@Percentage", percentage);
+        return command.ExecuteNonQuery() != 0;
+      }
+    }
+  }
+  ```
+
+* Example 2: Update all products price based on a percentage
+
+  ```csharp
+  public static int UpdateProductPrices(double percentage)
+  {
+    string query = @"UPDATE Products
+                      SET UnitPrice = UnitPrice * (1 + @Percentage  / 100)";
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    {
+      connection.Open();
+      using (var command = new SqlCommand(query, connection))
+      {
+        command.Parameters.AddWithValue("@Percentage", percentage);
+        return command.ExecuteNonQuery();
+      }
+    }
+  }
+  ```
+
+* Example 3: Update all or a specific product price based on a percentage
+
+  ```csharp
+  public static int UpdatePrices(double percentage, int? productId = null)
+  {
+    StringBuilder query = new StringBuilder();
+    query.Append(@"UPDATE Products
+                  SET UnitPrice = UnitPrice * (1 + @Percentage  / 100)");
+    if (productId.HasValue)
+    {
+      query.Append(" WHERE ProductID = @productId");
+    }
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    {
+      connection.Open();
+      using (var command = new SqlCommand(query.ToString(), connection))
+      {
+        command.Parameters.AddWithValue("@Percentage", percentage);
+        if (productId.HasValue)
+        {
+          command.Parameters.AddWithValue("@productId", productId);
+        }
+        return command.ExecuteNonQuery();
+      }
+    }
+  }
+  ```
 
 ### Executing a Scalar Query
 
