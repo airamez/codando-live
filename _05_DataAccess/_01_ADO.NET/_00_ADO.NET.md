@@ -381,19 +381,52 @@ The command.ExecuteScalar returns the fist column of the first row, or DBNull.Va
   }
   ```
 
-### Executing Functions and Stored Procedure
+### Executing Stored Procedure
 
-Functions and stored procedures help encapsulate SQL logic for reuse and can return results or perform operations.
+To execute a Stored Procedure is necessary to set the command type to `CommandType.StoredProcedure`
 
-```csharp
-SqlCommand command = new SqlCommand("GetEmployeeById", connection);
-command.CommandType = CommandType.StoredProcedure;
-command.Parameters.AddWithValue("@Id", 1);
-using (SqlDataReader reader = command.ExecuteReader())
-{
-    while (reader.Read())
+* Example: Executing the `Sales by Year` stored procedure
+
+  ```csharp
+  public class SalesByYearResult
+  {
+    public DateTime ShippedDate { get; set; }
+    public int OrderID { get; set; }
+    public decimal Subtotal { get; set; }
+    public int Year { get; set; }
+    public override string ToString()
+      => $" | {Year} | {ShippedDate:MM-dd} | {OrderID} | {Subtotal,8:N2}";
+  }
+
+  public class DatabaseHelper
+  {
+    public static List<SalesByYearResult> ExecuteSalesByYearProcedure(DateTime beginningDate, DateTime endingDate)
     {
-        Console.WriteLine($"Name: {reader["Name"]}, Age: {reader["Age"]}");
+      var results = new List<SalesByYearResult>();
+      using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+      {
+        connection.Open();
+        using (SqlCommand command = new SqlCommand("[dbo].[Sales by Year]", connection))
+        {
+          command.CommandType = CommandType.StoredProcedure;
+          command.Parameters.AddWithValue("@Beginning_Date", beginningDate);
+          command.Parameters.AddWithValue("@Ending_Date", endingDate);
+          using (SqlDataReader reader = command.ExecuteReader())
+          {
+            while (reader.Read())
+            {
+              results.Add(new SalesByYearResult
+              {
+                ShippedDate = reader.GetDateTime("ShippedDate"),
+                OrderID = reader.GetInt32("OrderID"),
+                Subtotal = reader.GetDecimal("Subtotal"),
+                Year = int.Parse(reader.GetString("Year"))
+              });
+            }
+          }
+        }
+      }
+      return results;
     }
-}
-```
+  }
+  ```
