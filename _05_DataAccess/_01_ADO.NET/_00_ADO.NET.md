@@ -349,13 +349,37 @@ They do not return any data but indicate the number of rows affected.
 
 ### Executing a Scalar Query
 
-Scalar commands return a single value, such as a count, a sum, or a specific column value.
+Scalar commands return a single value, such as COUNT, SUM, MIN, MAX, etc or a specific column value.
+The command.ExecuteScalar returns the fist column of the first row, or DBNull.Value if empty.
 
-```csharp
-SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM Employees", connection);
-int employeeCount = (int)command.ExecuteScalar();
-Console.WriteLine($"Total employees: {employeeCount}");
-```
+* Example: Get the total amount of all orders for a customer
+
+  ```csharp
+  public static decimal? GetCustomerOrdesTotal(string customerId)
+  {
+    string query = @"SELECT SUM(od.Quantity * od.UnitPrice)
+                        FROM [Order Details] od
+                        INNER JOIN Orders o on o.OrderID = od.OrderID
+                        WHERE o.CustomerID = @customerID";
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    {
+      connection.Open();
+      using (var command = new SqlCommand(query, connection))
+      {
+        command.Parameters.AddWithValue("@customerId", customerId);
+        var result = command.ExecuteScalar();
+        if (result == DBNull.Value)
+        {
+          return null;
+        }
+        else
+        {
+          return (decimal)result;
+        }
+      }
+    }
+  }
+  ```
 
 ### Executing Functions and Stored Procedure
 
