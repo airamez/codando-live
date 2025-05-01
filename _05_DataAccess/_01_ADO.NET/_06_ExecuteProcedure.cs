@@ -13,7 +13,7 @@ public class ExecuteProcedureApp
   public static void Main(string[] args)
   {
     DateTime startDate = DateTime.Parse("1990-01-01");
-    DateTime endDate = DateTime.Parse("2024-12-31");
+    DateTime endDate = DateTime.Parse("2025-12-31");
 
     var salesData = DatabaseHelper.ExecuteSalesByYearProcedure(startDate, endDate);
 
@@ -31,7 +31,7 @@ public class ExecuteProcedureApp
     public decimal Subtotal { get; set; }
     public int Year { get; set; }
     public override string ToString()
-      => $" | {Year} | {ShippedDate:MM-dd} | {OrderID} | {Subtotal,8:N2}";
+      => $" | {Year} | {ShippedDate:yyyy-MM-dd} | {OrderID} | {Subtotal,8:N2}";
   }
 
   public class DatabaseHelper
