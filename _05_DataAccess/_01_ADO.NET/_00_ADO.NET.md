@@ -433,7 +433,7 @@ To execute a Stored Procedure is necessary to set the command type to `CommandTy
 
 ### Transactions
 
-ADO.NET provides transaction support to ensure data integrity when performing multiple related operations. Transactions allow committing all changes if successful or rolling back in case of failure.
+ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/local-transactions) to ensure data integrity when performing multiple related operations. Transactions allow committing all changes if successful or rolling back in case of failure.
 
 > 🚨 **Alert**: A **single connection instance** must be used for all SQL commands participating in the transaction.
 
@@ -449,7 +449,7 @@ ADO.NET provides transaction support to ensure data integrity when performing mu
   * **Supports distributed transactions:** Can handle multiple database connections.
   * **Encapsulates transaction logic:** Makes code cleaner and easier to maintain.
 
-* Examples prep
+* Examples SQL prep
 
   ```sql
   CREATE TABLE Account (

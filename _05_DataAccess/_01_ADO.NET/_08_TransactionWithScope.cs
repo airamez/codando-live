@@ -21,7 +21,7 @@ public class TransactionWithScopeApp
         Console.Write("  To Account ID: ");
         int targetId = int.Parse(Console.ReadLine());
 
-        Console.Write("Amount: ");
+        Console.Write("         Amount: ");
         decimal amount = decimal.Parse(Console.ReadLine());
 
         bankService.Transfer(sourceId, targetId, amount);

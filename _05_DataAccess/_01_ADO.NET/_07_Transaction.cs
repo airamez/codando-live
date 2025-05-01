@@ -11,18 +11,19 @@ public class TransactionApp
     BankAccountService bankService = new BankAccountService();
     while (true)
     {
-      // Note: Remember to show how a hacker could create money using this design
-
+      /*
+       * Note: Remember to show how a hacker could create money using this design
+       */
       try
       {
         Console.Write("From Account ID: ");
         int sourceId = int.Parse(Console.ReadLine());
         if (sourceId == 0) break;
 
-        Console.Write("To Account ID: ");
+        Console.Write("  To Account ID: ");
         int targetId = int.Parse(Console.ReadLine());
 
-        Console.Write("Amount: ");
+        Console.Write("       Amount: ");
         decimal amount = decimal.Parse(Console.ReadLine());
 
         bankService.Transfer(sourceId, targetId, amount);
@@ -37,9 +38,6 @@ public class TransactionApp
 
 public class BankAccountService
 {
-  public BankAccountService()
-  {
-  }
 
   public void Debit(int accountId, decimal amount,
                     SqlConnection connection,
