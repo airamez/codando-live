@@ -430,3 +430,154 @@ To execute a Stored Procedure is necessary to set the command type to `CommandTy
     }
   }
   ```
+
+### Transactions
+
+ADO.NET provides transaction support to ensure data integrity when performing multiple related operations. Transactions allow committing all changes if successful or rolling back in case of failure.
+
+> 🚨 **Alert**: A **single connection instance** must be used for all SQL commands participating in the transaction.
+
+#### TransactionScope
+
+[TransactionScope](https://learn.microsoft.com/en-us/dotnet/api/system.transactions.transactionscope?view=net-9.0) is a powerful feature in ADO.NET that provides an easy way to manage transactions across multiple operations. It ensures **atomicity**, meaning all operations within the scope either complete successfully or none take effect.
+
+> 🚨 **Alert**: **Transaction Scope** allow distributed transaction so multiple connections could be used.
+
+* Why Use TransactionScope?
+  * **Automatic rollback on failure:** If an exception occurs, all changes are reverted automatically.
+  * **Simplifies transaction management:** No need to manually commit or roll back transactions.
+  * **Supports distributed transactions:** Can handle multiple database connections.
+  * **Encapsulates transaction logic:** Makes code cleaner and easier to maintain.
+
+* Examples prep
+
+  ```sql
+  CREATE TABLE Account (
+      id INT PRIMARY KEY,
+      amount DECIMAL(18,2) NOT NULL
+  );
+
+  INSERT INTO Account (id, amount) values 
+    (1, 1000),
+    (2, 1000),
+    (3, 1000)
+
+  SELECT * FROM Account WITH(NOLOCK)
+  ```
+
+* Example 1: Bank Account Transfer
+
+  ```csharp
+  public void Transfer(int sourceId, int targetId, decimal amount)
+  {
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    {
+      connection.Open();
+      using (SqlTransaction transaction = connection.BeginTransaction())
+      {
+        try
+        {
+          Debit(sourceId, amount, connection, transaction);
+
+          // Simulating a connection issue
+          Random random = new Random();
+          if (random.Next(4) == 3)
+          {
+            throw new Exception("Connection Lost");
+          }
+
+          Credit(targetId, amount, connection, transaction);
+          transaction.Commit();
+          Console.WriteLine("Transfer completed");
+        }
+        catch (Exception ex)
+        {
+          Console.WriteLine(ex.Message);
+          transaction.Rollback();
+        }
+      }
+    }
+  }
+
+  public void Debit(int accountId, decimal amount,
+                    SqlConnection connection,
+                    SqlTransaction transaction)
+  {
+    string sql = "UPDATE Account SET amount = amount - @Amount WHERE id = @AccountId";
+    using (SqlCommand command = new SqlCommand(sql, connection, transaction))
+    {
+      command.Parameters.AddWithValue("@Amount", amount);
+      command.Parameters.AddWithValue("@AccountId", accountId);
+      command.ExecuteNonQuery();
+    }
+  }
+
+  public void Credit(int accountId, decimal amount,
+                    SqlConnection connection,
+                    SqlTransaction transaction)
+  {
+    string sql = "UPDATE Account SET amount = amount + @Amount WHERE id = @AccountId";
+    using (SqlCommand command = new SqlCommand(sql, connection, transaction))
+    {
+      command.Parameters.AddWithValue("@Amount", amount);
+      command.Parameters.AddWithValue("@AccountId", accountId);
+      command.ExecuteNonQuery();
+    }
+  }
+  ```
+
+* Example 2: Bank Account Transfer with TransactionScope
+
+  ```csharp
+  public void Transfer(int sourceId, int targetId, decimal amount)
+  {
+    using (var transactionScope = new TransactionScope())
+    {
+      using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+      {
+        connection.Open();
+        try
+        {
+          Debit(sourceId, amount, connection);
+
+          // Simulating a connection issue
+          Random random = new Random();
+          if (random.Next(4) == 3)
+          {
+            throw new Exception("Connection Lost");
+          }
+
+          Credit(targetId, amount, connection);
+          transactionScope.Complete();
+          Console.WriteLine("Transfer completed!");
+        }
+        catch (Exception ex)
+        {
+          Console.WriteLine(ex.Message);
+        }
+      }
+    }
+  }
+  
+  public void Debit(int accountId, decimal amount, SqlConnection connection)
+  {
+    string sql = "UPDATE Account SET amount = amount - @Amount WHERE id = @AccountId";
+    using (SqlCommand command = new SqlCommand(sql, connection))
+    {
+      command.Parameters.AddWithValue("@Amount", amount);
+      command.Parameters.AddWithValue("@AccountId", accountId);
+      command.ExecuteNonQuery();
+    }
+  }
+
+  public void Credit(int accountId, decimal amount, SqlConnection connection)
+  {
+    string sql = "UPDATE Account SET amount = amount + @Amount WHERE id = @AccountId";
+    using (SqlCommand command = new SqlCommand(sql, connection))
+    {
+      command.Parameters.AddWithValue("@Amount", amount);
+      command.Parameters.AddWithValue("@AccountId", accountId);
+      command.ExecuteNonQuery();
+    }
+  }
+  ```
