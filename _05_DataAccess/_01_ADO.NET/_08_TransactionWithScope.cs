@@ -1,4 +1,4 @@
-// https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/local-transactions
+// https://learn.microsoft.com/en-us/dotnet/api/system.transactions.transactionscope?view=net-9.0
 using System;
 using System.Transactions;
 using Microsoft.Data.SqlClient;
@@ -9,7 +9,12 @@ public class TransactionWithScopeApp
 {
   public static void Main(string[] args)
   {
-    BankAccountServiceWithScope bankService = new BankAccountServiceWithScope();
+    BankAccountServiceWithScope accountService = new BankAccountServiceWithScope();
+
+    // Callind Debit and Credit directly
+    accountService.Credit(1, 100);
+    accountService.Debit(2, 200);
+
     while (true)
     {
       try
@@ -24,7 +29,7 @@ public class TransactionWithScopeApp
         Console.Write("         Amount: ");
         decimal amount = decimal.Parse(Console.ReadLine());
 
-        bankService.Transfer(sourceId, targetId, amount);
+        accountService.Transfer(sourceId, targetId, amount);
       }
       catch (Exception ex)
       {
@@ -42,13 +47,12 @@ public class BankAccountServiceWithScope
     {
       using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
       {
-        connection.Open();
         try
         {
           Debit(sourceId, amount, connection);
 
           // Simulating a connection issue
-          Random random = new Random();
+          Random random = new();
           if (random.Next(4) == 3)
           {
             throw new Exception("Connection Lost");
@@ -61,29 +65,66 @@ public class BankAccountServiceWithScope
         catch (Exception ex)
         {
           Console.WriteLine(ex.Message);
+          throw;
         }
       }
     }
   }
-  public void Debit(int accountId, decimal amount, SqlConnection connection)
+
+  public void Debit(int accountId, decimal amount, SqlConnection connection = null)
   {
-    string sql = "UPDATE Account SET amount = amount - @Amount WHERE id = @AccountId";
-    using (SqlCommand command = new SqlCommand(sql, connection))
+    bool shouldClose = false;
+    if (connection == null)
     {
-      command.Parameters.AddWithValue("@Amount", amount);
-      command.Parameters.AddWithValue("@AccountId", accountId);
-      command.ExecuteNonQuery();
+      connection = new SqlConnection(ConnectionString.GetConnectionString());
+      connection.Open();
+      shouldClose = true;
+    }
+    try
+    {
+      string sql = "UPDATE Account SET amount = amount - @Amount WHERE id = @AccountId";
+      using (SqlCommand command = new SqlCommand(sql, connection))
+      {
+        command.Parameters.AddWithValue("@Amount", amount);
+        command.Parameters.AddWithValue("@AccountId", accountId);
+        command.ExecuteNonQuery();
+      }
+    }
+    finally
+    {
+      if (shouldClose)
+      {
+        connection.Close();
+      }
     }
   }
 
-  public void Credit(int accountId, decimal amount, SqlConnection connection)
+  public void Credit(int accountId, decimal amount, SqlConnection connection = null)
   {
-    string sql = "UPDATE Account SET amount = amount + @Amount WHERE id = @AccountId";
-    using (SqlCommand command = new SqlCommand(sql, connection))
+    bool shouldClose = false;
+    if (connection == null)
     {
-      command.Parameters.AddWithValue("@Amount", amount);
-      command.Parameters.AddWithValue("@AccountId", accountId);
-      command.ExecuteNonQuery();
+      connection = new SqlConnection(ConnectionString.GetConnectionString());
+      connection.Open();
+      shouldClose = true;
+    }
+    try
+    {
+      string sql = "UPDATE Account SET amount = amount + @Amount WHERE id = @AccountId";
+      using (SqlCommand command = new SqlCommand(sql, connection))
+      {
+        command.Parameters.AddWithValue("@Amount", amount);
+        command.Parameters.AddWithValue("@AccountId", accountId);
+        command.ExecuteNonQuery();
+
+      }
+    }
+    finally
+    {
+      if (shouldClose)
+      {
+        connection.Close();
+      }
     }
   }
 }
