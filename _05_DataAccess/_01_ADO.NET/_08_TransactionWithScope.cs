@@ -11,7 +11,7 @@ public class TransactionWithScopeApp
   {
     BankAccountServiceWithScope accountService = new BankAccountServiceWithScope();
 
-    // Callind Debit and Credit directly
+    // Calling Debit and Credit directly
     accountService.Credit(1, 100);
     accountService.Debit(2, 200);
 
@@ -73,13 +73,7 @@ public class BankAccountServiceWithScope
 
   public void Debit(int accountId, decimal amount, SqlConnection connection = null)
   {
-    bool shouldClose = false;
-    if (connection == null)
-    {
-      connection = new SqlConnection(ConnectionString.GetConnectionString());
-      connection.Open();
-      shouldClose = true;
-    }
+    bool shouldClose = CheckConnection(ref connection);
     try
     {
       string sql = "UPDATE Account SET amount = amount - @Amount WHERE id = @AccountId";
@@ -101,13 +95,7 @@ public class BankAccountServiceWithScope
 
   public void Credit(int accountId, decimal amount, SqlConnection connection = null)
   {
-    bool shouldClose = false;
-    if (connection == null)
-    {
-      connection = new SqlConnection(ConnectionString.GetConnectionString());
-      connection.Open();
-      shouldClose = true;
-    }
+    bool shouldClose = CheckConnection(ref connection);
     try
     {
       string sql = "UPDATE Account SET amount = amount + @Amount WHERE id = @AccountId";
@@ -126,5 +114,17 @@ public class BankAccountServiceWithScope
         connection.Close();
       }
     }
+  }
+
+  private static bool CheckConnection(ref SqlConnection connection)
+  {
+    bool shouldClose = false;
+    if (connection == null)
+    {
+      connection = new SqlConnection(ConnectionString.GetConnectionString());
+      connection.Open();
+      shouldClose = true;
+    }
+    return shouldClose;
   }
 }
