@@ -526,7 +526,7 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
   }
   ```
 
-  > 🚨 **RED ALERT**: The example above has a serious security issue: Allow an attacker to call the Transfer, Credit or Debit methods with account ids that don't exis, and this will cause the operation to 'create' or 'destoy' money.
+  > 🚨 **RED ALERT**: The example above has a serious security issue: Allow an attacker to call the Transfer, Credit or Debit methods with account ids that don't exis, and this will cause the operation to 'create' or 'destroy' money.
 
   * The solution is to check if the update commands on Credit and Debit methods affected one line: ```if (command.ExecuteNonQuery() == 0)``` and throw an exception if not.
   * This is a good example how important is to pay great attention to security when designing software.

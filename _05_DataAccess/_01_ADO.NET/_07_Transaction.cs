@@ -84,7 +84,7 @@ public class BankAccountService
         {
           Debit(sourceId, amount, connection, transaction);
 
-          // Simulating a connection issue
+          //Simulating a connection issue
           Random random = new Random();
           if (random.Next(4) == 3)
           {
