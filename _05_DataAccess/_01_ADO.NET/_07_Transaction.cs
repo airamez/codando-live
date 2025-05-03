@@ -48,6 +48,7 @@ public class BankAccountService
     {
       command.Parameters.AddWithValue("@Amount", amount);
       command.Parameters.AddWithValue("@AccountId", accountId);
+      // This fixes the security issue when account id does not exist
       if (command.ExecuteNonQuery() == 0)
       {
         throw new Exception($"Account ID not found: {accountId}");
@@ -64,6 +65,7 @@ public class BankAccountService
     {
       command.Parameters.AddWithValue("@Amount", amount);
       command.Parameters.AddWithValue("@AccountId", accountId);
+      // This closes the security issue when account id does not exist
       if (command.ExecuteNonQuery() == 0)
       {
         throw new Exception($"Account ID not found: {accountId}");
@@ -93,10 +95,10 @@ public class BankAccountService
           transaction.Commit();
           Console.WriteLine("Transfer completed");
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-          Console.WriteLine(ex.Message);
           transaction.Rollback();
+          throw;
         }
       }
     }

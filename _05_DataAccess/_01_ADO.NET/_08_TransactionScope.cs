@@ -5,7 +5,7 @@ using Microsoft.Data.SqlClient;
 
 namespace ADO.NET.DataAcces;
 
-public class TransactionWithScopeApp
+public class TransactionScopeApp
 {
   public static void Main(string[] args)
   {
@@ -14,6 +14,15 @@ public class TransactionWithScopeApp
     // Calling Debit and Credit directly
     accountService.Credit(1, 100);
     accountService.Debit(2, 200);
+
+    try
+    {
+      accountService.Credit(99, 200);
+    }
+    catch (Exception ex)
+    {
+      Console.WriteLine(ex.Message);
+    }
 
     while (true)
     {
@@ -47,26 +56,18 @@ public class BankAccountServiceWithScope
     {
       using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
       {
-        try
-        {
-          Debit(sourceId, amount, connection);
+        Debit(sourceId, amount, connection);
 
-          // Simulating a connection issue
-          Random random = new();
-          if (random.Next(4) == 3)
-          {
-            throw new Exception("Connection Lost");
-          }
-
-          Credit(targetId, amount, connection);
-          transactionScope.Complete();
-          Console.WriteLine("Transfer completed!");
-        }
-        catch (Exception ex)
+        // Simulating a connection issue
+        Random random = new();
+        if (random.Next(4) == 3)
         {
-          Console.WriteLine(ex.Message);
-          throw;
+          throw new Exception("Connection Lost");
         }
+
+        Credit(targetId, amount, connection);
+        transactionScope.Complete();
+        Console.WriteLine("Transfer completed!");
       }
     }
   }
@@ -81,7 +82,10 @@ public class BankAccountServiceWithScope
       {
         command.Parameters.AddWithValue("@Amount", amount);
         command.Parameters.AddWithValue("@AccountId", accountId);
-        command.ExecuteNonQuery();
+        if (command.ExecuteNonQuery() == 0)
+        {
+          throw new Exception($"Account ID not found: {accountId}");
+        }
       }
     }
     finally
@@ -103,8 +107,10 @@ public class BankAccountServiceWithScope
       {
         command.Parameters.AddWithValue("@Amount", amount);
         command.Parameters.AddWithValue("@AccountId", accountId);
-        command.ExecuteNonQuery();
-
+        if (command.ExecuteNonQuery() == 0)
+        {
+          throw new Exception($"Account ID not found: {accountId}");
+        }
       }
     }
     finally
@@ -118,13 +124,15 @@ public class BankAccountServiceWithScope
 
   private static bool CheckConnection(ref SqlConnection connection)
   {
-    bool shouldClose = false;
     if (connection == null)
     {
       connection = new SqlConnection(ConnectionString.GetConnectionString());
-      connection.Open();
-      shouldClose = true;
     }
-    return shouldClose;
+    if (connection.State == System.Data.ConnectionState.Closed)
+    {
+      connection.Open();
+      return true;
+    }
+    return false;
   }
 }

@@ -526,6 +526,47 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
   }
   ```
 
+  > 🚨 **RED ALERT**: The example above has a serious security issue: Allow an attacker to call the Transfer, Credit or Debit methods with account ids that don't exis, and this will cause the operation to 'create' or 'destoy' money.
+
+  * The solution is to check if the update commands on Credit and Debit methods affected one line: ```if (command.ExecuteNonQuery() == 0)``` and throw an exception if not.
+  * This is a good example how important is to pay great attention to security when designing software.
+
+  ```csharp
+    public void Debit(int accountId, decimal amount,
+                    SqlConnection connection,
+                    SqlTransaction transaction)
+  {
+    string sql = "UPDATE Account SET amount = amount - @Amount WHERE id = @AccountId";
+    using (SqlCommand command = new SqlCommand(sql, connection, transaction))
+    {
+      command.Parameters.AddWithValue("@Amount", amount);
+      command.Parameters.AddWithValue("@AccountId", accountId);
+      // This fixes the security issue when account id does not exist
+      if (command.ExecuteNonQuery() == 0)
+      {
+        throw new Exception($"Account ID not found: {accountId}");
+      }
+    }
+  }
+
+  public void Credit(int accountId, decimal amount,
+                    SqlConnection connection,
+                    SqlTransaction transaction)
+  {
+    string sql = "UPDATE Account SET amount = amount + @Amount WHERE id = @AccountId";
+    using (SqlCommand command = new SqlCommand(sql, connection, transaction))
+    {
+      command.Parameters.AddWithValue("@Amount", amount);
+      command.Parameters.AddWithValue("@AccountId", accountId);
+      // This closes the security issue when account id does not exist
+      if (command.ExecuteNonQuery() == 0)
+      {
+        throw new Exception($"Account ID not found: {accountId}");
+      }
+    }
+  }
+  ```
+
 * Example 2: Bank Account Transfer with TransactionScope
 
   ```csharp
@@ -535,49 +576,83 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
     {
       using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
       {
-        connection.Open();
-        try
-        {
-          Debit(sourceId, amount, connection);
+        Debit(sourceId, amount, connection);
 
-          // Simulating a connection issue
-          Random random = new Random();
-          if (random.Next(4) == 3)
-          {
-            throw new Exception("Connection Lost");
-          }
-
-          Credit(targetId, amount, connection);
-          transactionScope.Complete();
-          Console.WriteLine("Transfer completed!");
-        }
-        catch (Exception ex)
+        // Simulating a connection issue
+        Random random = new();
+        if (random.Next(4) == 3)
         {
-          Console.WriteLine(ex.Message);
+          throw new Exception("Connection Lost");
         }
+
+        Credit(targetId, amount, connection);
+        transactionScope.Complete();
+        Console.WriteLine("Transfer completed!");
       }
     }
   }
-  
-  public void Debit(int accountId, decimal amount, SqlConnection connection)
+
+  public void Debit(int accountId, decimal amount, SqlConnection connection = null)
   {
-    string sql = "UPDATE Account SET amount = amount - @Amount WHERE id = @AccountId";
-    using (SqlCommand command = new SqlCommand(sql, connection))
+    bool shouldClose = CheckConnection(ref connection);
+    try
     {
-      command.Parameters.AddWithValue("@Amount", amount);
-      command.Parameters.AddWithValue("@AccountId", accountId);
-      command.ExecuteNonQuery();
+      string sql = "UPDATE Account SET amount = amount - @Amount WHERE id = @AccountId";
+      using (SqlCommand command = new SqlCommand(sql, connection))
+      {
+        command.Parameters.AddWithValue("@Amount", amount);
+        command.Parameters.AddWithValue("@AccountId", accountId);
+        if (command.ExecuteNonQuery() == 0)
+        {
+          throw new Exception($"Account ID not found: {accountId}");
+        }
+      }
+    }
+    finally
+    {
+      if (shouldClose)
+      {
+        connection.Close();
+      }
     }
   }
 
-  public void Credit(int accountId, decimal amount, SqlConnection connection)
+  public void Credit(int accountId, decimal amount, SqlConnection connection = null)
   {
-    string sql = "UPDATE Account SET amount = amount + @Amount WHERE id = @AccountId";
-    using (SqlCommand command = new SqlCommand(sql, connection))
+    bool shouldClose = CheckConnection(ref connection);
+    try
     {
-      command.Parameters.AddWithValue("@Amount", amount);
-      command.Parameters.AddWithValue("@AccountId", accountId);
-      command.ExecuteNonQuery();
+      string sql = "UPDATE Account SET amount = amount + @Amount WHERE id = @AccountId";
+      using (SqlCommand command = new SqlCommand(sql, connection))
+      {
+        command.Parameters.AddWithValue("@Amount", amount);
+        command.Parameters.AddWithValue("@AccountId", accountId);
+        if (command.ExecuteNonQuery() == 0)
+        {
+          throw new Exception($"Account ID not found: {accountId}");
+        }
+      }
     }
+    finally
+    {
+      if (shouldClose)
+      {
+        connection.Close();
+      }
+    }
+  }
+
+  private static bool CheckConnection(ref SqlConnection connection)
+  {
+    if (connection == null)
+    {
+      connection = new SqlConnection(ConnectionString.GetConnectionString());
+    }
+    if (connection.State == System.Data.ConnectionState.Closed)
+    {
+      connection.Open();
+      return true;
+    }
+    return false;
   }
   ```
