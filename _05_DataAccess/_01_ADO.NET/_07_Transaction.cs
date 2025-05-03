@@ -48,7 +48,10 @@ public class BankAccountService
     {
       command.Parameters.AddWithValue("@Amount", amount);
       command.Parameters.AddWithValue("@AccountId", accountId);
-      command.ExecuteNonQuery();
+      if (command.ExecuteNonQuery() == 0)
+      {
+        throw new Exception($"Account ID not found: {accountId}");
+      }
     }
   }
 
@@ -61,7 +64,10 @@ public class BankAccountService
     {
       command.Parameters.AddWithValue("@Amount", amount);
       command.Parameters.AddWithValue("@AccountId", accountId);
-      command.ExecuteNonQuery();
+      if (command.ExecuteNonQuery() == 0)
+      {
+        throw new Exception($"Account ID not found: {accountId}");
+      }
     }
   }
 
