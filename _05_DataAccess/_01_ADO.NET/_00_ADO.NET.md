@@ -656,3 +656,89 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
     return false;
   }
   ```
+
+#### Using Store Procedure to Encapsulate Operation with Transactional behaviour
+
+* If scaling is not a string requirement, the usage of stored procedure is the simplest, safest and re-usable way to encapsulate multiple SQL command to accomplish a Task (funcionality or operations).
+
+* A stored procedure can be called by any programming language or service product/technoly.
+
+* Stored prodedure for transfer
+
+  ```sql
+  CREATE PROCEDURE [dbo].[TransferAmount]
+      @SourceAccountId INT,
+      @TargetAccountId INT,
+      @Amount DECIMAL(18,2)
+  AS
+  BEGIN
+      SET NOCOUNT ON;
+      SET XACT_ABORT ON;
+
+      BEGIN TRY
+          BEGIN TRANSACTION;
+
+          IF NOT EXISTS (SELECT 1 FROM Account WHERE id = @SourceAccountId)
+          BEGIN
+              RAISERROR('Source account does not exist.', 16, 1);
+              RETURN;
+          END
+          
+          IF NOT EXISTS (SELECT 1 FROM Account WHERE id = @TargetAccountId)
+          BEGIN
+              RAISERROR('Target account does not exist.', 16, 1);
+              RETURN;
+          END
+
+          DECLARE @SourceBalance DECIMAL(18,2);
+          SELECT @SourceBalance = amount FROM Account WHERE id = @SourceAccountId;
+
+          IF @SourceBalance < @Amount
+          BEGIN
+              RAISERROR('Insufficient balance in source account.', 16, 1);
+              RETURN;
+          END
+
+          UPDATE Account
+            SET amount = amount - @Amount
+            WHERE id = @SourceAccountId;
+
+          UPDATE Account
+            SET amount = amount + @Amount
+            WHERE id = @TargetAccountId;
+
+          -- Commit transaction
+          COMMIT TRANSACTION;
+      END TRY
+      BEGIN CATCH
+          IF @@TRANCOUNT > 0
+          BEGIN
+              ROLLBACK TRANSACTION;
+          END
+          
+          DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+          DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+          RAISERROR(@ErrorMessage, @ErrorSeverity, 1);
+      END CATCH
+  END;
+  ```
+
+* Calling the stored procedure
+
+  ```csharp
+  public void Transfer(int sourceId, int targetId, decimal amount)
+  {
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    {
+      connection.Open();
+      using (SqlCommand command = new SqlCommand("[dbo].[TransferAmount]", connection))
+      {
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.AddWithValue("@SourceAccountId", sourceId);
+        command.Parameters.AddWithValue("@TargetAccountId", targetId);
+        command.Parameters.AddWithValue("@Amount", amount);
+        command.ExecuteNonQuery();
+      }
+    }
+  }
+  ```
