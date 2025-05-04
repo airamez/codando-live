@@ -437,18 +437,6 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
 
 > 🚨 **Alert**: A **single connection instance** must be used for all SQL commands participating in the transaction.
 
-#### TransactionScope
-
-[TransactionScope](https://learn.microsoft.com/en-us/dotnet/api/system.transactions.transactionscope?view=net-9.0) is a powerful feature in ADO.NET that provides an easy way to manage transactions across multiple operations. It ensures **atomicity**, meaning all operations within the scope either complete successfully or none take effect.
-
-> 🚨 **Alert**: **Transaction Scope** allow distributed transaction so multiple connections could be used.
-
-* Why Use TransactionScope?
-  * **Automatic rollback on failure:** If an exception occurs, all changes are reverted automatically.
-  * **Simplifies transaction management:** No need to manually commit or roll back transactions.
-  * **Supports distributed transactions:** Can handle multiple database connections.
-  * **Encapsulates transaction logic:** Makes code cleaner and easier to maintain.
-
 * Examples SQL prep
 
   ```sql
@@ -465,7 +453,7 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
   SELECT * FROM Account WITH(NOLOCK)
   ```
 
-* Example 1: Bank Account Transfer
+* Example 1: Bank Account Transfer (with modularization)
 
   ```csharp
   public void Transfer(int sourceId, int targetId, decimal amount)
@@ -567,7 +555,87 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
   }
   ```
 
-* Example 2: Bank Account Transfer with TransactionScope
+* Example 1: Bank Account Transfer (checking balance and without modularization)
+  * Sometimes is better to have all the sql commands inside the same method
+
+  ```csharp
+  public void TransferFull(int sourceId, int targetId, decimal amount)
+  {
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    {
+      connection.Open();
+      using (SqlTransaction transaction = connection.BeginTransaction())
+      {
+        try
+        {
+          // Check Balance
+          string balanceQuery = "SELECT Amount from Account WHERE id = @AccountId";
+          using (SqlCommand balanceCommand = new SqlCommand(balanceQuery, connection, transaction))
+          {
+            balanceCommand.Parameters.AddWithValue("@AccountId", sourceId);
+            var result = balanceCommand.ExecuteScalar();
+            // Note: Explain this and show that amount is not null
+            if (result == null || result == DBNull.Value)
+            {
+              throw new Exception($"Source Account ID not found: {sourceId}");
+            }
+            decimal balance = (decimal)result;
+            if (amount > balance)
+            {
+              throw new Exception($"Insufficient balance in source account: Id={sourceId}; Balance={balance}; Amount={amount}");
+            }
+          }
+          // Credit
+          string sqlDebit = "UPDATE Account SET amount = amount - @Amount WHERE id = @AccountId";
+          using (SqlCommand debitCommand = new SqlCommand(sqlDebit, connection, transaction))
+          {
+            debitCommand.Parameters.AddWithValue("@Amount", amount);
+            debitCommand.Parameters.AddWithValue("@AccountId", sourceId);
+            if (debitCommand.ExecuteNonQuery() == 0)
+            {
+              throw new Exception($"Source Account ID not found: {sourceId}");
+            }
+          }
+          // Debit
+          string sqlCredit = "UPDATE Account SET amount = amount + @Amount WHERE id = @AccountId";
+          using (SqlCommand creditCommand = new SqlCommand(sqlCredit, connection, transaction))
+          {
+            creditCommand.Parameters.AddWithValue("@Amount", amount);
+            creditCommand.Parameters.AddWithValue("@AccountId", targetId);
+            if (creditCommand.ExecuteNonQuery() == 0)
+            {
+              throw new Exception($"Target Account ID not found: {targetId}");
+            }
+          }
+          transaction.Commit();
+        }
+        catch (Exception)
+        {
+          transaction.Rollback();
+          throw;
+        }
+      }
+    }
+  }
+  ```
+
+#### Transaction Scope
+
+[TransactionScope](https://learn.microsoft.com/en-us/dotnet/api/system.transactions.transactionscope?view=net-9.0) is a powerful feature in ADO.NET that provides an easy way to manage transactions across multiple operations. It ensures **atomicity**, meaning all operations within the scope either complete successfully or none take effect.
+
+> 🚨 **Alert**: **Transaction Scope** allow distributed transaction so multiple connections could be used.
+
+* Why Use TransactionScope?
+  * **Automatic rollback on failure:** If an exception occurs, all changes are reverted automatically.
+  * **Simplifies transaction management:** No need to manually commit or roll back transactions.
+  * **Supports distributed transactions:** Can handle multiple database connections.
+  * **Encapsulates transaction logic:** Makes code cleaner and easier to maintain.
+
+* In .NET Core, TransactionScope primarily works within the same database provider, meaning that all transactions need to be under the same resource manager (like SQL Server). If your transactions span multiple databases of different types—like SQL Server and PostgreSQL—you can run into compatibility issues.
+
+* SQL Server (Multiple Connections): Works natively with TransactionScope because SQL Server supports distributed transactions.
+
+* Example: Bank Account Transfer with TransactionScope
 
   ```csharp
   public void Transfer(int sourceId, int targetId, decimal amount)
@@ -657,13 +725,13 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
   }
   ```
 
-#### Using Store Procedure to Encapsulate Operation with Transactional behaviour
+#### Using Store Procedure to Encapsulate Operations with Transactional behaviour
 
-* If scaling is not a string requirement, the usage of stored procedure is the simplest, safest and re-usable way to encapsulate multiple SQL command to accomplish a Task (funcionality or operations).
+* If scaling is not a strong requirement, the usage of stored procedure is the simplest, safest and re-usable way to encapsulate multiple SQL commands to accomplish a Task (funcionality or operations).
 
-* A stored procedure can be called by any programming language or service product/technoly.
+* A stored procedure can be called by any programming language or service product/technologyy.
 
-* Stored prodedure for transfer
+* Transfer stored prodedure
 
   ```sql
   CREATE PROCEDURE [dbo].[TransferAmount]
