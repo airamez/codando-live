@@ -120,7 +120,7 @@ public class BankAccountService
           {
             balanceCommand.Parameters.AddWithValue("@AccountId", sourceId);
             var result = balanceCommand.ExecuteScalar();
-            // Note: Explain this
+            // Note: Explain this and show that amount is not null
             if (result == null || result == DBNull.Value)
             {
               throw new Exception($"Source Account ID not found: {sourceId}");
