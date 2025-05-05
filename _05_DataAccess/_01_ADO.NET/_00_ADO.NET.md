@@ -93,9 +93,9 @@ dotnet add package Microsoft.Data.SqlClient
 
 > ⚠️ **Warning**: This `System.Data.SqlClient` was the most common package but now it is deprecated
 
-### Defining the Connection String in a configuration file
+## Defining the Connection String in a configuration file
 
-#### Configuration Files in .NET Core
+### Configuration Files in .NET Core
 
 * [Configuration management](https://learn.microsoft.com/en-us/dotnet/core/extensions/configuration) is a critical part of building applications, as it allows developers to manage settings and secrets outside of the source code.
 In .NET Core, configuration is highly flexible, enabling you to load configurations.
@@ -183,7 +183,7 @@ dotnet add package Microsoft.Extensions.Configuration
 dotnet add package Microsoft.Extensions.Configuration.Json
 ```
 
-### Executing SQL commands with parameters
+## Executing SQL commands with parameters
 
 > 🚨 **Alert**: This class is about what we should NOT do. We must eliminate this type of vulneralibity.
 
@@ -194,48 +194,48 @@ dotnet add package Microsoft.Extensions.Configuration.Json
 
 > 🚨 **Alert**: SQL injection is one of the most common and dangerous security vulnerabilities.
 
-#### Open Web Application Security Project (OWASP)
+### Open Web Application Security Project (OWASP)
 
 * <https://owasp.org/>
 * [OWASP TOP Ten](https://owasp.org/www-project-top-ten/)
 * [Injection](https://owasp.org/Top10/A03_2021-Injection/)
 
-#### Examples of SQL Injection
+* Examples of SQL Injection
 
-* Example 1
-  * Consider the following insecure code, where the userInput is a content provided by the user:
+  * Example 1
+    * Consider the following insecure code, where the userInput is a content provided by the user:
+
+      ```csharp
+      string query = $"SELECT * FROM Employees WHERE FirstName = '{userInput}'";
+      ```
+
+    * If attacker provides: ```"bye bye'; DROP TABLE Employees;--"```
+
+      ```sql
+      SELECT * FROM Employees WHERE FirstName = 'bye bye'; DROP TABLE Employees;--'
+      ```
+
+  * Example 2
 
     ```csharp
-    string query = $"SELECT * FROM Employees WHERE FirstName = '{userInput}'";
+    string query = $"SELECT * FROM Users WHERE Username = '{username}' AND Password = '{password}'";
     ```
 
-  * If attacker provides: ```"bye bye'; DROP TABLE Employees;--"```
+    * If the attacker provides:
+      * username: ```admin'--```
+      * password: ```anything```
 
-    ```sql
-    SELECT * FROM Employees WHERE FirstName = 'bye bye'; DROP TABLE Employees;--'
-    ```
+      ```sql
+      SELECT * FROM Users WHERE Username = 'admin' -- AND Password = ''
+      ```
 
-* Example 2
+    * If the attacker provides:
+      * username: ```admin' OR '1'='1```
+      * password: ```anything```
 
-  ```csharp
-  string query = $"SELECT * FROM Users WHERE Username = '{username}' AND Password = '{password}'";
-  ```
-
-  * If the attacker provides:
-    * username: ```admin'--```
-    * password: ```anything```
-
-    ```sql
-    SELECT * FROM Users WHERE Username = 'admin' -- AND Password = ''
-    ```
-
-  * If the attacker provides:
-    * username: ```admin' OR '1'='1```
-    * password: ```anything```
-
-    ```sql
-    SELECT * FROM Users WHERE Username = 'admin' OR '1'='1' AND Password = ''
-    ```
+      ```sql
+      SELECT * FROM Users WHERE Username = 'admin' OR '1'='1' AND Password = ''
+      ```
 
 ### Executing SQL commands with parameters (How to prevent SQL Injection)
 
@@ -274,7 +274,7 @@ dotnet add package Microsoft.Extensions.Configuration.Json
   }
   ```
 
-### Executing a Non-Query Command
+## Executing a Non-Query Command
 
 Non-Query commands are used to execute operations like `INSERT`, `UPDATE`, and `DELETE`.
 They do not return any data but indicate the number of rows affected.
@@ -347,7 +347,7 @@ They do not return any data but indicate the number of rows affected.
   }
   ```
 
-### Executing a Scalar Query
+## Executing a Scalar Query
 
 Scalar commands return a single value, such as COUNT, SUM, MIN, MAX, etc or a specific column value.
 The command.ExecuteScalar returns the fist column of the first row, or DBNull.Value if empty.
@@ -381,7 +381,7 @@ The command.ExecuteScalar returns the fist column of the first row, or DBNull.Va
   }
   ```
 
-### Executing Stored Procedure
+## Executing Stored Procedure
 
 To execute a Stored Procedure is necessary to set the command type to `CommandType.StoredProcedure`
 
@@ -431,7 +431,7 @@ To execute a Stored Procedure is necessary to set the command type to `CommandTy
   }
   ```
 
-### Transactions
+## Transactions
 
 ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/local-transactions) to ensure data integrity when performing multiple related operations. Transactions allow committing all changes if successful or rolling back in case of failure.
 
@@ -619,7 +619,7 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
   }
   ```
 
-#### Transaction Scope
+## Transaction Scope
 
 [TransactionScope](https://learn.microsoft.com/en-us/dotnet/api/system.transactions.transactionscope?view=net-9.0) is a powerful feature in ADO.NET that provides an easy way to manage transactions across multiple operations. It ensures **atomicity**, meaning all operations within the scope either complete successfully or none take effect.
 
@@ -725,7 +725,7 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
   }
   ```
 
-#### Using Store Procedure to Encapsulate Operations with Transactional behaviour
+## Using Store Procedure to Encapsulate Operations with Transactional behaviour
 
 * If scaling is not a strong requirement, the usage of stored procedure is the simplest, safest and re-usable way to encapsulate multiple SQL commands to accomplish a Task (funcionality or operations).
 
@@ -810,3 +810,85 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
     }
   }
   ```
+
+## DataTable
+
+[DataTable](https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/dataset-datatable-dataview/datatables) is a powerful in-memory representation of tabular data. It provides functionalities similar to a database table, allowing operations like filtering, sorting, and data manipulation without requiring an actual database.
+
+* Key Features
+  * Represents tabular data with rows and columns.
+  * Supports filtering and sorting operations.
+  * Allows relational operations via `DataRelation`.
+  * Enables serialization and deserialization for easy data exchange.
+  * Offers strong type safety with constraints and schema definitions.
+
+### Basic Operations with DataTable
+
+To create a `DataTable`, define its schema (columns) and populate it with rows.
+
+```csharp
+    DataTable students = new DataTable("Students");
+
+    // Define columns
+    students.Columns.Add("ID", typeof(int));
+    students.Columns.Add("Name", typeof(string));
+    students.Columns.Add("Age", typeof(int));
+
+    // Add rows
+    students.Rows.Add(1, "Alice", 22);
+    students.Rows.Add(2, "Bob", 25);
+    students.Rows.Add(3, "Charlie", 21);
+    students.Rows.Add(4, "David", 24);
+    students.Rows.Add(5, "Emma", 23);
+    students.Rows.Add(6, "Frank", 26);
+    students.Rows.Add(7, "Grace", 22);
+    students.Rows.Add(8, "Hannah", 27);
+    students.Rows.Add(9, "Ian", 20);
+    students.Rows.Add(10, "Julia", 29);
+    students.Rows.Add(11, "Kevin", 22);
+    students.Rows.Add(12, "Laura", 25);
+    students.Rows.Add(13, "Mike", 21);
+    students.Rows.Add(14, "Nancy", 24);
+    students.Rows.Add(15, "Oliver", 23);
+
+    // Traversing
+    foreach (DataRow student in students.Rows)
+    {
+      Console.WriteLine($"{student["ID"]}, {student["Name"]}, {student["Age"]}");
+    }
+
+    // Filtering and sorting
+    Console.WriteLine("Age greater than 24 and sorted by Name in ascending order");
+    foreach (DataRow student in students.Select("Age > 24", "Name ASC"))
+    {
+      Console.WriteLine($"{student["ID"]}, {student["Name"]}, {student["Age"]}");
+    }
+
+    // Updating
+    Console.WriteLine($"table.Rows[0][\"Name\"] = {students.Rows[0]["Name"]}");
+    students.Rows[0]["Name"] = "Jose";
+    Console.WriteLine($"table.Rows[0][\"Name\"] = {students.Rows[0]["Name"]}");
+
+    // Deleting
+    students.Rows[1].Delete();
+    students.AcceptChanges();
+    foreach (DataRow student in students.Rows)
+    {
+      Console.WriteLine($"{student["ID"]}, {student["Name"]}, {student["Age"]}");
+    }
+
+    // Converting to JSON
+    string json = JsonConvert.SerializeObject(students, Formatting.Indented);
+    Console.WriteLine(json);
+
+    // Loading from JSON
+    // Note: All columns are defined as strings
+    DataTable studentsFromJson = JsonConvert.DeserializeObject<DataTable>(json);
+
+    foreach (DataRow row in studentsFromJson.Rows)
+    {
+      Console.WriteLine($"{row["ID"]}, {row["Name"]}, {row["Age"]}");
+    }
+```
+
+### Loading DataTable from Queries
