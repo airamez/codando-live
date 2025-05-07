@@ -453,7 +453,7 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
   SELECT * FROM Account WITH(NOLOCK)
   ```
 
-* Example 1: Bank Account Transfer (with modularization)
+* Example: Bank Account Transfer (with modularization)
 
   ```csharp
   public void Transfer(int sourceId, int targetId, decimal amount)
@@ -555,8 +555,9 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
   }
   ```
 
-* Example 1: Bank Account Transfer (checking balance and without modularization)
-  * Sometimes is better to have all the sql commands inside the same method
+* Example: Bank Account Transfer (checking balance and without modularization)
+  > Sometimes is better to have all the sql commands inside the same method
+  because make it easier to share the connection and transaction
 
   ```csharp
   public void TransferFull(int sourceId, int targetId, decimal amount)
@@ -645,14 +646,6 @@ ADO.NET provides [transaction support](https://learn.microsoft.com/en-us/dotnet/
       using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
       {
         Debit(sourceId, amount, connection);
-
-        // Simulating a connection issue
-        Random random = new();
-        if (random.Next(4) == 3)
-        {
-          throw new Exception("Connection Lost");
-        }
-
         Credit(targetId, amount, connection);
         transactionScope.Complete();
         Console.WriteLine("Transfer completed!");

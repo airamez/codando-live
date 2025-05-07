@@ -83,7 +83,7 @@ public class BankAccountService
       {
         try
         {
-          Debit(sourceId, amount, connection, null);
+          Debit(sourceId, amount, connection, transaction);
 
           //Simulating a connection issue
           Random random = new Random();

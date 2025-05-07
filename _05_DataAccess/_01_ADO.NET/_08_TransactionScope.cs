@@ -3,7 +3,7 @@ using System;
 using System.Transactions;
 using Microsoft.Data.SqlClient;
 
-namespace ADO.NET.DataAcces;
+namespace ADO.NET.DataAccess;
 
 public class TransactionScopeApp
 {
@@ -56,15 +56,8 @@ public class BankAccountServiceWithScope
     {
       using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
       {
+        connection.Open();
         Debit(sourceId, amount, connection);
-
-        // Simulating a connection issue
-        Random random = new();
-        if (random.Next(4) == 3)
-        {
-          throw new Exception("Connection Lost");
-        }
-
         Credit(targetId, amount, connection);
         transactionScope.Complete();
         Console.WriteLine("Transfer completed!");
