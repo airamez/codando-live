@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using Microsoft.Data.SqlClient;
 
-namespace ADO.NET.DataAcces;
+namespace ADO.NET.DataAccess;
 
 public class ExecuteNonQueryApp
 {

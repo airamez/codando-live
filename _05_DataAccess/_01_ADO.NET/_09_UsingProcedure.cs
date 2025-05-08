@@ -3,7 +3,7 @@ using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
 
-namespace ADO.NET.DataAcces;
+namespace ADO.NET.DataAccess;
 
 public class UsingProcedureApp
 {
