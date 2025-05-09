@@ -30,6 +30,8 @@ public class DataTableFromQueryApp
         decimal increase = (decimal)product["UnitPrice"] * 50 / 100;
         product["UnitPrice"] = increase + (decimal)product["UnitPrice"];
       }
+      products.AcceptChanges();
+
       PrintDataTable(products);
 
       // Persiting the changes
@@ -44,7 +46,6 @@ public class DataTableFromQueryApp
       int id = (int)product["ProductID"];
       string name = (string)product["ProductName"];
       decimal price = (decimal)product["UnitPrice"];
-
       Console.WriteLine($"{id}; {name}; {price}");
     }
   }

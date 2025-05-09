@@ -885,3 +885,52 @@ To create a `DataTable`, define its schema (columns) and populate it with rows.
 ```
 
 ### Loading DataTable from Queries
+
+* Example 1: Loading product data
+
+  ```csharp
+  string query = "SELECT ProductID, ProductName, UnitPrice FROM Products";
+  using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+  {
+    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+    DataTable products = new DataTable();
+    adapter.Fill(products);
+
+    PrintDataTable(products);
+  }
+  ```
+
+* Example 2: Loading product Data, making changes and persiting back to the database
+
+  ```csharp
+  string query = "SELECT ProductID, ProductName, UnitPrice FROM Products";
+  using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+  {
+    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+
+    // Auto-generates INSERT, UPDATE, DELETE
+    SqlCommandBuilder commandBuilder = new SqlCommandBuilder(adapter);
+
+    DataTable products = new DataTable();
+    adapter.Fill(products);
+
+    // Define Primary Key
+    products.PrimaryKey = new DataColumn[] { products.Columns["ProductID"] };
+
+    PrintDataTable(products);
+
+    // Changing the price
+    foreach (DataRow product in products.Rows)
+    {
+      decimal increase = (decimal)product["UnitPrice"] * 50 / 100;
+      product["UnitPrice"] = increase + (decimal)product["UnitPrice"];
+    }
+
+    products.AcceptChanges();
+
+    PrintDataTable(products);
+
+    // Persiting the changes
+    adapter.Update(products);
+  }
+  ```
