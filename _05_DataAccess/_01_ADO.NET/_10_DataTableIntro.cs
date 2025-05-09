@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using Newtonsoft.Json;
 
-namespace ADO.NET;
+namespace ADO.NET.DataAccess;
 
 public class DataTableIntroApp
 {
