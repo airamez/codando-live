@@ -889,48 +889,96 @@ To create a `DataTable`, define its schema (columns) and populate it with rows.
 * Example 1: Loading product data
 
   ```csharp
-  string query = "SELECT ProductID, ProductName, UnitPrice FROM Products";
-  using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+  public static DataTable GetProducts()
   {
-    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-    DataTable products = new DataTable();
-    adapter.Fill(products);
-
-    PrintDataTable(products);
+    string query = "SELECT ProductID, ProductName, UnitPrice FROM Products";
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    {
+      SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+      DataTable products = new DataTable();
+      adapter.Fill(products);
+      return products;
+    }
   }
   ```
 
-* Example 2: Loading product Data, making changes and persiting back to the database
+* Example 2: Loading product Data, making changes and persiting the changes to the database
 
   ```csharp
-  string query = "SELECT ProductID, ProductName, UnitPrice FROM Products";
-  using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+  public static void Main(string[] args)
   {
-    SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+    var products = GetProductsForUpdate();
 
-    // Auto-generates INSERT, UPDATE, DELETE
-    SqlCommandBuilder commandBuilder = new SqlCommandBuilder(adapter);
-
-    DataTable products = new DataTable();
-    adapter.Fill(products);
-
-    // Define Primary Key
-    products.PrimaryKey = new DataColumn[] { products.Columns["ProductID"] };
-
-    PrintDataTable(products);
-
-    // Changing the price
-    foreach (DataRow product in products.Rows)
+    while (true)
     {
-      decimal increase = (decimal)product["UnitPrice"] * 50 / 100;
-      product["UnitPrice"] = increase + (decimal)product["UnitPrice"];
+      Console.Write("ProductID (0 to exit): ");
+      int productId = int.Parse(Console.ReadLine());
+
+      if (productId == 0)
+        break;
+
+      DataRow product = products.Rows.Find(productId);
+      if (product == null)
+      {
+        Console.WriteLine("Product ID not found.");
+      }
+      else
+      {
+        Console.WriteLine($"Current  Name: {product["ProductName"]}");
+        Console.WriteLine($"Current Price: {product["UnitPrice"]}");
+
+        Console.Write("New Product Name: ");
+        string newName = Console.ReadLine();
+
+        Console.Write("New Unit Price: ");
+        decimal newPrice = decimal.Parse(Console.ReadLine());
+
+        // Update values
+        product["ProductName"] = newName;
+        product["UnitPrice"] = newPrice;
+      }
     }
 
-    products.AcceptChanges();
+    UpdateProducts(products);
+  }
 
-    PrintDataTable(products);
+  public static DataTable GetProductsForUpdate()
+  {
+    string query = "SELECT ProductID, ProductName, UnitPrice FROM Products";
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    {
+      SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+      SqlCommandBuilder commandBuilder = new SqlCommandBuilder(adapter);
 
-    // Persiting the changes
-    adapter.Update(products);
+      DataTable products = new DataTable();
+      adapter.Fill(products);
+
+      // Define Primary Key
+      products.PrimaryKey = [products.Columns["ProductID"]];
+
+      // Attach adapter for future updates
+      products.ExtendedProperties["Adapter"] = adapter;
+
+      return products;
+    }
+  }
+
+  public static void UpdateProducts(DataTable products)
+  {
+    if (products.ExtendedProperties["Adapter"] is SqlDataAdapter adapter)
+    {
+      using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+      {
+        connection.Open();
+        adapter.SelectCommand.Connection = connection;  // Explicitly assign connection
+        adapter.Update(products);
+        products.AcceptChanges();
+        connection.Close();
+      }
+    }
+    else
+    {
+      throw new Exception("The DataTable does not have a Adapter as extended Property");
+    }
   }
   ```

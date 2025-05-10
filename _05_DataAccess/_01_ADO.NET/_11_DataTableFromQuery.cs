@@ -2,44 +2,29 @@ using System;
 using System.Data;
 using Microsoft.Data.SqlClient;
 
-namespace ADO.NET;
+namespace ADO.NET.DataAccess;
 
 public class DataTableFromQueryApp
 {
   public static void Main(string[] args)
   {
+    var products = GetProducts();
+    PrintDataTable(products);
+  }
+
+  public static DataTable GetProducts()
+  {
     string query = "SELECT ProductID, ProductName, UnitPrice FROM Products";
     using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
     {
       SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-
-      // Auto-generates INSERT, UPDATE, DELETE
-      SqlCommandBuilder commandBuilder = new SqlCommandBuilder(adapter);
-
       DataTable products = new DataTable();
       adapter.Fill(products);
-
-      // Define Primary Key
-      products.PrimaryKey = new DataColumn[] { products.Columns["ProductID"] };
-
-      PrintDataTable(products);
-
-      // Changing the price
-      foreach (DataRow product in products.Rows)
-      {
-        decimal increase = (decimal)product["UnitPrice"] * 50 / 100;
-        product["UnitPrice"] = increase + (decimal)product["UnitPrice"];
-      }
-      products.AcceptChanges();
-
-      PrintDataTable(products);
-
-      // Persiting the changes
-      adapter.Update(products);
+      return products;
     }
   }
 
-  private static void PrintDataTable(DataTable products)
+  public static void PrintDataTable(DataTable products)
   {
     foreach (DataRow product in products.Rows)
     {
