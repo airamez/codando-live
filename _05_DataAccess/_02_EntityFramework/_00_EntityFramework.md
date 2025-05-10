@@ -5,17 +5,29 @@ Entity Framework (EF) is an Object-Relational Mapping (ORM) framework for .NET a
 * Setting Up Entity Framework Core
 Run the following command in the terminal to install EF Core:
 
-  ```sh
+  ```shell
   dotnet add package Microsoft.EntityFrameworkCore
   dotnet add package Microsoft.EntityFrameworkCore.SqlServer
   dotnet add package Microsoft.EntityFrameworkCore.Tools
   ```
 
+  ```shell
   dotnet tool install --global dotnet-ef
   dotnet ef --version
+  ```
 
-  ```sh
+  ```shell
   dotnet ef dbcontext scaffold 'Server=localhost,1433;Database=NorthWind;User Id=sa;Password=Password!;TrustServerCertificate=True;' Microsoft.EntityFrameworkCore.SqlServer --output-dir Models
+  ```
+
+  ```shell
+  connectionString=$(jq -r '.ConnectionStrings.MySQLConnection' appsettings.json)
+  dotnet ef dbcontext scaffold "$connectionString" Microsoft.EntityFrameworkCore.SqlServer --output-dir Models
+  ```
+
+  ```shell
+  $connectionString = (Get-Content appsettings.json | ConvertFrom-Json).ConnectionStrings.DefaultConnection
+  dotnet ef dbcontext scaffold "$connectionString" Microsoft.EntityFrameworkCore.SqlServer --output-dir Models
   ```
 
   ```csharp
