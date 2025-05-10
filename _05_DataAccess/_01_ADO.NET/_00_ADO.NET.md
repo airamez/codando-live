@@ -902,83 +902,130 @@ To create a `DataTable`, define its schema (columns) and populate it with rows.
   }
   ```
 
+### Update DataTable content in disconnected mode
+
 * Example 2: Loading product Data, making changes and persiting the changes to the database
 
   ```csharp
-  public static void Main(string[] args)
+  public class ProductDataManager
   {
-    var products = GetProductsForUpdate();
+    public const string PRODUCTS_QUERY = "SELECT ProductID, ProductName, UnitPrice FROM Products";
+    private readonly SqlConnection Connection;
+    private readonly SqlDataAdapter Adapter;
 
-    while (true)
+    public ProductDataManager(string connectionString)
     {
-      Console.Write("ProductID (0 to exit): ");
-      int productId = int.Parse(Console.ReadLine());
-
-      if (productId == 0)
-        break;
-
-      DataRow product = products.Rows.Find(productId);
-      if (product == null)
-      {
-        Console.WriteLine("Product ID not found.");
-      }
-      else
-      {
-        Console.WriteLine($"Current  Name: {product["ProductName"]}");
-        Console.WriteLine($"Current Price: {product["UnitPrice"]}");
-
-        Console.Write("New Product Name: ");
-        string newName = Console.ReadLine();
-
-        Console.Write("New Unit Price: ");
-        decimal newPrice = decimal.Parse(Console.ReadLine());
-
-        // Update values
-        product["ProductName"] = newName;
-        product["UnitPrice"] = newPrice;
-      }
+      Connection = new SqlConnection(connectionString);
+      Adapter = new SqlDataAdapter(PRODUCTS_QUERY, Connection);
+      new SqlCommandBuilder(Adapter); // Enable automatic command generation
     }
 
-    UpdateProducts(products);
-  }
-
-  public static DataTable GetProductsForUpdate()
-  {
-    string query = "SELECT ProductID, ProductName, UnitPrice FROM Products";
-    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    public DataTable GetProductsForUpdate()
     {
-      SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-      SqlCommandBuilder commandBuilder = new SqlCommandBuilder(adapter);
-
       DataTable products = new DataTable();
-      adapter.Fill(products);
+      Adapter.Fill(products);
 
       // Define Primary Key
       products.PrimaryKey = [products.Columns["ProductID"]];
 
-      // Attach adapter for future updates
-      products.ExtendedProperties["Adapter"] = adapter;
-
       return products;
+    }
+
+    public void UpdateProducts(DataTable products)
+    {
+      Adapter.Update(products);
+      products.AcceptChanges();
+    }
+  }
+  ```
+
+## Dataset
+
+[Dataset](https://learn.microsoft.com/en-us/dotnet/api/system.data.dataset?view=net-9.0)
+is an in-memory representation of a collection of DataTable objects and their relationships. It provides functionalities for handling multiple related tables, allowing complex data operations, caching, and offline processing.
+
+* Key Features
+  * Contains multiple DataTable objects representing relational data.
+  * Supports relations via DataRelation between tables.
+  * Allows serialization for seamless data exchange.
+  * Provides disconnected data manipulation for better performance.
+  * Supports enforcing constraints like primary keys and foreign keys.
+
+## DataSet Example with Northwind Database
+
+[DataSet](https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/dataset-datatable-dataview/dataset) is an in-memory collection of `DataTable` objects and their relationships, making it ideal for handling multiple related tables from a database like Northwind.
+
+* Example 1: Retrieving Customers and Orders
+
+  ```csharp
+  public static DataSet LoadDataSet()
+  {
+    string queryCustomers = "SELECT CustomerID, CompanyName, ContactName FROM Customers";
+    string queryOrders = "SELECT OrderID, CustomerID, OrderDate, ShipCountry FROM Orders";
+
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    {
+      SqlDataAdapter adapter = new SqlDataAdapter();
+      DataSet ordersDS = new DataSet();
+
+      adapter.SelectCommand = new SqlCommand(queryCustomers, connection);
+      adapter.Fill(ordersDS, "Customers");
+
+      adapter.SelectCommand = new SqlCommand(queryOrders, connection);
+      adapter.Fill(ordersDS, "Orders");
+
+      // Establish relationship
+      ordersDS.Relations.Add("CustomerOrders",
+          ordersDS.Tables["Customers"].Columns["CustomerID"],
+          ordersDS.Tables["Orders"].Columns["CustomerID"]);
+
+      return ordersDS;
     }
   }
 
-  public static void UpdateProducts(DataTable products)
+  public static void PrintCustomerOrders(DataSet northwindDataSet)
   {
-    if (products.ExtendedProperties["Adapter"] is SqlDataAdapter adapter)
+    foreach (DataRow customer in northwindDataSet.Tables["Customers"].Rows)
     {
-      using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+      Console.WriteLine($"Customer: {customer["CompanyName"]} ({customer["CustomerID"]})");
+      foreach (DataRow order in customer.GetChildRows("CustomerOrders"))
       {
-        connection.Open();
-        adapter.SelectCommand.Connection = connection;  // Explicitly assign connection
-        adapter.Update(products);
-        products.AcceptChanges();
-        connection.Close();
+        Console.WriteLine($"\t{order["OrderID"]}; {order["OrderDate"]}; {order["ShipCountry"]}");
       }
     }
-    else
+  }
+  ```
+
+* Example 2: Updating the Dataset content and update the database
+
+  ```csharp
+  public static void ModifyDataSet(DataSet dataSet)
+  {
+    var ordersTable = dataSet.Tables["Orders"];
+
+    // Adding a new row
+    DataRow newOrder = ordersTable.NewRow();
+    // OrderId is Auto Incremented
+    newOrder["CustomerID"] = "WOLZA";
+    newOrder["OrderDate"] = DateTime.Now;
+    newOrder["ShipCountry"] = "USA";
+    ordersTable.Rows.Add(newOrder);
+
+    // Updating an existing row
+    DataRow[] orderToUpdate = ordersTable.Select("OrderID = 10374");
+    if (orderToUpdate.Length > 0)
     {
-      throw new Exception("The DataTable does not have a Adapter as extended Property");
+      orderToUpdate[0]["ShipCountry"] = "Brazil";
+    }
+  }
+
+  public static void UpdateDatabase(DataSet dataSet)
+  {
+    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
+    {
+      SqlDataAdapter adapter = new SqlDataAdapter("SELECT OrderID, CustomerID, OrderDate, ShipCountry FROM Orders", connection);
+      SqlCommandBuilder builder = new SqlCommandBuilder(adapter);
+      adapter.Update(dataSet, "Orders");
     }
   }
   ```

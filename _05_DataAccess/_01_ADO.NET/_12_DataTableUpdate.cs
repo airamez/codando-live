@@ -8,7 +8,8 @@ public class DataTableUpdateApp
 {
   public static void Main(string[] args)
   {
-    var products = GetProductsForUpdate();
+    var productManager = new ProductDataManager(ConnectionString.GetConnectionString());
+    var products = productManager.GetProductsForUpdate();
 
     while (true)
     {
@@ -34,52 +35,42 @@ public class DataTableUpdateApp
         Console.Write("New Price: ");
         decimal newPrice = decimal.Parse(Console.ReadLine());
 
-        // Update values
         product["ProductName"] = newName;
         product["UnitPrice"] = newPrice;
       }
     }
 
-    UpdateProducts(products);
+    productManager.UpdateProducts(products);
+  }
+}
+
+public class ProductDataManager
+{
+  public const string PRODUCTS_QUERY = "SELECT ProductID, ProductName, UnitPrice FROM Products";
+  private readonly SqlConnection Connection;
+  private readonly SqlDataAdapter Adapter;
+
+  public ProductDataManager(string connectionString)
+  {
+    Connection = new SqlConnection(connectionString);
+    Adapter = new SqlDataAdapter(PRODUCTS_QUERY, Connection);
+    new SqlCommandBuilder(Adapter); // Enable automatic command generation
   }
 
-  public static DataTable GetProductsForUpdate()
+  public DataTable GetProductsForUpdate()
   {
-    string query = "SELECT ProductID, ProductName, UnitPrice FROM Products";
-    using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
-    {
-      SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
-      SqlCommandBuilder commandBuilder = new SqlCommandBuilder(adapter);
+    DataTable products = new DataTable();
+    Adapter.Fill(products);
 
-      DataTable products = new DataTable();
-      adapter.Fill(products);
+    // Define Primary Key
+    products.PrimaryKey = [products.Columns["ProductID"]];
 
-      // Define Primary Key
-      products.PrimaryKey = [products.Columns["ProductID"]];
-
-      // Attach adapter for future updates
-      products.ExtendedProperties["Adapter"] = adapter;
-
-      return products;
-    }
+    return products;
   }
 
-  public static void UpdateProducts(DataTable products)
+  public void UpdateProducts(DataTable products)
   {
-    if (products.ExtendedProperties["Adapter"] is SqlDataAdapter adapter)
-    {
-      using (var connection = new SqlConnection(ConnectionString.GetConnectionString()))
-      {
-        connection.Open();
-        adapter.SelectCommand.Connection = connection;  // Explicitly assign connection
-        adapter.Update(products);
-        products.AcceptChanges();
-        connection.Close();
-      }
-    }
-    else
-    {
-      throw new Exception("The DataTable does not have a Adapter as extended Property");
-    }
+    Adapter.Update(products);
+    products.AcceptChanges();
   }
 }
