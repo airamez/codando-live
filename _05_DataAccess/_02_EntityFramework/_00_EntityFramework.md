@@ -1,9 +1,17 @@
-# Introduction to Entity Framework with C# and .NET Core
+# Entity Framework with C# and .NET Core
 
-Entity Framework (EF) is an Object-Relational Mapping (ORM) framework for .NET applications that simplifies database access. It allows developers to work with databases using strongly-typed objects rather than raw SQL queries.
+[Entity Framework (EF)](https://learn.microsoft.com/en-us/ef/) is an Object-Relational Mapping (ORM) framework for .NET applications that simplifies database access.
+It allows developers to work with databases using strongly-typed objects rather than raw SQL queries.
+
+>Entity Framework is a modern object-relation mapper that lets you build a clean, portable, and high-level data access layer with .NET (C#) across a variety of databases, including SQL Database (on-premises and Azure), SQLite, MySQL, PostgreSQL, and Azure Cosmos DB. It supports LINQ queries, change tracking, updates, and schema migrations.
+
+* Object-Relational Mapping (ORM)
+
+  * Object-Relational Mapping (ORM) is a programming technique that allows developers to interact with a relational database using object-oriented principles rather than writing raw SQL queries. It essentially acts as a bridge between an application's code and its database, converting data between incompatible systems—objects in a programming language and tables in a database.
+  * With ORM, each database table corresponds to a class in the code, and each row in the table represents an instance of that class. This abstraction simplifies data manipulation, making it easier to create, read, update, and delete records without manually handling SQL syntax.
+  * ORM frameworks, such as Hibernate for Java, Entity Framework for .NET, and SQLAlchemy for Python, automate the mapping process, improving efficiency, reducing boilerplate code, and enhancing security by preventing SQL injection attacks.
 
 * Setting Up Entity Framework Core
-Run the following command in the terminal to install EF Core:
 
   ```shell
   dotnet add package Microsoft.EntityFrameworkCore
@@ -11,123 +19,127 @@ Run the following command in the terminal to install EF Core:
   dotnet add package Microsoft.EntityFrameworkCore.Tools
   ```
 
+* Installing the [dotnet-ef tool](https://learn.microsoft.com/en-us/ef/core/cli/dotnet)
+
   ```shell
   dotnet tool install --global dotnet-ef
-  dotnet ef --version
+
+  dotnet ef
   ```
 
-  ```shell
-  dotnet ef dbcontext scaffold 'Server=localhost,1433;Database=NorthWind;User Id=sa;Password=Password!;TrustServerCertificate=True;' Microsoft.EntityFrameworkCore.SqlServer --output-dir Models
-  ```
+* Generate the ORM model from the database
 
-  ```shell
-  connectionString=$(jq -r '.ConnectionStrings.MySQLConnection' appsettings.json)
-  dotnet ef dbcontext scaffold "$connectionString" Microsoft.EntityFrameworkCore.SqlServer --output-dir Models
-  ```
+  * Providing the Connection String
 
-  ```shell
-  $connectionString = (Get-Content appsettings.json | ConvertFrom-Json).ConnectionStrings.DefaultConnection
-  dotnet ef dbcontext scaffold "$connectionString" Microsoft.EntityFrameworkCore.SqlServer --output-dir Models
-  ```
+    ```shell
+    dotnet ef dbcontext scaffold 'Server=localhost,1433;Database=NorthWind;User Id=sa;Password=Password!;TrustServerCertificate=True;' Microsoft.EntityFrameworkCore.SqlServer --output-dir Models --force
+    ```
+
+  * Using a connection from the `appsettings.json` file
+
+    ```shell
+    connectionString=$(jq -r '.ConnectionStrings.MySQLConnection' appsettings.json)
+    dotnet ef dbcontext scaffold "$connectionString" Microsoft.EntityFrameworkCore.SqlServer --output-dir Models --force
+    ```
+
+>Note: The `--force` option indicate to overwrite existing files
+
+* The Model classes
+  * Explore the content of the Model folder
+  * Explore the [NorthWindContext.cs](../Models/NorthWindContext.cs) class
+
+* Using the DB Context
 
   ```csharp
-  using Microsoft.EntityFrameworkCore;
-
-  public class NorthwindContext : DbContext
+  var optionsBuilder = new DbContextOptionsBuilder<NorthWindContext>();
+  optionsBuilder.UseSqlServer(ConnectionString.GetConnectionString());
+  using (var context = new NorthWindContext(optionsBuilder.Options))
   {
-      public DbSet<Customer> Customers { get; set; }
-      public DbSet<Order> Orders { get; set; }
-      protected override void OnConfiguring(DbContextOptionsBuilder options)
-      {
-          options.UseSqlServer("Server=your_server;Database=Northwind;Trusted_Connection=True;");
-      }
+    // Coding here
   }
+  ```
+
+* Listing all Products
+
+  ```csharp
+  var optionsBuilder = new DbContextOptionsBuilder<NorthWindContext>();
+  optionsBuilder.UseSqlServer(ConnectionString.GetConnectionString());
+  using (var context = new NorthWindContext(optionsBuilder.Options))
+  {
+    List<Product> products = context.Products.ToList();
+    foreach (var product in products)
+    {
+      Console.WriteLine($"[{product.ProductId}; {product.ProductName}; {product.UnitPrice}]");
+    }
+  }  
   ```
 
 * Add new Customer
 
   ```csharp
-  using (var context = new NorthwindContext())
+  var customer = new Customer
   {
-      var customer = new Customer
-      {
-          CustomerID = "NEWC1",
-          CompanyName = "New Customer Inc.",
-          ContactName = "John Doe"
-      };
-      context.Customers.Add(customer);
-      context.SaveChanges();
-  }
+      CustomerID = "NEWC1",
+      CompanyName = "New Customer Inc.",
+      ContactName = "John Doe"
+  };
+  context.Customers.Add(customer);
+  context.SaveChanges();
   ```
 
-* Fetching all customers
+* Find a specific Customer
 
   ```csharp
-  using (var context = new NorthwindContext())
+  var foundCustomer = context.Customers.FirstOrDefault(c => c.CustomerId == "NEWC1");
+  if (newCustomer != null)
   {
-      var customers = context.Customers.ToList();
-      foreach (var customer in customers)
-      {
-          Console.WriteLine($"{customer.CompanyName} - {customer.ContactName}");
-      }
+    Console.WriteLine($"{foundCustomer.CustomerId}; {foundCustomer.CompanyName}; {foundCustomer.ContactName}");
   }
-  ```
-
-* Query for a specific Customer
-
-  ```csharp
-  using (var context = new NorthwindContext())
-  {
-      var customer = context.Customers.FirstOrDefault(c => c.CustomerID == "NEWC1");
-      if (customer != null)
-      {
-          Console.WriteLine($"Customer: {customer.CompanyName}");
-      }
-  }  
   ```
 
 * Updating
 
   ```csharp
-  using (var context = new NorthwindContext())
-  {
-      var customer = context.Customers.FirstOrDefault(c => c.CustomerID == "NEWC1");
-      if (customer != null)
-      {
-          customer.CompanyName = "Updated Customer Inc.";
-          context.SaveChanges();
-      }
-  }
+  foundCustomer.CompanyName = "Updated Customer Inc.";
+  context.SaveChanges();
   ```
 
 * Deleting
 
   ```csharp
-  using (var context = new NorthwindContext())
-  {
-      var customer = context.Customers.FirstOrDefault(c => c.CustomerID == "NEWC1");
-      if (customer != null)
-      {
-          context.Customers.Remove(customer);
-          context.SaveChanges();
-      }
-  }
+  context.Customers.Remove(foundCustomer);
+  context.SaveChanges();
   ```
 
 * Querying with LINQ
 
   ```csharp
-  using (var context = new NorthwindContext())
-  {
-      var customers = context.Customers.Where(c => c.CompanyName.Contains("Food")).ToList();
-  }
+      var customers = context.Customers.Where(c => c.Country == "Brazil" && c.City == "Sao Paulo").ToList();
+      customers.ForEach(c => Console.WriteLine($"{c.CustomerId}; {c.CompanyName}; {c.Country}, {c.City}"));
   ```
 
-* Joins
+* Accessing Relationships
 
   ```csharp
-  using (var context = new NorthwindContext())
+  var customersWithOrder = context.Customers
+    .Include(c => c.Orders)           // Orders
+    .ThenInclude(o => o.OrderDetails) // OrderDetails
+    .ThenInclude(od => od.Product)    // Product
+    .ToList();
+
+  foreach (var customer in customers)
   {
-      var orders = context.Orders.Include(o => o.Customer).ToList();
+    Console.WriteLine($"[{customer.CustomerId}]: {customer.CompanyName}");
+    foreach (var order in customer.Orders)
+    {
+      Console.WriteLine($"* {order.OrderId}; {order.OrderDate}");
+      foreach (var detail in order.OrderDetails)
+      {
+        Console.Write($"  - {detail.ProductId}; {detail.Product.ProductName}; ");
+        Console.Write($"{detail.Quantity}; ${detail.UnitPrice:N2}; ");
+        Console.WriteLine($"${detail.Quantity * detail.UnitPrice:N2}");
+      }
+    }
+    Console.WriteLine("".PadLeft(60, '-'));
   }
   ```
