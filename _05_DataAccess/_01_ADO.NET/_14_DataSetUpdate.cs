@@ -34,7 +34,7 @@ public class DataSetUpdateApp
     ordersTable.Rows.Add(newOrder);
 
     // Updating an existing row
-    DataRow[] orderToUpdate = ordersTable.Select("OrderID = 10374");
+    DataRow[] orderToUpdate = ordersTable.Select("OrderID = 10870");
     if (orderToUpdate.Length > 0)
     {
       orderToUpdate[0]["ShipCountry"] = "Brazil";

@@ -50,7 +50,7 @@ public class DataSetApp
       adapter.SelectCommand = new SqlCommand(queryOrders, connection);
       adapter.Fill(ordersDS, "Orders");
 
-      // Establish relationship
+      // Defining the relationship
       ordersDS.Relations.Add("CustomerOrders",
           ordersDS.Tables["Customers"].Columns["CustomerID"],
           ordersDS.Tables["Orders"].Columns["CustomerID"]);
@@ -59,9 +59,9 @@ public class DataSetApp
     }
   }
 
-  public static void PrintCustomerOrders(DataSet northwindDataSet)
+  public static void PrintCustomerOrders(DataSet dataSet)
   {
-    foreach (DataRow customer in northwindDataSet.Tables["Customers"].Rows)
+    foreach (DataRow customer in dataSet.Tables["Customers"].Rows)
     {
       Console.WriteLine($"Customer: {customer["CompanyName"]} ({customer["CustomerID"]})");
       foreach (DataRow order in customer.GetChildRows("CustomerOrders"))

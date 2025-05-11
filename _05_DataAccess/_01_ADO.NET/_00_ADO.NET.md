@@ -941,19 +941,14 @@ To create a `DataTable`, define its schema (columns) and populate it with rows.
 
 ## Dataset
 
-[Dataset](https://learn.microsoft.com/en-us/dotnet/api/system.data.dataset?view=net-9.0)
-is an in-memory representation of a collection of DataTable objects and their relationships. It provides functionalities for handling multiple related tables, allowing complex data operations, caching, and offline processing.
+[Dataset](https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/ado-net-datasets) is an in-memory representation of a collection of DataTable objects and their relationships. It provides functionalities for handling multiple related tables, allowing complex data operations, caching, and offline processing.
 
-* Key Features
+* [Key Features](https://learn.microsoft.com/en-us/dotnet/api/system.data.dataset?view=net-9.0)
   * Contains multiple DataTable objects representing relational data.
   * Supports relations via DataRelation between tables.
   * Allows serialization for seamless data exchange.
   * Provides disconnected data manipulation for better performance.
   * Supports enforcing constraints like primary keys and foreign keys.
-
-## DataSet Example with Northwind Database
-
-[DataSet](https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/dataset-datatable-dataview/dataset) is an in-memory collection of `DataTable` objects and their relationships, making it ideal for handling multiple related tables from a database like Northwind.
 
 * Example 1: Retrieving Customers and Orders
 
