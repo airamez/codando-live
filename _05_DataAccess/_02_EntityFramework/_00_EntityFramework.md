@@ -1,7 +1,6 @@
 # Entity Framework with C# and .NET Core
 
-[Entity Framework (EF)](https://learn.microsoft.com/en-us/ef/) is an Object-Relational Mapping (ORM) framework for .NET applications that simplifies database access.
-It allows developers to work with databases using strongly-typed objects rather than raw SQL queries.
+[Entity Framework (EF)](https://learn.microsoft.com/en-us/ef/) is an Object-Relational Mapping (ORM) framework for .NET applications that simplifies database access. It allows developers to work with databases using strongly-typed objects rather than SQL queries.
 
 >Entity Framework is a modern object-relation mapper that lets you build a clean, portable, and high-level data access layer with .NET (C#) across a variety of databases, including SQL Database (on-premises and Azure), SQLite, MySQL, PostgreSQL, and Azure Cosmos DB. It supports LINQ queries, change tracking, updates, and schema migrations.
 
@@ -114,7 +113,9 @@ It allows developers to work with databases using strongly-typed objects rather 
 * Querying with LINQ
 
   ```csharp
-      var customers = context.Customers.Where(c => c.Country == "Brazil" && c.City == "Sao Paulo").ToList();
+      var customers = context.Customers
+        .Where(c => c.Country == "Brazil" && c.City == "Sao Paulo")
+        .ToList();
       customers.ForEach(c => Console.WriteLine($"{c.CustomerId}; {c.CompanyName}; {c.Country}, {c.City}"));
   ```
 
@@ -141,5 +142,54 @@ It allows developers to work with databases using strongly-typed objects rather 
       }
     }
     Console.WriteLine("".PadLeft(60, '-'));
+  }
+  ```
+
+* Using Transaction
+
+  ```csharp
+  using (var transaction = context.Database.BeginTransaction())
+  {
+    try
+    {
+      int sourceAccountId = 1;
+      int targetAccountId = 2;
+      decimal amount = 100;
+      var sourceAccount = context.Accounts.Find(sourceAccountId);
+      var targetAccount = context.Accounts.Find(targetAccountId);
+      if (sourceAccount == null) throw new Exception("Source Account ID is invalid");
+      if (targetAccount == null) throw new Exception("Target Account ID is invalid");
+      if (sourceAccount.Amount < amount)
+      {
+        throw new Exception("Insufficient funds.");
+      }
+      sourceAccount.Amount -= amount;
+      targetAccount.Amount += amount;
+      context.SaveChanges();
+      transaction.Commit();
+    }
+    catch (Exception ex)
+    {
+      transaction.Rollback();
+      Console.WriteLine($"Transaction failed: {ex.Message}");
+    }
+  }
+  ```
+
+* Calling Stored Procedure
+
+  ```csharp
+  try
+  {
+    var sourceAccountIdParam = new SqlParameter("@SourceAccountId", 2);
+    var targetAccountIdParam = new SqlParameter("@TargetAccountId", 1);
+    var amountParam = new SqlParameter("@Amount", 100);
+
+    context.Database.ExecuteSqlRaw("EXEC TransferAmount @SourceAccountId, @TargetAccountId, @Amount",
+                                    sourceAccountIdParam, targetAccountIdParam, amountParam);
+  }
+  catch (Exception ex)
+  {
+    Console.WriteLine(ex.Message);
   }
   ```
