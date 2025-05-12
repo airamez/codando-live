@@ -1,26 +1,29 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            // Use IntelliSense to find out which attributes exist for C# debugging
-            // Use hover for the description of the existing attributes
-            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-            "name": ".NET Core Launch (console)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build-DataAccess",
-            // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/_05_DataAccess/bin/Debug/net9.0/DataAccess.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/_05_DataAccess",
-            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
-            "console": "integratedTerminal",
-            "stopAtEntry": false
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Use IntelliSense to find out which attributes exist for C# debugging
+      // Use hover for the description of the existing attributes
+      // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+      "name": ".NET Core Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-DataAccess",
+      //"preLaunchTask": "build-WebAPI",
+      // If you have changed target frameworks, make sure to update the program path.
+      "program": "${workspaceFolder}/_05_DataAccess/bin/Debug/net9.0/DataAccess.dll",
+      //"program": "${workspaceFolder}/_06_WebAPI/bin/Debug/net9.0/WebAPI.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/_05_DataAccess",
+      //"cwd": "${workspaceFolder}/_06_WebAPI",
+      // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    },
+    {
+      "name": ".NET Core Attach",
+      "type": "coreclr",
+      "request": "attach"
+    }
+  ]
 }
