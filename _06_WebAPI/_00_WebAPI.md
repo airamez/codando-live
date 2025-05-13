@@ -2,23 +2,35 @@
 
 ## Definition
 
-A WebAPI in ASP.NET Core is a framework for building HTTP services that can be consumed by web applications, mobile apps, or other services. It follows RESTful principles and is lightweight, making it ideal for microservices and backend communication.
+A WebAPI in ASP.NET Core is a framework for building HTTP services that can be consumed by web applications, mobile apps, or other services.
+It follows RESTful principles and is lightweight, making it ideal for microservices and backend communication.
 
 * Interesting Sources
   * [APIs with ASP.NET Core](https://dotnet.microsoft.com/en-us/apps/aspnet/apis)
-  * [Build a web API with minimal API, ASP.NET Core, and .NET](https://learn.microsoft.com/en-us/training/modules/build-web-api-minimal-api/?WT.mc_id=dotnet-35129-website)
-    * FREE COURSE
+  * [Build a web API with minimal API, ASP.NET Core, and .NET (FREE COURSE)](https://learn.microsoft.com/en-us/training/modules/build-web-api-minimal-api/?WT.mc_id=dotnet-35129-website)
   * [Minimal APIs overview](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/overview?view=aspnetcore-9.0&WT.mc_id=dotnet-35129-website)
+
+## REST API
+
+A [REST API](https://developer.mozilla.org/en-US/docs/Glossary/REST) (Representational State Transfer Application Programming Interface) is a web service that allows systems to communicate over HTTP using a set of predefined rules. REST APIs follow architectural principles that emphasize statelessness, uniform interfaces, and client-server separation.
+
+REST APIs are widely used for building scalable and efficient web services. They rely on standard HTTP methods to perform CRUD (Create, Read, Update, Delete) operations on resources. These methods include:
+
+* Properties
+  * `Statelessness` – Each request from a client must contain all necessary information because the server does not store client session data. This improves scalability and reliability.
+  * `Uniform Interface` – REST APIs follow a standard set of conventions, including resource-based URLs and HTTP methods (GET, POST, PUT, DELETE).
+  * `Client-Server Architecture` – The client and server are independent; the client sends requests, and the server responds with data.
+  * `Cacheability` – Responses can be cached to improve performance and reduce redundant requests.
+  * `Layered System` – REST APIs support intermediate layers such as load balancers, security layers, and proxies without affecting communication.
+  * `Resource-Based Design` – Everything is treated as a resource, accessible via a unique URL: ```/users/123, /products/456```.
 
 ## MVC
 
 The [**Model-View-Controller (MVC)**](https://learn.microsoft.com/en-us/aspnet/core/mvc/overview?view=aspnetcore-9.0) pattern is a software design architecture that separates an application into three main components:
 
-1. **Model**: Represents the data and business logic.
-2. **View**: Handles UI presentation (not relevant in WebAPI).
-3. **Controller**: Manages user requests and acts as an intermediary between the Model and View.
-
-![Postman](images/mvc.png)
+1. `Model`: Represents the data and business logic.
+2. `View`: Handles UI presentation (not relevant in WebAPI).
+3. `Controller`: Manages user requests and acts as an intermediary between the Model and View.
 
 ASP.NET Core WebAPI primarily focuses on **Controllers**, where requests are processed and responses are sent in formats like JSON.
 
@@ -147,34 +159,6 @@ a series of steps occur to ensure communication between the client and the serve
 
 > This is a very common quest on Interviews
 
-## HTTP Headers
-
-HTTP headers are key-value pairs included in requests and responses, providing additional context and instructions about the communication between a client and a server. They influence caching, authentication, security, and content processing.
-
-* HTTP Headers types
-  * Request Headers
-    * Sent by the client to provide details about the request, such as the expected response format or authentication credentials.
-    * `User-Agent`: Identifies the client (e.g., browser type, operating system).
-    * `Accept`: Specifies the preferred media types (e.g., `text/html`, `application/json`).
-    * `Authorization`: Contains authentication credentials, such as API keys or tokens.
-    * `Referer`: Indicates the previous webpage that led to the request.
-  * Response Headers
-    * Sent by the server to provide additional information about the response.
-    * `Content-Type`: Specifies the format of the response (e.g., `application/json`, `text/html`).
-    * `Server`: Identifies the server software handling the request.
-    * `Set-Cookie`: Used to send cookies to the client for session management.
-    * `Cache-Control`: Determines caching policies for the response.
-  * General Headers
-    * Used in both requests and responses, providing communication-related metadata.
-    * `Date`: Indicates the timestamp when the request or response was created.
-    * `Connection`: Controls connection persistence (e.g., `keep-alive` to maintain open connections).
-    * `Content-Length`: Specifies the size of the response body in bytes.
-* Importance of Headers
-  * **Security**: Authentication and encryption headers ensure secure data exchange.
-  * **Performance**: Headers like `Cache-Control` help optimize resource loading.
-  * **Customization**: Developers use headers to tailor request behavior for APIs and web applications.
-* Understanding HTTP headers allows developers to fine-tune communication between clients and servers, ensuring efficient and secure web interactions.
-
 ## HTTP Status Codes
 
 HTTP status codes are **standardized responses** used by servers to indicate the result of an API request.  
@@ -288,30 +272,10 @@ They are grouped into categories:
     {
       _context = context;
     }
-
-    // GET: api/categories - Retrieve all categories
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
-    {
-      try
-      {
-        return await _context
-          .Categories.Select(
-            c => new Category
-            {
-              CategoryId = c.CategoryId,
-              CategoryName = c.CategoryName,
-              Description = c.Description
-            })
-          .ToListAsync();
-      }
-      catch (Exception ex)
-      {
-        return StatusCode(500, $"Database error: {ex.Message}");
-      }
-    }
     ...
   ```
+
+>Note: The Controller methods are all set as `async` to not block the thread
 
 * Testing the API Endpoints
 
@@ -321,10 +285,33 @@ They are grouped into categories:
     curl --location 'http://localhost:5062/api/categories'
     ```
 
+    ```csharp
+    // GET: api/categories - Retrieve all categories
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+    {
+      var categories = await _context.Categories.ToListAsync();
+      return categories.Any() ? Ok(categories) : NoContent();
+    }
+    ```
+
   * Get a Category
 
     ```shell
     curl --location 'http://localhost:5062/api/categories/5'
+    ```
+
+    ```csharp
+    // GET: api/categories/{id} - Retrieve a single category by ID
+    public async Task<ActionResult<Category>> GetCategory(int id)
+    {
+      var category = await _context.Categories.FindAsync(id);
+      if (category == null)
+      {
+        return NotFound($"Category with ID {id} not found.");
+      }
+      return Ok(category);
+    }
     ```
 
   * Add a Category
@@ -338,6 +325,30 @@ They are grouped into categories:
     }'
     ```
 
+    ```csharp
+    // POST: api/categories - Add a new category
+    [HttpPost]
+    public async Task<ActionResult<Category>> CreateCategory(Category category)
+    {
+      if (category == null)
+      {
+        return BadRequest("Invalid category data.");
+      }
+      if (string.IsNullOrWhiteSpace(category.CategoryName))
+      {
+         return BadRequest("Category Name is required");
+      }
+      var newCategory = new Category
+      {
+        CategoryName = category.CategoryName,
+        Description = category.Description
+      };
+      _context.Categories.Add(newCategory);
+      await _context.SaveChangesAsync();
+      return CreatedAtAction(nameof(GetCategory), new { id = newCategory.CategoryId }, newCategory);
+    }
+    ```
+
   * Update a Category
 
     ```shell
@@ -347,6 +358,23 @@ They are grouped into categories:
         "CategoryName": "Beverages.", 
         "Description": "Devices and gadgets."
     }'
+    ```
+
+    ```csharp
+    // PUT: api/categories/{id} - Update an existing category
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateCategory(int id, Category category)
+    {
+      var existingCategory = await _context.Categories.FindAsync(id);
+      if (existingCategory == null)
+      {
+        return NotFound($"Category with ID {id} not found.");
+      }
+      existingCategory.CategoryName = category.CategoryName;
+      existingCategory.Description = category.Description;
+      await _context.SaveChangesAsync();
+      return NoContent();
+    }
     ```
 
   * Delete a Category
@@ -359,3 +387,63 @@ They are grouped into categories:
         "Description": "Devices and gadgets [UPDATED]"
     }'
     ```
+
+    ```csharp
+    // DELETE: api/categories/{id} - Remove a category
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteCategory(int id)
+    {
+      var category = await _context.Categories.FindAsync(id);
+      if (category == null)
+      {
+        return NotFound($"Category with ID {id} not found.");
+      }
+      _context.Categories.Remove(category);
+      await _context.SaveChangesAsync();
+      return NoContent();
+    }
+    ```
+
+## HTTP Headers
+
+HTTP headers are key-value pairs included in requests and responses, providing additional context and instructions about the communication between a client and a server. They influence caching, authentication, security, and content processing.
+
+* HTTP Headers types
+  * Request Headers
+    * Sent by the client to provide details about the request, such as the expected response format or authentication credentials.
+    * `User-Agent`: Identifies the client (e.g., browser type, operating system).
+    * `Accept`: Specifies the preferred media types (e.g., `text/html`, `application/json`).
+    * `Authorization`: Contains authentication credentials, such as API keys or tokens.
+    * `Referer`: Indicates the previous webpage that led to the request.
+  * Response Headers
+    * Sent by the server to provide additional information about the response.
+    * `Content-Type`: Specifies the format of the response (e.g., `application/json`, `text/html`).
+    * `Server`: Identifies the server software handling the request.
+    * `Set-Cookie`: Used to send cookies to the client for session management.
+    * `Cache-Control`: Determines caching policies for the response.
+  * General Headers
+    * Used in both requests and responses, providing communication-related metadata.
+    * `Date`: Indicates the timestamp when the request or response was created.
+    * `Connection`: Controls connection persistence (e.g., `keep-alive` to maintain open connections).
+    * `Content-Length`: Specifies the size of the response body in bytes.
+* Importance of Headers
+  * **Security**: Authentication and encryption headers ensure secure data exchange.
+  * **Performance**: Headers like `Cache-Control` help optimize resource loading.
+  * **Customization**: Developers use headers to tailor request behavior for APIs and web applications.
+* Understanding HTTP headers allows developers to fine-tune communication between clients and servers, ensuring efficient and secure web interactions.
+
+* HTTP Header Demo
+
+  ```shell
+  curl -X GET "http://localhost:5000/api/headerdemo" \
+    -H "User-Agent: Mozilla/5.0" \
+    -H "Accept: application/json" \
+    -H "Authorization: Bearer token123" \
+    -H "Content-Type: application/json"
+  ```
+
+  ```csharp
+
+  ```
+
+## Authentication

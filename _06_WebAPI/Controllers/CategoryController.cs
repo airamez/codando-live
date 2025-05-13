@@ -19,43 +19,19 @@ public class CategoriesController : ControllerBase
   [HttpGet]
   public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
   {
-    try
-    {
-      return await _context
-        .Categories.Select(
-          c => new Category
-          {
-            CategoryId = c.CategoryId,
-            CategoryName = c.CategoryName,
-            Description = c.Description
-          })
-        .ToListAsync();
-    }
-    catch (Exception ex)
-    {
-      // Becareful when returning exception messages
-      return StatusCode(500, $"Database error: {ex.Message}");
-    }
+    var categories = await _context.Categories.ToListAsync();
+    return categories.Any() ? Ok(categories) : NoContent();
   }
 
   // GET: api/categories/{id} - Retrieve a single category by ID
-  [HttpGet("{id}")]
   public async Task<ActionResult<Category>> GetCategory(int id)
   {
-    var category = await _context.Categories
-                                 .Where(c => c.CategoryId == id)
-                                 .Select(c => new Category
-                                 {
-                                   CategoryId = c.CategoryId,
-                                   CategoryName = c.CategoryName,
-                                   Description = c.Description
-                                 })
-                                 .FirstOrDefaultAsync();
+    var category = await _context.Categories.FindAsync(id);
     if (category == null)
     {
       return NotFound($"Category with ID {id} not found.");
     }
-    return category;
+    return Ok(category);
   }
 
   // POST: api/categories - Add a new category
@@ -66,22 +42,18 @@ public class CategoriesController : ControllerBase
     {
       return BadRequest("Invalid category data.");
     }
-
     //@todo: Show the risk of not catching exceptions
     // if (string.IsNullOrWhiteSpace(category.CategoryName))
     // {
     //   return BadRequest("Category Name is required");
     // }
-
     var newCategory = new Category
     {
       CategoryName = category.CategoryName,
       Description = category.Description
     };
-
     _context.Categories.Add(newCategory);
     await _context.SaveChangesAsync();
-
     return CreatedAtAction(nameof(GetCategory), new { id = newCategory.CategoryId }, newCategory);
   }
 
@@ -89,18 +61,23 @@ public class CategoriesController : ControllerBase
   [HttpPut("{id}")]
   public async Task<IActionResult> UpdateCategory(int id, Category category)
   {
+    //@todo: cause exceptions to show the how to deal with it
+    // try
+    // {
     var existingCategory = await _context.Categories.FindAsync(id);
     if (existingCategory == null)
     {
       return NotFound($"Category with ID {id} not found.");
     }
-
     existingCategory.CategoryName = category.CategoryName;
     existingCategory.Description = category.Description;
-
-    _context.Entry(existingCategory).State = EntityState.Modified;
     await _context.SaveChangesAsync();
-
+    // }
+    // catch (Exception ex)
+    // {
+    //   // Becareful when returning exception messages
+    //   return StatusCode(500, $"Database error: {ex.Message}");
+    // }
     return NoContent();
   }
 
@@ -113,10 +90,8 @@ public class CategoriesController : ControllerBase
     {
       return NotFound($"Category with ID {id} not found.");
     }
-
     _context.Categories.Remove(category);
     await _context.SaveChangesAsync();
-
     return NoContent();
   }
 }
