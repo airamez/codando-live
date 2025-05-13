@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ADO.NET.DataAccess.EF;
 
-public class UsingDbContext
+public class EntityFrameworkApp
 {
 
   public static void Main(string[] args)
