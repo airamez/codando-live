@@ -7,8 +7,20 @@ namespace WebAPI.Controllers;
 public class HelloWorldController : ControllerBase
 {
   [HttpGet]
-  public string Get()
+  public IActionResult English()
   {
-    return "Hello World from a Controller";
+    return Ok("Hello World from a Controller");
+  }
+
+  [HttpGet("ptbr")]
+  public IActionResult Portuguese()
+  {
+    return Ok("Olá Mundo de um Controlador");
+  }
+
+  [HttpGet("hindi")]
+  public IActionResult Hindi()
+  {
+    return Ok("नियंत्रक से हेलो वर्ल्ड");
   }
 }

@@ -76,7 +76,7 @@
     {
       "label": "build-WebAPI",
       "command": "dotnet",
-      "type": "shell",
+      "type": "process",
       "args": [
         "build",
         "${workspaceFolder}/_06_WebAPI/WebAPI.csproj"

@@ -8,8 +8,8 @@
       "name": ".NET Core Launch (console)",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "build-DataAccess",
-      //"preLaunchTask": "build-WebAPI",
+      //"preLaunchTask": "build-DataAccess",
+      "preLaunchTask": "build-WebAPI",
       // If you have changed target frameworks, make sure to update the program path.
       //"program": "${workspaceFolder}/_05_DataAccess/bin/Debug/net9.0/DataAccess.dll",
       "program": "${workspaceFolder}/_06_WebAPI/bin/Debug/net9.0/WebAPI.dll",

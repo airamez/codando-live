@@ -1,14 +1,38 @@
 # WebAPI ASP.NET Core
 
-## Definition
-
 A WebAPI in ASP.NET Core is a framework for building HTTP services that can be consumed by web applications, mobile apps, or other services.
 It follows RESTful principles and is lightweight, making it ideal for microservices and backend communication.
 
-* Interesting Sources
+* Interesting sources
   * [APIs with ASP.NET Core](https://dotnet.microsoft.com/en-us/apps/aspnet/apis)
   * [Build a web API with minimal API, ASP.NET Core, and .NET (FREE COURSE)](https://learn.microsoft.com/en-us/training/modules/build-web-api-minimal-api/?WT.mc_id=dotnet-35129-website)
   * [Minimal APIs overview](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/overview?view=aspnetcore-9.0&WT.mc_id=dotnet-35129-website)
+
+## URL - Uniform Resource Locator
+
+A [**Uniform Resource Locator (URL)**](https://en.wikipedia.org/wiki/URL) is a reference or address used to access resources on the web. It specifies the location of a resource and the protocol used to retrieve it. URLs are fundamental to web navigation, allowing users and applications to interact with websites, APIs, and other online services.
+
+* Structure of a URL
+  * A typical URL consists of several components, each serving a distinct purpose:
+  * Example: `https://www.example.com:8080/path/to/resource?query=value#section`
+  * Components:
+
+    | **Value**         | **Component**    | **Description**                                          |
+    |-------------------|------------------|----------------------------------------------------------|
+    | `https://`        | **Protocol**     | Specifies the communication method (HTTP/HTTPS).         |
+    | `www.example.com` | **Domain**       | The address of the website.                              |
+    | `:8080`           | **Port**         | (Optional) Defines the communication port.               |
+    | `/path/to/page`   | **Path**         | Specifies the resource location within the site.         |
+    | `?query=value`    | **Query String** | (Optional) Sends data to the server via key-value pairs. |
+    | `#section`        | **Fragment**     | (Optional) Refers to a specific section within the page. |
+
+  * Additional Notes
+    * **Protocols**: Common ones include `http`, `https`, `ftp`, and `file`.
+    * [**Ports**](https://en.wikipedia.org/wiki/Port_(computer_networking)): Default ports are `80` for HTTP and `443` for HTTPS. When omitted, browsers assume these defaults.
+    * **Query Parameters**: Used for passing dynamic data to a webpage, often seen in search queries.
+    * **Fragments**: Allow navigation to specific sections within a page, improving usability.
+
+> Note 🚀: Understanding URL structures is essential for web developers in **building, debugging, and optimizing web applications**.
 
 ## REST API
 
@@ -123,6 +147,8 @@ ASP.NET Core WebAPI primarily focuses on **Controllers**, where requests are pro
 
 ## What Happens on an HTTP Request
 
+![HTTP Request](images/HTTP-Request.png)
+
 When a client (such as a web browser) sends an [HTTP request](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview),
 a series of steps occur to ensure communication between the client and the server. Here's a breakdown of the process:
 
@@ -157,7 +183,7 @@ a series of steps occur to ensure communication between the client and the serve
 
 * Understanding this process is crucial for debugging issues and optimizing web applications!
 
-> This is a very common quest on Interviews
+> This is a common quest on Interviews
 
 ## HTTP Status Codes
 
@@ -216,6 +242,124 @@ They are grouped into categories:
   2. The framework looks for methods with [HttpGet] inside HelloWorldController.
   3. The Get() method executes because it has [HttpGet] defined.
   4. The method returns "Hello World from a Controller" as a response.
+
+* Calling the HelloWorldController
+
+  ```shell
+  curl --location 'http://localhost:5062/api/HelloWorld'
+
+  curl --location 'http://localhost:5062/api/HelloWorld/port'
+
+  curl --location 'http://localhost:5062/api/HelloWorld/hindi'
+  ```
+
+## Query String
+
+A query string is a part of the URL that contains key-value pairs used to pass data to web applications.
+It appears after the `?` symbol in the URL and consists of multiple parameters separated by `&`.
+
+* Example 1
+  * `http://localhost:5062/api/QueryString?category=laptops&minPrice=500&sortBy=rating`
+* Example 2
+  * `http://localhost:5062/api/QueryString/with-params?category=laptops&minPrice=500&sortBy=rating`
+
+```csharp
+using Microsoft.AspNetCore.Mvc;
+
+namespace WebAPI.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class QueryStringController : ControllerBase
+{
+  [HttpGet()]
+  public IActionResult Get()
+  {
+    var category = HttpContext.Request.Query["category"];
+    var minPrice = HttpContext.Request.Query["minPrice"];
+    var sortBy = HttpContext.Request.Query["sortBy"];
+
+    return Ok($"Category: {category}, Min Price: {minPrice}, Sorted By: {sortBy}");
+  }
+
+  [HttpGet("with-params")]
+  public IActionResult GetWithParams(string category, decimal minPrice = 0, string sortBy = "name")
+  {
+    return Ok($"Category: {category}, Min Price: {minPrice}, Sorted By: {sortBy}");
+  }
+}
+```
+
+## HTTP Headers
+
+HTTP headers are key-value pairs included in requests and responses, providing additional context and instructions about the communication between a client and a server. They influence caching, authentication, security, and content processing.
+
+* HTTP Headers types
+  * Request Headers
+    * Sent by the client to provide details about the request, such as the expected response format or authentication credentials.
+    * `User-Agent`: Identifies the client (e.g., browser type, operating system).
+    * `Accept`: Specifies the preferred media types (e.g., `text/html`, `application/json`).
+    * `Authorization`: Contains authentication credentials, such as API keys or tokens.
+    * `Referer`: Indicates the previous webpage that led to the request.
+  * Response Headers
+    * Sent by the server to provide additional information about the response.
+    * `Content-Type`: Specifies the format of the response (e.g., `application/json`, `text/html`).
+    * `Server`: Identifies the server software handling the request.
+    * `Set-Cookie`: Used to send cookies to the client for session management.
+    * `Cache-Control`: Determines caching policies for the response.
+  * General Headers
+    * Used in both requests and responses, providing communication-related metadata.
+    * `Date`: Indicates the timestamp when the request or response was created.
+    * `Connection`: Controls connection persistence (e.g., `keep-alive` to maintain open connections).
+    * `Content-Length`: Specifies the size of the response body in bytes.
+* Importance of Headers
+  * **Security**: Authentication and encryption headers ensure secure data exchange.
+  * **Performance**: Headers like `Cache-Control` help optimize resource loading.
+  * **Customization**: Developers use headers to tailor request behavior for APIs and web applications.
+* Understanding HTTP headers allows developers to fine-tune communication between clients and servers, ensuring efficient and secure web interactions.
+
+* HTTP Header Demo
+
+  ```shell
+  curl --location 'http://localhost:5062/api/headerdemo' \
+  --header 'User-Agent:  Mozilla/5.0' \
+  --header 'Accept:  application/json' \
+  --header 'Authorization:  Bearer token123' \
+  --header 'Content-Type:  application/json'
+  ```
+
+  ```csharp
+  using Microsoft.AspNetCore.Mvc;
+
+  namespace WebAPI.Controllers;
+  [Route("api/[controller]")]
+  [ApiController]
+  public class HeaderDemoController : ControllerBase
+  {
+    // GET: api/headerdemo
+    [HttpGet]
+    public IActionResult HeaderDemo()
+    {
+      var headers = Request.Headers;
+      var userAgent = headers["User-Agent"].ToString();
+      var accept = headers["Accept"].ToString();
+      var authorization = headers["Authorization"].ToString();
+      var contentType = headers["Content-Type"].ToString();
+
+      Response.Headers["X-User-Agent"] = string.IsNullOrEmpty(userAgent) ? "Not provided" : userAgent;
+      Response.Headers["X-Accept"] = string.IsNullOrEmpty(accept) ? "Not provided" : accept;
+      Response.Headers["X-Authorization"] = string.IsNullOrEmpty(authorization) ? "Not provided" : authorization;
+      Response.Headers["X-Content-Type"] = string.IsNullOrEmpty(contentType) ? "Not provided" : contentType;
+
+      var body = new
+      {
+        content = "No body, just headers"
+      };
+
+      return Ok(body);
+    }
+  }
+  ```
 
 ## Implementing a Controller using Entity Framework
 
@@ -403,47 +547,5 @@ They are grouped into categories:
       return NoContent();
     }
     ```
-
-## HTTP Headers
-
-HTTP headers are key-value pairs included in requests and responses, providing additional context and instructions about the communication between a client and a server. They influence caching, authentication, security, and content processing.
-
-* HTTP Headers types
-  * Request Headers
-    * Sent by the client to provide details about the request, such as the expected response format or authentication credentials.
-    * `User-Agent`: Identifies the client (e.g., browser type, operating system).
-    * `Accept`: Specifies the preferred media types (e.g., `text/html`, `application/json`).
-    * `Authorization`: Contains authentication credentials, such as API keys or tokens.
-    * `Referer`: Indicates the previous webpage that led to the request.
-  * Response Headers
-    * Sent by the server to provide additional information about the response.
-    * `Content-Type`: Specifies the format of the response (e.g., `application/json`, `text/html`).
-    * `Server`: Identifies the server software handling the request.
-    * `Set-Cookie`: Used to send cookies to the client for session management.
-    * `Cache-Control`: Determines caching policies for the response.
-  * General Headers
-    * Used in both requests and responses, providing communication-related metadata.
-    * `Date`: Indicates the timestamp when the request or response was created.
-    * `Connection`: Controls connection persistence (e.g., `keep-alive` to maintain open connections).
-    * `Content-Length`: Specifies the size of the response body in bytes.
-* Importance of Headers
-  * **Security**: Authentication and encryption headers ensure secure data exchange.
-  * **Performance**: Headers like `Cache-Control` help optimize resource loading.
-  * **Customization**: Developers use headers to tailor request behavior for APIs and web applications.
-* Understanding HTTP headers allows developers to fine-tune communication between clients and servers, ensuring efficient and secure web interactions.
-
-* HTTP Header Demo
-
-  ```shell
-  curl -X GET "http://localhost:5000/api/headerdemo" \
-    -H "User-Agent: Mozilla/5.0" \
-    -H "Accept: application/json" \
-    -H "Authorization: Bearer token123" \
-    -H "Content-Type: application/json"
-  ```
-
-  ```csharp
-
-  ```
 
 ## Authentication
