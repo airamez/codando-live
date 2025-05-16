@@ -123,10 +123,11 @@ ASP.NET Core WebAPI primarily focuses on **Controllers**, where requests are pro
     curl -X GET http://localhost:5062/api/HelloWorld
     ```
 
-## HTTP - Hyper Text Transger Protocol
+## HTTP - Hyper Text Transfer Protocol
 
 [**HTTP (HyperText Transfer Protocol)**](https://en.wikipedia.org/wiki/HTTP) is the foundation of communication on the web. It allows clients (such as browsers or APIs) to interact with servers by sending requests and receiving responses.
 
+* [HTTP Documentation](https://httpwg.org/specs/)
 * Every HTTP interaction follows this structure:
   1. **Client sends a request** (e.g., browser or API call).
   2. **Server processes the request** and generates a response.
@@ -145,7 +146,7 @@ ASP.NET Core WebAPI primarily focuses on **Controllers**, where requests are pro
   | `HEAD`   | Retrieve only headers, without the response body |
   | `TRACE`  | Debugging tool that shows the request journey |
 
-## What Happens on an HTTP Request
+## What Happens on a HTTP Request
 
 ![HTTP Request](images/HTTP-Request.png)
 
@@ -223,9 +224,21 @@ They are grouped into categories:
   public class HelloWorldController : ControllerBase
   {
     [HttpGet]
-    public string Get()
+    public IActionResult English()
     {
-      return "Hello World from a Controller";
+      return Ok("Hello World from a Controller");
+    }
+
+    [HttpGet("ptbr")]
+    public IActionResult Portuguese()
+    {
+      return Ok("Olá Mundo de um Controlador");
+    }
+
+    [HttpGet("hindi")]
+    public IActionResult Hindi()
+    {
+      return Ok("नियंत्रक से हेलो वर्ल्ड");
     }
   }
   ```
@@ -248,7 +261,7 @@ They are grouped into categories:
   ```shell
   curl --location 'http://localhost:5062/api/HelloWorld'
 
-  curl --location 'http://localhost:5062/api/HelloWorld/port'
+  curl --location 'http://localhost:5062/api/HelloWorld/ptbr'
 
   curl --location 'http://localhost:5062/api/HelloWorld/hindi'
   ```
