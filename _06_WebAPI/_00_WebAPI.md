@@ -295,45 +295,59 @@ They are grouped into categories:
     {
       return Ok("नियंत्रक से हेलो वर्ल्ड");
     }
+  }
+  ```
 
-    [HttpOptions("products")]
-    public IActionResult GetOptions()
+## A Controller Demo: ProductController
+
+* Controller implementation for Products
+
+  ```csharp
+  using Microsoft.AspNetCore.Mvc;
+
+  namespace WebAPI.Controllers;
+
+  [Route("api/[controller]")]
+  [ApiController]
+  public class ProductController : ControllerBase
+  {
+    [HttpOptions()]
+    public IActionResult Options()
     {
       Response.Headers.Append("Allow", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
       return Ok();
     }
 
     // GET: Retrieve all products
-    [HttpGet("products")]
+    [HttpGet()]
     public ActionResult<IEnumerable<Product>> GetProducts()
     {
-      return Ok(products);
+      return Ok(products.Values);
     }
 
     // GET: Retrieve a single product by ID
-    [HttpGet("products/{id}")]
+    [HttpGet("{id}")]
     public ActionResult<Product> GetProduct(int id)
     {
-      var product = products.FirstOrDefault(p => p.Id == id);
-      if (product == null)
+      if (!products.ContainsKey(id))
         return NotFound();
-      return Ok(product);
+      return Ok(products[id]);
     }
 
     // POST: Add a new product
-    [HttpPost("products")]
+    [HttpPost()]
     public ActionResult<Product> AddProduct([FromBody] Product newProduct)
     {
-      newProduct.Id = products.Count > 0 ? products.Max(p => p.Id) + 1 : 1;
-      products.Add(newProduct);
+      newProduct.Id = products.Count > 0 ? products.Max(p => p.Key) + 1 : 1;
+      products[newProduct.Id.Value] = newProduct;
       return CreatedAtAction(nameof(GetProduct), new { id = newProduct.Id }, newProduct);
     }
 
     // PUT: Update an existing product entirely
-    [HttpPut("products/{id}")]
+    [HttpPut("{id}")]
     public ActionResult PutProduct(int id, [FromBody] Product product)
     {
-      var existingProduct = products.FirstOrDefault(p => p.Id == id);
+      var existingProduct = products[id];
       if (existingProduct == null)
         return NotFound();
       existingProduct.Description = product.Description;
@@ -342,41 +356,36 @@ They are grouped into categories:
     }
 
     // PATCH: Update an existing product partially
-    [HttpPatch("products/{id}")]
+    [HttpPatch("{id}")]
     public ActionResult PatchProduct(int id, [FromBody] Product product)
     {
-      var existingProduct = products.FirstOrDefault(p => p.Id == id);
-      if (existingProduct == null)
+      if (!products.ContainsKey(id))
         return NotFound();
+      var existingProduct = products[id];
       if (product.Description != null)
-      {
         existingProduct.Description = product.Description;
-      }
       if (product.Price.HasValue)
-      {
         existingProduct.Price = product.Price.Value;
-      }
       return NoContent();
     }
 
     // DELETE: Remove a product
-    [HttpDelete("products/{id}")]
+    [HttpDelete("{id}")]
     public ActionResult DeleteProduct(int id)
     {
-      var product = products.FirstOrDefault(p => p.Id == id);
-      if (product == null)
+      if (!products.ContainsKey(id))
         return NotFound();
-      products.Remove(product);
+      products.Remove(id);
       return NoContent();
     }
 
-    private static List<Product> products = new List<Product>
-      {
-          new Product { Id = 1, Description = "Notebook", Price = 1200 },
-          new Product { Id = 2, Description = "Smartphone", Price = 800 },
-          new Product { Id = 3, Description = "Mouse", Price = 50 },
-          new Product { Id = 4, Description = "Keyboard", Price = 70 }
-      };
+    private static Dictionary<int, Product> products = new Dictionary<int, Product>
+    {
+        { 1, new Product { Id = 1, Description = "Notebook", Price = 1200 } },
+        { 2, new Product { Id = 2, Description = "Smartphone", Price = 800 } },
+        { 3, new Product { Id = 3, Description = "Mouse", Price = 50 } },
+        { 4, new Product { Id = 4, Description = "Keyboard", Price = 70 } }
+    };
   }
 
   public class Product
@@ -385,6 +394,7 @@ They are grouped into categories:
     public string? Description { get; set; }
     public decimal? Price { get; set; }
   }
+
   ```
 
 ## Query String
