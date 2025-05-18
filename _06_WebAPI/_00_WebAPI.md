@@ -505,6 +505,14 @@ HTTP headers are key-value pairs included in requests and responses, providing a
   }
   ```
 
+## Demonstrating ASP.NET Web API with a online Chess game
+
+* [HTTP CHESS](https://github.com/airamez/http-chess)
+* Hosted on Azure as the free option of App Service
+* Easy deployment with Deployment Center connected with the GitHub repository
+
+![HTTP Chess](images/http-chess.png)
+
 ## Implementing a Controller using Entity Framework
 
 * Adding a reference to the DataAccess project
