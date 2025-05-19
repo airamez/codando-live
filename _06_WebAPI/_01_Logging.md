@@ -68,8 +68,14 @@ public class SampleController : ControllerBase
     [HttpGet]
     public IActionResult Get()
     {
+      try  {
         _logger.LogInformation("Processing request at {Time}", DateTime.UtcNow);
         return Ok("Logging example!");
+      catch (Exception ex)
+      {
+        _logger.LogError(ex, "Error on Get");
+        return Problem();
+      }
     }
 }
 ```
