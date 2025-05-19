@@ -161,7 +161,7 @@
   * SortedSet
   * Stack
 * Intro to Leetcode and interview
-  * Question resolution and interview tips
+  * Questions resolution and interview tips
 * .Net API
   * StringBuilder
   * DateTime
@@ -180,8 +180,14 @@
   * Extension Method
   * RegEx: Regular Expression
   * Multi-Threading and Async Programming
+    * Race Condition
+    * Thread Safe
+    * Console mode games
+    * Web Crawler/Explorer
+    * Heavy processing
   * Functional Programming
   * LRU Cache: Least Recently Used Cache
+  * Serpent gam
 
 ## Introduction to SQL
 
@@ -220,15 +226,39 @@
 ## .NET Data Access
 
 * ADO.NET
+  * Intro
+  * Basic query
+  * SQL Injection
+  * NonQuery Commands
+  * Scalar Commands
+  * Stored Procedure
+  * Transactions
+  * Secure Design
+  * DataTable
+  * DataSet
 * Entity Framework
 
 ## Introduction to Web Development
 
-* HTML
-* CSS
-* JavaScript
-* Web Development Java Script Framework
-  * Angular
-  * React
+### ASP.NET Web API
 
-## Web Services/API
+* Intro
+* HTTP
+* MVC
+* Controller
+* Query String
+* Headers
+* Chess game over HTTP
+* Hosting on Azure
+* Controllers with Entity Framework
+* Logging
+
+### HTML
+
+### CSS
+
+### JavaScript
+
+### Angular
+
+### React
