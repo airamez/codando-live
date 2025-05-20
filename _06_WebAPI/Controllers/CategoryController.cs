@@ -24,6 +24,7 @@ public class CategoriesController : ControllerBase
   }
 
   // GET: api/categories/{id} - Retrieve a single category by ID
+  [HttpGet("{id}")]
   public async Task<ActionResult<Category>> GetCategory(int id)
   {
     var category = await _context.Categories.FindAsync(id);

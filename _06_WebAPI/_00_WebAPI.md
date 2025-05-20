@@ -814,4 +814,147 @@ There are the common options for .NET Core
 
 Logging is a fundamental aspect of software development, ensuring maintainability, security, and observability. With .NET Core's built-in logging framework and third-party tools like Serilog, developers can implement structured and efficient logging practices.
 
+## Swagger
+
+### Overview of Swagger
+
+Swagger, now part of the OpenAPI Specification, is a powerful tool for documenting and testing RESTful APIs. It provides an interactive user interface (Swagger UI) that allows developers to explore API endpoints, view request/response schemas, and test API calls directly in the browser. In ASP.NET Core Web APIs, Swagger is commonly implemented using the `Swashbuckle.AspNetCore` NuGet package.
+
+#### Why Use Swagger?
+
+* **Automatic Documentation**: Generates API documentation from code, reducing manual effort.
+* **Interactive Testing**: Allows developers and testers to try API endpoints without external tools.
+* **Standardized Format**: Uses OpenAPI to produce machine-readable API specifications (e.g., JSON/YAML).
+* **Improved Collaboration**: Makes APIs easier to understand for frontend developers, testers, and external consumers.
+* **Consistency**: Ensures documentation stays in sync with code changes.
+
+#### Key Components
+
+* **Swagger JSON/YAML**: A machine-readable document describing the API (e.g., `/swagger/v1/swagger.json`).
+* **Swagger UI**: A web interface for exploring and testing the API.
+* **Swashbuckle.AspNetCore**: A NuGet package that integrates Swagger into ASP.NET Core.
+
+### Integrating Swagger into an ASP.NET Core Web API
+
+#### Step 1: Install Swashbuckle.AspNetCore
+
+  ```bash
+  dotnet add package Swashbuckle.AspNetCore
+  ```
+
+* Verify the package in your .csproj file
+
+  ```xml
+  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  ```
+
+#### Step 2: Configure Swagger in Program.cs
+
+Modify your Program.cs to register Swagger services and add the Swagger middleware. This enables Swagger to generate the OpenAPI document and serve the Swagger UI.
+
+Here’s an updated Program.cs based on your project:
+
+```csharp
+using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Diagnostics;
+using System.Net;
+using Microsoft.OpenApi.Models;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add database context to services
+builder.Services
+    .AddDbContext<NorthWindContext>(options => options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")
+    ));
+
+// Add controllers with JSON options
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        options.JsonSerializerOptions.WriteIndented = true;
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
+
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
+// Add Swagger services
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "NorthWind API",
+        Version = "v1",
+        Description = "API for managing categories and products in the NorthWind database",
+        Contact = new OpenApiContact
+        {
+            Name = "Your Name",
+            Email = "your.email@example.com"
+        }
+    });
+
+    // Optional: Handle schema ID conflicts (e.g., Product in multiple namespaces)
+    c.CustomSchemaIds(type => type.FullName.Replace(".", "_"));
+});
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "NorthWind API v1");
+        c.RoutePrefix = string.Empty; // Serve Swagger UI at root (/)
+    });
+}
+else
+{
+    app.UseExceptionHandler(errorApp =>
+    {
+        errorApp.Run(async context =>
+        {
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.ContentType = "application/json";
+            var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+            if (exceptionHandlerPathFeature?.Error != null)
+            {
+                var logger = app.Services.GetRequiredService<ILogger<Program>>();
+                logger.LogError(exceptionHandlerPathFeature.Error, "Unhandled exception occurred");
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    Success = false,
+                    ErrorMessage = "An unexpected error occurred. Please try again later."
+                });
+            }
+        });
+    });
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+app.UseRouting();
+app.MapControllers();
+
+app.Run();
+```
+
+#### Step 3: Test Swagger
+
+* Run the Application
+* Access Swagger UI: Navigate to `http://localhost:<port>/` (or `https://localhost:<port>/` if HTTPS is enabled).
+* Verify Endpoints: Check that endpoints (e.g., GET `/api/CategoriesPro`) are documented with schemas for CategoryDto and `ApiResponse<T>`.
+* Test API Calls: Use the Swagger UI to send requests and verify responses.
+
+![Swagger](images/swagger.png)
+
+## CORS
+
 ## Authentication

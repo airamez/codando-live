@@ -18,7 +18,7 @@ public class CategoriesWithLogController : ControllerBase
   {
     _context = context;
     _logger = logger;
-    _logger.LogInformation("Application loaded");
+    _logger.LogInformation("CategoriesWithLogController is loaded");
   }
 
   // GET: api/categories - Retrieve all categories
@@ -39,6 +39,7 @@ public class CategoriesWithLogController : ControllerBase
   }
 
   // GET: api/categories/{id} - Retrieve a single category by ID
+  [HttpGet("{id}")]
   public async Task<ActionResult<Category>> GetCategory(int id)
   {
     try

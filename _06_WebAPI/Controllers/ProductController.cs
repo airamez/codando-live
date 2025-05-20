@@ -15,14 +15,14 @@ public class ProductController : ControllerBase
 
   // GET: Retrieve all products
   [HttpGet()]
-  public ActionResult<IEnumerable<Product>> GetProducts()
+  public ActionResult<IEnumerable<ProductEntity>> GetProducts()
   {
     return Ok(products.Values);
   }
 
   // GET: Retrieve a single product by ID
   [HttpGet("{id}")]
-  public ActionResult<Product> GetProduct(int id)
+  public ActionResult<ProductEntity> GetProduct(int id)
   {
     if (!products.ContainsKey(id))
       return NotFound();
@@ -31,7 +31,7 @@ public class ProductController : ControllerBase
 
   // POST: Add a new product
   [HttpPost()]
-  public ActionResult<Product> AddProduct([FromBody] Product newProduct)
+  public ActionResult<ProductEntity> AddProduct([FromBody] ProductEntity newProduct)
   {
     newProduct.Id = products.Count > 0 ? products.Max(p => p.Key) + 1 : 1;
     products[newProduct.Id.Value] = newProduct;
@@ -40,7 +40,7 @@ public class ProductController : ControllerBase
 
   // PUT: Update an existing product entirely
   [HttpPut("{id}")]
-  public ActionResult PutProduct(int id, [FromBody] Product product)
+  public ActionResult PutProduct(int id, [FromBody] ProductEntity product)
   {
     var existingProduct = products[id];
     if (existingProduct == null)
@@ -52,7 +52,7 @@ public class ProductController : ControllerBase
 
   // PATCH: Update an existing product partially
   [HttpPatch("{id}")]
-  public ActionResult PatchProduct(int id, [FromBody] Product product)
+  public ActionResult PatchProduct(int id, [FromBody] ProductEntity product)
   {
     if (!products.ContainsKey(id))
       return NotFound();
@@ -74,16 +74,16 @@ public class ProductController : ControllerBase
     return NoContent();
   }
 
-  private static Dictionary<int, Product> products = new Dictionary<int, Product>
+  private static Dictionary<int, ProductEntity> products = new Dictionary<int, ProductEntity>
   {
-      { 1, new Product { Id = 1, Description = "Notebook", Price = 1200 } },
-      { 2, new Product { Id = 2, Description = "Smartphone", Price = 800 } },
-      { 3, new Product { Id = 3, Description = "Mouse", Price = 50 } },
-      { 4, new Product { Id = 4, Description = "Keyboard", Price = 70 } }
+      { 1, new ProductEntity { Id = 1, Description = "Notebook", Price = 1200 } },
+      { 2, new ProductEntity { Id = 2, Description = "Smartphone", Price = 800 } },
+      { 3, new ProductEntity { Id = 3, Description = "Mouse", Price = 50 } },
+      { 4, new ProductEntity { Id = 4, Description = "Keyboard", Price = 70 } }
   };
 }
 
-public class Product
+public class ProductEntity
 {
   public int? Id { get; set; }
   public string? Description { get; set; }
