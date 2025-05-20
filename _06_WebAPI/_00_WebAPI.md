@@ -955,6 +955,4 @@ app.Run();
 
 ![Swagger](images/swagger.png)
 
-## CORS
-
 ## Authentication

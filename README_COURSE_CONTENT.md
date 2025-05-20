@@ -251,7 +251,10 @@
 * Chess game over HTTP
 * Hosting on Azure
 * Controllers with Entity Framework
+* Professional Controller
 * Logging
+* Swagger
+* Authentication
 
 ### HTML
 
