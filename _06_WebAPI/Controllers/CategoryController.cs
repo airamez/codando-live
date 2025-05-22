@@ -39,23 +39,33 @@ public class CategoriesController : ControllerBase
   [HttpPost]
   public async Task<ActionResult<Category>> CreateCategory(Category category)
   {
-    if (category == null)
+    try
     {
-      return BadRequest("Invalid category data.");
+      if (category == null)
+      {
+        return BadRequest("Invalid category data.");
+      }
+      //@todo: Show the risk of not catching exceptions
+      if (string.IsNullOrWhiteSpace(category.CategoryName))
+      {
+        return BadRequest("Category Name is required");
+      }
+      if (category.CategoryName.Length > 15)
+      {
+        return BadRequest("Category Name Length max is 15");
+      }
+      // if (category.CategoryName.Length > 15)
+      // {
+      //   category.CategoryName = category.CategoryName.Substring(0, 15);
+      // }
+      _context.Categories.Add(category);
+      await _context.SaveChangesAsync();
+      return CreatedAtAction(nameof(GetCategory), new { id = category.CategoryId }, category);
     }
-    //@todo: Show the risk of not catching exceptions
-    // if (string.IsNullOrWhiteSpace(category.CategoryName))
-    // {
-    //   return BadRequest("Category Name is required");
-    // }
-    var newCategory = new Category
+    catch (Exception)
     {
-      CategoryName = category.CategoryName,
-      Description = category.Description
-    };
-    _context.Categories.Add(newCategory);
-    await _context.SaveChangesAsync();
-    return CreatedAtAction(nameof(GetCategory), new { id = newCategory.CategoryId }, newCategory);
+      return StatusCode(500, "Unexpected Error! Try again later!");
+    }
   }
 
   // PUT: api/categories/{id} - Update an existing category
@@ -63,22 +73,22 @@ public class CategoriesController : ControllerBase
   public async Task<IActionResult> UpdateCategory(int id, Category category)
   {
     //@todo: cause exceptions to show the how to deal with it
-    // try
-    // {
-    var existingCategory = await _context.Categories.FindAsync(id);
-    if (existingCategory == null)
+    try
     {
-      return NotFound($"Category with ID {id} not found.");
+      var existingCategory = await _context.Categories.FindAsync(id);
+      if (existingCategory == null)
+      {
+        return NotFound($"Category with ID {id} not found.");
+      }
+      existingCategory.CategoryName = category.CategoryName;
+      existingCategory.Description = category.Description;
+      await _context.SaveChangesAsync();
     }
-    existingCategory.CategoryName = category.CategoryName;
-    existingCategory.Description = category.Description;
-    await _context.SaveChangesAsync();
-    // }
-    // catch (Exception ex)
-    // {
-    //   // Becareful when returning exception messages
-    //   return StatusCode(500, $"Database error: {ex.Message}");
-    // }
+    catch (Exception ex)
+    {
+      // Becareful when returning exception messages
+      return StatusCode(500, $"Database error: {ex.Message}");
+    }
     return NoContent();
   }
 
