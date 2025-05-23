@@ -28,7 +28,7 @@ public class CategoriesWithLogController : ControllerBase
     try
     {
       var categories = await _context.Categories.ToListAsync();
-      _logger.LogInformation("Categories retrieved");
+      _logger.LogInformation($"Categories retrieved: Count={categories.Count}");
       return categories.Any() ? Ok(categories) : NoContent();
     }
     catch (Exception ex)
