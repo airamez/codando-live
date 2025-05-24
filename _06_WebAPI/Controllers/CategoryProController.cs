@@ -28,6 +28,9 @@ public class CategoriesProController : ControllerBase
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<ActionResult<ApiResponse<IEnumerable<CategoryDto>>>> GetCategories()
   {
+    /*
+     * NOTE: Remember to explain about the async Task
+     */
     try
     {
       _logger.LogInformation("Fetching all categories");
