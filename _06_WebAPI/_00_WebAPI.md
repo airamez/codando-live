@@ -818,7 +818,7 @@ Logging is a fundamental aspect of software development, ensuring maintainabilit
 
 ### Overview of Swagger
 
-Swagger, now part of the OpenAPI Specification, is a powerful tool for documenting and testing RESTful APIs. It provides an interactive user interface (Swagger UI) that allows developers to explore API endpoints, view request/response schemas, and test API calls directly in the browser. In ASP.NET Core Web APIs, Swagger is commonly implemented using the `Swashbuckle.AspNetCore` NuGet package.
+[Swagger](https://swagger.io/), now part of the OpenAPI Specification, is a powerful tool for documenting and testing RESTful APIs. It provides an interactive user interface (Swagger UI) that allows developers to explore API endpoints, view request/response schemas, and test API calls directly in the browser. In ASP.NET Core Web APIs, Swagger is commonly implemented using the `Swashbuckle.AspNetCore` NuGet package.
 
 #### Why Use Swagger?
 
@@ -890,12 +890,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "NorthWind API",
         Version = "v1",
-        Description = "API for managing categories and products in the NorthWind database",
-        Contact = new OpenApiContact
-        {
-            Name = "Your Name",
-            Email = "your.email@example.com"
-        }
+        Description = "API for managing categories and products in the NorthWind database"
     });
 
     // Optional: Handle schema ID conflicts (e.g., Product in multiple namespaces)
@@ -954,5 +949,7 @@ app.Run();
 * Test API Calls: Use the Swagger UI to send requests and verify responses.
 
 ![Swagger](images/swagger.png)
+
+## A Professional Controller using Entity Framework
 
 ## Authentication
