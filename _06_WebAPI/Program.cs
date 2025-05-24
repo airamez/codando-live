@@ -1,6 +1,7 @@
 using System.Net;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using WebAPI.Mappers;
@@ -16,6 +17,11 @@ builder.Services
 builder.Services.AddControllers();
 
 builder.Services.AddAutoMapper(typeof(CategoryProfile));
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+  options.SuppressModelStateInvalidFilter = true;
+});
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
