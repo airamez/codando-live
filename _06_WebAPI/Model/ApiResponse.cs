@@ -6,4 +6,5 @@ public class ApiResponse<T>
   public T? Data { get; set; }
   public string? ErrorMessage { get; set; }
   public int? Version { get; set; }
+  public List<string> Errors { get; set; } = new List<string>();
 }

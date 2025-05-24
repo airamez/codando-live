@@ -950,17 +950,62 @@ Logging is a fundamental aspect of software development, ensuring maintainabilit
 
 ## A Professional Controller using Entity Framework
 
-There are multiple ways to implemente a professional and production ready Controller.
-Below is an example following some best practices:
+* There are multiple ways to implemente a professional and production ready Controller.
+* [This is a Microsoft recomendation](https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-9.0&tabs=visual-studio)
 
-* Use DTO (Data Transfer Objects) classes as input and output parameters
-  * DTO is a design pattern used to transfer data between different layers or components of an application, such as between a client and server or between services in a microservices architecture.
-  * [DTO APIs](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations?view=net-9.0) allow [annotations](https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions/mvc-music-store/mvc-music-store-part-6) to enforce rules
-  * Category DTO
-  * Benefits:
-    * Decoupling: Separates the internal data model (e.g., database entities) from the data exposed to clients.
-    * Efficiency: Reduces overhead by bundling related data into a single object, minimizing network calls.
-    * Security: Allows control over which data is exposed, hiding sensitive or unnecessary fields.
+### 1. Use DTO (Data Transfer Objects) classes
+
+* [DTO](https://learn.microsoft.com/en-us/aspnet/web-api/overview/data/using-web-api-with-entity-framework/part-5) is a design pattern used to transfer data between different layers or components of an application, such as between a client and server or between services in a microservices architecture.
+* [DTO APIs](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.dataannotations?view=net-9.0) allow [annotations](https://learn.microsoft.com/en-us/aspnet/mvc/overview/older-versions/mvc-music-store/mvc-music-store-part-6) to enforce rules
+* There are Mappers APIs to map from and to the DTO class
+* Benefits:
+  * Decoupling: Separates the internal data model (e.g., database entities) from the data exposed to clients.
+  * Efficiency: Reduces overhead by bundling related data into a single object, minimizing network calls.
+  * Security: Allows control over which data is exposed, hiding sensitive or unnecessary fields.
+* [Pros and Cons from Microsoft](https://learn.microsoft.com/en-us/archive/msdn-magazine/2009/brownfield/pros-and-cons-of-data-transfer-objects)
+* Using a [Mapper](https://github.com/AutoMapper/AutoMapper) API
+  * Add to the project.
+    * Run the script below at the project folder
+
+      ```shell
+      dotnet add package AutoMapper
+      dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection
+      ```
+
+    * Check the `.csproj` file for the entriesn and make sure the version are the same
+
+      ```xml
+      <PackageReference Include="AutoMapper" Version="12.0.1" />
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+      ```
+
+  * Define a Mapper
+
+    ```csharp
+    using AutoMapper;
+    using WebAPI.Models;
+    using DataAccess.Models;
+
+    namespace WebAPI.MappingProfiles;
+
+    public class CategoryProfile : Profile
+    {
+      public CategoryProfile()
+      {
+        CreateMap<Category, CategoryDto>();
+        CreateMap<CategoryDto, Category>()
+            .ForMember(dest => dest.CategoryId, opt => opt.Ignore()); // Ignore CategoryId for POST to avoid overwriting
+      }
+    }
+    ```
+
+  * Register the Mapper in `Program.cs`
+
+    ```csharp
+    builder.Services.AddAutoMapper(typeof(CategoryProfile));
+    ```
+
+* Category DTO
 
   ```csharp
   using System.ComponentModel.DataAnnotations;
@@ -980,7 +1025,33 @@ Below is an example following some best practices:
   }
   ```
 
-* Use a structure to encapsulate the HTTP Response
+* Mapping from and to the DTO in the Controller
+
+  ```csharp
+  // Mapping from Entity Framework class to DTO
+  var categories = await _context.Categories
+      .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
+      .ToListAsync();
+
+  // Mapping from DTO to Entity Framework class
+  var category = _mapper.Map<Category>(categoryDto);
+  ```
+
+### 2. Use a structure to encapsulate the HTTP Response
+
+Encapsulating HTTP responses in a structured class like `ApiResponse<T>` provides a standardized way to return data, status, and error information to clients. This approach improves the reliability, maintainability, and clarity of your API.
+
+* Benefits
+  * Consistency Across Endpoints
+  * Improved Error Handling
+  * Extensibility for Future Needs
+  * Type Safety with Generics
+  * Clear Success/Failure Indication
+  * Enhanced Client Experience
+  * Simplified Controller Code
+  * Support for Versioning and Metadata
+
+* An ApiResponse Example
 
   ```csharp
   namespace WebAPI.Models;
@@ -990,56 +1061,270 @@ Below is an example following some best practices:
     public bool Success { get; set; }
     public T? Data { get; set; }
     public string? ErrorMessage { get; set; }
+    public int? Version { get; set; }
+    public List<string> Errors { get; set; } = new List<string>();
   }
   ```
 
-* The Controller method implementation provide details and deal with exceptions
+* Returning the API Response from the Controller
 
   ```csharp
-  // GET: api/CategoriesPro/{id} - Retrieve a single category by ID
-  [HttpGet("{id}")]
-  [ProducesResponseType(StatusCodes.Status200OK)]
-  [ProducesResponseType(StatusCodes.Status404NotFound)]
+  return Ok(new ApiResponse<IEnumerable<CategoryDto>>
+  {
+    Success = true,
+    Data = categories.Any() ? categories : null,
+    ErrorMessage = categories.Any() ? null : "No categories found",
+    Version = 1
+  });
+  ```
+
+### 3. Use the Controller `ModelState`
+
+* `ModelState` is a feature in ASP.NET Core that tracks the state of model binding and validation for data submitted in HTTP requests.
+* It is represented by the `ModelStateDictionary` class, accessible via the `ControllerBase.ModelState` property in MVC controllers.
+* `ModelState` is used to validate incoming data (e.g., form submissions, JSON payloads) against predefined rules, ensuring the data is valid before processing.
+
+#### Key Concepts
+
+* **Model Binding**: Automatically maps incoming request data (e.g., JSON, form data, query strings) to a model object (e.g., a DTO or view model).
+* **Validation**: After binding, the framework checks the model against validation rules, such as data annotations (`[Required]`, `[StringLength]`) or custom validation logic.
+* **ModelStateDictionary**: Stores the results of binding and validation, including:
+  * Values submitted in the request.
+  * Errors if validation fails (e.g., missing required fields, invalid formats).
+  * A boolean property, `IsValid`, indicating whether all validations passed.
+
+#### How ModelState Works
+
+1. **Model Binding**:
+   * When a request is received (e.g., POST with a JSON body), ASP.NET Core binds the data to the action method's parameter (e.g., `CategoryDto` in a `[FromBody]` parameter).
+   * The binding process populates the `ModelState` dictionary with the submitted values.
+
+2. **Validation**:
+   * The framework applies validation rules defined by:
+     * **Data Annotations**: Attributes like `[Required]`, `[StringLength]`, `[Range]`, etc., on the model properties.
+     * **Custom Validation**: Implementing `IValidatableObject` or custom validation attributes.
+   * If any rule is violated, `ModelState` records an error, and `ModelState.IsValid` is set to `false`.
+
+3. **Checking ModelState**:
+   * Controllers check `ModelState.IsValid` to determine if the data is valid.
+   * If invalid, the controller typically returns a `400 Bad Request` response with details from `ModelState`.
+
+* ModelState example
+
+  * DTO with annotation
+
+    ```csharp
+    using System.ComponentModel.DataAnnotations;
+
+    namespace WebAPI.Models;
+
+    public class CategoryDto
+    {
+      public int CategoryId { get; set; }
+
+      [Required(ErrorMessage = "Category name is required")]
+      [StringLength(100, ErrorMessage = "Category name cannot exceed 100 characters")]
+      public string CategoryName { get; set; } = string.Empty;
+
+      [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
+      public string? Description { get; set; }
+    }
+    ```
+
+  * Checking the ModelState status in the Controller
+
+    ```csharp
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<CategoryDto>>> CreateCategory([FromBody] CategoryDto categoryDto)
+    {
+      try
+      {
+        if (!ModelState.IsValid) // Checking ModelState
+        {
+          _logger.LogWarning("Invalid category data provided");
+          return BadRequest(new ApiResponse<CategoryDto>
+          {
+            Success = false,
+            ErrorMessage = "Invalid category data",
+            Data = null
+          });
+        }
+    ...
+    ```
+
+  * Checking the validation errors
+
+    ```csharp
+    var errors = ModelState.Values
+        .SelectMany(v => v.Errors)
+        .Select(e => e.ErrorMessage)
+        .ToList();
+    ```
+
+### 4. The Controller method provides details and deal with exceptions
+
+  ```csharp
+  [HttpPost]
+  [ProducesResponseType(StatusCodes.Status201Created)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-  public async Task<ActionResult<ApiResponse<CategoryDto>>> GetCategory(int id)
+  public async Task<ActionResult<ApiResponse<CategoryDto>>> CreateCategory([FromBody] CategoryDto categoryDto)
   {
     try
     {
-      _logger.LogInformation("Fetching category with ID {CategoryId}", id);
-      var category = await _context.Categories
-          .Where(c => c.CategoryId == id)
-          .Select(c => new CategoryDto
-          {
-            CategoryId = c.CategoryId,
-            CategoryName = c.CategoryName,
-            Description = c.Description
-          })
-          .FirstOrDefaultAsync();
-
-      if (category == null)
+      if (!ModelState.IsValid)
       {
-        _logger.LogWarning("Category with ID {CategoryId} not found", id);
-        return NotFound(new ApiResponse<CategoryDto>
+        _logger.LogWarning("Invalid category data provided");
+        var errors = ModelState.Values
+            .SelectMany(v => v.Errors)
+            .Select(e => e.ErrorMessage)
+            .ToList();
+        return BadRequest(new ApiResponse<CategoryDto>
         {
           Success = false,
-          ErrorMessage = $"Category with ID {id} not found"
+          ErrorMessage = "Invalid category data",
+          Data = null,
+          Errors = errors
         });
       }
 
-      return Ok(new ApiResponse<CategoryDto>
-      {
-        Success = true,
-        Data = category
-      });
+      _logger.LogInformation("Creating new category: {CategoryName}", categoryDto.CategoryName);
+      var category = _mapper.Map<Category>(categoryDto);
+
+      _context.Categories.Add(category);
+      await _context.SaveChangesAsync();
+
+      categoryDto = _mapper.Map<CategoryDto>(category);
+
+      return CreatedAtAction(
+          nameof(GetCategory),
+          new { id = category.CategoryId },
+          new ApiResponse<CategoryDto>
+          {
+            Success = true,
+            Data = categoryDto
+          });
     }
     catch (Exception ex)
     {
-      _logger.LogError(ex, "Failed to retrieve category with ID {CategoryId}", id);
+      _logger.LogError(ex, "Failed to create category: {CategoryName}", categoryDto.CategoryName);
       return StatusCode(StatusCodes.Status500InternalServerError, new ApiResponse<CategoryDto>
       {
         Success = false,
-        ErrorMessage = "An error occurred while retrieving the category"
+        ErrorMessage = "An error occurred while creating the category"
       });
     }
   }
+  ```
+
+### Testing the Pro Controller
+
+>Note: The [jq tool](https://jqlang.org/) is a lightweight, command-line JSON processor that is widely used for parsing, filtering, and formatting JSON data. It comes from an open-source project created by Stephen Dolan.
+
+* New category
+
+* All categories
+
+  ```shell
+  curl -X GET http://localhost:5062/api/CategoriesPro -H "Content-Type: application/json" \
+  | jq .
+  ```
+
+* Add category
+
+  ```shell
+  curl -X POST http://localhost:5062/api/CategoriesPro \
+  -H "Content-Type: application/json" \
+  -d '{"CategoryName": "Pro Category", "Description": "A new Professional Category"}' | jq .
+  ```
+
+* All categories
+
+  ```shell
+  curl -X GET http://localhost:5062/api/CategoriesPro -H "Content-Type: application/json" | jq .
+  ```
+
+* Get category
+
+  ```shell
+  curl -X GET http://localhost:5062/api/CategoriesPro/1 -H "Content-Type: application/json" | jq .
+  ```
+
+* Get invalid category
+
+  ```shell
+  curl -X GET http://localhost:5062/api/CategoriesPro/999 -H "Content-Type: application/json" | jq .
+  ```
+
+* Mising name
+
+  ```shell
+  curl -X POST http://localhost:5062/api/CategoriesPro \
+  -H "Content-Type: application/json" \
+  -d '{"Description": "Valid description"}' | jq .
+  ```
+
+* Name too long
+
+  ```shell
+  curl -X POST http://localhost:5062/api/CategoriesPro \
+  -H "Content-Type: application/json" \
+  -d '{"CategoryName": "ThisIsWayTooLongCategoryName", "Description": "Valid description"}' | jq .
+  ```
+
+* Description too long
+
+  ```shell
+  curl -X POST http://localhost:5062/api/CategoriesPro \
+  -H "Content-Type: application/json" \
+  -d '{"CategoryName": "Beverages", "Description": "This description is way too long and exceeds the maximum allowed length of 200 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."}' | jq .
+  ```
+
+* Name and description too long
+
+  ```shell
+  curl -X POST http://localhost:5062/api/CategoriesPro \
+  -H "Content-Type: application/json" \
+  -d '{"CategoryName": "ThisIsWayTooLongCategoryName", "Description": "This description is way too long and exceeds the maximum allowed length of 200 characters. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."}' | jq .
+  ```
+
+* Get category
+
+  ```shell
+  curl -X GET http://localhost:5062/api/CategoriesPro/1 -H "Content-Type: application/json" | jq .
+  ```
+
+* Update category description
+
+  ```shell
+  curl -X PUT http://localhost:5062/api/CategoriesPro/1 \
+  -H "Content-Type: application/json" \
+  -d '{"Description": "Updated description"}' | jq .
+  ```
+
+* Get category
+
+  ```shell
+  curl -X GET http://localhost:5062/api/CategoriesPro/1 -H "Content-Type: application/json" | jq .
+  ```
+
+* Delete invalid category
+
+  ```shell
+  curl -X DELETE http://localhost:5062/api/CategoriesPro/999 -H "Content-Type: application/json" | jq .
+  ```
+
+* Delete category
+
+  ```shell
+  curl -X DELETE http://localhost:5062/api/CategoriesPro/X -H "Content-Type: application/json" | jq .
+  ```
+
+* Get category
+
+  ```shell
+  curl -X GET http://localhost:5062/api/CategoriesPro/X -H "Content-Type: application/json" | jq .
   ```

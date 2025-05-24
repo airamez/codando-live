@@ -3,6 +3,7 @@ using DataAccess.Models;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using WebAPI.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Services
   ));
 
 builder.Services.AddControllers();
+
+builder.Services.AddAutoMapper(typeof(CategoryProfile));
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();

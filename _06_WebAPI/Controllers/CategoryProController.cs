@@ -1,7 +1,9 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using WebAPI.Models;
+using AutoMapper.QueryableExtensions;
 
 namespace WebAPI.Controllers;
 
@@ -11,14 +13,17 @@ public class CategoriesProController : ControllerBase
 {
   private readonly NorthWindContext _context;
   private readonly ILogger<CategoriesProController> _logger;
+  private readonly IMapper _mapper;
 
   public CategoriesProController(
       NorthWindContext context,
-      ILogger<CategoriesProController> logger)
+      ILogger<CategoriesProController> logger,
+      IMapper mapper)
   {
     _context = context ?? throw new ArgumentNullException(nameof(context));
     _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    _logger.LogInformation("CategoriesProController initialized");
+    _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+    _logger.LogDebug("CategoriesProController Initialized");
   }
 
   // GET: api/CategoriesPro - Retrieve all categories
@@ -28,19 +33,11 @@ public class CategoriesProController : ControllerBase
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public async Task<ActionResult<ApiResponse<IEnumerable<CategoryDto>>>> GetCategories()
   {
-    /*
-     * NOTE: Remember to explain about the async Task
-     */
     try
     {
       _logger.LogInformation("Fetching all categories");
       var categories = await _context.Categories
-          .Select(c => new CategoryDto
-          {
-            CategoryId = c.CategoryId,
-            CategoryName = c.CategoryName,
-            Description = c.Description
-          })
+          .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
           .ToListAsync();
 
       return Ok(new ApiResponse<IEnumerable<CategoryDto>>
@@ -72,15 +69,8 @@ public class CategoriesProController : ControllerBase
     {
       _logger.LogInformation("Fetching category with ID {CategoryId}", id);
       var category = await _context.Categories
-          .Where(c => c.CategoryId == id)
-          .Select(c => new CategoryDto
-          {
-            CategoryId = c.CategoryId,
-            CategoryName = c.CategoryName,
-            Description = c.Description
-          })
-          .FirstOrDefaultAsync();
-
+          .ProjectTo<CategoryDto>(_mapper.ConfigurationProvider)
+          .FirstOrDefaultAsync(c => c.CategoryId == id);
       if (category == null)
       {
         _logger.LogWarning("Category with ID {CategoryId} not found", id);
@@ -90,7 +80,6 @@ public class CategoriesProController : ControllerBase
           ErrorMessage = $"Category with ID {id} not found"
         });
       }
-
       return Ok(new ApiResponse<CategoryDto>
       {
         Success = true,
@@ -120,26 +109,23 @@ public class CategoriesProController : ControllerBase
       if (!ModelState.IsValid)
       {
         _logger.LogWarning("Invalid category data provided");
+        var errors = ModelState.Values
+            .SelectMany(v => v.Errors)
+            .Select(e => e.ErrorMessage)
+            .ToList();
         return BadRequest(new ApiResponse<CategoryDto>
         {
           Success = false,
           ErrorMessage = "Invalid category data",
-          Data = null
+          Data = null,
+          Errors = errors
         });
       }
-
       _logger.LogInformation("Creating new category: {CategoryName}", categoryDto.CategoryName);
-      var category = new Category
-      {
-        CategoryName = categoryDto.CategoryName,
-        Description = categoryDto.Description
-      };
-
+      var category = _mapper.Map<Category>(categoryDto);
       _context.Categories.Add(category);
       await _context.SaveChangesAsync();
-
-      categoryDto.CategoryId = category.CategoryId;
-
+      categoryDto = _mapper.Map<CategoryDto>(category);
       return CreatedAtAction(
           nameof(GetCategory),
           new { id = category.CategoryId },
@@ -173,13 +159,17 @@ public class CategoriesProController : ControllerBase
       if (!ModelState.IsValid)
       {
         _logger.LogWarning("Invalid category data for update with ID {CategoryId}", id);
+        var errors = ModelState.Values
+            .SelectMany(v => v.Errors)
+            .Select(e => e.ErrorMessage)
+            .ToList();
         return BadRequest(new ApiResponse<object>
         {
           Success = false,
-          ErrorMessage = "Invalid category data"
+          ErrorMessage = "Invalid category data",
+          Errors = errors
         });
       }
-
       var existingCategory = await _context.Categories.FindAsync(id);
       if (existingCategory == null)
       {
@@ -190,13 +180,9 @@ public class CategoriesProController : ControllerBase
           ErrorMessage = $"Category with ID {id} not found"
         });
       }
-
       _logger.LogInformation("Updating category with ID {CategoryId}", id);
-      existingCategory.CategoryName = categoryDto.CategoryName;
-      existingCategory.Description = categoryDto.Description;
-
+      _mapper.Map(categoryDto, existingCategory);
       await _context.SaveChangesAsync();
-
       return NoContent();
     }
     catch (Exception ex)
@@ -229,11 +215,9 @@ public class CategoriesProController : ControllerBase
           ErrorMessage = $"Category with ID {id} not found"
         });
       }
-
       _logger.LogInformation("Deleting category with ID {CategoryId}", id);
       _context.Categories.Remove(category);
       await _context.SaveChangesAsync();
-
       return NoContent();
     }
     catch (Exception ex)
