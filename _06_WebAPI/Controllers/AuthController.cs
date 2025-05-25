@@ -32,15 +32,15 @@ public class AuthController : ControllerBase
     if (!ModelState.IsValid)
     {
       var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-      _logger.LogWarning("Invalid registration attempt due to model validation errors: {Errors}", string.Join(", ", errors));
-      return Ok(ApiResponseHelper.Failure<UserDTO>("Invalid input: " + string.Join(", ", errors)));
+      _logger.LogWarning("Invalid registration. Errors: {Errors}", string.Join(", ", errors));
+      return Problem("Invalid input: " + string.Join(", ", errors));
     }
 
     // Check if login already exists
     if (await _dbContext.Users.AnyAsync(u => u.Login == request.Login))
     {
       _logger.LogWarning("Registration attempt with existing login: {Login}", request.Login);
-      return Ok(ApiResponseHelper.Failure<UserDTO>("Login already exists."));
+      return Problem("Login already exists.");
     }
 
     /*
@@ -63,7 +63,7 @@ public class AuthController : ControllerBase
 
     var userDTO = new UserDTO { Id = user.Id, Username = user.Login };
     _logger.LogInformation("Successful registration for login: {Login}", user.Login);
-    return Ok(ApiResponseHelper.Success(userDTO));
+    return Ok();
   }
 
   [HttpPost("login")]
@@ -74,7 +74,7 @@ public class AuthController : ControllerBase
     {
       var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
       _logger.LogWarning("Invalid login attempt due to model validation errors: {Errors}", string.Join(", ", errors));
-      return Ok(ApiResponseHelper.Failure<UserDTO>("Invalid input: " + string.Join(", ", errors)));
+      return Problem("Invalid input: " + string.Join(", ", errors));
     }
 
     // Query the database for the user
@@ -85,7 +85,7 @@ public class AuthController : ControllerBase
     if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
     {
       _logger.LogWarning("Invalid login attempt for username: {Username}", request.Username);
-      return Ok(ApiResponseHelper.Failure<UserDTO>("Invalid username or password."));
+      return Problem("Invalid username or password.");
     }
 
     // Generate JWT
@@ -108,7 +108,7 @@ public class AuthController : ControllerBase
     var userDTO = new UserDTO { Id = user.Id, Username = user.Login };
 
     _logger.LogInformation("Successful login for username: {Username}", user.Login);
-
-    return Ok(ApiResponseHelper.Success(new { Token = jwt, User = userDTO }));
+    Response.Headers["jwt-token"] = jwt;
+    return Ok();
   }
 }
