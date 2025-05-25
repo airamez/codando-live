@@ -238,7 +238,7 @@
   * DataSet
 * Entity Framework
 
-## Introduction to Web Development
+## Web Development
 
 ### ASP.NET Web API
 
@@ -273,8 +273,14 @@
 * Docker
 * Kubernetes
 
-## Rabbit MQ
+# Messages
 
-## Kafka
+* Rabbit MQ
+* Kafka
 
-## Mongo DB
+# Databases
+
+* SQL Lite
+* Postgres
+* Mongo DB
+* Redis
