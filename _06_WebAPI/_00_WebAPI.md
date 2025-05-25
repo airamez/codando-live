@@ -1007,7 +1007,8 @@ Logging is a fundamental aspect of software development, ensuring maintainabilit
 
 * Category DTO
 
-  ```csharp
+  ```csharp## Managing Cookies in ASP.NET Core Web API
+
   using System.ComponentModel.DataAnnotations;
 
   namespace WebAPI.Models;

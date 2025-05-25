@@ -251,9 +251,10 @@
 * Chess game over HTTP
 * Hosting on Azure
 * Controllers with Entity Framework
-* Professional Controller
 * Logging
 * Swagger
+* Professional Controller
+* HTTP Cookies
 * Authentication
 
 ### HTML
@@ -265,3 +266,15 @@
 ### Angular
 
 ### React
+
+## Containers
+
+* Podman
+* Docker
+* Kubernetes
+
+## Rabbit MQ
+
+## Kafka
+
+## Mongo DB
