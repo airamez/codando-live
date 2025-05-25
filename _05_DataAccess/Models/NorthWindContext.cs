@@ -71,6 +71,8 @@ public partial class NorthWindContext : DbContext
 
     public virtual DbSet<Territory> Territories { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=localhost,1433;Database=NorthWind;User Id=sa;Password=Password!;TrustServerCertificate=True;");
@@ -670,6 +672,24 @@ public partial class NorthWindContext : DbContext
                 .HasForeignKey(d => d.RegionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Territories_Region");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__User__3214EC0798BB784F");
+
+            entity.ToTable("User");
+
+            entity.HasIndex(e => e.Login, "UQ__User__5E55825BF240D754").IsUnique();
+
+            entity.Property(e => e.Login)
+                .IsRequired()
+                .HasMaxLength(20)
+                .IsUnicode(false);
+            entity.Property(e => e.Password)
+                .IsRequired()
+                .HasMaxLength(255)
+                .IsUnicode(false);
         });
 
         OnModelCreatingPartial(modelBuilder);
