@@ -63,11 +63,11 @@ public class PreferencesController : ControllerBase
     }
     catch (Exception)
     {
-      return StatusCode(500, "Error setting preferences");
+      return StatusCode(500, "Error accessing preferences");
     }
   }
 
-  [HttpDelete("clear-preferences")]
+  [HttpGet("clear-preferences")]
   public IActionResult ClearPreferences()
   {
     try

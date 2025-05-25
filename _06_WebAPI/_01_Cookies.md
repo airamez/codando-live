@@ -1,11 +1,13 @@
-# Cookies in ASP.NET Core Web API
+# HTTP Cookies
 
-## Overview of Cookies
-
-* Cookies are small pieces of data that a server sends to a client (typically a web browser) to store on the client’s device.
+* [HTTP Cookies](https://en.wikipedia.org/wiki/HTTP_cookie) are small pieces of data that a server sends to a client (typically a web browser) to store on the client’s device.
+* Every Web development platform has APIs to deal with HTTP Cookies.
+  * [This is a documentation page for ASP.Net Core from Microsoft](https://learn.microsoft.com/en-us/aspnet/web-api/overview/advanced/http-cookies)
+  * [This is a documentation page from Mozila](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies)
 * The client includes these cookies in subsequent HTTP requests to the same server, allowing the server to retrieve or update the stored data.
 * Cookies are usually stored in the client file system and can be accessed even after the browser is closed or the client machine is powered off.
 * In the context Web APIs, cookies are often used to persist small amounts of data across requests, such as user preferences, session identifiers, or tracking information.
+* Cookies may present as security threat and there is a effort to regulate and mitigate issues with [third-party cookies](https://developer.mozilla.org/en-US/docs/Web/Privacy/Guides/Third-party_cookies).
 
 ## Characteristics of Cookies
 

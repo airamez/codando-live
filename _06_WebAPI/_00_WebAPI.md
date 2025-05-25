@@ -1165,7 +1165,7 @@ Encapsulating HTTP responses in a structured class like `ApiResponse<T>` provide
         .ToList();
     ```
 
-### 4. The Controller method provides details and deal with exceptions
+### 4. The Controller method provides details, implement logging and deal with exceptions
 
   ```csharp
   [HttpPost]
