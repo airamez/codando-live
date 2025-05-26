@@ -1,0 +1,282 @@
+# Introduction to Common HTML Tags
+
+## What is HTML?
+
+HTML (HyperText Markup Language) is the backbone of web development, used to structure content on a webpage. It consists of tags that define elements like headings, paragraphs, links, images, and more.
+
+## HTML Tag?
+
+* An HTML tag is a fundamental component of HTML (HyperText Markup Language) used to structure and define content on a webpage.
+* Tags are the building blocks of HTML, marking up content to indicate its role, such as headings, paragraphs, links, or images.
+* They create elements that browsers interpret to render a webpage.
+* Components
+  * `Delimiter`: The angle brackets `<` and `>` enclose the tag name. For example, in `<p>`, the < and > are the delimiters.
+  * `Tag Name`: The name inside the delimiters that specifies the type of element (e.g., p for paragraph, h1 for a main heading, img for an image). HTML has a predefined set of tag names, unlike XML, which allows custom tags.
+  * `Attributes`: Optional key-value pairs included in the opening tag to provide additional information about the element. Attributes are written as name="value". For example, in `<a href="https://example.com">Click Here<a>`, href is an attribute specifying the link’s destination.
+  * `Content`: The text or other elements between the opening and closing tags. For example, in `<p>Hello, world!</p>`, “Hello, world!” is the content.
+  * `Closing Tag`: Mirrors the opening tag with a forward slash (/) before the tag name (e.g., `</p>`).
+
+> Some tags are self-closing, meaning they don’t need a separate closing tag (e.g., `<br>`, `<hr>`, `<img src="image.jpg" alt="A photo" />`).
+
+## Common HTML Tags
+
+Below is a list of frequently used HTML tags, their purposes, and key attributes:
+
+* **Document Structure Tags**:
+  * `<!DOCTYPE html>`: Declares the document as HTML5.
+  * `<html>`: The root element of the page, often with a `lang` attribute (e.g., `lang="en"`).
+  * `<head>`: Contains metadata, such as the page title and character encoding.
+  * `<body>`: Contains the visible content of the webpage.
+* **Metadata Tags** (inside `<head>`):
+  * `<meta>`: Defines metadata, like character set (`charset="UTF-8"`) or responsive viewport (`name="viewport"`).
+  * `<title>`: Sets the title of the webpage, shown in the browser tab.
+  * `<link>`: Links external resources, such as CSS stylesheets (e.g., `<link rel="stylesheet" href="styles.css">`).
+* **Text Formatting Tags**:
+  * `<h1>` to `<h6>`: Headings, with `<h1>` being the largest/most important and `<h6>` the smallest.
+  * `<img>`: Embeds an image, with src for the image path and alt for accessibility (e.g., `<img src="image.jpg" alt="Description">`).
+  * `<p>`: Defines a paragraph.
+  * `<strong>`: Indicates important text, typically bold.
+  * `<em>`: Indicates emphasized text, typically italic.
+  * `<br>`: Inserts a line break (self-closing tag).
+  * `<hr>`: Creates a horizontal rule (line) to separate content.
+* **Links and Media Tags**:
+  * `<a>`: Creates a hyperlink, using the `href` attribute for the URL.
+  * `<img>`: Embeds an image, with `src` for the image path and `alt` for accessibility.
+  * `<audio>`: Embeds audio, with `src` and attributes like `controls` for playback.
+  * `<video>`: Embeds video, with `src`, `controls`, and optional `width`/`height`.
+* **List Tags**:
+  * `<ul>`: Creates an unordered (bulleted) list.
+  * `<ol>`: Creates an ordered (numbered) list.
+  * `<li>`: Defines a list item within `<ul>` or `<ol>`.
+* **Structural and Semantic Tags**:
+  * `<div>`: A block-level container for grouping content.
+  * `<span>`: An inline container for styling or scripting small portions of content.
+  * `<header>`: Represents introductory content or navigation.
+  * `<nav>`: Defines a navigation section, often containing links (e.g., `<nav><a href="#home">Home</a></nav>`).
+  * `<footer>`: Contains footer content, like copyright or contact info.
+  * `<section>`: Defines a standalone section of content.
+  * `<article>`: Represents independent, self-contained content.
+* **Table Tags**:
+  * `<table>`: Defines a table.
+  * `<tr>`: Defines a table row.
+  * `<th>`: Defines a table header cell.
+  * `<td>`: Defines a table data cell.
+* **Form Tags**:
+  * `<form>`: Creates a form for user input, with attributes like action (URL to send data) and method (e.g., get or post).
+  * `<input>`: Creates an input field, with types like text, email, submit, radio, checkbox, etc.
+  * `<label>`: Labels an input for accessibility, using for to match an input’s id (e.g., `<label for="name">Name:</label>`).
+  * `<button>`: Creates a clickable button, often with type="submit" or type="button".
+  * `<select>`: Creates a dropdown list, often with a name attribute for form submission (e.g., `<select name="choice">`).
+  * `<option>`: Defines an option within a `<select>` dropdown, with value for the data sent and optional selected attribute (e.g., `<option value="1">Option 1</option>`).
+  * `<textarea>`: Creates a multi-line text input, with attributes like rows and cols for size (e.g., `<textarea rows="4" cols="50">`).
+
+* Comments
+
+  ```html
+  <!-- This is a comment -->
+
+  <!-- 
+    This is a multi-line comment
+  -->
+  ```
+
+  >Warning: Comments are visible in the page source, so avoid including sensitive information.
+
+## Example: A Webpage Using Common HTML Tags
+
+Below is a sample HTML webpage that incorporates most of the tags listed above, creating a simple blog post layout with text, media, lists, a table, and a form.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Codando.Live Training Course</title>
+</head>
+
+<body>
+  <header>
+    <h1>Welcome to Codando.Live</h1>
+    <nav>
+      <a href="#home">Home</a> |
+      <a href="#about">About</a> |
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section>
+    <!-- Main article for course description -->
+    <article>
+      <h1>Sobre o Curso</h1>
+      <p>O Objetivo desse curso é proporcionar gratuitamente a todos os brasileiros, interessados em aprender
+        programação de computadores ("Engenharia de Software"), um curso com conteúdo e qualidade de bons cursos
+        universitários.</p>
+      <p>O conteúdo é focado nos fundamentos e aspectos práticos. A ideia é ser um curso bem dinâmico com práticas,
+        demonstrações e explicações que ajudem a assimilar o conteúdo e deixar claro O PORQUÊ das coisas.</p>
+      <p>Como todo curso, é necessário que você faça a sua parte e esforce-se para acompanhar, principalmente fazendo os
+        exercícios.</p>
+      <p>As aulas serão através de vídeos ao vivo no YouTube, mas se você estiver começando, foque em assistir o
+        conteúdo existente. Para acompanhar as aulas atuais, é necessário domínio de todo conteúdo já abordado, assim
+        não tenha pressa, mas seja dedicado e mantenha esforço constante. Para virar um programador júnior, é necessário
+        algumas milhares de horas de dedicação.</p>
+      <p>Esse curso vai abordar todo o conteúdo para prepará-lo para ser um programador e conquistar um espaço nesse
+        mercado tão vasto e cheio de oportunidades.</p>
+      <p>Logo abaixo tem uma tabela com todas as aulas com links para os vídeos e arquivos.</p>
+
+      <!-- Links to course resources -->
+      <ul>
+        <li><a href="https://www.youtube.com/playlist?list=PLBQmBWUPdMJSCssCE1uEkqIA6f2o_zYWZ">Playlist no YouTube</a>
+        </li>
+        <li><a href="https://discord.gg/QUxmPTZeNz">Canal no Discord</a></li>
+      </ul>
+
+      <!-- Placeholder for table of lessons -->
+      <table border="1">
+        <tr>
+          <th>Aula</th>
+          <th>Link para o Vídeo</th>
+          <th>Arquivos</th>
+        </tr>
+        <tr>
+          <td colspan="3">Tabela de aulas será adicionada aqui</td>
+        </tr>
+      </table>
+    </article>
+  </section>
+
+  <section>
+    <!-- Main article for author bio -->
+    <article>
+      <h1>Sobre o Autor</h1>
+      <p>José Santos (mais conhecido como Zé Maria) é um engenheiro de software e professor veterano que iniciou no
+        mundo da informática na adolescência e antes do advento da internet.</p>
+      <p>Teve uma carreira diferenciada por atuar no meio acadêmico, sendo professor da Escola Técnica Federal de
+        Sergipe, Universidade Tiradentes, FANESE e Universidade Federal de Sergipe.</p>
+      <p>Atuou como consultor de TI, programador, administrador de redes, analista de sistemas e líder técnico no
+        Brasil, Canadá e atualmente nos Estados Unidos, trabalhando em grandes empresas, mais recentemente na Microsoft
+        e atualmente na Intuit.</p>
+      <p>Foi bastante ativo como atleta e ganhou vários títulos em esportes diferentes, entre eles: natação, voleibol,
+        tae-kwon-do e full-contact.</p>
+      <p>Além de nerd, foi atleta competente em diferentes esportes.</p>
+      <!-- Link to LinkedIn profile -->
+      <p><a href="https://www.linkedin.com/in/jose-rodrigues-santos/">LinkedIn Profile</a></p>
+    </article>
+  </section>
+
+  <section>
+    <h1>Plano de Aulas do Codando.Live</h1>
+    <table border="1">
+      <tr>
+        <th>Aula #</th>
+        <th>Vídeo no YouTube</th>
+        <th>Arquivos</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td><a href="https://youtube.com/live/YEfi_kZcaeU">Overview about Software Engineer</a></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><a href="https://youtube.com/live/41j7Gd-EX0c">Introduction</a></td>
+        <td>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_00_Overview.txt">_00_Overview.txt</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_01_HelloWorld.cs">_01_HelloWorld.cs</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_02_Comments.cs">_02_Comments.cs</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_03_VariablesAndTypes.cs">_03_VariablesAndTypes.cs</a>
+        </td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><a href="https://youtube.com/live/R9hpViMrt38">Input/Output<br>Basic Operations</a></td>
+        <td>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_04_InputOutput.cs">_04_InputOutput.cs</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_05_BasicOperations.cs">_05_BasicOperations.cs</a>
+        </td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><a href="https://youtube.com/live/TPEGq0YXGQw">Basic Operations Practices</a></td>
+        <td>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion01.cs">01.
+            Read a value in miles and convert to kilometers: 1 Mile = 1.60934KM</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion02.cs">02.
+            Read an integer number and print the three predecessors and successors.</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion03.cs">03.
+            Read two integer numbers A and B and print the result of all arithmetic operations you know for A and
+            B.</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion04.cs">04.
+            Read three integer numbers and calculate the average.</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion05.cs">05.
+            Read the base and length of a rectangle and calculate its area.</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion06.cs">06.
+            Read an integer and print True if the number is Even and False if it is Odd.</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsPractices.txt">_09_BasicOperationsPractices.txt</a>
+        </td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><a href="https://youtube.com/live/rabHztMHL2s">Basic Operations Practices</a></td>
+        <td>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion07.cs">07.
+            Read a temperature in Celsius and convert to Fahrenheit: F = C x 1.8 + 32.</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion08.cs">08.
+            Read the buying price (cost), the desired profit percentage and calculate the sales price of a
+            product.</a><br>
+          <a
+            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion09.cs">09.
+            Read the buying price (cost), the desired profit percentage and the sales tax % and calculate the final
+            sales price of a product.</a>
+        </td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Join Codando.Live</h2>
+    <form action="/submit" method="post">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+      <br>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <br>
+      <label for="country">Country:</label>
+      <select id="country" name="country" required>
+        <option value="">Select a country</option>
+        <option value="brazil">Brazil</option>
+        <option value="canada">Canada</option>
+        <option value="usa">USA</option>
+      </select>
+      <br>
+      <label for="notifications">Enable Notifications:</label>
+      <input type="checkbox" id="notifications" name="notifications">
+      <br>
+      <button type="submit">Sign Up</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>© 2025 Codando.Live. All rights reserved.</p>
+  </footer>
+</body>
+
+</html>
+```
