@@ -44,7 +44,7 @@ public class AuthController : ControllerBase
     }
 
     /*
-     * WARNING: Never log password
+     * WARNING: Never log password or token
      */
 
     // Hash password
@@ -61,7 +61,6 @@ public class AuthController : ControllerBase
     _dbContext.Users.Add(user);
     await _dbContext.SaveChangesAsync();
 
-    var userDTO = new UserDTO { Id = user.Id, Username = user.Login };
     _logger.LogInformation("Successful registration for login: {Login}", user.Login);
     return Ok();
   }
@@ -91,9 +90,9 @@ public class AuthController : ControllerBase
     // Generate JWT
     var claims = new[]
     {
-            new Claim(ClaimTypes.Name, user.Login),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-        };
+      new Claim(ClaimTypes.Name, user.Login),
+      new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+    };
 
     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -101,11 +100,10 @@ public class AuthController : ControllerBase
         issuer: _configuration["Jwt:Issuer"],
         audience: _configuration["Jwt:Audience"],
         claims: claims,
-        expires: DateTime.Now.AddMinutes(30),
+        expires: DateTime.Now.AddMinutes(5),
         signingCredentials: creds);
 
     var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-    var userDTO = new UserDTO { Id = user.Id, Username = user.Login };
 
     _logger.LogInformation("Successful login for username: {Username}", user.Login);
     Response.Headers["jwt-token"] = jwt;

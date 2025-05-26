@@ -115,15 +115,21 @@ ASP.NET Core supports multiple authentication schemes, each suited to different 
 
 ## Implementing JWT Authentication in ASP.NET Core Web API
 
-Below is an example of implementing JWT authentication in an ASP.NET Core Web API, using the `ApiResponse<T>` class for consistent responses. This example includes user login to generate a JWT and securing an endpoint with the `[Authorize]` attribute.
+Below is an example of implementing JWT authentication in an ASP.NET Core Web API, using the `ApiResponse<T>` class for consistent responses.
+
+* This example includes entry points to:
+  * Register a new User encryptin the password
+  * Login using username and password
+  * Access a controller that requires authentication: `[Authorize]` attribute.
 
 ### Prerequisites
 
-* Install libaries:
+* Install libaries
 
   ```shell
   dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer
   dotnet add package System.IdentityModel.Tokens.Jwt
+  dotnet add package BCrypt.Net-Next
   ```
 
   * Verify the .csproj file
@@ -132,16 +138,11 @@ Below is an example of implementing JWT authentication in an ASP.NET Core Web AP
     ...
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     ...
     ```
 
-* Install BCrypt.Net-Next
-
-  ```shell
-  dotnet add package BCrypt.Net-Next
-  ```
-
-* Create a User table
+* Create User table
 
   ````sql
   CREATE TABLE [User] (
@@ -151,7 +152,7 @@ Below is an example of implementing JWT authentication in an ASP.NET Core Web AP
   );
   ```
 
-### Step 1: Define Models
+### Define Models
 
 Define models for login, user data and ApiResponseHelper.
 
@@ -159,8 +160,29 @@ Define models for login, user data and ApiResponseHelper.
 
 public class LoginRequest
 {
-    public string Username { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
+  [Required(ErrorMessage = "Username is required.")]
+  [StringLength(20, ErrorMessage = "Username must be 20 characters or less.")]
+  public string Username { get; set; } = string.Empty;
+
+  [Required(ErrorMessage = "Password is required.")]
+  [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters long.")]
+  public string Password { get; set; } = string.Empty;
+}
+
+public class RegisterRequest
+{
+  [Required(ErrorMessage = "Login is required.")]
+  [StringLength(20, ErrorMessage = "Login must be 20 characters or less.")]
+  public string Login { get; set; } = string.Empty;
+
+  [Required(ErrorMessage = "Password is required.")]
+  [StringLength(100, MinimumLength = 8, ErrorMessage = "Password must be at least 8 characters long.")]
+  [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$", ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, and one number.")]
+  public string Password { get; set; } = string.Empty;
+
+  [Required(ErrorMessage = "Confirm password is required.")]
+  [Compare("Password", ErrorMessage = "Passwords do not match.")]
+  public string ConfirmPassword { get; set; } = string.Empty;
 }
 
 public class UserDTO
@@ -176,72 +198,179 @@ public static class ApiResponseHelper
 }
 ```
 
-### Step 2: Configure JWT Authentication
+### Configure JWT Authentication
 
-Add JWT authentication services in `Program.cs` and configure the token validation parameters.
+* Add JWT authentication services in `Program.cs` and configure the token validation parameters.
+
+  ```csharp
+  using Microsoft.AspNetCore.Authentication.JwtBearer;
+  using Microsoft.IdentityModel.Tokens;
+  using System.Text;
+  using WebAPI.Models;
+
+  var builder = WebApplication.CreateBuilder(args);
+
+  // Add services
+  builder.Services.AddControllers();
+  builder.Services.AddAuthentication(options =>
+  {
+      options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+      options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+  }).AddJwtBearer(options =>
+  {
+      options.TokenValidationParameters = new TokenValidationParameters
+      {
+          ValidateIssuer = true,
+          ValidateAudience = true,
+          ValidateLifetime = true,
+          ValidateIssuerSigningKey = true,
+          ValidIssuer = builder.Configuration["Jwt:Issuer"],
+          ValidAudience = builder.Configuration["Jwt:Audience"],
+          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+      };
+  });
+
+  var app = builder.Build();
+
+  // Configure middleware
+  app.UseHttpsRedirection();
+  app.UseAuthentication();
+  app.UseAuthorization();
+  app.MapControllers();
+
+  app.Run();
+  ```
+
+* Add JWT settings to `appsettings.json`:
+
+  ```json
+  {
+    "Jwt": {
+      "Key": "YourSuperSecretKey1234567890123456", // At least 32 characters
+      "Issuer": "YourIssuer",
+      "Audience": "YourAudience"
+    }
+  }
+  ```
+
+### Authentication Controller with Register and Login entry points
 
 ```csharp
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using WebAPI.Models;
+using BCrypt.Net;
+using Microsoft.EntityFrameworkCore;
+using DataAccess.Models;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace WebAPI.Controllers;
 
-// Add services
-builder.Services.AddControllers();
-builder.Services.AddAuthentication(options =>
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController : ControllerBase
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+  private readonly IConfiguration _configuration;
+  private readonly NorthWindContext _dbContext;
+  private readonly ILogger<CategoriesProController> _logger;
+
+  public AuthController(IConfiguration configuration, NorthWindContext context, ILogger<CategoriesProController> logger)
+  {
+    _configuration = configuration;
+    _dbContext = context ?? throw new ArgumentNullException(nameof(context));
+    _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+  }
+
+  [HttpPost("register")]
+  public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+  {
+    // Validate model using data annotations
+    if (!ModelState.IsValid)
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+      var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+      _logger.LogWarning("Invalid registration. Errors: {Errors}", string.Join(", ", errors));
+      return Problem("Invalid input: " + string.Join(", ", errors));
+    }
+
+    // Check if login already exists
+    if (await _dbContext.Users.AnyAsync(u => u.Login == request.Login))
+    {
+      _logger.LogWarning("Registration attempt with existing login: {Login}", request.Login);
+      return Problem("Login already exists.");
+    }
+
+    /*
+     * WARNING: Never log password
+     */
+
+    // Hash password
+    var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
+    // Create new user
+    var user = new User
+    {
+      Login = request.Login,
+      Password = hashedPassword
     };
-});
 
-var app = builder.Build();
+    // Save to database
+    _dbContext.Users.Add(user);
+    await _dbContext.SaveChangesAsync();
 
-// Configure middleware
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
+    _logger.LogInformation("Successful registration for login: {Login}", user.Login);
+    return Ok();
+  }
 
-app.Run();
-```
+  [HttpPost("login")]
+  public async Task<IActionResult> Login([FromBody] LoginRequest request)
+  {
+    // Validate model using data annotations
+    if (!ModelState.IsValid)
+    {
+      var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+      _logger.LogWarning("Invalid login attempt due to model validation errors: {Errors}", string.Join(", ", errors));
+      return Problem("Invalid input: " + string.Join(", ", errors));
+    }
 
-Add JWT settings to `appsettings.json`:
+    // Query the database for the user
+    var user = await _dbContext.Users
+        .FirstOrDefaultAsync(u => u.Login == request.Username);
 
-```json
-{
-  "Jwt": {
-    "Key": "YourSuperSecretKey1234567890123456", // At least 32 characters
-    "Issuer": "YourIssuer",
-    "Audience": "YourAudience"
+    // Check if user exists and verify password
+    if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.Password))
+    {
+      _logger.LogWarning("Invalid login attempt for username: {Username}", request.Username);
+      return Problem("Invalid username or password.");
+    }
+
+    // Generate JWT
+    var claims = new[]
+    {
+      new Claim(ClaimTypes.Name, user.Login),
+      new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+    };
+
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+    var token = new JwtSecurityToken(
+        issuer: _configuration["Jwt:Issuer"],
+        audience: _configuration["Jwt:Audience"],
+        claims: claims,
+        expires: DateTime.Now.AddMinutes(30),
+        signingCredentials: creds);
+
+    var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+    _logger.LogInformation("Successful login for username: {Username}", user.Login);
+    Response.Headers["jwt-token"] = jwt;
+    return Ok();
   }
 }
 ```
 
-### Step 3: Create a Login Endpoint
-
-Implement a controller to handle user login and generate JWTs.
-
-```csharp
-
-```
-
-### Step 4: Protect an Endpoint
-
-Create a controller with a protected endpoint using the `[Authorize]` attribute.
+### Protected Endpoint
 
 ```csharp
 using Microsoft.AspNetCore.Authorization;
@@ -252,61 +381,51 @@ namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController : ControllerBase
+public class UserController : ControllerBase
 {
-    [Authorize]
-    [HttpGet("profile")]
-    public IActionResult GetProfile()
-    {
-        var username = User.Identity?.Name; // From JWT claims
-        var user = new UserDTO { Id = 1, Username = username ?? "Unknown" };
-        return Ok(ApiResponseHelper.Success(user));
-    }
+  [Authorize]
+  [HttpGet("profile")]
+  public IActionResult GetProfile()
+  {
+    var username = User.Identity?.Name; // From JWT claims
+    var user = new UserDTO { Id = 1, Username = username ?? "Unknown" };
+    return Ok(ApiResponseHelper.Success(user));
+  }
 }
 ```
 
-### Step 5: Testing the API
+### Testing the API
 
-1. **Login Request**:
-   * POST to `/api/auth/login` with body:
+1. **Register**:
 
-     ```json
-     {
-       "username": "testuser",
-       "password": "password"
-     }
-     ```
+   ```shell
+   curl --location 'http://localhost:5062/api/auth/register' \
+   --header 'Content-Type: application/json' \
+   --data '{
+     "Login": "user3",
+     "Password": "Password!123",
+     "ConfirmPassword": "Password!123"
+   }'
+   ```
 
-   * Response:
+2. **Login**:
 
-     ```json
-     {
-       "Success": true,
-       "Data": {
-         "Token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-         "User": {
-           "Id": 1,
-           "Username": "testuser"
-         }
-       },
-       "ErrorMessage": null
-     }
-     ```
+    ```shell
+    curl --location 'http://localhost:5062/api/Auth/login' \
+    --header 'Content-Type: application/json' \
+    --data '{
+      "username": "user1",
+      "password": "Password!123"
+    }'
+    ```
 
-2. **Access Protected Endpoint**:
-   * GET to `/api/users/profile` with header `Authorization: Bearer <token>`.
-   * Response:
+3. **Access a secure Controller**:
 
-     ```json
-     {
-       "Success": true,
-       "Data": {
-         "Id": 1,
-         "Username": "testuser"
-       },
-       "ErrorMessage": null
-     }
-     ```
+  ```shell
+  curl --location --request GET 'http://localhost:5062/api/User/profile' \
+  --header 'Content-Type: application/json' \
+  --header 'Authorization: Bearer {{TOKEN_HERE}}' \
+  ```
 
 > **Security Alert**: Store the JWT key securely (e.g., in Azure Key Vault or environment variables).
 
