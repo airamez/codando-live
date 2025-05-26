@@ -94,7 +94,14 @@ public class AuthController : ControllerBase
       new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
     };
 
-    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+    string? keyString = _configuration["Jwt:Key"];
+    if (string.IsNullOrEmpty(keyString))
+    {
+      _logger.LogError("JWT Key configuration is missing or empty.");
+      return Problem("Server configuration error: JWT Key is missing.");
+    }
+
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
     var token = new JwtSecurityToken(
         issuer: _configuration["Jwt:Issuer"],
