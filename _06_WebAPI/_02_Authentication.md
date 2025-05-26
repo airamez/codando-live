@@ -19,9 +19,9 @@ Authentication is the process of verifying the identity of a user or system acce
   * One-time password
   * Push notification
   * Voice authentication
+  * Biometric authentication
   * Two-factor authentication
   * Multifactor authentication
-  * Biometric authentication
 
 ## Why Authentication Matters
 
@@ -115,9 +115,11 @@ ASP.NET Core supports multiple authentication schemes, each suited to different 
 
 ## Implementing JWT Authentication in ASP.NET Core Web API
 
-Below is an example of implementing JWT authentication in an ASP.NET Core Web API, using the `ApiResponse<T>` class for consistent responses.
+Implementation of JWT authentication in an ASP.NET Core Web API.
 
-* This example includes entry points to:
+![JWT Token](images/jwt-token.png)
+
+* The example includes entry points to:
   * Register a new User encryptin the password
   * Login using username and password
   * Access a controller that requires authentication: `[Authorize]` attribute.
