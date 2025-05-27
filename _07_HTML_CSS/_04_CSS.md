@@ -104,16 +104,11 @@ The class attribute in HTML is used to assign one or more identifiers (called cl
     ```
 
 * Examples
-  * _05_Demo.html
-    * CSS file: _05_Style.css
-    * ![Demo1](images/demo1.png)
-    * ![Demo2](images/demo2.png)
-    * ![Demo3](images/demo3.png)
-  * _06_Form.html
-    * CSS file: _06_Style.css
-    * ![Form1](images/form1.png)
-    * ![Form2](images/form2.png)
-  * _07_Advanced.html
-    * * CSS file: _07_Style.css
+  * [_05_Demo.html](_05_Demo.html)
+    * [_05_Style.css](_05_Style.css)
+  * [_06_Form.html](_06_Form.html)
+    * [_06_Style.css](_06_Style.css)
+  * [_07_Advanced.html](_07_Advanced.html)
+    * [_07_Style.css](_07_Style.css)
 
 >Note: Every browser allow CSS exploration using the Dev Tools
