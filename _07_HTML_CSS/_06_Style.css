@@ -1,0 +1,232 @@
+/* Reset default margins and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global styles */
+body {
+  font-family: 'Arial', 'Helvetica', sans-serif;
+  line-height: 1.5;
+  color: #333;
+  background-color: #f5f6f5;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 15px;
+}
+
+/* Heading styles */
+h1 {
+  color: #0052cc;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+/* Form styles */
+form {
+  background-color: white;
+  padding: 15px;
+  border-radius: 6px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Label styles */
+label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+/* Input styles (text, email, tel, url, password, number, date, time, etc.) */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="search"],
+input[type="file"],
+input[type="color"],
+textarea,
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #dfe1e5;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #0052cc;
+  box-shadow: 0 0 4px rgba(0, 82, 204, 0.2);
+}
+
+/* Textarea specific styles */
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Select dropdown */
+select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 28px;
+}
+
+/* Checkbox and radio styles */
+input[type="checkbox"],
+input[type="radio"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #0052cc;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+/* Features and Priority sections */
+label[for="feature1"],
+label[for="feature2"],
+label[for="feature3"],
+label[for="low"],
+label[for="medium"],
+label[for="high"] {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 15px;
+  font-weight: normal;
+  font-size: 0.9rem;
+}
+
+/* Wrap Features and Priority in a flex container */
+form>label[for="feature1"],
+form>label[for="feature2"],
+form>label[for="feature3"],
+form>label[for="low"],
+form>label[for="medium"],
+form>label[for="high"] {
+  margin-bottom: 0;
+}
+
+/* Style the Features and Priority labels to act as group headers */
+form>label:not([for]) {
+  margin-bottom: 4px;
+}
+
+/* Flex container for Features and Priority */
+input[id="feature1"],
+input[id="feature2"],
+input[id="feature3"],
+input[id="low"],
+input[id="medium"],
+input[id="high"] {
+  display: inline-block;
+}
+
+form>input[type="checkbox"]+label,
+form>input[type="radio"]+label {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* File input styling */
+input[type="file"] {
+  padding: 5px;
+}
+
+/* Color input styling */
+input[type="color"] {
+  height: 32px;
+  padding: 4px;
+  width: 80px;
+}
+
+/* Range input styling */
+input[type="range"] {
+  width: 100%;
+  accent-color: #0052cc;
+}
+
+/* Button styles */
+button {
+  background-color: #0052cc;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+button[type="reset"] {
+  background-color: #6c757d;
+}
+
+button:hover {
+  background-color: #003087;
+}
+
+button[type="reset"]:hover {
+  background-color: #5a6268;
+}
+
+/* Button container */
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Remove <br> tags for spacing, use CSS */
+br {
+  display: none;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  form {
+    padding: 10px;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 0.85rem;
+  }
+
+  button {
+    padding: 8px 12px;
+  }
+
+  label[for="feature1"],
+  label[for="feature2"],
+  label[for="feature3"],
+  label[for="low"],
+  label[for="medium"],
+  label[for="high"] {
+    margin-right: 10px;
+  }
+}

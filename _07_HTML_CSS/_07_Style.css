@@ -1,0 +1,443 @@
+/* CSS Variables for Theming */
+:root {
+  --primary-color: #00ff88;
+  --secondary-color: #1e90ff;
+  --accent-neon: #ff00ff;
+  --bg-dark: #0a0a0a;
+  --bg-light: #1c2526;
+  --text-light: #ffffff;
+  --font-primary: 'Roboto', sans-serif;
+}
+
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-primary);
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  line-height: 1.6;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Navigation */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.9), transparent);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+}
+
+.nav-links li {
+  margin-left: 2rem;
+}
+
+.nav-links a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-label {
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+#theme-switch {
+  display: none;
+}
+
+.toggle-label {
+  width: 50px;
+  height: 24px;
+  background: #333;
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.toggle-label::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+#theme-switch:checked+.toggle-label {
+  background: var(--secondary-color);
+}
+
+#theme-switch:checked+.toggle-label::before {
+  transform: translateX(26px);
+}
+
+/* Hero Section */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('https://source.unsplash.com/random/1920x1080?tech') no-repeat center/cover;
+  filter: brightness(0.3);
+  transform: scale(1.1);
+  animation: parallax 20s linear infinite;
+}
+
+@keyframes parallax {
+  0% {
+    transform: scale(1.1) translateY(0);
+  }
+
+  100% {
+    transform: scale(1.1) translateY(-10%);
+  }
+}
+
+.hero-content {
+  text-align: center;
+  z-index: 1;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: 1rem;
+  text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+  animation: neon-glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes neon-glow {
+  0% {
+    text-shadow: 0 0 10px var(--primary-color);
+  }
+
+  100% {
+    text-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--accent-neon);
+  }
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  margin-bottom: 2rem;
+  opacity: 0.8;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  color: var(--bg-dark);
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: bold;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.5s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 255, 136, 0.5);
+  background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+}
+
+.cta-button.small {
+  padding: 0.5rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+/* Projects Section */
+.projects {
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  scroll-snap-align: start;
+  background: var(--bg-light);
+}
+
+.projects h2 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--primary-color);
+}
+
+/* Project Table with Accordion */
+.project-table {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.project-table th,
+.project-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.project-table th {
+  background: rgba(0, 255, 136, 0.1);
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+.accordion-toggle {
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.accordion-toggle:hover {
+  background: rgba(0, 255, 136, 0.2);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+
+.accordion-details {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.accordion-toggle:has(+ .accordion-content.active) {
+  background: rgba(0, 255, 136, 0.3);
+}
+
+.accordion-content.active {
+  max-height: 200px;
+  /* Adjust based on content */
+}
+
+/* Progress Bar */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  width: var(--progress);
+  animation: fill-progress 1.5s ease-out;
+}
+
+@keyframes fill-progress {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: var(--progress);
+  }
+}
+
+/* Contact Section */
+.contact {
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact h2 {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+}
+
+.contact-form {
+  max-width: 500px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.input-group {
+  position: relative;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-light);
+  font-size: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.contact-form label {
+  position: absolute;
+  top: 0.8rem;
+  left: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.contact-form input:focus+label,
+.contact-form input:not(:placeholder-shown)+label,
+.contact-form textarea:focus+label,
+.contact-form textarea:not(:placeholder-shown)+label {
+  top: -0.8rem;
+  left: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--primary-color);
+  background: var(--bg-light);
+  padding: 0 0.2rem;
+}
+
+.submit-button {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  color: var(--bg-dark);
+  padding: 0.8rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.3s ease, background 0.5s ease;
+}
+
+.submit-button:hover {
+  background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+  transform: scale(1.05);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: var(--bg-dark);
+  color: var(--text-light);
+  opacity: 0.7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .project-table {
+    font-size: 0.9rem;
+  }
+
+  .project-table th,
+  .project-table td {
+    padding: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .projects,
+  .contact {
+    padding: 2rem 1rem;
+  }
+
+  .contact-form {
+    padding: 1rem;
+  }
+
+  .project-table th,
+  .project-table td {
+    padding: 0.5rem;
+  }
+}

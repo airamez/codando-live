@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Data Entry Form Example</title>
+  <link rel="stylesheet" href="_06_Style.css">
 </head>
 
 <body>
@@ -67,21 +68,18 @@
       <option value="au">Australia</option>
     </select><br>
 
-    <label>Features (checkbox):</label>
-    <input type="checkbox" id="feature1" name="features" value="wireless">
-    <label for="feature1">Wireless</label>
-    <input type="checkbox" id="feature2" name="features" value="portable">
-    <label for="feature2">Portable</label>
-    <input type="checkbox" id="feature3" name="features" value="durable">
-    <label for="feature3">Durable</label><br>
-
-    <label>Priority (radio):</label>
-    <input type="radio" id="low" name="priority" value="low">
-    <label for="low">Low</label>
-    <input type="radio" id="medium" name="priority" value="medium" checked>
-    <label for="medium">Medium</label>
-    <input type="radio" id="high" name="priority" value="high">
-    <label for="high">High</label><br>
+    <div class="checkbox-group">
+      <label>Features (checkbox):</label>
+      <label><input type="checkbox" id="feature1" name="features" value="wireless"> Wireless</label>
+      <label><input type="checkbox" id="feature2" name="features" value="portable"> Portable</label>
+      <label><input type="checkbox" id="feature3" name="features" value="durable"> Durable</label>
+    </div>
+    <div class="radio-group">
+      <label>Priority (radio):</label>
+      <label><input type="radio" id="low" name="priority" value="low"> Low</label>
+      <label><input type="radio" id="medium" name="priority" value="medium" checked> Medium</label>
+      <label><input type="radio" id="high" name="priority" value="high"> High</label>
+    </div>
 
     <!-- File input -->
     <label for="image">Upload Image (file):</label>
