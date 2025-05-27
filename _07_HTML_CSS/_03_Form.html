@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Entry Form Example</title>
+</head>
+
+<body>
+  <h1>Data Entry Form</h1>
+  <form action="" method="POST" name="data-entry-form">
+    <!-- Hidden input -->
+    <input type="hidden" id="userId" name="userId" value="12345">
+
+    <!-- Text-based inputs -->
+    <label for="name">Name (text):</label>
+    <input type="text" id="name" name="name" placeholder="Enter name" required><br>
+
+    <label for="description">Description (textarea):</label>
+    <textarea id="description" name="description" rows="4" cols="50" placeholder="Enter description"></textarea><br>
+
+    <label for="email">Email (email):</label>
+    <input type="email" id="email" name="email" placeholder="example@domain.com"><br>
+
+    <label for="phone">Phone Number (tel):</label>
+    <input type="tel" id="phone" name="phone" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"><br>
+
+    <label for="website">Website (url):</label>
+    <input type="url" id="website" name="website" placeholder="https://example.com"><br>
+
+    <label for="password">Password (password):</label>
+    <input type="password" id="password" name="password"><br>
+
+    <!-- Numeric inputs -->
+    <label for="quantity">Quantity (number):</label>
+    <input type="number" id="quantity" name="quantity" min="1" max="100" value="1"><br>
+
+    <label for="price">Price (number with step):</label>
+    <input type="number" id="price" name="price" step="0.01" min="0" value="0.00"><br>
+
+    <label for="rating">Rating (range):</label>
+    <input type="range" id="rating" name="rating" min="0" max="10" value="5"><br>
+
+    <!-- Date and time inputs -->
+    <label for="startDate">Start Date (date):</label>
+    <input type="date" id="startDate" name="startDate"><br>
+
+    <label for="eventTime">Event Time (time):</label>
+    <input type="time" id="eventTime" name="eventTime"><br>
+
+    <label for="eventDateTime">Event Date and Time (datetime-local):</label>
+    <input type="datetime-local" id="eventDateTime" name="eventDateTime"><br>
+
+    <label for="month">Month (month):</label>
+    <input type="month" id="month" name="month"><br>
+
+    <label for="week">Week (week):</label>
+    <input type="week" id="week" name="week"><br>
+
+    <!-- Selection inputs -->
+    <label for="country">Country:</label>
+    <select id="country" name="country">
+      <option value="us">United States</option>
+      <option value="ca">Canada</option>
+      <option value="uk">United Kingdom</option>
+      <option value="au">Australia</option>
+    </select><br>
+
+    <label>Features (checkbox):</label>
+    <input type="checkbox" id="feature1" name="features" value="wireless">
+    <label for="feature1">Wireless</label>
+    <input type="checkbox" id="feature2" name="features" value="portable">
+    <label for="feature2">Portable</label>
+    <input type="checkbox" id="feature3" name="features" value="durable">
+    <label for="feature3">Durable</label><br>
+
+    <label>Priority (radio):</label>
+    <input type="radio" id="low" name="priority" value="low">
+    <label for="low">Low</label>
+    <input type="radio" id="medium" name="priority" value="medium" checked>
+    <label for="medium">Medium</label>
+    <input type="radio" id="high" name="priority" value="high">
+    <label for="high">High</label><br>
+
+    <!-- File input -->
+    <label for="image">Upload Image (file):</label>
+    <input type="file" id="image" name="image" accept="image/*"><br>
+
+    <!-- Color input -->
+    <label for="themeColor">Theme Color (color):</label>
+    <input type="color" id="themeColor" name="themeColor" value="#0000ff"><br>
+
+    <!-- Search input -->
+    <label for="search">Search (search):</label>
+    <input type="search" id="search" name="search" placeholder="Search categories"><br>
+
+    <!-- Buttons -->
+    <button type="submit">Submit</button>
+    <button type="reset">Reset</button>
+  </form>
+</body>
+
+</html>

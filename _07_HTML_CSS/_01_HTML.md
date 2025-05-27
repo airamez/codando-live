@@ -63,12 +63,13 @@ Below is a list of frequently used HTML tags, their purposes, and key attributes
   * `<td>`: Defines a table data cell.
 * **Form Tags**:
   * `<form>`: Creates a form for user input, with attributes like action (URL to send data) and method (e.g., get or post).
-  * `<input>`: Creates an input field, with types like text, email, submit, radio, checkbox, etc.
+  * `<input>`: Creates an input field, with types like text, email, submit, range, radio, checkbox, etc.
   * `<label>`: Labels an input for accessibility, using for to match an input’s id (e.g., `<label for="name">Name:</label>`).
   * `<button>`: Creates a clickable button, often with type="submit" or type="button".
   * `<select>`: Creates a dropdown list, often with a name attribute for form submission (e.g., `<select name="choice">`).
   * `<option>`: Defines an option within a `<select>` dropdown, with value for the data sent and optional selected attribute (e.g., `<option value="1">Option 1</option>`).
   * `<textarea>`: Creates a multi-line text input, with attributes like rows and cols for size (e.g., `<textarea rows="4" cols="50">`).
+  *
 
 * Comments
 
@@ -82,7 +83,7 @@ Below is a list of frequently used HTML tags, their purposes, and key attributes
 
   >Warning: Comments are visible in the page source, so avoid including sensitive information.
 
-## Example: A Webpage Using Common HTML Tags
+## A Webpage Using Common HTML Tags
 
 Below is a sample HTML webpage that incorporates most of the tags listed above, creating a simple blog post layout with text, media, lists, a table, and a form.
 
@@ -109,21 +110,20 @@ Below is a sample HTML webpage that incorporates most of the tags listed above, 
   <section>
     <!-- Main article for course description -->
     <article>
-      <h1>Sobre o Curso</h1>
-      <p>O Objetivo desse curso é proporcionar gratuitamente a todos os brasileiros, interessados em aprender
-        programação de computadores ("Engenharia de Software"), um curso com conteúdo e qualidade de bons cursos
-        universitários.</p>
-      <p>O conteúdo é focado nos fundamentos e aspectos práticos. A ideia é ser um curso bem dinâmico com práticas,
-        demonstrações e explicações que ajudem a assimilar o conteúdo e deixar claro O PORQUÊ das coisas.</p>
-      <p>Como todo curso, é necessário que você faça a sua parte e esforce-se para acompanhar, principalmente fazendo os
-        exercícios.</p>
-      <p>As aulas serão através de vídeos ao vivo no YouTube, mas se você estiver começando, foque em assistir o
-        conteúdo existente. Para acompanhar as aulas atuais, é necessário domínio de todo conteúdo já abordado, assim
-        não tenha pressa, mas seja dedicado e mantenha esforço constante. Para virar um programador júnior, é necessário
-        algumas milhares de horas de dedicação.</p>
-      <p>Esse curso vai abordar todo o conteúdo para prepará-lo para ser um programador e conquistar um espaço nesse
-        mercado tão vasto e cheio de oportunidades.</p>
-      <p>Logo abaixo tem uma tabela com todas as aulas com links para os vídeos e arquivos.</p>
+      <h1>About the Course</h1>
+      <p>The objective of this course is to provide free education to all Brazilians interested in learning
+        computer programming ("Software Engineering"), offering content and quality comparable to good university courses.</p>
+      <p>The content focuses on fundamentals and practical aspects. The idea is to create a dynamic course with hands-on exercises,
+        demonstrations, and explanations that help in understanding the material and clarifying the WHY behind concepts.</p>
+      <p>As with any course, it's essential that you do your part and put in the effort to follow along, especially by completing the
+        exercises.</p>
+      <p>Classes will be conducted via live videos on YouTube, but if you are just starting, focus on watching the
+        existing content. To follow the current lessons, a solid understanding of all previously covered material is necessary.
+        So, don't rush, but stay dedicated and maintain continuous effort. Becoming a junior programmer requires several thousand hours
+        of dedication.</p>
+      <p>This course will cover all the necessary content to prepare you to become a programmer and secure a place in this
+        vast and opportunity-rich market.</p>
+      <p>Below is a table listing all the lessons with links to the videos and files.</p>
 
       <!-- Links to course resources -->
       <ul>
@@ -149,17 +149,17 @@ Below is a sample HTML webpage that incorporates most of the tags listed above, 
   <section>
     <!-- Main article for author bio -->
     <article>
-      <h1>Sobre o Autor</h1>
-      <p>José Santos (mais conhecido como Zé Maria) é um engenheiro de software e professor veterano que iniciou no
-        mundo da informática na adolescência e antes do advento da internet.</p>
-      <p>Teve uma carreira diferenciada por atuar no meio acadêmico, sendo professor da Escola Técnica Federal de
-        Sergipe, Universidade Tiradentes, FANESE e Universidade Federal de Sergipe.</p>
-      <p>Atuou como consultor de TI, programador, administrador de redes, analista de sistemas e líder técnico no
-        Brasil, Canadá e atualmente nos Estados Unidos, trabalhando em grandes empresas, mais recentemente na Microsoft
-        e atualmente na Intuit.</p>
-      <p>Foi bastante ativo como atleta e ganhou vários títulos em esportes diferentes, entre eles: natação, voleibol,
-        tae-kwon-do e full-contact.</p>
-      <p>Além de nerd, foi atleta competente em diferentes esportes.</p>
+      <h1>About the Author</h1>
+      <p>José Santos (better known as Zé Maria) is a veteran software engineer and professor who started his journey 
+        in computing during his teenage years, before the advent of the internet.</p>
+      <p>He has had a distinguished career in academia, teaching at the Federal Technical School of Sergipe, 
+        Tiradentes University, FANESE, and the Federal University of Sergipe.</p>
+      <p>He has worked as an IT consultant, programmer, network administrator, systems analyst, and technical 
+        leader in Brazil, Canada, and currently in the United States, collaborating with major companies, 
+        most recently at Microsoft and now at Intuit.</p>
+      <p>He has been highly active as an athlete, earning multiple titles in various sports, including swimming, 
+        volleyball, taekwondo, and full-contact.</p>
+      <p>Beyond being a tech enthusiast, he has also excelled as a skilled athlete in multiple sports.</p>
       <!-- Link to LinkedIn profile -->
       <p><a href="https://www.linkedin.com/in/jose-rodrigues-santos/">LinkedIn Profile</a></p>
     </article>
@@ -190,60 +190,6 @@ Below is a sample HTML webpage that incorporates most of the tags listed above, 
             href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_02_Comments.cs">_02_Comments.cs</a><br>
           <a
             href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_03_VariablesAndTypes.cs">_03_VariablesAndTypes.cs</a>
-        </td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td><a href="https://youtube.com/live/R9hpViMrt38">Input/Output<br>Basic Operations</a></td>
-        <td>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_04_InputOutput.cs">_04_InputOutput.cs</a><br>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_05_BasicOperations.cs">_05_BasicOperations.cs</a>
-        </td>
-      </tr>
-      <tr>
-        <td>4</td>
-        <td><a href="https://youtube.com/live/TPEGq0YXGQw">Basic Operations Practices</a></td>
-        <td>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion01.cs">01.
-            Read a value in miles and convert to kilometers: 1 Mile = 1.60934KM</a><br>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion02.cs">02.
-            Read an integer number and print the three predecessors and successors.</a><br>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion03.cs">03.
-            Read two integer numbers A and B and print the result of all arithmetic operations you know for A and
-            B.</a><br>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion04.cs">04.
-            Read three integer numbers and calculate the average.</a><br>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion05.cs">05.
-            Read the base and length of a rectangle and calculate its area.</a><br>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion06.cs">06.
-            Read an integer and print True if the number is Even and False if it is Odd.</a><br>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsPractices.txt">_09_BasicOperationsPractices.txt</a>
-        </td>
-      </tr>
-      <tr>
-        <td>5</td>
-        <td><a href="https://youtube.com/live/rabHztMHL2s">Basic Operations Practices</a></td>
-        <td>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion07.cs">07.
-            Read a temperature in Celsius and convert to Fahrenheit: F = C x 1.8 + 32.</a><br>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion08.cs">08.
-            Read the buying price (cost), the desired profit percentage and calculate the sales price of a
-            product.</a><br>
-          <a
-            href="https://github.com/airamez/codando-live/blob/main/_01_CSharp/_01_Intro/_09_BasicOperationsQuestion09.cs">09.
-            Read the buying price (cost), the desired profit percentage and the sales tax % and calculate the final
-            sales price of a product.</a>
         </td>
       </tr>
     </table>
@@ -280,3 +226,161 @@ Below is a sample HTML webpage that incorporates most of the tags listed above, 
 
 </html>
 ```
+
+![JWT Token](images/html.png)
+
+>Note: Every brower allow the visualition of the HTML source content.
+
+## Document Object Model (DOM)
+
+The **DOM (Document Object Model)** is an interface that represents the structure of an HTML document as a tree, allowing JavaScript to dynamically manipulate content.
+
+* Key Concepts:
+  * The DOM represents the document as a tree of nodes.
+  * JavaScript interacts with the DOM to access and modify page content dynamically.
+  * Each HTML element becomes a **node** in the tree.
+
+* Example Structure
+
+```plaintext
+Document
+├── html
+    ├── head
+    │   ├── title
+    ├── body
+        ├── header
+        ├── section
+        ├── footer
+```
+
+>Note: Every browser has a `Dev Tools` that allow exploration of the DOM.
+
+## Form
+
+HTML forms allow users to input data, which can be processed by web applications. They are essential for interactions like login pages, contact forms, and surveys.
+
+* Basic Structure
+  A form is created using the `<form>` element, which contains input fields.
+* Attributes
+  * `action` – Defines where the form data is sent (Controller path).
+  * `method` – Specifies the HTTP method (GET or POST).
+  * `name` – Identifies the form.
+
+```html
+<form action="/submit" method="post" name="data-entry-form">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name">
+    <button type="submit">Submit</button>
+</form>
+```
+
+* Example
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Entry Form Example</title>
+</head>
+
+<body>
+  <h1>Data Entry Form</h1>
+  <form action="" method="POST" name="data-entry-form">
+    <!-- Hidden input -->
+    <input type="hidden" id="userId" name="userId" value="12345">
+
+    <!-- Text-based inputs -->
+    <label for="name">Name (text):</label>
+    <input type="text" id="name" name="name" placeholder="Enter name" required><br>
+
+    <label for="description">Description (textarea):</label>
+    <textarea id="description" name="description" rows="4" cols="50" placeholder="Enter description"></textarea><br>
+
+    <label for="email">Email (email):</label>
+    <input type="email" id="email" name="email" placeholder="example@domain.com"><br>
+
+    <label for="phone">Phone Number (tel):</label>
+    <input type="tel" id="phone" name="phone" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"><br>
+
+    <label for="website">Website (url):</label>
+    <input type="url" id="website" name="website" placeholder="https://example.com"><br>
+
+    <label for="password">Password (password):</label>
+    <input type="password" id="password" name="password"><br>
+
+    <!-- Numeric inputs -->
+    <label for="quantity">Quantity (number):</label>
+    <input type="number" id="quantity" name="quantity" min="1" max="100" value="1"><br>
+
+    <label for="price">Price (number with step):</label>
+    <input type="number" id="price" name="price" step="0.01" min="0" value="0.00"><br>
+
+    <label for="rating">Rating (range):</label>
+    <input type="range" id="rating" name="rating" min="0" max="10" value="5"><br>
+
+    <!-- Date and time inputs -->
+    <label for="startDate">Start Date (date):</label>
+    <input type="date" id="startDate" name="startDate"><br>
+
+    <label for="eventTime">Event Time (time):</label>
+    <input type="time" id="eventTime" name="eventTime"><br>
+
+    <label for="eventDateTime">Event Date and Time (datetime-local):</label>
+    <input type="datetime-local" id="eventDateTime" name="eventDateTime"><br>
+
+    <label for="month">Month (month):</label>
+    <input type="month" id="month" name="month"><br>
+
+    <label for="week">Week (week):</label>
+    <input type="week" id="week" name="week"><br>
+
+    <!-- Selection inputs -->
+    <label for="country">Country:</label>
+    <select id="country" name="country">
+      <option value="us">United States</option>
+      <option value="ca">Canada</option>
+      <option value="br">Brazil</option>
+      <option value="uk">United Kingdom</option>
+    </select><br>
+
+    <label>Features (checkbox):</label>
+    <input type="checkbox" id="feature1" name="features" value="wireless">
+    <label for="feature1">Wireless</label>
+    <input type="checkbox" id="feature2" name="features" value="portable">
+    <label for="feature2">Portable</label>
+    <input type="checkbox" id="feature3" name="features" value="durable">
+    <label for="feature3">Durable</label><br>
+
+    <label>Priority (radio):</label>
+    <input type="radio" id="low" name="priority" value="low">
+    <label for="low">Low</label>
+    <input type="radio" id="medium" name="priority" value="medium" checked>
+    <label for="medium">Medium</label>
+    <input type="radio" id="high" name="priority" value="high">
+    <label for="high">High</label><br>
+
+    <!-- File input -->
+    <label for="image">Upload Image (file):</label>
+    <input type="file" id="image" name="image" accept="image/*"><br>
+
+    <!-- Color input -->
+    <label for="themeColor">Theme Color (color):</label>
+    <input type="color" id="themeColor" name="themeColor" value="#0000ff"><br>
+
+    <!-- Search input -->
+    <label for="search">Search (search):</label>
+    <input type="search" id="search" name="search" placeholder="Search categories"><br>
+
+    <!-- Buttons -->
+    <button type="submit">Submit</button>
+    <button type="reset">Reset</button>
+  </form>
+</body>
+
+</html>
+```
+
+![Form](images/form.png)

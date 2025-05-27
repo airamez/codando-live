@@ -261,7 +261,7 @@
 
 ### CSS
 
-### TypeScript
+### JavaScript
 
 ### Angular
 
