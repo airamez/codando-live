@@ -1,10 +1,8 @@
-# Introduction to Common HTML Tags
-
-## What is HTML?
+# Introduction to HTML
 
 HTML (HyperText Markup Language) is the backbone of web development, used to structure content on a webpage. It consists of tags that define elements like headings, paragraphs, links, images, and more.
 
-## HTML Tag?
+## HTML Tag
 
 * An HTML tag is a fundamental component of HTML (HyperText Markup Language) used to structure and define content on a webpage.
 * Tags are the building blocks of HTML, marking up content to indicate its role, such as headings, paragraphs, links, or images.
