@@ -72,7 +72,7 @@ The class attribute in HTML is used to assign one or more identifiers (called cl
   * Example
   
     ```html
-    `<p style="color: blue; font-size: 16px;">This is a styled paragraph.</p>`
+    <p style="color: blue; font-size: 16px;">This is a styled paragraph.</p>
     ```
 
 * Internal
