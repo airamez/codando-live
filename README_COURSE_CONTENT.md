@@ -263,6 +263,8 @@
 
 ### JavaScript
 
+### TypeScript
+
 ### Angular
 
 ## Containers

@@ -1,13 +1,14 @@
-# JavaScript Class Overview: Core Concepts and Functionalities
+# JavaScript Overview
 
-JavaScript is a versatile, high-level programming language primarily used for web development. It runs in browsers and on servers (via Node.js), enabling dynamic, interactive web experiences. This overview introduces key concepts, from variables to arrays and collections, to provide a solid foundation for learning JavaScript.
+JavaScript is a versatile, high-level programming language primarily used for web development. It runs in browsers and on servers (via Node.js), enabling dynamic, interactive web experiences.
 
 ## Who Maintains JavaScript
 
-* JavaScript, officially standardized as ECMAScript, is maintained by Ecma International, specifically through its Technical Committee 39 (TC39).
+* JavaScript, officially standardized as [ECMAScript](https://262.ecma-international.org/), is maintained by Ecma International, specifically through its [Technical Committee 39 (TC39)](https://tc39.es/ecma262/).
 * TC39 consists of JavaScript developers, implementers, academics, and representatives from major tech companies like Google, Apple, and Microsoft.
 * They collaborate to evolve the ECMAScript specification, defining language syntax, semantics, and features.
 * The process is open, with proposals discussed publicly on GitHub and ratified annually.
+* [GitHub repository](https://github.com/tc39/ecma262)
 
 >Note: JavaScript is an implementation of ECMAScript, and browser vendors (e.g., Chrome’s V8, Firefox’s SpiderMonkey) ensure their engines align with the standard. The open-source community also contributes significantly to its evolution.
 
@@ -57,14 +58,18 @@ JavaScript is a versatile, high-level programming language primarily used for we
     </html>
     ```
 
-## 0. Printing information to the browser console
+## Debugging
+
+Add the command `debugger;` and the browser will enable debugging functionality on the Dev Tools
+
+## Logging information to the browser console
 
   ```javascript
   console.log('Hello World!');
   console.log('Hello', 'World');
   ```
 
-## 1. Variables and Data Types
+## Variables and Data Types
 
 JavaScript uses three keywords to declare variables:
 
@@ -78,25 +83,25 @@ JavaScript uses three keywords to declare variables:
   * Preferred for variable declarations.
 * **`const`**: Block-scoped, cannot be reassigned or redeclared. Used for constants or values that won’t change.
 
-**Example**:
+* Examples:
 
-```javascript
-let name = "Alice"; // String
-const age = 25; // Number
-var isStudent = true; // Boolean
-```
+  ```javascript
+  let name = "Alice"; // String
+  const age = 25; // Number
+  var isStudent = true; // Boolean
+  ```
 
-**Data Types**:
+* **Data Types**:
 
-* **Primitive**: `string`, `number`, `boolean`, `null`, `undefined`, `symbol`, `bigint`.
-* **Reference**: `object` (includes arrays, functions, and more).
+  * **Primitive**: `string`, `number`, `boolean`, `null`, `undefined`, `symbol`, `bigint`.
+  * **Reference**: `object` (includes arrays, functions, and more).
 
-**Key Points**:
+* **Key Points**:
 
 * JavaScript is dynamically typed; variables can hold any data type without explicit declaration.
 * Use `typeof` to check a variable’s type (e.g., `typeof name // "string"`).
 
-## 2. Basic Operators and Control Flow
+## Basic Operators and Control Flow
 
 * JavaScript supports standard operators for
   * Arithmetic: `+`, `-`, `*`, `/`, `%`
@@ -131,14 +136,14 @@ var isStudent = true; // Boolean
 * **Examples**:
   * [_02_JavaScriptIntro.js](_02_JavaScriptIntro.js)
 
-## 3. Functions
+## Functions
 
 * **Declaration Types**:
   * **Function Declaration**: `function greet(name) { return "Hello, " + name; }`
   * **Function Expression**: `const greet = function(name) { return "Hello, " + name; };`
   * **Arrow Function (ES6)**: `const greet = (name) => "Hello, " + name;`
 
-## 4. Arrays
+## Arrays
 
 Arrays are ordered, zero-indexed lists used to store multiple values in a single variable.
 
@@ -162,7 +167,7 @@ Arrays are ordered, zero-indexed lists used to store multiple values in a single
   let evens = numbers.filter(num => num % 2 === 0); // [2, 4]
   ```
 
-## 5. Objects and Collections
+## Objects and Collections
 
 Objects store key-value pairs, where keys are strings (or symbols) and values can be any data type.
 
