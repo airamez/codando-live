@@ -241,35 +241,35 @@ Below is the updated section with descriptions for each Arithmetic, Comparison, 
 
   * `while`: executes the block of code as long as the condition is true
 
-  ```javascript
-  while (condition) {
-    // Code to execute while condition is true
-  }
-  ```
+    ```javascript
+    while (condition) {
+      // Code to execute while condition is true
+    }
+    ```
 
   * `do...while`: executes the code block at least once, then repeats as long as the condition is true.
 
-  ```javascript
-  do {
-    // Code to execute at least once
-  } while (condition);
-  ```
+    ```javascript
+    do {
+      // Code to execute at least once
+    } while (condition);
+    ```
 
   * `for...of`: loop iterates over iterable objects like arrays or strings, assigning each element to the variable.
 
-  ```javascript
-  for (variable of iterable) {
-    // Code to execute for each element in iterable
-  }
-  ```
+    ```javascript
+    for (variable of iterable) {
+      // Code to execute for each element in iterable
+    }
+    ```
 
   * `for...in`: iterates over the enumerable properties of an object, assigning each property name to the variable.
 
-  ```javascript
-  for (variable in object) {
-    // Code to execute for each property in object
-  }
-  ```
+    ```javascript
+    for (variable in object) {
+      // Code to execute for each property in object
+    }
+    ```
 
 * **Ternary Operator**
   * `condition ? valueIfTrue : valueIfFalse`.

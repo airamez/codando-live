@@ -1,4 +1,4 @@
-// "use strict";
+"use strict";
 
 //debugger; // Execution will pause here if DevTools is open
 
@@ -7,7 +7,7 @@ console.log('Hello World!');
 console.log('Hello', 'World');
 
 // Variables
-let firstName = "Alice"; // String
+let firstName = "Jose"; // String
 console.log(firstName, typeof firstName);
 let age = 25; // Number
 console.log(age, typeof age);
