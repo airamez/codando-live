@@ -83,134 +83,200 @@ JavaScript uses three keywords to declare variables:
   * Preferred for variable declarations.
 * **`const`**: Block-scoped, cannot be reassigned or redeclared. Used for constants or values that won’t change.
 
-* **Data Types**:
+>Warning: It is possible to declare a variable without explicitly using `var`, `let`, or `const`, but this is generally a bad practice and depends on the context. This can be avoid by using `"use strict";` at the begin of the JavaScript file.
 
-  * **Primitive**: `string`, `number`, `boolean`, `null`, `undefined`, `symbol`, `bigint`.
-  * **Reference**: `object` (includes arrays, functions, and more).
-  * Examples:
+* It is recommended to use `"use strict";` at the beging of your JavaScript files
+  * **Prevents Implicit Globals**: Strict mode throws a ReferenceError when assigning to undeclared variables, avoiding accidental global variables (like overwriting window.name in browsers).
+  * **Eliminates Silent Errors**: Strict mode turns certain silent failures into explicit errors, such as assigning to read-only properties or using reserved words incorrectly.
+  * **Disallows Deprecated Features**: It prevents the use of outdated or problematic features.
+  * **Better Performance**: Some JavaScript engines optimize code better in strict mode due to its stricter rules.
 
-* **Key Points**:
-  * JavaScript is dynamically typed; variables can hold any data type without explicit declaration.
-  * Use `typeof` to check a variable’s type (e.g., `typeof name // "string"`).
+* **Data Types**
+  * **Primitive Types**
+    * `string`: Represents textual data (e.g., "hello").
+    * `number`: Represents numeric values, including integers and floating-point numbers (e.g., 42, 3.14).
+    * `boolean`: Represents true or false.
+    * `null`: Represents the intentional absence of any value.
+    * `undefined`: Indicates a variable that has been declared but not assigned a value.
+    * `symbol`: Represents a unique and immutable identifier (introduced in ES6).
+    * `bigint`: Represents whole numbers larger than the number type can safely handle (introduced in ES2020).
+  * **Reference Type**
+    * `object`: Includes plain objects (`{}`), arrays (`[]`), functions, dates, regular expressions, and more.
+    * Objects are mutable and stored by reference.
+  * **Key Points**
+    * JavaScript is dynamically typed; variables can hold any data type without explicit declaration.
+    * Use `typeof` to check a variable’s type (e.g., `typeof name // "string"`).
+
+  * Examples
 
   ```javascript
-  let name = "Alice"; // String
-  console.log(name, typeof name);
+  // Variables
+  let firstName = "Jose"; // String
+  console.log(firstName, typeof firstName);
   let age = 25; // Number
   console.log(age, typeof age);
   let price = 19.99; // Number
-  console.log(price, typeof price)
+  console.log(price, typeof price);
   let isStudent = true; // Boolean
-  console.log(isStudent, typeof isStudent)
+  console.log(isStudent, typeof isStudent);
   let product = null; // null
-  console.log(product, typeof product)
+  console.log(product, typeof product);
+
+  // The same variable can receive different types
+  let mutantVar = "I am a string";
+  console.log(mutantVar, typeof mutantVar);
+  mutantVar = 10;
+  console.log(mutantVar, typeof mutantVar);
+  mutantVar = true;
+  console.log(mutantVar, typeof mutantVar);
   ```
+
+>Note: When JavaScript is running in a HTML page, `name` represents a property for the Windows Name: `window.name`. Avoid using name as a variable or function name in JavaScript, especially in browser environments, to prevent conflicts with window.name or other DOM-related properties.
 
 * Read input from user
 
   ```javascript
-  name = prompt("What is your name?");
-  console.log(`Hello ${name}!`);
+  firstName = prompt("What is your name?");
+  console.log(`Hello ${firstName}!`);
   ```
 
 * Showing values to the user
 
   ```javascript
-  alert(`Hello, ${name}!`);
+  alert(`Hello, ${firstName}!`);
   ```
 
-## Basic Operators and Control Flow
+Below is the updated section with descriptions for each Arithmetic, Comparison, and Logical operator, with each operator described on a single line, as requested.
 
-* JavaScript supports standard operators for
-  * Arithmetic: `+`, `-`, `*`, `/`, `%`
+## Basic Operators
+
+* Arithmetic:
+  * `+`: Adds two numbers or concatenates strings.
+  * `-`: Subtracts one number from another.
+  * `*`: Multiplies two numbers.
+  * `/`: Divides one number by another.
+  * `%`: Returns the remainder of division between two numbers.
+* Comparison:
+  * `==`: Checks if two values are equal, with type coercion.
+  * `===`: Checks if two values are equal and of the same type, without coercion.
+  * `!=`: Checks if two values are not equal, with type coercion.
+  * `!==`: Checks if two values are not equal or not of the same type, without coercion.
+  * `>`: Checks if the left value is greater than the right value.
+  * `<`: Checks if the left value is less than the right value.
+  * `>=`: Checks if the left value is greater than or equal to the right value.
+  * `<=`: Checks if the left value is less than or equal to the right value.
+  * Examples of `==`, `===`, `!=` and `!==`
 
     ```javascript
-    let n1 = 10;
-    let n2 = 3;
-    let result1 = n1 / n2; // 10 ÷ 3 ≈ 3.333...
-    console.log(result1);
-    let result2 = Math.floor(n1 / n2)
-    console.log(result2);
+    // Loose equality (==) - Allows type coercion
+    console.log(5 == "5"); // true (string "5" is coerced to number 5)
+    console.log(true == 1); // true (boolean true is coerced to number 1)
+    console.log(null == undefined); // true (special case: null and undefined are considered equal with ==)
+
+    // Strict equality (===) - No type coercion, checks value and type
+    console.log(5 === "5"); // false (number 5 and string "5" have different types)
+    console.log(true === 1); // false (boolean true and number 1 have different types)
+    console.log(null === undefined); // false (null and undefined have different types)
+
+    // Loose inequality (!=) - Allows type coercion
+    console.log(5 != "5"); // false (string "5" is coerced to number 5, so they're equal)
+    console.log(true != 1); // false (boolean true is coerced to number 1, so they're equal)
+    console.log(null != undefined); // false (null and undefined are considered equal with !=)
+
+    // Strict inequality (!==) - No type coercion, checks value and type
+    console.log(5 !== "5"); // true (number 5 and string "5" have different types)
+    console.log(true !== 1); // true (boolean true and number 1 have different types)
+    console.log(null !== undefined); // true (null and undefined have different types)
     ```
 
-  * Comparison `==`, `===`, `!=`, `!==`, `>`, `<`
-  * Logical operations `&&`, `||`, `!`
-* **Control Flow**:
-  * **Conditionals**
-    * `if`, `else if`, `else`
+    * Key Points
+      * `==` and `!=`: Perform type coercion, converting operands to the same type before comparing (e.g., string to number, boolean to number).
+      * `===` and `!==`: Do not perform type coercion, requiring both value and type to match (or differ for !==).
+      * Use `===` and `!==` in modern JavaScript to avoid unexpected results from coercion, making code more predictable.
 
-      ```javascript
-      if (condition) {
-        // Code to execute if condition is true
-      } else if (anotherCondition) {
-        // Code to execute if anotherCondition is true
-      } else {
-        // Code to execute if no conditions are true
-      }
-      ```
+* Logical operations:
+  * `&&`: Returns true if both operands are true (logical AND).
+  * `||`: Returns true if at least one operand is true (logical OR).
+  * `!`: Returns the opposite boolean value of the operand (logical NOT).
 
-    * `switch`: statement evaluates an expression and executes the code block of the matching case. The break statement exits the switch block. If no cases match, the default block runs.
+## Control Flow
 
-      ```javascript
-      switch (expression) {
-        case value1:
-          // Code to execute if expression === value1
-          break;
-        case value2:
-          // Code to execute if expression === value2
-          break;
-        default:
-          // Code to execute if no cases match
-      }
-      ````
-
-  * **Loops**
-    * `for`: initializes a counter, checks a condition, and updates the counter after each iteration. It runs until the condition is false.
-
-      ```javascript
-      for (initialization; condition; update) {
-        // Code to execute repeatedly while condition is true
-      }
-      ```
-
-    * `while`: executes the block of code as long as the condition is true
+* **Conditionals**
+  * `if`, `else if`, `else`
 
     ```javascript
-    while (condition) {
-      // Code to execute while condition is true
+    if (condition) {
+      // Code to execute if condition is true
+    } else if (anotherCondition) {
+      // Code to execute if anotherCondition is true
+    } else {
+      // Code to execute if no conditions are true
     }
     ```
 
-    * `do...while`: executes the code block at least once, then repeats as long as the condition is true.
+  * `switch`: statement evaluates an expression and executes the code block of the matching case. The break statement exits the switch block. If no cases match, the default block runs.
 
     ```javascript
-    do {
-      // Code to execute at least once
-    } while (condition);
-    ```
+    switch (expression) {
+      case value1:
+        // Code to execute if expression === value1
+        break;
+      case value2:
+        // Code to execute if expression === value2
+        break;
+      default:
+        // Code to execute if no cases match
+    }
+    ````
 
-    * `for...of`: loop iterates over iterable objects like arrays or strings, assigning each element to the variable.
+* **Loops**
+  * `for`: initializes a counter, checks a condition, and updates the counter after each iteration.
+    It runs until the condition is false.
 
     ```javascript
-    for (variable of iterable) {
-      // Code to execute for each element in iterable
+    for (initialization; condition; update) {
+      // Code to execute repeatedly while condition is true
     }
     ```
 
-    * `for...in`: iterates over the enumerable properties of an object, assigning each property name to the variable.
+  * `while`: executes the block of code as long as the condition is true
 
-    ```javascript
-    for (variable in object) {
-      // Code to execute for each property in object
-    }
-    ```
+  ```javascript
+  while (condition) {
+    // Code to execute while condition is true
+  }
+  ```
 
-  * **Ternary Operator**
-    * `condition ? valueIfTrue : valueIfFalse`.
+  * `do...while`: executes the code block at least once, then repeats as long as the condition is true.
+
+  ```javascript
+  do {
+    // Code to execute at least once
+  } while (condition);
+  ```
+
+  * `for...of`: loop iterates over iterable objects like arrays or strings, assigning each element to the variable.
+
+  ```javascript
+  for (variable of iterable) {
+    // Code to execute for each element in iterable
+  }
+  ```
+
+  * `for...in`: iterates over the enumerable properties of an object, assigning each property name to the variable.
+
+  ```javascript
+  for (variable in object) {
+    // Code to execute for each property in object
+  }
+  ```
+
+* **Ternary Operator**
+  * `condition ? valueIfTrue : valueIfFalse`.
 
 * **Examples**:
-  * [_02_JavaScriptIntro.html](_02_JavaScriptIntro.html)
-  * [_02_JavaScriptIntro.js](_02_JavaScriptIntro.js)
+  * [_02_Intro.html](_02_Intro.html)
+  * [_02_Intro.js](_02_Intro.js)
 
 ## Functions
 
@@ -227,6 +293,8 @@ JavaScript uses three keywords to declare variables:
 ## Array Operations
 
 Arrays in JavaScript are ordered, zero-indexed lists used to store multiple values in a single variable.
+
+>Note: Unlike many others languages, an array in JavaScript has no type and each index has the type assigned dynamically.
 
 * Creating Arrays
 
@@ -268,7 +336,8 @@ Arrays in JavaScript are ordered, zero-indexed lists used to store multiple valu
 
     ```javascript
     // Accessing elements
-    let fruits = ["apple", "banana", "orange"];
+    let fruits = ["apple", "banana", "orange", "jaca"];
+    console.log(fruits);
     console.log(fruits[0]); // Output: apple
     console.log(fruits[2]); // Output: orange
 
@@ -428,14 +497,15 @@ The document object provides properties and methods to interact with the structu
 
 | Property/Method | Description |
 |-----------------|-------------|
+| `document.title` | Gets or sets the title of the document (text in the `<title>` tag). |
+| `document.body` | Returns the `<body>` element of the document. |
+| `document.name` | Returns the `name` element of the document. A variable called `name` is define for all html page |
+| `document.documentElement` | Returns the `<html>` element of the document. |
 | `document.getElementById(id)` | Returns the element with the specified `id`, or `null` if not found. |
 | `document.getElementsByClassName(className)` | Returns a live HTMLCollection of elements with the specified class name. |
 | `document.getElementsByTagName(tagName)` | Returns a live HTMLCollection of elements with the specified tag name (e.g., `div`, `input`). |
 | `document.querySelector(selector)` | Returns the first element matching the CSS selector, or `null` if not found. |
 | `document.querySelectorAll(selector)` | Returns a static NodeList of all elements matching the CSS selector. |
-| `document.body` | Returns the `<body>` element of the document. |
-| `document.documentElement` | Returns the `<html>` element of the document. |
-| `document.title` | Gets or sets the title of the document (text in the `<title>` tag). |
 | `document.createElement(tagName)` | Creates a new HTML element with the specified tag name. |
 | `document.createTextNode(text)` | Creates a text node with the specified text content. |
 
