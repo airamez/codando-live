@@ -1,18 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <script src="_03_Events.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events</title>
+  <!-- 
+   Note: The defer makes sure the HTML is completed loaded 
+         before the JavaScript from the file is executed.
+         Without the defer there is a change the events 
+         binding fails because the HTML components does 
+         not exist yet.
+
+   -->
+  <script defer src="_03_Events.js"></script>
+  <link rel="stylesheet" href="_03_Events.css">
 </head>
 
 <body>
   <button id="btn">Click Me</button>
-  <input id="textInput" type="text" placeholder="Type here">
+  <div id="box"></div>
   <form id="myForm">
-    <input type="text" name="username">
-    <button type="submit">Submit</button>
+    <input type="text" id="textInput" placeholderxcvcxvxc="Enter text"> <br>
+    <input type="text" id="paragraphInput" placeholder="Enter paragraph text"> <br>
+    <button type="button" id="addParagraphBtn">Add Paragraph</button>
   </form>
-  <div id="box" style="width:100px; height:100px; background:lightblue;"></div>
+  <div id="paragraphContainer"></div>
 </body>
 
 </html>

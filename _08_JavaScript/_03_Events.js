@@ -1,16 +1,16 @@
+
 // Mouse Events
 const button = document.getElementById('btn');
 button.addEventListener('click', () => {
-  console.log('Button clicked!'); // String output
+  console.log('Button clicked!');
 });
 button.addEventListener('dblclick', () => {
-  console.log(2); // Integer output
+  console.log('Button double-clicked!');
 });
 
 const box = document.getElementById('box');
 box.addEventListener('mouseover', () => {
   box.style.backgroundColor = 'lightgreen';
-  console.log(true); // Boolean output
 });
 box.addEventListener('mouseout', () => {
   box.style.backgroundColor = 'lightblue';
@@ -23,13 +23,6 @@ input.addEventListener('keydown', (event) => {
 });
 input.addEventListener('keyup', () => {
   console.log(input.value.length); // Integer: length of input string
-});
-
-// Form Events
-const form = document.getElementById('myForm');
-form.addEventListener('submit', (event) => {
-  event.preventDefault(); // Prevent form submission
-  console.log('Form submitted!');
 });
 
 input.addEventListener('change', () => {
@@ -47,7 +40,7 @@ input.addEventListener('blur', () => {
 
 // Window/Document Events
 window.addEventListener('load', () => {
-  console.log('Page loaded!');
+  console.log(`Page loaded!:`);
 });
 window.addEventListener('resize', () => {
   console.log(window.innerWidth); // Integer: window width
@@ -55,3 +48,19 @@ window.addEventListener('resize', () => {
 window.addEventListener('scroll', () => {
   console.log(window.scrollY); // Decimal: scroll position
 });
+
+// Dynamic Paragraph Addition
+const paragraphInput = document.getElementById('paragraphInput');
+const addParagraphBtn = document.getElementById('addParagraphBtn');
+const paragraphContainer = document.getElementById('paragraphContainer');
+addParagraphBtn.addEventListener('click', addParagraph);
+
+function addParagraph() {
+  const text = paragraphInput.value.trim();
+  if (text) {
+    const p = document.createElement('p');
+    p.textContent = text;
+    paragraphContainer.appendChild(p);
+    paragraphInput.value = ''; // Clear input after adding
+  }
+}
