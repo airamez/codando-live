@@ -146,8 +146,6 @@ JavaScript uses three keywords to declare variables:
   alert(`Hello, ${firstName}!`);
   ```
 
-Below is the updated section with descriptions for each Arithmetic, Comparison, and Logical operator, with each operator described on a single line, as requested.
-
 ## Basic Operators
 
 * Arithmetic:
@@ -278,25 +276,50 @@ Below is the updated section with descriptions for each Arithmetic, Comparison, 
   * [_02_Intro.html](_02_Intro.html)
   * [_02_Intro.js](_02_Intro.js)
 
+## Math Functions
+
+The `Math` object provides static methods for mathematical operations.
+
+| Method | Description |
+|--------|-------------|
+| `Math.floor(number)` | Returns the largest integer less than or equal to the number (rounds down). |
+| `Math.ceil(number)` | Returns the smallest integer greater than or equal to the number (rounds up). |
+| `Math.round(number)` | Rounds the number to the nearest integer (0.5 rounds up). |
+| `Math.trunc(number)` | Returns the integer part of a number by removing the decimal part (no rounding). |
+| `Math.abs(number)` | Returns the absolute (positive) value of a number. |
+| `Math.max(value1, value2, ...)` | Returns the largest value from a set of numbers. |
+| `Math.min(value1, value2, ...)` | Returns the smallest value from a set of numbers. |
+| `Math.pow(base, exponent)` | Returns the base raised to the exponent power. |
+| `Math.sqrt(number)` | Returns the square root of a non-negative number. |
+| `Math.random()` | Returns a random floating-point number between 0 (inclusive) and 1 (exclusive). |
+
 ## Functions
 
-* **Declaration Types**:
-  * **Function Declaration**:
-  
-    ```javascript
-    function functionName(parameter1, parameter2, ...) {
-      // Code to execute
-      return value; // Optional return statement
-    }
-    ```
+* Functions in JavaScript are reusable blocks of code that perform specific tasks, accept inputs via parameters, and may return a value.
+* JavaScript is dynamically typed, meaning parameter lists do not specify types (e.g., string, number) and functions do not declare a return type.
+* This allows flexibility but requires careful handling to avoid errors, as parameters and return values can be of any type (e.g., numbers, strings, objects, or even undefined).
 
-## Array Operations
+* Declaration
+
+  ```javascript
+  function functionName(parameter1, parameter2, ...) {
+    // Code to execute
+    return value; // Optional return statement
+  }
+  ```
+
+  * Key Characteristics
+    * **No Parameter Types**: Parameters in the function definition (e.g., name, a, b) do not specify types. You can pass any value (e.g., string, number, object, or null), and JavaScript will accept it without compile-time type checking.
+    * **No Return Type**: Functions do not declare what type they return. A function can return any value (e.g., string, number, array, or nothing/undefined), and this can vary based on the function's logic.
+    * **Dynamic Typing Implications**: Since types are not enforced, developers must validate inputs or handle varying return types to prevent runtime errors (e.g., checking if a parameter is a number before performing arithmetic).
+
+## Array
 
 Arrays in JavaScript are ordered, zero-indexed lists used to store multiple values in a single variable.
 
->Note: Unlike many others languages, an array in JavaScript has no type and each index has the type assigned dynamically.
+>Note: Unlike many others languages, an array in JavaScript has no type and each element type is assigned dynamically.
 
-* Creating Arrays
+* Array Declaration
 
   ```javascript
   let arrayName = [element1, element2, ...];
@@ -326,168 +349,209 @@ Arrays in JavaScript are ordered, zero-indexed lists used to store multiple valu
   console.log(mixed);
   ```
 
-* Common Methods
+* Common Array Methods
 
-  * Access/Modify
-    * **Access**: `arrayName[index]` retrieves the element at the specified index.
-    * **Modify**: `arrayName[index] = value` updates the element at the specified index.
+| Command    | Description                                                                 | Syntax                                             |
+|------------|-----------------------------------------------------------------------------|----------------------------------------------------|
+| Access     | Retrieves the element at the specified index.                               | `arrayName[index]`                                 |
+| Modify     | Updates the element at the specified index.                                 | `arrayName[index] = value`                         |
+| at()       | Accesses an element at a specified index (supports negative indices).       | `arrayName.at(index)`                              |
+| push()     | Adds one or more elements to the end of an array.                           | `arrayName.push(item1, item2, ...)`                |
+| pop()      | Removes and returns the last element of an array.                           | `arrayName.pop()`                                  |
+| unshift()  | Adds one or more elements to the beginning of an array.                     | `arrayName.unshift(item1, item2, ...)`             |
+| shift()    | Removes and returns the first element of an array.                          | `arrayName.shift()`                                |
+| forEach()  | Executes a function for each array element.                                 | `arrayName.forEach(callback(element, index))`      |
+| map()      | Creates a new array with the results of calling a function on every element.| `arrayName.map(callback(element, index))`          |
+| filter()   | Creates a new array with elements that pass a test.                         | `arrayName.filter(callback(element, index))`       |
+| indexOf()  | Returns the first index of a specified value, or -1 if not found.           | `arrayName.indexOf(value)`                         |
+| includes() | Returns `true` if the array contains a specified value, `false` otherwise.  | `arrayName.includes(value)`                        |
+| slice()    | Returns a shallow copy of a portion of an array (non-destructive).          | `arrayName.slice(start, end)`                      |
+| splice()   | Adds/removes elements from an array (modifies original array).              | `arrayName.splice(start, deleteCount, item1, ...)` |
+| concat()   | Merges two or more arrays, returning a new array.                           | `arrayName.concat(array1, array2, ...)`            |
 
-    * **Examples**:
+* Examples
 
-    ```javascript
-    // Accessing elements
-    let fruits = ["apple", "banana", "orange", "jaca"];
-    console.log(fruits);
-    console.log(fruits[0]); // Output: apple
-    console.log(fruits[2]); // Output: orange
+  ```javascript
+  // Initial array with 8 fruits
+  let fruits = ["apple", "banana", "orange", "grape", "mango", "kiwi", "pear", "peach"];
 
-    // Modifying elements
-    let numbers = [1, 2, 3];
-    numbers[1] = 10; // Update index 1
-    console.log(numbers); // Output: [1, 10, 3]
+  // Access: Retrieve element at index 2
+  console.log(fruits[2]); // Output: orange
 
-    let prices = [9.99, 14.50];
-    prices[0] = 12.99; // Update index 0
-    console.log(prices); // Output: [12.99, 14.5]
+  // Modify: Update element at index 3
+  fruits[3] = "cherry";
+  console.log(fruits); // Output: ["apple", "banana", "orange", "cherry", "mango", "kiwi", "pear", "peach"]
 
-    let flags = [true, false];
-    flags[1] = true; // Update index 1
-    console.log(flags); // Output: [true, true]
+  // at(): Access last element using negative index
+  let lastFruit = fruits.at(-1);
+  console.log(lastFruit); // Output: peach
 
-    let lastFruit = fruits.at(-1);
-    console.log(lastFruit);
-    ```
+  // push(): Add elements to the end
+  fruits.push("pineapple");
+  console.log(fruits); // Output: ["apple", "banana", "orange", "cherry", "mango", "kiwi", "pear", "peach", "pineapple"]
 
-  * Add/Remove
-    * **push()**: Adds one or more elements to the end of an array.
-    * **pop()**: Removes and returns the last element of an array.
-    * **unshift()**: Adds one or more elements to the beginning of an array.
-    * **shift()**: Removes and returns the first element of an array.
-  * **Examples**:
+  // pop(): Remove and return last element
+  let removedFruit = fruits.pop();
+  console.log(removedFruit); // Output: pineapple
+  console.log(fruits); // Output: ["apple", "banana", "orange", "cherry", "mango", "kiwi", "pear", "peach"]
 
-    ```javascript
-    // push(): Adding elements
-    let fruits = ["apple", "banana"];
-    fruits.push("orange"); // Add to end
-    console.log(fruits); // Output: ["apple", "banana", "orange"]
+  // unshift(): Add elements to the beginning
+  fruits.unshift("strawberry");
+  console.log(fruits); // Output: ["strawberry", "apple", "banana", "orange", "cherry", "mango", "kiwi", "pear", "peach"]
 
-    let numbers = [1, 2];
-    numbers.push(3, 4); // Add multiple integers
-    console.log(numbers); // Output: [1, 2, 3, 4]
+  // shift(): Remove and return first element
+  let firstFruit = fruits.shift();
+  console.log(firstFruit); // Output: strawberry
+  console.log(fruits); // Output: ["apple", "banana", "orange", "cherry", "mango", "kiwi", "pear", "peach"]
 
-    // pop(): Removing last element
-    let prices = [9.99, 14.50, 3.25];
-    let lastPrice = prices.pop(); // Remove and return last element
-    console.log(lastPrice); // Output: 3.25
-    console.log(prices); // Output: [9.99, 14.5]
+  // forEach(): Iterate and log each fruit
+  fruits.forEach(fruit => console.log(fruit));
+  // Output: apple, banana, orange, cherry, mango, kiwi, pear, peach
 
-    // unshift(): Adding to beginning
-    let flags = [true, false];
-    flags.unshift(false); // Add to start
-    console.log(flags); // Output: [false, true, false]
+  // map(): Create new array with fruit names in uppercase
+  let upperFruits = fruits.map(fruit => fruit.toUpperCase());
+  console.log(upperFruits); // Output: ["APPLE", "BANANA", "ORANGE", "CHERRY", "MANGO", "KIWI", "PEAR", "PEACH"]
 
-    // shift(): Removing first element
-    let scores = [85, 90, 95];
-    let firstScore = scores.shift(); // Remove and return first element
-    console.log(firstScore); // Output: 85
-    console.log(scores); // Output: [90, 95]
-    ```
+  // filter(): Create new array with fruits having 5 or fewer characters
+  let shortFruits = fruits.filter(fruit => fruit.length <= 5);
+  console.log(shortFruits); // Output: ["apple", "mango", "kiwi", "pear", "peach"]
 
-  * Iterate
-    * **forEach()**: Executes a function for each array element.
-    * **map()**: Creates a new array with the results of calling a function on every element.
-    * **filter()**: Creates a new array with elements that pass a test.
-    * **Examples**:
+  // indexOf(): Find index of "cherry"
+  let cherryIndex = fruits.indexOf("cherry");
+  console.log(cherryIndex); // Output: 3
 
-      ```javascript
-      // forEach(): Iterate and log elements
-      let fruits = ["apple", "banana", "orange"];
-      fruits.forEach(fruit => console.log(fruit));
-      // Output: apple, banana, orange
+  // includes(): Check if "banana" exists
+  let hasBanana = fruits.includes("banana");
+  console.log(hasBanana); // Output: true
 
-      // map(): Create new array with modified elements
-      let numbers = [1, 2, 3];
-      let doubled = numbers.map(num => num * 2);
-      console.log(doubled); // Output: [2, 4, 6]
+  // slice(): Extract portion from index 1 to 3
+  let someFruits = fruits.slice(1, 4);
+  console.log(someFruits); // Output: ["banana", "orange", "cherry"]
+  console.log(fruits); // Original unchanged: ["apple", "banana", "orange", "cherry", "mango", "kiwi", "pear", "peach"]
 
-      // filter(): Create new array with filtered elements
-      let prices = [9.99, 14.50, 3.25, 20.00];
-      let affordable = prices.filter(price => price < 10);
-      console.log(affordable); // Output: [9.99, 3.25]
-      ```
+  // splice(): Remove 1 element at index 2 and add "lemon"
+  fruits.splice(2, 1, "lemon");
+  console.log(fruits); // Output: ["apple", "banana", "lemon", "cherry", "mango", "kiwi", "pear", "peach"]
 
-  * Search
-    * **indexOf()**: Returns the first index of a specified value, or -1 if not found.
-    * **includes()**: Returns `true` if the array contains a specified value, `false` otherwise.
-    * **Examples**:
+  // concat(): Merge with another array
+  let moreFruits = ["plum", "lime"];
+  let allFruits = fruits.concat(moreFruits);
+  console.log(allFruits); // Output: ["apple", "banana", "lemon", "cherry", "mango", "kiwi", "pear", "peach", "plum", "lime"]
+  ```
 
-      ```javascript
-      // indexOf(): Find index of element
-      let fruits = ["apple", "banana", "orange", "banana"];
-      let index = fruits.indexOf("banana");
-      console.log(index); // Output: 1
+## Object-Oriented Programming in JavaScript
 
-      let numbers = [1, 2, 3, 2];
-      let notFound = numbers.indexOf(4);
-      console.log(notFound); // Output: -1
+* JavaScript supports object-oriented programming (OOP) through objects, prototypes, and, since ES6 (2015), class syntax.
+* OOP in JavaScript allows you to model real-world entities using objects that encapsulate data (properties) and behavior (methods).
+* JavaScript's OOP is flexible due to its prototype-based inheritance, differing from traditional class-based languages like Java or C++.
 
-      // includes(): Check if element exists
-      let prices = [9.99, 14.50, 3.25];
-      let hasPrice = prices.includes(14.50);
-      console.log(hasPrice); // Output: true
+* Core OOP Concepts
 
-      let flags = [true, false, true];
-      let hasFalse = flags.includes(false);
-      console.log(hasFalse); // Output: true
-      ```
+  | Concept          | Description                                                                 |
+  |------------------|-----------------------------------------------------------------------------|
+  | **Object**       | A collection of properties (data) and methods (functions) representing an entity. |
+  | **Class**        | A blueprint for creating objects with shared properties and methods (introduced in ES6). |
+  | **Encapsulation**| Restricting access to an object's internal data, exposing only necessary parts via methods. |
+  | **Inheritance**  | Allowing a class to inherit properties and methods from another class using `extends`. |
+  | **Polymorphism** | Objects of different classes can be treated as instances of a common superclass, with methods behaving differently. |
 
-  * Transform
-    * **slice()**: Returns a shallow copy of a portion of an array (non-destructive).
-    * **splice()**: Adds/removes elements from an array (modifies original array).
-      * array.splice(start, deleteCount, item1, item2, ...)
-    * **concat()**: Merges two or more arrays, returning a new array.
-    * **Examples**:
+* Key Characteristics
+  * **Objects**: In JavaScript, objects are dynamic collections of key-value pairs. They can be created using object literals (`{}`), constructors, or classes.
+  * **Prototype-Based**: JavaScript uses prototypes for inheritance, allowing objects to share properties and methods via a prototype chain.
+  * **Classes**: ES6 introduced `class` syntax as a cleaner way to define constructor functions and prototypes, but JavaScript remains prototype-based under the hood.
+  * **Dynamic Typing**: Properties and methods can be added or modified at runtime, offering flexibility but requiring careful management.
+  * **Private Properties**: Modern JavaScript (ES2022) supports private fields with `#` prefix for encapsulation, though older code may use conventions like `_` for private-like behavior.
 
-      ```javascript
-      // slice(): Extract portion of array
-      let fruits = ["apple", "banana", "orange", "grape"];
-      let someFruits = fruits.slice(1, 3); // From index 1 to 2
-      console.log(someFruits); // Output: ["banana", "orange"]
-      console.log(fruits); // Original unchanged: ["apple", "banana", "orange", "grape"]
+* Example
 
-      // splice(): Remove and/or add elements
-      let numbers = [1, 2, 3, 4, 5];
-      numbers.splice(2, 1, 10, 20); // Remove 1 element at index 2, add 10 and 20
-      console.log(numbers); // Output: [1, 2, 10, 20, 4, 5]
+  ```javascript
+  // 1. Object Literal: Basic book object
+  const book = {
+    title: 'JavaScript Guide',
+    author: 'Jane Doe',
+    pages: 200,
+    read() {
+      console.log(`Reading ${this.title} by ${this.author}`);
+    }
+  };
+  book.read(); // Output: Reading JavaScript Guide by Jane Doe
+  console.log(book.pages); // Output: 200
 
-      // concat(): Merge arrays
-      let prices = [9.99, 14.50];
-      let morePrices = [3.25, 19.99];
-      let allPrices = prices.concat(morePrices);
-      console.log(allPrices); // Output: [9.99, 14.5, 3.25, 19.99]
+  // 2. Class: Define a Book class with encapsulation
+  class Book {
+    #pages; // Private field for encapsulation
+    constructor(title, author, pages) {
+      this.title = title;
+      this.author = author;
+      this.#pages = pages;
+    }
+    getPages() {
+      return this.#pages; // Access private field via method
+    }
+    read() {
+      return `Reading ${this.title} by ${this.author}`;
+    }
+  }
+  const book1 = new Book('Learning JS', 'John Smith', 300);
+  console.log(book1.read()); // Output: Reading Learning JS by John Smith
+  console.log(book1.getPages()); // Output: 300
+  // console.log(book1.#pages); // Error: Private field '#pages' must be declared in an enclosing class
 
-      let flags = [true, false];
-      let moreFlags = [false, true];
-      let allFlags = flags.concat(moreFlags);
-      console.log(allFlags); // Output: [true, false, false, true]
-      ```
+  // 3. Inheritance: EBook class extends Book
+  class EBook extends Book {
+    constructor(title, author, pages, format) {
+      super(title, author, pages);
+      this.format = format;
+    }
+    download() {
+      return `Downloading ${this.title} in ${this.format} format`;
+    }
+  }
+  const ebook1 = new EBook('JS Advanced', 'Alice Brown', 250, 'PDF');
+  console.log(ebook1.read()); // Output: Reading JS Advanced by Alice Brown
+  console.log(ebook1.download()); // Output: Downloading JS Advanced in PDF format
+  console.log(ebook1.getPages()); // Output: 250
 
-## Math Functions
+  // 4. Polymorphism: Override read method in AudioBook
+  class AudioBook extends Book {
+    constructor(title, author, pages, duration) {
+      super(title, author, pages);
+      this.duration = duration;
+    }
+    read() {
+      return `Listening to ${this.title} for ${this.duration} hours`;
+    }
+  }
+  const audiobook1 = new AudioBook('JS Basics', 'Emma Wilson', 150, 5);
+  console.log(audiobook1.read()); // Output: Listening to JS Basics for 5 hours
 
-The `Math` object provides static methods for mathematical operations.
+  // 5. Polymorphism with Array: Treat different objects as Book instances
+  const library = [
+    new Book('JavaScript Guide', 'Jane Doe', 200),
+    new EBook('JS Advanced', 'Alice Brown', 250, 'EPUB'),
+    new AudioBook('JS Basics', 'Emma Wilson', 150, 5)
+  ];
+  library.forEach(item => {
+    console.log(item.read());
+  });
+  // Output:
+  // Reading JavaScript Guide by Jane Doe
+  // Reading JS Advanced by Alice Brown
+  // Listening to JS Basics for 5 hours
 
-| Method | Description |
-|--------|-------------|
-| `Math.floor(number)` | Returns the largest integer less than or equal to the number (rounds down). |
-| `Math.ceil(number)` | Returns the smallest integer greater than or equal to the number (rounds up). |
-| `Math.round(number)` | Rounds the number to the nearest integer (0.5 rounds up). |
-| `Math.trunc(number)` | Returns the integer part of a number by removing the decimal part (no rounding). |
-| `Math.abs(number)` | Returns the absolute (positive) value of a number. |
-| `Math.max(value1, value2, ...)` | Returns the largest value from a set of numbers. |
-| `Math.min(value1, value2, ...)` | Returns the smallest value from a set of numbers. |
-| `Math.pow(base, exponent)` | Returns the base raised to the exponent power. |
-| `Math.sqrt(number)` | Returns the square root of a non-negative number. |
-| `Math.random()` | Returns a random floating-point number between 0 (inclusive) and 1 (exclusive). |
+  // 6. Dynamic Property Addition: Add a property at runtime
+  const book2 = new Book('Dynamic JS', 'Bob Lee', 400);
+  book2.rating = 4.5; // Dynamically add a property
+  console.log(book2.rating); // Output: 4.5
+  console.log(book2.getPages()); // Output: 400
+
+  // 7. Prototype Extension: Add a method to all Book instances
+  Book.prototype.summary = function() {
+    return `${this.title} by ${this.author}, ${this.getPages()} pages`;
+  };
+  console.log(book1.summary()); // Output: Learning JS by John Smith, 300 pages
+  console.log(ebook1.summary()); // Output: JS Advanced by Alice Brown, 250 pages
+  ```
 
 ## Document Object
 
@@ -530,7 +594,7 @@ In JavaScript, you can reference HTML elements (components) in the Document Obje
     * Returns a NodeList (array-like) of all elements matching a CSS selector.
     * ```let elements = document.querySelectorAll('selector');```
 
-## Event Binding for HTML Components
+## Events for HTML Components
 
 In JavaScript, events are actions or occurrences (e.g., clicks, key presses, mouse movements) that can be detected and handled by binding JavaScript functions to HTML elements.
 Events allow interactivity between users and web pages.
