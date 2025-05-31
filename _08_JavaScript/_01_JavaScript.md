@@ -369,11 +369,14 @@ Arrays in JavaScript are ordered, zero-indexed lists used to store multiple valu
 | splice()   | Adds/removes elements from an array (modifies original array).              | `arrayName.splice(start, deleteCount, item1, ...)` |
 | concat()   | Merges two or more arrays, returning a new array.                           | `arrayName.concat(array1, array2, ...)`            |
 
+>Note: The names `push`, `pop`,`shift` and `unshift` came from common operation on data structrures.
+
 * Examples
 
   ```javascript
   // Initial array with 8 fruits
   let fruits = ["apple", "banana", "orange", "grape", "mango", "kiwi", "pear", "peach"];
+  print(fruits);
 
   // Access: Retrieve element at index 2
   console.log(fruits[2]); // Output: orange
@@ -430,6 +433,7 @@ Arrays in JavaScript are ordered, zero-indexed lists used to store multiple valu
   console.log(fruits); // Original unchanged: ["apple", "banana", "orange", "cherry", "mango", "kiwi", "pear", "peach"]
 
   // splice(): Remove 1 element at index 2 and add "lemon"
+  // Syntax: splice(start, deleteCount, item1, item2, ..., itemN)
   fruits.splice(2, 1, "lemon");
   console.log(fruits); // Output: ["apple", "banana", "lemon", "cherry", "mango", "kiwi", "pear", "peach"]
 
