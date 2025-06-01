@@ -598,7 +598,7 @@ In JavaScript, you can reference HTML elements (components) in the Document Obje
     * Returns a NodeList (array-like) of all elements matching a CSS selector.
     * ```let elements = document.querySelectorAll('selector');```
 
-## Events for HTML Components
+## HTML Components Events
 
 In JavaScript, events are actions or occurrences (e.g., clicks, key presses, mouse movements) that can be detected and handled by binding JavaScript functions to HTML elements.
 Events allow interactivity between users and web pages.

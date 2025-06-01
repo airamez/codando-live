@@ -16,6 +16,27 @@ box.addEventListener('mouseout', () => {
   box.style.backgroundColor = 'lightblue';
 });
 
+const runningButton = document.getElementById("running_btn");
+// Set initial position at the bottom of the page
+window.addEventListener('load', () => {
+  console.log('Page loaded!');
+  const paragraphContainer = document.getElementById('paragraphContainer');
+  const rect = paragraphContainer.getBoundingClientRect();
+  const scrollY = window.scrollY || window.pageYOffset;
+  runningButton.style.left = `${rect.left}px`;
+  runningButton.style.top = `${rect.bottom + scrollY + 10}px`; // 10px gap below paragraphContainer
+});
+runningButton.addEventListener('mouseover', () => {
+  const maxX = window.innerWidth - runningButton.offsetWidth;
+  const maxY = window.innerHeight - runningButton.offsetHeight;
+  // Generate random positions
+  const randomX = Math.floor(Math.random() * maxX);
+  const randomY = Math.floor(Math.random() * maxY);
+  // Apply new position
+  runningButton.style.left = `${randomX}px`;
+  runningButton.style.top = `${randomY}px`;
+});
+
 // Keyboard Events
 const input = document.getElementById('textInput');
 input.addEventListener('keydown', (event) => {

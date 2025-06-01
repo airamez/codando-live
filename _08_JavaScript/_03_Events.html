@@ -15,17 +15,28 @@
    -->
   <script defer src="_03_Events.js"></script>
   <link rel="stylesheet" href="_03_Events.css">
+  <style>
+    #running_btn {
+      position: absolute;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
   <button id="btn">Click Me</button>
   <div id="box"></div>
   <form id="myForm">
-    <input type="text" id="textInput" placeholderxcvcxvxc="Enter text"> <br>
+    <label for="textInput">Input</label>
+    <input type="text" id="textInput" placeholder="Enter text"> <br>
+    <label for="paragraphInput">New Paragraph</label>
     <input type="text" id="paragraphInput" placeholder="Enter paragraph text"> <br>
     <button type="button" id="addParagraphBtn">Add Paragraph</button>
   </form>
   <div id="paragraphContainer"></div>
+  <button id="running_btn">Try Click Me</button>
 </body>
 
 </html>
