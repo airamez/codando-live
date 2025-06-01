@@ -636,3 +636,13 @@ Events allow interactivity between users and web pages.
   * addEventListener (Preferred)
     * Attaches an event listener to an element, allowing multiple handlers for the same event and better control (e.g., removing listeners).
     * ```element.addEventListener('event', function() { /* code */ });```
+
+## HTTP Request
+
+* Demo with ASP.NET Controller
+* Async
+* CORS
+
+## Building UI with Pure JavaScript
+
+## Using third part components
