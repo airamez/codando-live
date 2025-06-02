@@ -443,7 +443,102 @@ Arrays in JavaScript are ordered, zero-indexed lists used to store multiple valu
   console.log(allFruits); // Output: ["apple", "banana", "lemon", "cherry", "mango", "kiwi", "pear", "peach", "plum", "lime"]
   ```
 
-## Object-Oriented Programming in JavaScript
+## Exception Handling
+
+Exception handling in JavaScript allows developers to manage errors gracefully, preventing crashes and enabling better user experiences. The primary mechanism for handling exceptions is the `try-catch` statement, with additional constructs like `finally` and `throw`.
+
+## Try-Catch
+
+The `try-catch` statement is used to handle exceptions (errors) that occur during code execution. Code in the `try` block is executed, and if an error occurs, control is passed to the `catch` block to handle the error.
+
+* Syntax
+
+  ```javascript
+  try {
+  // Code that might throw an error
+  } catch (err if err instanceof TypeError) {
+    // Handle TypeError
+  } catch (err if err instanceof RangeError) {
+    // Handle RangeError
+  } catch (err) {
+    // Handle any other errors
+  } finally { // Optional
+    // Code that always executes
+  }
+  ```
+
+* Example
+
+  ```javascript
+  try {
+    let invalidJSON = "this is not a valid json";
+    let result = JSON.parse(invalidJSON); // Throws SyntaxError
+  } catch (error) {
+    console.log("An error occurred:", error.message); // Output: An error occurred: Unexpected token i in JSON at position 0
+  }
+
+  try {
+    let data = fetchData(); // Assume this might throw an exception
+  } catch (error) {
+    console.log("Error:", error.message);
+  } finally {
+    console.log("Cleanup complete"); // Always runs
+  }
+  ```
+
+  * The `error` parameter in the `catch` block is an instance of the `Error` object (or its subclasses like `SyntaxError`, `TypeError`, etc.).
+  * Common properties of the `error` object include `name` (type of error) and `message` (description of the error).
+  * The `finally` block executes regardless of whether an error occurs, making it useful for cleanup tasks.
+
+* **Backward Compatibility**: Multiple catch blocks with specific error types are supported in modern JavaScript (ES2022+). In older environments, you’d typically use a single catch block and check the error type manually with instanceof.
+
+  ```javascript
+  try {
+    let value = null;
+    value.toUpperCase();
+  } catch (err) {
+    if (err instanceof TypeError) {
+      console.log("Caught a TypeError:", err.message);
+    } else if (err instanceof RangeError) {
+      console.log("Caught a RangeError:", err.message);
+    } else {
+      console.log("Caught an unexpected error:", err.message);
+    }
+  }
+  ```
+
+## Throwing Exceptions
+
+The `throw` statement allows you to create custom errors. You can throw any value, but it’s best to throw an `Error` object for consistency.
+
+* Example
+
+  ```javascript
+  function divide(a, b) {
+    if (b === 0) {
+      throw new Error("Division by zero is not allowed");
+    }
+    return a / b;
+  }
+
+  try {
+    console.log(divide(10, 0));
+  } catch (error) {
+    console.log("Caught error:", error.message); // Output: Caught error: Division by zero is not allowed
+  }
+  ```
+
+## Error Types
+
+JavaScript has several built-in error types, including:
+
+* `Error`: Generic error.
+* `SyntaxError`: Parsing errors, e.g., invalid JSON.
+* `TypeError`: Incorrect type usage, e.g., calling a non-function.
+* `RangeError`: Value out of valid range, e.g., invalid array length.
+* `ReferenceError`: Accessing undefined variables.
+
+## Object-Oriented Programming
 
 * JavaScript supports object-oriented programming (OOP) through objects, prototypes, and, since ES6 (2015), class syntax.
 * OOP in JavaScript allows you to model real-world entities using objects that encapsulate data (properties) and behavior (methods).
@@ -641,6 +736,7 @@ Events allow interactivity between users and web pages.
 
 * Demo with ASP.NET Controller
 * Async
+  * Promise
 * CORS
 
 ## Building UI with Pure JavaScript
