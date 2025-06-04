@@ -507,32 +507,30 @@ Arrays in JavaScript are ordered, zero-indexed lists used to store multiple valu
 
 * **Throwing Exceptions**
   * The `throw` statement allows you to create custom errors. You can throw any value, but it’s best to throw an `Error` object for consistency.
-  * Example
 
-    ```javascript
-    function divide(a, b) {
-      if (b === 0) {
-        throw new Error("Division by zero is not allowed");
-      }
-      return a / b;
+  ```javascript
+  function divide(a, b) {
+    if (b === 0) {
+      throw new Error("Division by zero is not allowed");
     }
+    return a / b;
+  }
 
-    try {
-      console.log(divide(10, 0));
-    } catch (error) {
-      console.log("Caught error:", error.message); // Output: Caught error: Division by zero is not allowed
-    }
-    ```
+  try {
+    console.log(divide(10, 0));
+  } catch (error) {
+    console.log("Caught error:", error.message); // Output: Caught error: Division by zero is not allowed
+  }
+  ```
 
 * **Error Types**
-  * JavaScript has several built-in error types, including:
-    * `Error`: Generic error.
-    * `SyntaxError`: Parsing errors, e.g., invalid JSON.
-    * `TypeError`: Incorrect type usage, e.g., calling a non-function.
-    * `RangeError`: Value out of valid range, e.g., invalid array length.
-    * `ReferenceError`: Accessing undefined variables.
-    * `EvalError`: An error has occurred in the eval() function
-    * `URIError`: An error in encodeURI() has occurred
+  * `Error`: Generic error.
+  * `SyntaxError`: Parsing errors, e.g., invalid JSON.
+  * `TypeError`: Incorrect type usage, e.g., calling a non-function.
+  * `RangeError`: Value out of valid range, e.g., invalid array length.
+  * `ReferenceError`: Accessing undefined variables.
+  * `EvalError`: An error has occurred in the eval() function
+  * `URIError`: An error in encodeURI() has occurred
 
 ## Object-Oriented Programming
 
@@ -551,7 +549,7 @@ Arrays in JavaScript are ordered, zero-indexed lists used to store multiple valu
   | **Polymorphism** | Objects of different classes can be treated as instances of a common superclass, with methods behaving differently. |
 
 * Key Characteristics
-  * **Objects**: In JavaScript, objects are dynamic collections of key-value pairs. They can be created using object literals (`{}`), constructors, or classes.
+  * **Objects**: In JavaScript, objects are dynamic collections of key-value pairs. They can be created using object literals `{}`, constructors, or classes.
   * **Prototype-Based**: JavaScript uses prototypes for inheritance, allowing objects to share properties and methods via a prototype chain.
   * **Classes**: ES6 introduced `class` syntax as a cleaner way to define constructor functions and prototypes, but JavaScript remains prototype-based under the hood.
   * **Dynamic Typing**: Properties and methods can be added or modified at runtime, offering flexibility but requiring careful management.
