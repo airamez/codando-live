@@ -649,7 +649,7 @@ Arrays in JavaScript are ordered, zero-indexed lists used to store multiple valu
 ## Document Object
 
 The document object in JavaScript represents the entire HTML document loaded in a browser window.
-It is a part of the Document Object Model (DOM) and serves as the entry point for accessing and manipulating HTML elements.
+It is a part of the [Document Object Model (DOM)](https://www.w3schools.com/js/js_htmldom.asp) and serves as the entry point for accessing and manipulating HTML elements.
 The document object provides properties and methods to interact with the structure, content, and styles of a web page.
 
 | Property/Method | Description |

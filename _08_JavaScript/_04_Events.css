@@ -92,3 +92,10 @@ input[type="text"]:focus {
   color: #333;
   border-left: 4px solid #4CAF50;
 }
+
+#running_btn {
+  position: absolute;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}

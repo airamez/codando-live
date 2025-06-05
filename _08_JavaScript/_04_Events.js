@@ -64,10 +64,10 @@ window.addEventListener('load', () => {
   console.log(`Page loaded!:`);
 });
 window.addEventListener('resize', () => {
-  console.log(window.innerWidth); // Integer: window width
+  console.log('innerWidth =', window.innerWidth); // Integer: window width
 });
 window.addEventListener('scroll', () => {
-  console.log(window.scrollY); // Decimal: scroll position
+  console.log(`ScrollY =`, window.scrollY); // Decimal: scroll position
 });
 
 // Dynamic Paragraph Addition
