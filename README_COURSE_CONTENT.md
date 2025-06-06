@@ -267,6 +267,8 @@
 
 ### Angular
 
+## VIM
+
 ## Containers
 
 * Podman

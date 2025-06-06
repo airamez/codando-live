@@ -12,6 +12,9 @@ JavaScript is a versatile, high-level programming language primarily used for we
 
 >Note: JavaScript is an implementation of ECMAScript, and browser vendors (e.g., Chrome’s V8, Firefox’s SpiderMonkey) ensure their engines align with the standard. The open-source community also contributes significantly to its evolution.
 
+* **TIP**: There are many options to play with JavaScript directly in the browser. This is a good one:
+  * <https://playcode.io/javascript>
+
 ## Adding JavaScript to HTML pages
 
 * JavaScript can be added to a web page in several ways.
@@ -725,6 +728,60 @@ Events allow interactivity between users and web pages.
   * addEventListener (Preferred)
     * Attaches an event listener to an element, allowing multiple handlers for the same event and better control (e.g., removing listeners).
     * ```element.addEventListener('event', function() { /* code */ });```
+
+## A CRUD Demo: StormWind Product
+
+The demo is a single-page web application that allows users to manage products with the following features:
+
+* **Create**: Add new products via a form.
+* **Read**: Display a list of products in a table.
+* **Update**: Edit existing products using the same form.
+* **Delete**: Remove products from the list.
+
+The application uses the Northwind dataset, with a form for input and a table to display products, interacting with a `DataAccessService` for data operations.
+
+* Live Server Extension
+  * When developing web applications locally, browsers impose CORS restrictions to prevent unauthorized cross-origin requests. If you open the HTML file directly (e.g., `file://`), JavaScript cannot fetch data from APIs or local JSON files due to these restrictions. Live Server creates a local web server (e.g., `http://localhost:5500`), allowing the application to make requests without CORS issues. This mimics a production environment and is critical for testing applications that rely on external data sources.
+  * **Why Live Server is Needed**: When running the application locally (e.g., via `file://` protocol), browsers enforce CORS (Cross-Origin Resource Sharing) restrictions, which block requests to local files or APIs. The Live Server extension for Visual Studio Code (or similar tools) serves the files over `http://localhost`, bypassing CORS issues by simulating a web server environment. This ensures the application can fetch data or interact with APIs without security errors.
+  * **Run the Application**: Right click on `_05_ProductCRUD.html` and select the option `Open with Live Server`.
+
+  ![Live Server Extension](images/LiveServerExtension.png)
+
+  >Note: Try to open the `_08_JavaScript/_05_ProductCRUD.html` directly from the browser.
+  
+* Files
+  * HTML: [_05_ProductCRUD.html](./_05_ProductCRUD.html)
+    * Defines the user interface with a form for product input and a table for listing products.
+    * **Structure**: Contains a form (`#productForm`) with fields for product details (name, supplier, category, quantity, price, discontinued) and a table (`#productsTable`) for listing products.
+    * **Key Elements**:
+      * `<input type="hidden" id="productId">`: Stores the ID of the product being edited.
+      * `<button id="cancelEdit">`: Hidden by default, shown during edit mode to reset the form.
+      * `<script defer type="module">`: Loads the JavaScript as a module to support ES6 imports.
+  * CSS: [_05_ProductCRUD.css`](./_05_ProductCRUD.css)
+    * Styles the application (not provided but referenced in HTML).
+  * Page JavaScript: [_05_ProductCRUD.js](./_05_ProductCRUD.js)
+    * Handles DOM manipulation, event listeners, and interactions with the service layer.
+    * **Imports**: Uses `DataAccessService` from `_05_ProductService.js` to handle data operations.
+    * **Initialization**:
+      * On `DOMContentLoaded`, populates dropdowns for suppliers and categories, renders the product list, and sets up form submission and cancel button listeners.
+    * **Event Handling**:
+      * **Form Submission (`handleSubmit`)**: Collects form data, creates or updates a product based on whether `productId` exists, and refreshes the product list.
+      * **Edit/Delete Buttons**: Uses event delegation to handle clicks on dynamically created buttons. `editProduct` populates the form with product data; `deleteProduct` removes a product and refreshes the table.
+    * **Rendering (`renderProducts`)**: Clears and repopulates the table body with product data, attaching event listeners to edit/delete buttons.
+    * **Form Reset (`resetForm`)**: Clears form inputs and hides the cancel button after submission or cancellation.
+  * Service JavaScript: [_05_ProductService.js](./_05_ProductService.js)
+    * Manages data operations (assumed to handle API calls or mock data).
+    * Simulate (Mock) a dataset or an API (e.g., Northwind API) to manage product data.
+    * Provides methods like:
+      * `getProducts()`
+      * `getProductById(id)`
+      * `addProduct(product)`
+      * `updateProduct(product)`
+      * `deleteProduct(id)`
+      * `getSuppliers()`
+      * `getSupplier(id)`
+      * `getCategories()`
+      * `getCategory(id)`
 
 ## HTTP Request
 
