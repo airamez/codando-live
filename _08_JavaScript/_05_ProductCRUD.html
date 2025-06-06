@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Northwind Products CRUD</title>
+  <link rel="stylesheet" href="_05_ProductCRUD.css">
+  <script defer src="_05_ProductCRUD.js"></script>
+</head>
+
+<body>
+  <h1>Northwind Products Management</h1>
+  <form id="productForm">
+    <input type="hidden" id="productId">
+    <div>
+      <label for="productName">Product Name:</label>
+      <input type="text" id="productName" required>
+    </div>
+    <div>
+      <label for="supplierId">Supplier:</label>
+      <select id="supplierId" required>
+        <option value="">Select Supplier</option>
+      </select>
+    </div>
+    <div>
+      <label for="categoryId">Category:</label>
+      <select id="categoryId" required>
+        <option value="">Select Category</option>
+      </select>
+    </div>
+    <div>
+      <label for="quantityPerUnit">Quantity Per Unit:</label>
+      <input type="number" min="0" step="1" id="quantityPerUnit">
+    </div>
+    <div>
+      <label for="unitPrice">Unit Price:</label>
+      <input type="number" step="0.01" min="0" id="unitPrice" required>
+    </div>
+    <div>
+      <label for="discontinued">Discontinued:</label>
+      <input type="checkbox" id="discontinued">
+    </div>
+    <button type="submit">Save Product</button>
+    <button type="button" id="cancelEdit" style="display:none;">Cancel</button>
+  </form>
+  <h2>Products List</h2>
+  <table id="productsTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Supplier</th>
+        <th>Category</th>
+        <th>Quantity/Unit</th>
+        <th>Unit Price</th>
+        <th>Discontinued</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="productsBody"></tbody>
+  </table>
+</body>
+
+</html>
