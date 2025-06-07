@@ -783,13 +783,187 @@ The application uses the Northwind dataset, with a form for input and a table to
 
   >Note: Try to open the `_08_JavaScript/_05_ProductCRUD.html` directly from the browser.
 
-## HTTP Request
+## HTTP Requests in JavaScript
 
-* Demo with ASP.NET Controller
-* Async
-  * Promise
-* CORS
+* HTTP (Hypertext Transfer Protocol) is the foundation of data communication on the web.
+* HTTP requests allow your application to communicate with servers to fetch or send data, such as retrieving JSON from an API or submitting form data.
 
-## Building UI with Pure JavaScript
+* Additional Resources
+  * [MDN: Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+  * [MDN: Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
+  * [RxJS Documentation](https://rxjs.dev/)
+  * [JSONPlaceholder](https://jsonplaceholder.typicode.com/) (for testing APIs)
+* Understanding HTTP Requests
+  * HTTP requests are how clients (like browsers) communicate with servers.
+  * HTTP methods include:
+    * **GET**: Retrieve data from a server (e.g., fetching a list of users).
+    * **POST**: Send data to a server (e.g., submitting a form).
+    * **PUT**: Update existing data on a server.
+    * **DELETE**: Remove data from a server.
+  * Status Codes
+    * **200 OK**: Request succeeded.
+    * **404 Not Found**: Resource not found.
+    * **500 Internal Server Error**: Server-side error.
+* Web APIs
+  * An Web API (Web Application Programming Interface) is a server endpoint that provides data or services.
+  * This is public API used for tests and demos:
+    * `https://jsonplaceholder.typicode.com`
+
+### XMLHttpRequest (XHR)
+
+* `XMLHttpRequest` is an older method for making HTTP requests in JavaScript.
+* While less common today, understanding it helps grasp the evolution of HTTP handling.
+
+* Example: Fetching Users with XHR
+
+  ```javascript
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://jsonplaceholder.typicode.com/users', true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      const data = JSON.parse(xhr.responseText);
+      console.log(data);
+    }
+  };
+  xhr.send();
+  ```
+
+* Key Points
+  * `open(method, url, async)`: Initializes the request.
+  * `readyState`: Indicates the request's status (4 = done).
+  * `status`: HTTP status code.
+  * `responseText`: The server's response as text.
+  * **Drawbacks**: XHR is verbose and lacks modern features like Promises.
+
+### The Fetch API
+
+* The `fetch` API is a modern, promise-based way to make HTTP requests.
+* It's simpler and more flexible than XHR.
+
+* Basic GET Request
+
+  ```javascript
+  fetch('https://jsonplaceholder.typicode.com/users')
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+  ```
+
+* Key Points
+  * `fetch` returns a Promise that resolves to a `Response` object.
+  * Use `.json()` to parse the response body as JSON.
+  * Handle errors in the `.catch` block.
+
+* POST Request Example
+
+  ```javascript
+  const data = {
+      title: 'New Post',
+      body: 'This is a new post.',
+      userId: 1,
+    }
+  fetch('https://jsonplaceholder.typicode.com/posts', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+  ```
+
+* Fetch Options
+  * `method`: HTTP method (e.g., 'GET', 'POST').
+  * `headers`: Request headers (e.g., for content type).
+  * `body`: Data to send (must be stringified for JSON).
+
+### Promises in HTTP Requests
+
+* Promises are a way to handle asynchronous operations, like HTTP requests, in a cleaner way than callbacks.
+* A Promise represents a value that may be available now, in the future, or never. It has three states:
+  * **Pending**: Initial state.
+  * **Fulfilled**: Operation completed successfully.
+  * **Rejected**: Operation failed.
+
+* **Chaining Promises**
+
+  ```javascript
+  // Initiate a GET request to fetch a list of users from the JSONPlaceholder API
+  fetch('https://jsonplaceholder.typicode.com/users')
+    // Handle the response from the first fetch request
+    .then(response => {
+      // Check if the response status is not OK (e.g., 404, 500); throw an error if so
+      if (!response.ok) throw new Error('Network response was not ok');
+      // Parse the response body as JSON and return the resulting Promise
+      return response.json();
+    })
+    // Handle the parsed JSON data (array of users) from the first request
+    .then(data => {
+      // Log the array of users to the console for debugging
+      console.log(data);
+      // Initiate a second GET request to fetch posts for the first user, using their ID
+      return fetch(`https://jsonplaceholder.typicode.com/posts?userId=${data[0].id}`);
+    })
+    // Handle the response from the second fetch request (posts)
+    .then(response => response.json())
+    // Handle the parsed JSON data (array of posts) from the second request
+    .then(posts => console.log(posts))
+    // Catch and handle any errors that occur in the Promise chain
+    .catch(error => console.error('Error:', error));
+  ```
+
+* Async/Await
+
+`async/await` is syntactic sugar for Promises, making asynchronous code look synchronous.
+
+```javascript
+async function getUserAndPosts() {
+  try {
+    const userResponse = await fetch('https://jsonplaceholder.typicode.com/users/1');
+    if (!userResponse.ok) throw new Error('Failed to fetch user');
+    const user = await userResponse.json();
+    
+    const postsResponse = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${user.id}`);
+    const posts = await postsResponse.json();
+    
+    console.log(user, posts);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+```
+
+* Key Points
+  * Use `try/catch` for error handling with `async/await`.
+  * `await` can only be used inside `async` functions.
+
+### Promise All
+
+* Promise.all takes an array of Promises and resolves when all complete, returning an array of results.
+* Enables concurrent HTTP requests, improving performance over sequential requests.
+* Single .catch block handles errors from any failed request in the Promise.all chain.
+* Ideal for fetching related data from multiple API endpoints simultaneously.
+* Efficient asynchronous for real-world applications like dashboards or feeds.
+
+```javascript
+function multiUserPostsRequest() {
+  // Create an array of Promises for fetching posts
+  const promises = [
+    fetch('https://jsonplaceholder.typicode.com/posts?userId=1'),
+    fetch('https://jsonplaceholder.typicode.com/posts?userId=2'),
+    fetch('https://jsonplaceholder.typicode.com/posts?userId=3')
+  ];
+  // Wait for all Promises to resolve and handle results
+  Promise.all(promises.map(promise =>
+    promise.then(response => response.json())
+  ))
+    .then(results => displayResult(results.flat()))
+    .catch(error => displayResult({ error: `Failed to fetch posts:${error}` }));
+}
+```
+
+## CORS
 
 ## Using third part components

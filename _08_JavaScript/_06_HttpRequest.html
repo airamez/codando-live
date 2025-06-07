@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTTP Request Demo</title>
+  <link rel="stylesheet" href="_06_HttpRequest.css">
+  <script defer src="./_06_HttpRequest.js"></script>
+</head>
+
+<body>
+  <h3>POST Request Input (JSON)</h3>
+  <textarea id="postInput" cols="60" rows="6">{
+  "title": "New Post",
+  "body": "This is a new post.",
+  "userId": 1
+}</textarea>
+
+  <h3>Trigger Requests</h3>
+  <button id="xhrButton">XHR GET</button>
+  <button id="fetchGetButton">Fetch GET</button>
+  <button id="fetchPostButton">Fetch POST</button>
+  <button id="asyncAwaitButton">Async/Await</button>
+  <button id="multiUserPostsButton">Promisse All</button>
+  <div>
+    <h3>Results <button id="clearResultsButton">Clear Results</button></h3>
+    <textarea id="resultOutput" cols="60" rows="30" readonly></textarea>
+  </div>
+</body>
+
+</html>
