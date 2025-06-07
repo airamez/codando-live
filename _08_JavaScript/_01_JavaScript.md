@@ -740,15 +740,6 @@ The demo is a single-page web application that allows users to manage products w
 
 The application uses the Northwind dataset, with a form for input and a table to display products, interacting with a `DataAccessService` for data operations.
 
-* Live Server Extension
-  * When developing web applications locally, browsers impose CORS restrictions to prevent unauthorized cross-origin requests. If you open the HTML file directly (e.g., `file://`), JavaScript cannot fetch data from APIs or local JSON files due to these restrictions. Live Server creates a local web server (e.g., `http://localhost:5500`), allowing the application to make requests without CORS issues. This mimics a production environment and is critical for testing applications that rely on external data sources.
-  * **Why Live Server is Needed**: When running the application locally (e.g., via `file://` protocol), browsers enforce CORS (Cross-Origin Resource Sharing) restrictions, which block requests to local files or APIs. The Live Server extension for Visual Studio Code (or similar tools) serves the files over `http://localhost`, bypassing CORS issues by simulating a web server environment. This ensures the application can fetch data or interact with APIs without security errors.
-  * **Run the Application**: Right click on `_05_ProductCRUD.html` and select the option `Open with Live Server`.
-
-  ![Live Server Extension](images/LiveServerExtension.png)
-
-  >Note: Try to open the `_08_JavaScript/_05_ProductCRUD.html` directly from the browser.
-  
 * Files
   * HTML: [_05_ProductCRUD.html](./_05_ProductCRUD.html)
     * Defines the user interface with a form for product input and a table for listing products.
@@ -782,6 +773,15 @@ The application uses the Northwind dataset, with a form for input and a table to
       * `getSupplier(id)`
       * `getCategories()`
       * `getCategory(id)`
+
+* Live Server Extension
+  * When developing web applications locally, browsers impose CORS restrictions to prevent unauthorized cross-origin requests. If you open the HTML file directly (e.g., `file://`), JavaScript cannot fetch data from APIs or local JSON files due to these restrictions. Live Server creates a local web server (e.g., `http://localhost:5500`), allowing the application to make requests without CORS issues. This mimics a production environment and is critical for testing applications that rely on external data sources.
+  * **Why Live Server is Needed**: When running the application locally (e.g., via `file://` protocol), browsers enforce CORS (Cross-Origin Resource Sharing) restrictions, which block requests to local files or APIs. The Live Server extension for Visual Studio Code (or similar tools) serves the files over `http://localhost`, bypassing CORS issues by simulating a web server environment. This ensures the application can fetch data or interact with APIs without security errors.
+  * **Run the Application**: Right click on `_05_ProductCRUD.html` and select the option `Open with Live Server`.
+
+  ![Live Server Extension](images/LiveServerExtension.png)
+
+  >Note: Try to open the `_08_JavaScript/_05_ProductCRUD.html` directly from the browser.
 
 ## HTTP Request
 

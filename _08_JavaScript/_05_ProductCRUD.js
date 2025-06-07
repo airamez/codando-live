@@ -24,8 +24,6 @@ document.addEventListener('click', (event) => {
 
 function populateDropdowns() {
   const supplierSelect = document.getElementById('supplierId');
-  const categorySelect = document.getElementById('categoryId');
-
   productService.getSuppliers().forEach(supplier => {
     const option = document.createElement('option');
     option.value = supplier.id;
@@ -33,6 +31,7 @@ function populateDropdowns() {
     supplierSelect.appendChild(option);
   });
 
+  const categorySelect = document.getElementById('categoryId');
   productService.getCategories().forEach(category => {
     const option = document.createElement('option');
     option.value = category.id;
