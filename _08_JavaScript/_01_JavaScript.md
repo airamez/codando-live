@@ -783,16 +783,13 @@ The application uses the Northwind dataset, with a form for input and a table to
 
   >Note: Try to open the `_08_JavaScript/_05_ProductCRUD.html` directly from the browser.
 
-## HTTP Requests in JavaScript
+## HTTP Requests
 
 * HTTP (Hypertext Transfer Protocol) is the foundation of data communication on the web.
 * HTTP requests allow your application to communicate with servers to fetch or send data, such as retrieving JSON from an API or submitting form data.
-
-* Additional Resources
-  * [MDN: Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-  * [MDN: Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)
-  * [RxJS Documentation](https://rxjs.dev/)
-  * [JSONPlaceholder](https://jsonplaceholder.typicode.com/) (for testing APIs)
+* We had classes about HTTP Request already
+  * [HTTP Request from CSharp](https://github.com/airamez/codando-live/blob/main/_01_CSharp/_20_API/_09_HttpRequest.cs)
+  * [HTTP from Web API classes](https://github.com/airamez/codando-live/blob/main/_06_WebAPI/_00_WebAPI.md#http---hyper-text-transfer-protocol)
 * Understanding HTTP Requests
   * HTTP requests are how clients (like browsers) communicate with servers.
   * HTTP methods include:
@@ -811,8 +808,32 @@ The application uses the Northwind dataset, with a form for input and a table to
 
 ### XMLHttpRequest (XHR)
 
-* `XMLHttpRequest` is an older method for making HTTP requests in JavaScript.
+* [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) is an older method for making HTTP requests in JavaScript.
 * While less common today, understanding it helps grasp the evolution of HTTP handling.
+* Sintaxe
+
+  ```javascript
+  const xhr = new XMLHttpRequest();
+  xhr.open(method, url, true); // true for asynchronous
+
+  // Set headers
+  xhr.setRequestHeader('Content-Type', 'application/json');
+
+  // Handle response
+  xhr.onload = () => {
+    if (xhr.status >= 200 && xhr.status < 300) {
+      resolve(JSON.parse(xhr.responseText)); // Parse JSON response
+    } else {
+      reject(new Error(`HTTP error! Status: ${xhr.status}`));
+    }
+  };
+
+  // Handle network errors
+  xhr.onerror = () => reject(new Error('Network error occurred'));
+
+  // Send request
+  xhr.send(data ? JSON.stringify(data) : null);  
+  ```
 
 * Example: Fetching Users with XHR
 
@@ -837,8 +858,33 @@ The application uses the Northwind dataset, with a form for input and a table to
 
 ### The Fetch API
 
-* The `fetch` API is a modern, promise-based way to make HTTP requests.
+* The [fetch API]((https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)) is a modern, promise-based way to make HTTP requests.
 * It's simpler and more flexible than XHR.
+* The nature of fetch API is **Async**
+* Sintaxe:
+
+  ```javascript
+  return fetch(url, {
+    method: method, // GET, POST, PUT, DELETE, etc.
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer your-token-here', // Example auth header
+    },
+    body: data ? JSON.stringify(data) : null // Include body for POST/PUT
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json(); // Parse JSON response
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error;
+    });
+  ```
+
+>Note: For Get resquests the `method` parameter is optional
 
 * Basic GET Request
 
@@ -853,7 +899,6 @@ The application uses the Northwind dataset, with a form for input and a table to
   * `fetch` returns a Promise that resolves to a `Response` object.
   * Use `.json()` to parse the response body as JSON.
   * Handle errors in the `.catch` block.
-
 * POST Request Example
 
   ```javascript
@@ -881,7 +926,7 @@ The application uses the Northwind dataset, with a form for input and a table to
 
 ### Promises in HTTP Requests
 
-* Promises are a way to handle asynchronous operations, like HTTP requests, in a cleaner way than callbacks.
+* [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are a way to handle asynchronous operations, like HTTP requests, in a cleaner way than callbacks.
 * A Promise represents a value that may be available now, in the future, or never. It has three states:
   * **Pending**: Initial state.
   * **Fulfilled**: Operation completed successfully.
@@ -963,6 +1008,19 @@ function multiUserPostsRequest() {
     .catch(error => displayResult({ error: `Failed to fetch posts:${error}` }));
 }
 ```
+
+### Demo
+
+* Files
+  * [_08_JavaScript/_06_HttpRequest.css](./_06_HttpRequest.css)
+  * [_08_JavaScript/_06_HttpRequest.html](./_06_HttpRequest.html)
+  * [_08_JavaScript/_06_HttpRequest.js](./_06_HttpRequest.js)
+
+>Note: Show the same requests on Postman
+
+### RxJS (Observables)
+
+[RxJS Documentation](https://rxjs.dev/)
 
 ## CORS
 
