@@ -3,7 +3,7 @@ import DataAccessService from './_07_ProductService.js';
 const productService = new DataAccessService();
 
 // Getting all components by ID
-const uiComponents = {
+const ui = {
   productForm: document.getElementById('productForm'),
   productsBody: document.getElementById('productsBody'),
   cancelEdit: document.getElementById('cancelEdit'),
@@ -28,11 +28,21 @@ const pagination = {
   totalItems: 0,
 };
 
+// Sort state
+const sortState = {
+  column: 'productId', // Default sort by ID
+  direction: 'asc', // Default ascending
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
-  uiComponents.productForm.addEventListener('submit', handleSubmit);
-  uiComponents.cancelEdit.addEventListener('click', resetForm);
-  uiComponents.prevPage.addEventListener('click', () => changePage(-1));
-  uiComponents.nextPage.addEventListener('click', () => changePage(1));
+  ui.productForm.addEventListener('submit', handleSubmit);
+  ui.cancelEdit.addEventListener('click', resetForm);
+  ui.prevPage.addEventListener('click', () => changePage(-1));
+  ui.nextPage.addEventListener('click', () => changePage(1));
+  // Add sort event listeners to table headers
+  document.querySelectorAll('#productsTable th').forEach((header, index) => {
+    header.addEventListener('click', () => sortTable(index));
+  });
   await initialize();
 });
 
@@ -54,7 +64,7 @@ async function populateDropdowns() {
         const option = document.createElement('option');
         option.value = supplier.supplierId;
         option.textContent = supplier.companyName;
-        uiComponents.supplierId.appendChild(option);
+        ui.supplierId.appendChild(option);
       });
     })
     .catch(error => {
@@ -67,7 +77,7 @@ async function populateDropdowns() {
         const option = document.createElement('option');
         option.value = category.categoryId;
         option.textContent = category.description;
-        uiComponents.categoryId.appendChild(option);
+        ui.categoryId.appendChild(option);
       });
     })
     .catch(error => {
@@ -80,15 +90,15 @@ async function handleSubmit(event) {
   try {
     showLoading(true);
     const product = {
-      ProductName: uiComponents.productName.value,
-      SupplierId: uiComponents.supplierId.value ? parseInt(uiComponents.supplierId.value) : null,
-      CategoryId: uiComponents.categoryId.value ? parseInt(uiComponents.categoryId.value) : null,
-      QuantityPerUnit: uiComponents.quantityPerUnit.value,
-      UnitPrice: parseFloat(uiComponents.unitPrice.value) || 0,
-      Discontinued: uiComponents.discontinued.checked,
+      ProductName: ui.productName.value,
+      SupplierId: ui.supplierId.value ? parseInt(ui.supplierId.value) : null,
+      CategoryId: ui.categoryId.value ? parseInt(ui.categoryId.value) : null,
+      QuantityPerUnit: ui.quantityPerUnit.value,
+      UnitPrice: parseFloat(ui.unitPrice.value) || 0,
+      Discontinued: ui.discontinued.checked,
     };
 
-    const productId = parseInt(uiComponents.productId.value);
+    const productId = parseInt(ui.productId.value);
     if (productId) {
       product.ProductId = productId;
       await productService.updateProduct(product);
@@ -107,10 +117,10 @@ async function handleSubmit(event) {
 }
 
 function resetForm() {
-  uiComponents.productForm.reset();
-  uiComponents.productId.value = '';
-  uiComponents.cancelEdit.style.display = 'none';
-  uiComponents.errorMessage.textContent = '';
+  ui.productForm.reset();
+  ui.productId.value = '';
+  ui.cancelEdit.style.display = 'none';
+  ui.errorMessage.textContent = '';
 }
 
 async function renderProducts() {
@@ -122,14 +132,44 @@ async function renderProducts() {
       productService.getCategories() || [],
     ]);
 
-    pagination.totalItems = products.length;
+    // Sort products based on sortState
+    const sortedProducts = [...products].sort((a, b) => {
+      const column = sortState.column;
+      const direction = sortState.direction === 'asc' ? 1 : -1;
+      let valueA = a[column];
+      let valueB = b[column];
+
+      // Handle special cases for Supplier and Category
+      if (column === 'supplier') {
+        const supplierA = suppliers.find(s => s.supplierId === a.supplierId);
+        const supplierB = suppliers.find(s => s.supplierId === b.supplierId);
+        valueA = supplierA?.companyName || 'Unknown';
+        valueB = supplierB?.companyName || 'Unknown';
+      } else if (column === 'category') {
+        const categoryA = categories.find(c => c.categoryId === a.categoryId);
+        const categoryB = categories.find(c => c.categoryId === b.categoryId);
+        valueA = categoryA?.categoryName || 'Unknown';
+        valueB = categoryB?.categoryName || 'Unknown';
+      }
+
+      // Handle numeric and boolean values
+      if (typeof valueA === 'number' || typeof valueB === 'number') {
+        return (valueA - valueB) * direction;
+      } else if (typeof valueA === 'boolean' || typeof valueB === 'boolean') {
+        return (valueA === valueB ? 0 : valueA ? -1 : 1) * direction;
+      }
+      // String comparison
+      return valueA.localeCompare(valueB) * direction;
+    });
+
+    pagination.totalItems = sortedProducts.length;
     updatePaginationControls();
 
     const startIndex = (pagination.currentPage - 1) * pagination.itemsPerPage;
     const endIndex = startIndex + pagination.itemsPerPage;
-    const paginatedProducts = products.slice(startIndex, endIndex);
+    const paginatedProducts = sortedProducts.slice(startIndex, endIndex);
 
-    uiComponents.productsBody.innerHTML = '';
+    ui.productsBody.innerHTML = '';
     paginatedProducts.forEach(product => {
       const supplier = suppliers.find(s => s.supplierId === product.supplierId);
       const category = categories.find(c => c.categoryId === product.categoryId);
@@ -147,13 +187,22 @@ async function renderProducts() {
                     <button class="delete" data-id="${product.productId}">Delete</button>
                 </td>
             `;
-      uiComponents.productsBody.appendChild(row);
+      ui.productsBody.appendChild(row);
     });
 
-    uiComponents.productsBody.querySelectorAll('.edit').forEach(button =>
+    // Update header classes for sort indicators
+    document.querySelectorAll('#productsTable th').forEach((header, index) => {
+      const columnKey = getColumnKey(index);
+      header.classList.remove('sort-asc', 'sort-desc');
+      if (columnKey === sortState.column) {
+        header.classList.add(`sort-${sortState.direction}`);
+      }
+    });
+
+    ui.productsBody.querySelectorAll('.edit').forEach(button =>
       button.addEventListener('click', () => editProduct(parseInt(button.dataset.id)))
     );
-    uiComponents.productsBody.querySelectorAll('.delete').forEach(button =>
+    ui.productsBody.querySelectorAll('.delete').forEach(button =>
       button.addEventListener('click', () => deleteProduct(parseInt(button.dataset.id)))
     );
   } catch (error) {
@@ -168,17 +217,16 @@ async function editProduct(id) {
     showLoading(true);
     const product = await productService.getProductById(id);
     if (product) {
-      uiComponents.productId.value = product.productId;
-      uiComponents.productName.value = product.productName;
-      uiComponents.supplierId.value = product.supplierId || '';
-      uiComponents.categoryId.value = product.categoryId || '';
-      uiComponents.quantityPerUnit.value = product.quantityPerUnit || '';
-      uiComponents.unitPrice.value = product.unitPrice;
-      uiComponents.discontinued.checked = product.discontinued;
-      uiComponents.cancelEdit.style.display = 'inline';
-      uiComponents.errorMessage.textContent = '';
-      // Scroll to top of page
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      ui.productId.value = product.productId;
+      ui.productName.value = product.productName;
+      ui.supplierId.value = product.supplierId || '';
+      ui.categoryId.value = product.categoryId || '';
+      ui.quantityPerUnit.value = product.quantityPerUnit || '';
+      ui.unitPrice.value = product.unitPrice.toFixed(2);
+      ui.discontinued.checked = product.discontinued;
+      ui.cancelEdit.style.display = 'inline';
+      ui.errorMessage.textContent = '';
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     }
   } catch (error) {
     showError(`Failed to load product: ${error.message}`);
@@ -191,7 +239,6 @@ async function deleteProduct(id) {
   try {
     showLoading(true);
     await productService.deleteProduct(id);
-    // Adjust page if current page becomes empty
     const totalPages = Math.ceil(pagination.totalItems / pagination.itemsPerPage);
     if (pagination.currentPage > totalPages && pagination.currentPage > 1) {
       pagination.currentPage--;
@@ -205,21 +252,41 @@ async function deleteProduct(id) {
 }
 
 function showLoading(isLoading) {
-  uiComponents.loadingIndicator.style.display = isLoading ? 'block' : 'none';
+  ui.loadingIndicator.style.display = isLoading ? 'block' : 'none';
 }
 
 function showError(message) {
-  uiComponents.errorMessage.textContent = message;
+  ui.errorMessage.textContent = message;
 }
 
 function updatePaginationControls() {
   const totalPages = Math.ceil(pagination.totalItems / pagination.itemsPerPage);
-  uiComponents.pageInfo.textContent = `Page ${pagination.currentPage} of ${totalPages || 1}`;
-  uiComponents.prevPage.disabled = pagination.currentPage === 1;
-  uiComponents.nextPage.disabled = pagination.currentPage >= totalPages;
+  ui.pageInfo.textContent = `Page ${pagination.currentPage} of ${totalPages || 1}`;
+  ui.prevPage.disabled = pagination.currentPage === 1;
+  ui.nextPage.disabled = pagination.currentPage >= totalPages;
 }
 
 function changePage(direction) {
   pagination.currentPage += direction;
   renderProducts();
+}
+
+function sortTable(columnIndex) {
+  const columnKeys = ['productId', 'productName', 'supplier', 'category', 'quantityPerUnit', 'unitPrice', 'discontinued'];
+  const newColumn = columnKeys[columnIndex];
+  if (!newColumn) return; // Skip Actions column
+  if (sortState.column === newColumn) {
+    // Toggle direction if same column
+    sortState.direction = sortState.direction === 'asc' ? 'desc' : 'asc';
+  } else {
+    // New column, reset to ascending
+    sortState.column = newColumn;
+    sortState.direction = 'asc';
+  }
+  renderProducts();
+}
+
+function getColumnKey(index) {
+  const columnKeys = ['productId', 'productName', 'supplier', 'category', 'quantityPerUnit', 'unitPrice', 'discontinued'];
+  return columnKeys[index] || '';
 }

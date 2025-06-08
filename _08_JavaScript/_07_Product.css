@@ -1,38 +1,23 @@
 :root {
   --font-size-base: 12px;
-  /* Centralized font size for most elements */
   --font-size-heading: 16px;
-  /* Font size for headings */
   --bg-color: #1e1e1e;
-  /* Dark background */
   --text-color: #e0e0e0;
-  /* Light text for contrast */
   --border-color: #444;
-  /* Darker border for tables */
   --input-bg: #2a2a2a;
-  /* Dark input background */
   --button-bg: #4CAF50;
-  /* Primary button color (unchanged) */
   --button-hover: #45a049;
-  /* Button hover (unchanged) */
   --cancel-bg: #f44336;
-  /* Cancel button */
   --cancel-hover: #da190b;
-  /* Cancel button hover */
   --edit-bg: #008CBA;
-  /* Edit button */
   --delete-bg: #f44336;
-  /* Delete button */
   --table-header-bg: #333;
-  /* Table header background */
   --table-row-even: #252525;
-  /* Even table rows */
   --table-row-hover: #2c2c2c;
-  /* Table row hover */
   --loading-bg: #333;
-  /* Loading indicator */
   --error-color: #ff5555;
-  /* Error message */
+  --sort-arrow-color: #e0e0e0;
+  /* Color for sort arrows */
 }
 
 body {
@@ -114,6 +99,28 @@ td {
 
 th {
   background-color: var(--table-header-bg);
+  cursor: pointer;
+  /* Indicate clickable headers */
+  position: relative;
+  /* For positioning sort arrows */
+  padding-right: 20px;
+  /* Space for sort arrows */
+}
+
+th.sort-asc::after {
+  content: '▲';
+  /* Up arrow for ascending */
+  position: absolute;
+  right: 5px;
+  color: var(--sort-arrow-color);
+}
+
+th.sort-desc::after {
+  content: '▼';
+  /* Down arrow for descending */
+  position: absolute;
+  right: 5px;
+  color: var(--sort-arrow-color);
 }
 
 tr:nth-child(even) {
