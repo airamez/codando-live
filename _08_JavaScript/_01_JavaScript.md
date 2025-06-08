@@ -858,7 +858,7 @@ The application uses the Northwind dataset, with a form for input and a table to
 
 ### The Fetch API
 
-* The [fetch API]((https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)) is a modern, promise-based way to make HTTP requests.
+* The [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is a modern, promise-based way to make HTTP requests.
 * It's simpler and more flexible than XHR.
 * The nature of fetch API is **Async**
 * Sintaxe:
@@ -1017,6 +1017,11 @@ function multiUserPostsRequest() {
   * [_08_JavaScript/_06_HttpRequest.js](./_06_HttpRequest.js)
 
 >Note: Show the same requests on Postman
+
+## A CRUD Demo (with HTTP Requests): StormWind Product
+
+* Completing the CRUD demo by calling controllers to persis the data.
+* A controller to handler Product CRUD operations was created.
 
 ### RxJS (Observables)
 
