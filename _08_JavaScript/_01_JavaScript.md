@@ -1023,10 +1023,18 @@ function multiUserPostsRequest() {
 * Completing the CRUD demo by calling controllers to persis the data.
 * A controller to handler Product CRUD operations was created.
 
-### RxJS (Observables)
+![Product CRUD](./images/Products.png)
 
-[RxJS Documentation](https://rxjs.dev/)
+* Files
+  * [_06_WebAPI/Controllers/ProductNortWindController.cs](../_06_WebAPI/Controllers/ProductNortWindController.cs)
+  * [_08_JavaScript/_07_HttpRequest.css](./_07_HttpRequest.css)
+  * [_08_JavaScript/_07_HttpRequest.html](./_07_HttpRequest.html)
+  * [_08_JavaScript/_07_HttpRequest.js](./_07_HttpRequest.js)
 
 ## CORS
+
+## RxJS (Observables)
+
+[RxJS Documentation](https://rxjs.dev/)
 
 ## Using third part components
