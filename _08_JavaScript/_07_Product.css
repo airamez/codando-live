@@ -7,6 +7,7 @@
   --input-bg: #2a2a2a;
   --button-bg: #4CAF50;
   --button-hover: #45a049;
+  --button-disabled: #666;
   --cancel-bg: #f44336;
   --cancel-hover: #da190b;
   --edit-bg: #008CBA;
@@ -17,7 +18,6 @@
   --loading-bg: #333;
   --error-color: #ff5555;
   --sort-arrow-color: #e0e0e0;
-  /* Color for sort arrows */
 }
 
 body {
@@ -31,7 +31,7 @@ body {
 
 h1,
 h2 {
-  text-align: center;
+  text-align: left;
   margin: 10px 0;
   font-size: var(--font-size-heading);
 }
@@ -71,15 +71,21 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   background-color: var(--button-hover);
+}
+
+button:disabled {
+  background-color: var(--button-disabled);
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 #cancelEdit {
   background-color: var(--cancel-bg);
 }
 
-#cancelEdit:hover {
+#cancelEdit:hover:not(:disabled) {
   background-color: var(--cancel-hover);
 }
 
@@ -100,16 +106,12 @@ td {
 th {
   background-color: var(--table-header-bg);
   cursor: pointer;
-  /* Indicate clickable headers */
   position: relative;
-  /* For positioning sort arrows */
   padding-right: 20px;
-  /* Space for sort arrows */
 }
 
 th.sort-asc::after {
   content: '▲';
-  /* Up arrow for ascending */
   position: absolute;
   right: 5px;
   color: var(--sort-arrow-color);
@@ -117,7 +119,6 @@ th.sort-asc::after {
 
 th.sort-desc::after {
   content: '▼';
-  /* Down arrow for descending */
   position: absolute;
   right: 5px;
   color: var(--sort-arrow-color);
@@ -171,6 +172,14 @@ button.delete {
 #paginationControls button {
   padding: 4px 8px;
   font-size: var(--font-size-base);
+}
+
+#paginationControls select {
+  padding: 4px;
+  font-size: var(--font-size-base);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
 }
 
 #paginationControls span {

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Models;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Data.SqlClient;
 
 namespace WebAPI.Controllers;
 
@@ -209,6 +210,11 @@ public class ProductNorthWindController : ControllerBase
       _context.Products.Remove(product);
       await _context.SaveChangesAsync();
       return NoContent();
+    }
+    catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx && sqlEx.Number == 547)
+    {
+      // Handle SQL Server error 547: foreign key constraint violation
+      return BadRequest(new { error = $"Cannot delete product with ID {id} because it is referenced in other tables." });
     }
     catch (Exception)
     {
