@@ -2,7 +2,6 @@ import DataAccessService from './_07_ProductService.js';
 
 const productService = new DataAccessService();
 
-
 // Getting all components by ID
 const uiComponents = {
   productForm: document.getElementById('productForm'),
@@ -17,11 +16,23 @@ const uiComponents = {
   discontinued: document.getElementById('discontinued'),
   errorMessage: document.getElementById('errorMessage'),
   loadingIndicator: document.getElementById('loadingIndicator'),
+  prevPage: document.getElementById('prevPage'),
+  nextPage: document.getElementById('nextPage'),
+  pageInfo: document.getElementById('pageInfo'),
+};
+
+// Pagination state
+const pagination = {
+  currentPage: 1,
+  itemsPerPage: 10,
+  totalItems: 0,
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
   uiComponents.productForm.addEventListener('submit', handleSubmit);
   uiComponents.cancelEdit.addEventListener('click', resetForm);
+  uiComponents.prevPage.addEventListener('click', () => changePage(-1));
+  uiComponents.nextPage.addEventListener('click', () => changePage(1));
   await initialize();
 });
 
@@ -86,6 +97,7 @@ async function handleSubmit(event) {
     }
 
     resetForm();
+    pagination.currentPage = 1; // Reset to first page after save
     await renderProducts();
   } catch (error) {
     showError(`Failed to save product: ${error.message}`);
@@ -110,8 +122,15 @@ async function renderProducts() {
       productService.getCategories() || [],
     ]);
 
+    pagination.totalItems = products.length;
+    updatePaginationControls();
+
+    const startIndex = (pagination.currentPage - 1) * pagination.itemsPerPage;
+    const endIndex = startIndex + pagination.itemsPerPage;
+    const paginatedProducts = products.slice(startIndex, endIndex);
+
     uiComponents.productsBody.innerHTML = '';
-    products.forEach(product => {
+    paginatedProducts.forEach(product => {
       const supplier = suppliers.find(s => s.supplierId === product.supplierId);
       const category = categories.find(c => c.categoryId === product.categoryId);
       const row = document.createElement('tr');
@@ -158,6 +177,8 @@ async function editProduct(id) {
       uiComponents.discontinued.checked = product.discontinued;
       uiComponents.cancelEdit.style.display = 'inline';
       uiComponents.errorMessage.textContent = '';
+      // Scroll to top of page
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   } catch (error) {
     showError(`Failed to load product: ${error.message}`);
@@ -170,6 +191,11 @@ async function deleteProduct(id) {
   try {
     showLoading(true);
     await productService.deleteProduct(id);
+    // Adjust page if current page becomes empty
+    const totalPages = Math.ceil(pagination.totalItems / pagination.itemsPerPage);
+    if (pagination.currentPage > totalPages && pagination.currentPage > 1) {
+      pagination.currentPage--;
+    }
     await renderProducts();
   } catch (error) {
     showError(`Failed to delete product: ${error.message}`);
@@ -184,4 +210,16 @@ function showLoading(isLoading) {
 
 function showError(message) {
   uiComponents.errorMessage.textContent = message;
+}
+
+function updatePaginationControls() {
+  const totalPages = Math.ceil(pagination.totalItems / pagination.itemsPerPage);
+  uiComponents.pageInfo.textContent = `Page ${pagination.currentPage} of ${totalPages || 1}`;
+  uiComponents.prevPage.disabled = pagination.currentPage === 1;
+  uiComponents.nextPage.disabled = pagination.currentPage >= totalPages;
+}
+
+function changePage(direction) {
+  pagination.currentPage += direction;
+  renderProducts();
 }

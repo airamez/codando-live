@@ -1,21 +1,62 @@
+:root {
+  --font-size-base: 12px;
+  /* Centralized font size for most elements */
+  --font-size-heading: 16px;
+  /* Font size for headings */
+  --bg-color: #1e1e1e;
+  /* Dark background */
+  --text-color: #e0e0e0;
+  /* Light text for contrast */
+  --border-color: #444;
+  /* Darker border for tables */
+  --input-bg: #2a2a2a;
+  /* Dark input background */
+  --button-bg: #4CAF50;
+  /* Primary button color (unchanged) */
+  --button-hover: #45a049;
+  /* Button hover (unchanged) */
+  --cancel-bg: #f44336;
+  /* Cancel button */
+  --cancel-hover: #da190b;
+  /* Cancel button hover */
+  --edit-bg: #008CBA;
+  /* Edit button */
+  --delete-bg: #f44336;
+  /* Delete button */
+  --table-header-bg: #333;
+  /* Table header background */
+  --table-row-even: #252525;
+  /* Even table rows */
+  --table-row-hover: #2c2c2c;
+  /* Table row hover */
+  --loading-bg: #333;
+  /* Loading indicator */
+  --error-color: #ff5555;
+  /* Error message */
+}
+
 body {
   font-family: Arial, sans-serif;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 h1,
 h2 {
   text-align: center;
+  margin: 10px 0;
+  font-size: var(--font-size-heading);
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  max-width: 400px;
-  margin-bottom: 20px;
+  gap: 8px;
+  max-width: 300px;
+  margin-bottom: 10px;
 }
 
 form div {
@@ -23,79 +64,108 @@ form div {
   flex-direction: column;
 }
 
+label {
+  font-size: var(--font-size-base);
+}
+
 input,
 select,
 button {
-  padding: 8px;
-  font-size: 16px;
+  padding: 5px;
+  font-size: var(--font-size-base);
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
 }
 
 button {
-  background-color: #4CAF50;
+  background-color: var(--button-bg);
   color: white;
   border: none;
-  padding: 10px;
+  padding: 6px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: var(--button-hover);
 }
 
 #cancelEdit {
-  background-color: #f44336;
+  background-color: var(--cancel-bg);
 }
 
 #cancelEdit:hover {
-  background-color: #da190b;
+  background-color: var(--cancel-hover);
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 th,
 td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  border: 1px solid var(--border-color);
+  padding: 3px;
   text-align: left;
+  font-size: var(--font-size-base);
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: var(--table-header-bg);
 }
 
 tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: var(--table-row-even);
 }
 
 tr:hover {
-  background-color: #f5f5f5;
+  background-color: var(--table-row-hover);
 }
 
 button.edit,
 button.delete {
-  padding: 5px 10px;
-  margin: 0 5px;
+  padding: 3px 6px;
+  margin: 0 3px;
+  font-size: var(--font-size-base);
 }
 
 button.edit {
-  background-color: #008CBA;
+  background-color: var(--edit-bg);
 }
 
 button.delete {
-  background-color: #f44336;
+  background-color: var(--delete-bg);
 }
 
 #loadingIndicator {
-  background: #f0f0f0;
-  padding: 10px;
+  background: var(--loading-bg);
+  padding: 5px;
   text-align: center;
+  font-size: var(--font-size-base);
+  color: var(--text-color);
 }
 
 #errorMessage {
-  color: red;
-  margin: 10px 0;
+  color: var(--error-color);
+  margin: 5px 0;
+  font-size: var(--font-size-base);
+}
+
+#paginationControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+#paginationControls button {
+  padding: 4px 8px;
+  font-size: var(--font-size-base);
+}
+
+#paginationControls span {
+  font-size: var(--font-size-base);
 }
