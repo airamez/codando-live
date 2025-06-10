@@ -1156,5 +1156,3 @@ In ASP.NET Core, CORS is configured in the server to allow specific origins, met
   * **Solution**: Verify the server allows the requested methods and headers via `Access-Control-Allow-Methods` and `Access-Control-Allow-Headers`.
 * **Error**: `Credentials issue`
   * **Solution**: Set `Access-Control-Allow-Credentials` to `true` on the server and include `credentials: 'include'` in the client request.
-
-## Using third part components
