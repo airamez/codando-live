@@ -1031,10 +1031,130 @@ function multiUserPostsRequest() {
   * [_08_JavaScript/_07_HttpRequest.html](./_07_HttpRequest.html)
   * [_08_JavaScript/_07_HttpRequest.js](./_07_HttpRequest.js)
 
-## CORS
+## Cross-Origin Resource Sharing (CORS) Overview
 
-## RxJS (Observables)
+CORS (Cross-Origin Resource Sharing) is a security mechanism implemented by browsers to control how web pages in one domain can request and interact with resources from another domain. It prevents unauthorized cross-origin requests while allowing legitimate ones through a set of HTTP headers.
 
-[RxJS Documentation](https://rxjs.dev/)
+* Reference Materials
+  * [MDN Web Docs: CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
+  * [ASP.NET Core CORS Documentation](https://docs.microsoft.com/en-us/aspnet/core/security/cors)
+  * [Fetch API Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+  * [Understanding CORS (Blog)](https://www.telerik.com/blogs/understanding-cors)
+
+### Why CORS Matters
+
+* **Security**: Protects users by restricting which origins can access resources.
+* **Flexibility**: Enables controlled sharing of resources across different domains.
+* **Common Use Case**: Web applications making API calls to a different domain (e.g., a frontend at `http://web-application:3000` calling an API at `http://api.example.com`).
+
+### How CORS Works
+
+1. **Browser Makes a Request**: When JavaScript code (e.g., using `fetch` or `XMLHttpRequest`) attempts to access a resource from a `different origin`, the browser enforces the Same-Origin Policy.
+   * `different origin` means: Request to a server with a different protocol, domain, or port than the one hosting the web page.
+2. **Preflight Requests**: For certain "complex" requests (e.g., non-GET methods or custom headers), the browser sends an HTTP `OPTIONS` request to check if the server allows the cross-origin request.
+3. **Server Response**: The server responds with CORS headers (e.g., `Access-Control-Allow-Origin`) to indicate whether the request is permitted.
+4. **Browser Decision**: If the server’s CORS headers allow the request, the browser proceeds; otherwise, it blocks the response from being accessed by the client.
+
+### Key CORS Headers
+
+* **`Access-Control-Allow-Origin`**: Specifies which origins are allowed (e.g., `*` for all or a specific origin like `http://localhost:3000`).
+* **`Access-Control-Allow-Methods`**: Lists allowed HTTP methods (e.g., `GET, POST, PUT`).
+* **`Access-Control-Allow-Headers`**: Specifies allowed headers in requests.
+* **`Access-Control-Allow-Credentials`**: Indicates whether credentials (e.g., cookies) can be included.
+* **`Access-Control-Max-Age`**: Defines how long preflight responses can be cached.
+
+## CORS in JavaScript (Client-Side Example)
+
+Below is an example of making a cross-origin request using the `fetch` API in pure JavaScript.
+
+### Example: JavaScript Fetch Request
+
+```javascript
+// Making a cross-origin GET request
+fetch('http://api.example.com/data', {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    'Custom-Header': 'value'
+  }
+})
+  .then(response => {
+    if (!response.ok) throw new Error('Network response was not ok');
+    return response.json();
+  })
+  .then(data => console.log(data))
+  .catch(error => console.error('Error:', error));
+```
+
+## CORS in ASP.NET Core WebAPI (Server-Side Example)
+
+In ASP.NET Core, CORS is configured in the server to allow specific origins, methods, and headers.
+
+* Example: Configuring CORS in ASP.NET Core
+  * Below is an example of setting up CORS in an ASP.NET Core WebAPI project.
+  * Step 1: Configure CORS in `Program.cs`
+
+    ```csharp
+    var builder = WebApplication.CreateBuilder(args);
+    // Add services to the container.
+    builder.Services.AddControllers();
+    // Configure CORS
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowSpecificOrigin",
+            policy =>
+            {
+                policy.WithOrigins("http://localhost:3000") // Allow specific origin
+                      .AllowAnyMethod()                    // Allow all HTTP methods
+                      .AllowAnyHeader()                    // Allow all headers
+                      .AllowCredentials();                 // Allow cookies/credentials
+            });
+    });
+
+    var app = builder.Build();
+    // Configure the HTTP request pipeline.
+    app.UseHttpsRedirection();
+    app.UseCors("AllowSpecificOrigin"); // Apply CORS policy
+    app.UseAuthorization();
+    app.MapControllers();
+    app.Run();
+    ```
+
+  * Step 2: Example Controller
+
+    ```csharp
+    using Microsoft.AspNetCore.Mvc;
+
+    [Route("api/[controller]")]
+    [ApiController]
+    public class DataController : ControllerBase
+    {
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return Ok(new { Message = "Hello from the API!" });
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] object data)
+        {
+            return Ok(new { Received = data });
+        }
+    }
+    ```
+
+* Notes
+  * **CORS Policy**: The `AllowSpecificOrigin` policy allows requests from `http://localhost:3000`. Replace with your frontend’s origin.
+  * **Preflight Handling**: ASP.NET Core automatically handles `OPTIONS` requests when CORS is enabled.
+  * **Granularity**: Use `WithOrigins`, `WithMethods`, or `WithHeaders` for fine-grained control.
+
+## Common CORS Issues and Solutions
+
+* **Error**: `No 'Access-Control-Allow-Origin' header is present`
+  * **Solution**: Ensure the server includes the `Access-Control-Allow-Origin` header for the requesting origin.
+* **Error**: `Preflight request fails`
+  * **Solution**: Verify the server allows the requested methods and headers via `Access-Control-Allow-Methods` and `Access-Control-Allow-Headers`.
+* **Error**: `Credentials issue`
+  * **Solution**: Set `Access-Control-Allow-Credentials` to `true` on the server and include `credentials: 'include'` in the client request.
 
 ## Using third part components

@@ -64,17 +64,28 @@ builder.Services.AddAuthentication(options =>
   };
 });
 
+// Registers a CORS policy named "AllowAll" 
 builder.Services.AddCors(options =>
 {
   options.AddPolicy("AllowAll", builder =>
   {
     builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
   });
+  options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+      builder.WithOrigins("http://localhost:5062", "http://127.0.0.1:5500", "https://yourfrontend.com")
+             .AllowAnyMethod()
+             .AllowAnyHeader();
+    });
 });
 
 var app = builder.Build();
 
+// Applies the "AllowAll" CORS policy to all endpoints in the application
 app.UseCors("AllowAll");
+
+// Applies the "AllowSpecificOrigin" CORS policy to all endpoints in the application
+//app.UseCors("AllowSpecificOrigin");
 
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
