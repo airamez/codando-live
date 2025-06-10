@@ -4,7 +4,11 @@
 * It compiles to plain JavaScript, making it compatible with any JavaScript environment, including browsers and Node.js.
 * TypeScript is widely used in Angular development due to its strong typing, which improves tooling, debugging, and scalability in large applications.
 
-* **Official Documentation**: [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+* Documentation
+  * [TypeScript](https://www.typescriptlang.org/)
+  * [Oficial Documentation](https://www.typescriptlang.org/docs/)
+  * [Handbook](https://www.typescriptlang.org/docs/handbook/intro.html)
+  * [OnLine Editor](https://www.typescriptlang.org/play/)
 
 ## Introduction to TypeScript
 
@@ -166,7 +170,7 @@ score = "95"; // Error: Type 'string' is not assignable to type 'number'
 
 Flow control statements in TypeScript, such as `if-else`, `while`, `do-while`, `for`, `switch`, and `try-catch`, allow you to control the execution flow of your program, building on your vanilla JavaScript knowledge. TypeScript enhances these constructs with its type system, ensuring type-safe conditions and iterations, which is crucial for writing robust Angular applications. This section covers these statements with examples, demonstrating how TypeScript’s static typing improves reliability.
 
-### 1. `if-else` Statements
+### `if-else` Statements
 
 The `if-else` statement executes code based on a condition, with TypeScript ensuring the condition evaluates to a `boolean`.
 
@@ -191,7 +195,7 @@ if (typeof value === "string") {
 
 >Note: **TypeScript Benefit**: Type narrowing (e.g., `typeof value === "string"`) ensures type-safe operations within the block, preventing errors like `value.toUpperCase()` on a number.
 
-### 2. `switch` Statements
+### `switch` Statements
 
 The `switch` statement evaluates an expression and executes code based on matching cases, with TypeScript enforcing type consistency.
 
@@ -228,7 +232,7 @@ switch (userRole) {
 
 >Note: **TypeScript Benefit**: Enums (like `Role`) ensure type-safe case values, and the compiler can warn about unhandled cases if `strict` mode is enabled.
 
-### 3. `while` Loop
+### `while` Loop
 
 The `while` loop executes as long as a condition is true, with TypeScript ensuring the condition is boolean-typed.
 
@@ -251,7 +255,7 @@ while (input !== null) {
 
 Note: **TypeScript Benefit**: Type narrowing ensures safe access to properties (e.g., `toUpperCase`) within the loop.
 
-### 4. `do-while` Loop
+### `do-while` Loop
 
 The `do-while` loop executes at least once before checking the condition, with TypeScript enforcing type-safe conditions.
 
@@ -267,7 +271,7 @@ do {
 
 >Note: **TypeScript Benefit**: Similar to `while`, type checking ensures the condition is valid, and variables are properly typed.
 
-### 5. `for` Loops
+### `for` Loops
 
 TypeScript supports traditional `for`, `for...of`, and `for...in` loops, with type safety for iterators and collections.
 
@@ -301,16 +305,16 @@ interface User {
   name: string;
   age: number;
 }
-let user: User = { name: "Alice", age: 25 };
+let user: User = { name: "Leila", age: 25 };
 for (let key in user) {
   console.log(`${key}: ${user[key as keyof User]}`); // Type-safe key access
 }
-// Output: name: Alice, age: 25
+// Output: name: Leila, age: 25
 ```
 
 >Note: **TypeScript Benefit**: `keyof` ensures only valid object keys are accessed, preventing runtime errors.
 
-### 6. `try-catch` for Error Handling
+### `try-catch` for Error Handling
 
 The `try-catch` statement handles exceptions, with TypeScript supporting typed errors.
 
@@ -329,35 +333,139 @@ try {
 
 Note: **TypeScript Benefit**: Type narrowing with `instanceof` ensures safe access to error properties, enhancing robustness.
 
-### 7. Practical Example: Combining Flow Control
+## Strings
 
-Combine flow control with data structures (from your module) for a realistic scenario:
+[Strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) in TypeScript represent text and are enclosed in single quotes (`'`), double quotes (`"`), or backticks (`` ` ``) for template literals. TypeScript provides a rich set of built-in methods for string manipulation, inherited from JavaScript's `String` object. Below are common string methods with examples.
+
+## Declaring Strings
+
+Strings can be declared using single quotes, double quotes, or template literals:
 
 ```typescript
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-}
-
-let products: Product[] = [
-  { id: 1, name: "Laptop", price: 999 },
-  { id: 2, name: "Phone", price: 499 }
-];
-
-try {
-  for (let product of products) {
-    if (product.price > 500) {
-      console.log(`${product.name} is expensive`);
-    } else {
-      console.log(`${product.name} is affordable`);
-    }
-  }
-} catch (error: unknown) {
-  console.error("Error processing products:", error);
-}
-// Output: Laptop is expensive, Phone is affordable
+let singleQuote: string = 'Hello, TypeScript!';
+let doubleQuote: string = "Hello, TypeScript!";
+let templateLiteral: string = `Hello, TypeScript!`;
 ```
+
+## Common String Methods
+
+* `length`: Returns the length of the string.
+
+```typescript
+let str: string = "TypeScript";
+console.log(str.length); // Output: 10
+```
+
+* `toUpperCase()` and `toLowerCase()`: Converts the string to uppercase or lowercase.
+
+```typescript
+let text: string = "TypeScript";
+console.log(text.toUpperCase()); // Output: TYPESCRIPT
+console.log(text.toLowerCase()); // Output: typescript
+```
+
+* `charAt(index)`: Returns the character at the specified index.
+
+```typescript
+let str: string = "Hello";
+console.log(str.charAt(1)); // Output: e
+```
+
+* `substring(start, end?)`: Extracts a portion of the string from `start` to `end` (end not included).
+
+```typescript
+let str: string = "TypeScript";
+console.log(str.substring(0, 4)); // Output: Type
+```
+
+* `slice(start, end?)`: Similar to `substring`, but supports negative indices to count from the end.
+
+```typescript
+let str: string = "TypeScript";
+console.log(str.slice(4, 10)); // Output: Script
+console.log(str.slice(-6)); // Output: Script
+console.log(str.slice(-1)); // Output: t
+```
+
+* `indexOf(substring, fromIndex?)`: Returns the index of the first occurrence of a substring, or -1 if not found.
+
+```typescript
+let str: string = "Hello, TypeScript!";
+console.log(str.indexOf("Type")); // Output: 7
+console.log(str.indexOf("Java")); // Output: -1
+```
+
+* `replace(searchValue, newValue)`: Replaces the first occurrence of a substring with a new value.
+
+```typescript
+let str: string = "Hello, Java!";
+console.log(str.replace("Java", "TypeScript")); // Output: Hello, TypeScript!
+```
+
+* `split(separator, limit?)`: Splits the string into an array based on a separator.
+
+```typescript
+let str: string = "apple,banana,orange";
+console.log(str.split(",")); // Output: ["apple", "banana", "orange"]
+console.log(str.split(",", 2)); // Output: ["apple", "banana"]
+```
+
+* `trim()`: Removes leading and trailing whitespace.
+
+```typescript
+let str: string = "  TypeScript  ";
+console.log(str.trim()); // Output: TypeScript
+```
+
+* `includes(substring, fromIndex?)`: Checks if a string contains a specified substring.
+
+```typescript
+let str: string = "Hello, TypeScript!";
+console.log(str.includes("Type")); // Output: true
+console.log(str.includes("Java")); // Output: false
+```
+
+* `startsWith(substring)` and `endsWith(substring)`: Checks if a string starts or ends with a specified substring.
+
+```typescript
+let str: string = "TypeScript";
+console.log(str.startsWith("Type")); // Output: true
+console.log(str.endsWith("Script")); // Output: true
+```
+
+* `concat(...strings)`: Combines the string with one or more strings.
+
+```typescript
+let str1: string = "Hello";
+let str2: string = "TypeScript";
+console.log(str1.concat(", ", str2, "!")); // Output: Hello, TypeScript!
+```
+
+* Template Literals: Template literals (using backticks) allow embedded expressions and multi-line strings.
+
+```typescript
+let name: string = "Leila";
+let greeting: string = `Hello, ${name}!
+Welcome to TypeScript!`;
+console.log(greeting);
+// Output:
+// Hello, Leila!
+// Welcome to TypeScript!
+```
+
+* Type Safety in TypeScript
+
+TypeScript ensures strings are typed as `string`. You can explicitly define the type:
+
+```typescript
+let message: string = "Hello, TypeScript!";
+message = 123; // Error: Type 'number' is not assignable to type 'string'
+```
+
+* **Notes**
+  * All string methods return a new string and do not modify the original.
+  * TypeScript's type system ensures type safety when working with strings.
+  * Template literals are useful for dynamic string creation with embedded variables.
 
 ## Functions
 
