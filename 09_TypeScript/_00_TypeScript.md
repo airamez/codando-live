@@ -25,7 +25,7 @@ TypeScript extends JavaScript by adding static types, interfaces, and advanced o
 * Ensure you have the following installed:
   * **Node.js and npm**: Download from [nodejs.org](https://nodejs.org/) (LTS version recommended).
     * `Node.js`: Node.js is an open-source, cross-platform JavaScript runtime environment built on Chrome’s V8 engine, enabling developers to execute JavaScript code outside web browsers for server-side and command-line applications. It supports event-driven, scalable development, making it ideal for web servers, APIs, and tools like Angular CLI, as used in your TypeScript module for running TypeScript and Angular projects.
-    * `npm`: npm (Node Package Manager) is the default command-line package manager included with Node.js, used to install, manage, and share JavaScript and TypeScript libraries and dependencies. It simplifies project setup by allowing commands like npm install typescript or npm install -g @angular/cli, essential for configuring TypeScript environments and Angular development in VS Code, as outlined in your module.
+    * `npm`: [npm (Node Package Manager)](https://www.npmjs.com/) is the default command-line package manager included with Node.js, used to install, manage, and share JavaScript and TypeScript libraries and dependencies. It simplifies project setup by allowing commands like npm install typescript or npm install -g @angular/cli, essential for configuring TypeScript environments and Angular development in VS Code, as outlined in your module.
 
     ```bash
     node -v
