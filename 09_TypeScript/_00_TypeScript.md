@@ -347,7 +347,12 @@ let doubleQuote: string = "Hello, TypeScript!";
 let templateLiteral: string = `Hello, TypeScript!`;
 ```
 
-## Common String Methods
+* **Notes**
+  * All string methods return a new string and do not modify the original.
+  * TypeScript's type system ensures type safety when working with strings.
+  * Template literals are useful for dynamic string creation with embedded variables.
+
+### Common String Methods
 
 ```typescript
 /*
@@ -421,44 +426,30 @@ console.log(`Template Literal Example:\n${greeting}`);
 // Welcome to TypeScript!
 ```
 
-* Type Safety in TypeScript
-
-TypeScript ensures strings are typed as `string`. You can explicitly define the type:
-
-```typescript
-let message: string = "Hello, TypeScript!";
-message = 123; // Error: Type 'number' is not assignable to type 'string'
-```
-
-* **Notes**
-  * All string methods return a new string and do not modify the original.
-  * TypeScript's type system ensures type safety when working with strings.
-  * Template literals are useful for dynamic string creation with embedded variables.
-
 ## Functions
 
 TypeScript allows typing function parameters and return values to ensure correctness.
 
-### Function Types
+* Function Types
 
-```typescript
-function add(a: number, b: number): number {
-  return a + b;
-}
+  ```typescript
+  function add(a: number, b: number): number {
+    return a + b;
+  }
 
-let multiply: (x: number, y: number) => number = (x, y) => x * y;
-```
+  let multiply: (x: number, y: number) => number = (x, y) => x * y;
+  ```
 
-### Optional and Default Parameters
+* Optional and Default Parameters
 
-```typescript
-function greet(name: string, greeting: string = "Hello"): string {
-  return `${greeting}, ${name}!`;
-}
+  ```typescript
+  function greet(name: string, greeting: string = "Hello"): string {
+    return `${greeting}, ${name}!`;
+  }
 
-console.log(greet("Leila")); // Hello, Leila!
-console.log(greet("Jose", "Hi")); // Hi, Jose!
-```
+  console.log(greet("Leila")); // Hello, Leila!
+  console.log(greet("Jose", "Hi")); // Hi, Jose!
+  ```
 
 ## Data Structures
 
@@ -468,112 +459,28 @@ TypeScript enhances JavaScript’s built-in data structures (like objects, array
 
 Arrays in TypeScript are typed to ensure all elements conform to a specific type.
 
-#### Typed Arrays
+* Typed Arrays
 
-```typescript
-let scores: number[] = [90, 85, 88];
-scores.push("95"); // Error: Argument of type 'string' is not assignable to type 'number'
+  ```typescript
+  let scores: number[] = [90, 85, 88];
+  scores.push("95"); // Error: Argument of type 'string' is not assignable to type 'number'
 
-let names: Array<string> = ["Leila", "Jose"]; // Alternative syntax
-```
+  let names: Array<string> = ["Leila", "Jose"]; // Alternative syntax
+  ```
 
-#### Readonly Arrays
+* Readonly Arrays: Prevent modifications to arrays:
 
-Prevent modifications to arrays:
+  ```typescript
+  let readonlyScores: readonly number[] = [90, 85, 88];
+  readonlyScores.push(95); // Error: Property 'push' does not exist on type 'readonly number[]'
+  ```
 
-```typescript
-let readonlyScores: readonly number[] = [90, 85, 88];
-readonlyScores.push(95); // Error: Property 'push' does not exist on type 'readonly number[]'
-```
+* Multi-Type Arrays (Union Types): Allow arrays to hold multiple types:
 
-#### Multi-Type Arrays (Union Types)
-
-Allow arrays to hold multiple types:
-
-```typescript
-let mixed: (string | number)[] = ["Leila", 25, "Jose", 30];
-mixed.push(true); // Error: Argument of type 'boolean' is not assignable to type 'string | number'
-```
-
-### Objects
-
-In JavaScript, objects are often used as dictionaries to store key-value pairs. TypeScript adds type safety to ensure keys and values adhere to specific types.
-
-#### Typed Objects
-
-Use interfaces or type aliases to define the structure of an object:
-
-```typescript
-interface UserDictionary {
-  [key: string]: string; // Index signature for dynamic keys
-}
-
-let users: UserDictionary = {
-  Leila: "Leila Smith",
-  Jose: "Jose Johnson",
-};
-
-users["charlie"] = "Charlie Brown"; // Valid
-users["david"] = 123; // Error: Type 'number' is not assignable to type 'string'
-```
-
-#### Specific Key-Value Types
-
-For more control, define exact keys and their types:
-
-```typescript
-interface Config {
-  apiUrl: string;
-  timeout: number;
-}
-
-let config: Config = {
-  apiUrl: "https://api.example.com",
-  timeout: 5000,
-};
-
-config.apiUrl = 42; // Error: Type 'number' is not assignable to type 'string'
-```
-
-#### Readonly Objects
-
-Prevent modifications to object properties:
-
-```typescript
-interface ReadonlyConfig {
-  readonly apiUrl: string;
-  readonly timeout: number;
-}
-
-let readonlyConfig: ReadonlyConfig = {
-  apiUrl: "https://api.example.com",
-  timeout: 5000,
-};
-
-readonlyConfig.apiUrl = "new-url"; // Error: Cannot assign to 'apiUrl' because it is a read-only property
-```
-
-### Dictionaries (Map)
-
-TypeScript’s `Map` is a modern alternative to objects for key-value storage, offering better performance for frequent additions/removals and support for non-string keys.
-
-```typescript
-let userMap = new Map<string, number>();
-userMap.set("Jose", 25); // Key: string, Value: number
-userMap.set("Leila", 30);
-
-console.log(userMap.get("Jose")); // 25
-userMap.set("Jose", "30"); // Error: Argument of type 'string' is not assignable to type 'number'
-
-console.log("Leila" in userMap);
-console.log("Artur" in userMap);
-
-const myDict: { [key: string]: number } = {
-  "apple": 1,
-  "banana": 2,
-  "cherry": 3,
-};
-```
+  ```typescript
+  let mixed: (string | number)[] = ["Leila", 25, "Jose", 30];
+  mixed.push(true); // Error: Argument of type 'boolean' is not assignable to type 'string | number'
+  ```
 
 ### Lists (Tuples)
 
@@ -603,6 +510,80 @@ console.log(uniqueIds.has(1)); // true
 console.log(uniqueIds.has(3)); // true
 ```
 
+### Dictionaries (Map)
+
+TypeScript’s `Map` is a modern alternative to objects for key-value storage, offering better performance for frequent additions/removals and support for non-string keys.
+
+```typescript
+let userMap = new Map<string, number>();
+userMap.set("Jose", 25); // Key: string, Value: number
+userMap.set("Leila", 30);
+
+console.log(userMap.get("Jose")); // 25
+userMap.set("Jose", "30"); // Error: Argument of type 'string' is not assignable to type 'number'
+
+console.log("Leila" in userMap);
+console.log("Artur" in userMap);
+
+const myDict: { [key: string]: number } = {
+  "apple": 1,
+  "banana": 2,
+  "cherry": 3,
+};
+```
+
+### Objects
+
+In JavaScript, objects are often used as dictionaries to store key-value pairs. TypeScript adds type safety to ensure keys and values adhere to specific types.
+
+* Typed Objects: Use interfaces or type aliases to define the structure of an object:
+
+  ```typescript
+  interface UserDictionary {
+    [key: string]: string; // Index signature for dynamic keys
+  }
+
+  let users: UserDictionary = {
+    Leila: "Leila Smith",
+    Jose: "Jose Johnson",
+  };
+
+  users["charlie"] = "Charlie Brown"; // Valid
+  users["david"] = 123; // Error: Type 'number' is not assignable to type 'string'
+  ```
+
+* Specific Key-Value Types: For more control, define exact keys and their types:
+
+  ```typescript
+  interface Config {
+    apiUrl: string;
+    timeout: number;
+  }
+
+  let config: Config = {
+    apiUrl: "https://api.example.com",
+    timeout: 5000,
+  };
+
+  config.apiUrl = 42; // Error: Type 'number' is not assignable to type 'string'
+  ```
+
+* Readonly Objects: Prevent modifications to object properties:
+
+  ```typescript
+  interface ReadonlyConfig {
+    readonly apiUrl: string;
+    readonly timeout: number;
+  }
+
+  let readonlyConfig: ReadonlyConfig = {
+    apiUrl: "https://api.example.com",
+    timeout: 5000,
+  };
+
+  readonlyConfig.apiUrl = "new-url"; // Error: Cannot assign to 'apiUrl' because it is a read-only property
+  ```
+
 ### Practical Example: Combining Data Structures
 
 Here’s an example combining dictionaries and lists for a simple Angular-like scenario:
@@ -623,6 +604,49 @@ let productList: Product[] = [
 productList.forEach(product => productMap.set(product.id, product));
 
 console.log(productMap.get(1)?.name); // Laptop
+```
+
+## Modules and Namespaces
+
+TypeScript supports modular code organization, which is essential for Angular’s modular architecture.
+
+### Export and Import
+
+Organize code in separate files:
+
+```typescript
+// math.ts
+export function add(a: number, b: number): number {
+  return a + b;
+}
+
+export function subtract(a: number, b: number): number {
+  return a - b;
+}
+
+// main.ts
+import { add } from './math'; // Importing specific functions
+console.log(add(2, 3)); // 5
+
+// main2.ts
+import * as math from './math'; // Importing all function
+console.log(math.add(2, 3)); // 5
+console.log(math.subtract(5, 3)); // 2
+
+```
+
+### Namespaces
+
+Group related code (less common in modern TypeScript due to ES modules):
+
+```typescript
+namespace Utilities {
+  export function log(message: string): void {
+    console.log(message);
+  }
+}
+
+Utilities.log("Hello, TypeScript!");
 ```
 
 ## Object-Oriented Programming
@@ -714,39 +738,6 @@ class Dog extends Animal {
 let dog = new Dog();
 dog.makeSound(); // Woof!
 console.log(dog.move()); // Moving...
-```
-
-## Modules and Namespaces
-
-TypeScript supports modular code organization, which is essential for Angular’s modular architecture.
-
-### Export and Import
-
-Organize code in separate files:
-
-```typescript
-// math.ts
-export function add(a: number, b: number): number {
-  return a + b;
-}
-
-// main.ts
-import { add } from './math';
-console.log(add(2, 3)); // 5
-```
-
-### Namespaces
-
-Group related code (less common in modern TypeScript due to ES modules):
-
-```typescript
-namespace Utilities {
-  export function log(message: string): void {
-    console.log(message);
-  }
-}
-
-Utilities.log("Hello, TypeScript!");
 ```
 
 ## Advanced Types
