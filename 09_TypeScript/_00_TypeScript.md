@@ -125,7 +125,7 @@ TypeScript extends JavaScript by adding static types, interfaces, and advanced o
 Use `let identifier: type` to declare a variable:
 
 ```typescript
-let name: string = "Leila"; // String type
+let firstName: string = "Leila"; // String type
 let age: number = 25; // Number type
 let isStudent: boolean = true; // Boolean type
 let id: any = 123; // Any type (avoid when possible)
@@ -349,105 +349,73 @@ let templateLiteral: string = `Hello, TypeScript!`;
 
 ## Common String Methods
 
-* `length`: Returns the length of the string.
-
 ```typescript
-let str: string = "TypeScript";
-console.log(str.length); // Output: 10
-```
+/*
+ * String common methods
+ */
 
-* `toUpperCase()` and `toLowerCase()`: Converts the string to uppercase or lowercase.
+// === length: Returns the length of the string ===
+const strLength: string = "TypeScript";
+console.log(`Length of "${strLength}": ${strLength.length}`); // Output: 10
 
-```typescript
-let text: string = "TypeScript";
-console.log(text.toUpperCase()); // Output: TYPESCRIPT
-console.log(text.toLowerCase()); // Output: typescript
-```
+// === toUpperCase() and toLowerCase(): Converts the string to uppercase or lowercase ===
+const text: string = "TypeScript";
+console.log(`Uppercase of "${text}": ${text.toUpperCase()}`); // Output: TYPESCRIPT
+console.log(`Lowercase of "${text}": ${text.toLowerCase()}`); // Output: typescript
 
-* `charAt(index)`: Returns the character at the specified index.
+// === charAt(index): Returns the character at the specified index ===
+const strCharAt: string = "Hello";
+console.log(`Character at index 1 in "${strCharAt}": ${strCharAt.charAt(1)}`); // Output: e
 
-```typescript
-let str: string = "Hello";
-console.log(str.charAt(1)); // Output: e
-```
+// === substring(start, end?): Extracts a portion of the string from start to end (end not included) ===
+const strSubstring: string = "TypeScript";
+console.log(`Substring (0, 4) of "${strSubstring}": ${strSubstring.substring(0, 4)}`); // Output: Type
 
-* `substring(start, end?)`: Extracts a portion of the string from `start` to `end` (end not included).
+// === slice(start, end?): Similar to substring, but supports negative indices ===
+const strSlice: string = "TypeScript";
+console.log(`Slice (4, 10) of "${strSlice}": ${strSlice.slice(4, 10)}`); // Output: Script
+console.log(`Slice (-6) of "${strSlice}": ${strSlice.slice(-6)}`); // Output: Script
+console.log(`Slice (-1) of "${strSlice}": ${strSlice.slice(-1)}`); // Output: t
 
-```typescript
-let str: string = "TypeScript";
-console.log(str.substring(0, 4)); // Output: Type
-```
+// === indexOf(substring, fromIndex?): Returns the index of the first occurrence of a substring ===
+const strIndexOf: string = "Hello, TypeScript!";
+console.log(`Index of "Type" in "${strIndexOf}": ${strIndexOf.indexOf("Type")}`); // Output: 7
+console.log(`Index of "Java" in "${strIndexOf}": ${strIndexOf.indexOf("Java")}`); // Output: -1
 
-* `slice(start, end?)`: Similar to `substring`, but supports negative indices to count from the end.
+// === replace(searchValue, newValue): Replaces the first occurrence of a substring ===
+const strReplace: string = "Hello, Java!";
+console.log(`Replacing "Java" with "TypeScript" in "${strReplace}": ${strReplace.replace("Java", "TypeScript")}`); // Output: Hello, TypeScript!
 
-```typescript
-let str: string = "TypeScript";
-console.log(str.slice(4, 10)); // Output: Script
-console.log(str.slice(-6)); // Output: Script
-console.log(str.slice(-1)); // Output: t
-```
+// === split(separator, limit?): Splits the string into an array based on a separator ===
+const strSplit: string = "apple,banana,orange";
+console.log(`Split "${strSplit}" by ",": ${JSON.stringify(strSplit.split(","))}`); // Output: ["apple", "banana", "orange"]
+console.log(`Split "${strSplit}" by "," with limit 2: ${JSON.stringify(strSplit.split(",", 2))}`); // Output: ["apple", "banana"]
 
-* `indexOf(substring, fromIndex?)`: Returns the index of the first occurrence of a substring, or -1 if not found.
+// === trim(): Removes leading and trailing whitespace ===
+const strTrim: string = "  TypeScript  ";
+console.log(`Trimmed "${strTrim}": "${strTrim.trim()}"`); // Output: TypeScript
 
-```typescript
-let str: string = "Hello, TypeScript!";
-console.log(str.indexOf("Type")); // Output: 7
-console.log(str.indexOf("Java")); // Output: -1
-```
+// === includes(substring, fromIndex?): Checks if a string contains a specified substring ===
+const strIncludes: string = "Hello, TypeScript!";
+console.log(`Does "${strIncludes}" include "Type"? ${strIncludes.includes("Type")}`); // Output: true
+console.log(`Does "${strIncludes}" include "Java"? ${strIncludes.includes("Java")}`); // Output: false
 
-* `replace(searchValue, newValue)`: Replaces the first occurrence of a substring with a new value.
+// === startsWith(substring) and endsWith(substring): Checks if a string starts or ends with a substring ===
+const strStartEnd: string = "TypeScript";
+console.log(`Does "${strStartEnd}" start with "Type"? ${strStartEnd.startsWith("Type")}`); // Output: true
+console.log(`Does "${strStartEnd}" end with "Script"? ${strStartEnd.endsWith("Script")}`); // Output: true
 
-```typescript
-let str: string = "Hello, Java!";
-console.log(str.replace("Java", "TypeScript")); // Output: Hello, TypeScript!
-```
+// === concat(...strings): Combines the string with one or more strings ===
+const str1: string = "Hello";
+const str2: string = "TypeScript";
+console.log(`Concatenating "${str1}" and "${str2}": ${str1.concat(", ", str2, "!")}`); // Output: Hello, TypeScript!
 
-* `split(separator, limit?)`: Splits the string into an array based on a separator.
-
-```typescript
-let str: string = "apple,banana,orange";
-console.log(str.split(",")); // Output: ["apple", "banana", "orange"]
-console.log(str.split(",", 2)); // Output: ["apple", "banana"]
-```
-
-* `trim()`: Removes leading and trailing whitespace.
-
-```typescript
-let str: string = "  TypeScript  ";
-console.log(str.trim()); // Output: TypeScript
-```
-
-* `includes(substring, fromIndex?)`: Checks if a string contains a specified substring.
-
-```typescript
-let str: string = "Hello, TypeScript!";
-console.log(str.includes("Type")); // Output: true
-console.log(str.includes("Java")); // Output: false
-```
-
-* `startsWith(substring)` and `endsWith(substring)`: Checks if a string starts or ends with a specified substring.
-
-```typescript
-let str: string = "TypeScript";
-console.log(str.startsWith("Type")); // Output: true
-console.log(str.endsWith("Script")); // Output: true
-```
-
-* `concat(...strings)`: Combines the string with one or more strings.
-
-```typescript
-let str1: string = "Hello";
-let str2: string = "TypeScript";
-console.log(str1.concat(", ", str2, "!")); // Output: Hello, TypeScript!
-```
-
-* Template Literals: Template literals (using backticks) allow embedded expressions and multi-line strings.
-
-```typescript
-let name: string = "Leila";
-let greeting: string = `Hello, ${name}!
+// === Template Literals: Allow embedded expressions and multi-line strings ===
+const wife: string = "Leila";
+const greeting: string =
+`Hello, ${wife}!
 Welcome to TypeScript!`;
-console.log(greeting);
+console.log(`Template Literal Example:\n${greeting}`);
 // Output:
 // Hello, Leila!
 // Welcome to TypeScript!

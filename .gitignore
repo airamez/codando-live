@@ -353,3 +353,4 @@ bin/
 obj/
 CSharpTest/coverage.json
 .~lock.*
+dist/

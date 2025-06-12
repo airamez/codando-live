@@ -1,0 +1,25 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Current File",
+      // Specifies that the debugger should launch the currently active file
+      "program": "${file}",
+      // Skips Node.js internal files during debugging
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      // Points to the compiled JavaScript files (adjust if your output directory differs)
+      "outFiles": [
+        "${workspaceFolder}/**/*.js"
+      ],
+      // Automatically compiles the TypeScript file before debugging
+      "preLaunchTask": "tsc: build - tsconfig.json"
+    }
+  ]
+}
