@@ -507,7 +507,7 @@ uniqueIds.add(2);
 uniqueIds.add("3"); // Error: Argument of type 'string' is not assignable to type 'number'
 
 console.log(uniqueIds.has(1)); // true
-console.log(uniqueIds.has(3)); // true
+console.log(uniqueIds.has(3)); // false
 ```
 
 ### Dictionaries (Map)
@@ -522,8 +522,8 @@ userMap.set("Leila", 30);
 console.log(userMap.get("Jose")); // 25
 userMap.set("Jose", "30"); // Error: Argument of type 'string' is not assignable to type 'number'
 
-console.log("Leila" in userMap);
-console.log("Artur" in userMap);
+console.log("Leila" in userMap); // true
+console.log("Artur" in userMap); // false
 
 const myDict: { [key: string]: number } = {
   "apple": 1,
