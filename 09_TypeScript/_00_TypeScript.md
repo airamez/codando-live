@@ -608,46 +608,224 @@ console.log(productMap.get(1)?.name); // Laptop
 
 ## Modules and Namespaces
 
-TypeScript supports modular code organization, which is essential for Angular’s modular architecture.
-
-### Export and Import
-
-Organize code in separate files:
-
-```typescript
-// math.ts
-export function add(a: number, b: number): number {
-  return a + b;
-}
-
-export function subtract(a: number, b: number): number {
-  return a - b;
-}
-
-// main.ts
-import { add } from './math'; // Importing specific functions
-console.log(add(2, 3)); // 5
-
-// main2.ts
-import * as math from './math'; // Importing all function
-console.log(math.add(2, 3)); // 5
-console.log(math.subtract(5, 3)); // 2
-
-```
+TypeScript’s support for [modules](https://www.typescriptlang.org/docs/handbook/2/modules.html) and [namespaces](https://www.typescriptlang.org/docs/handbook/namespaces.html) enables developers to organize code effectively, promoting modularity, reusability, and maintainability. Below, we explore namespaces and modules in detail, including their syntax, use cases, and best practices.
 
 ### Namespaces
 
-Group related code (less common in modern TypeScript due to ES modules):
+Namespaces (previously called "internal modules") provide a way to group related code within a single file or across multiple files. They help prevent naming collisions in the global scope by encapsulating functionality under a named container. While namespaces were common in earlier TypeScript versions, ES modules are now preferred in modern projects due to better interoperability with JavaScript ecosystems.
+
+#### Defining a Namespace
+  
+  A namespace groups related functionality, such as functions, classes, or interfaces, under a single name.Only items marked with `export` are accessible outside the namespace, ensuring controlled visibility.
+
+  ```typescript
+  namespace Utilities {
+    export function log(message: string): void {
+      privateLog(message);
+    }
+
+    export function error(message: string): void {
+      privateLog(message);
+    }
+
+    // Private function (not exported, inaccessible outside)
+    function privateLog(message: string): void {
+      console.log(`[Private]: ${message}`);
+    }
+  }
+
+  Utilities.log("Hello, TypeScript!"); // Hello, TypeScript!
+  Utilities.error("Something went wrong!"); // Something went wrong!
+  // Utilities.privateLog("Test"); // Error: 'privateLog' is not exported
+  ```
+
+#### Nested Namespaces
+
+Namespaces can be nested to create hierarchical organization:
 
 ```typescript
-namespace Utilities {
+namespace App {
+  export namespace Logging {
+    export function log(message: string): void {
+      console.log(`[App]: ${message}`);
+    }
+
+    export function warn(message: string): void {
+      console.warn(`[Warning]: ${message}`);
+    }
+  }
+
+  export function getVersion(): string {
+    return "1.0.0";
+  }
+}
+
+App.Logging.log("Application started"); // [App]: Application started
+App.Logging.warn("Low memory"); // [Warning]: Low memory
+console.log(App.getVersion()); // 1.0.0
+```
+
+#### Best Practices for Namespaces
+
+* **Avoid in New Projects**: Use ES modules unless required for legacy compatibility.
+* **Use Descriptive Names**: Choose clear, unique namespace names (e.g., `App.Utilities` instead of `Utils`).
+* **Export Only What’s Needed**: Only export items intended for external use to maintain encapsulation.
+* **Combine with Modules**: If using namespaces, consider wrapping them in modules to limit global scope exposure:
+
+```typescript
+// utilities.ts
+export namespace Utilities {
   export function log(message: string): void {
     console.log(message);
   }
 }
-
-Utilities.log("Hello, TypeScript!");
 ```
+
+```typescript
+// main.ts
+import { Utilities } from './utilities';
+Utilities.log("Hello"); // Hello
+```
+
+### Modules
+
+TypeScript uses ES modules (ECMAScript modules) to organize code into reusable units. Modules allow you to split your codebase across multiple files, each encapsulating related functionality. This modularity improves code organization, reduces global scope pollution, and supports tree-shaking for optimized builds.
+
+#### Export and Import
+
+Modules use `export` to expose functions, classes, interfaces, or variables, and `import` to consume them in other files. **Only items explicitly marked with `export` can be used outside the module.** Anything not exported remains private, ensuring encapsulation. TypeScript supports named exports and default exports for flexible code organization.
+
+##### Named Exports
+
+* You can export multiple items from a module using named exports, which are imported explicitly by name.
+
+  ```typescript
+  // math.ts
+  export function add(a: number, b: number): number {
+    return a + b;
+  }
+
+  export function subtract(a: number, b: number): number {
+    return a - b;
+  }
+
+  export const PI: number = 3.14159;
+
+  export class Calculator {
+    multiply(a: number, b: number): number {
+      return a * b;
+    }
+  }
+
+  // Private function (not exported, inaccessible outside)
+  function privateHelper(): void {
+    console.log("This is private");
+  }
+  ```
+
+* To use these exports:
+
+  ```typescript
+  // main.ts
+  import { add, PI, Calculator } from './math';
+
+  console.log(add(2, 3)); // 5
+  console.log(PI); // 3.14159
+  const calc = new Calculator();
+  console.log(calc.multiply(4, 5)); // 20
+  // Cannot access privateHelper because it's not exported
+  ```
+
+  You can define alias imports to avoid naming conflicts:
+
+  ```typescript
+  // main.ts
+  import { add as sum, PI as circleConstant, Calculator as MathCalc } from './math';
+
+  console.log(sum(2, 3)); // 5
+  console.log(circleConstant); // 3.14159
+  const calc = new MathCalc();
+  console.log(calc.multiply(4, 5)); // 20
+  ```
+
+##### Importing All Exports
+
+* To import everything from a module as a single object, use `import * as`:
+
+  ```typescript
+  // main2.ts
+  import * as math from './math';
+
+  console.log(math.add(2, 3)); // 5
+  console.log(math.subtract(5, 3)); // 2
+  console.log(math.PI); // 3.14159
+  const calc = new math.Calculator();
+  console.log(calc.multiply(4, 5)); // 20
+  ```
+
+> This is useful for modules with many exports but can reduce code clarity.
+
+##### Default Exports
+
+A module can have one default export, often used for the primary functionality. Default exports don’t require curly braces during import and can be given any name.
+
+```typescript
+// calculator.ts
+export default class Calculator {
+  multiply(a: number, b: number): number {
+    return a * b;
+  }
+}
+```
+
+```typescript
+// main.ts
+import Calculator from './calculator';
+const calc = new Calculator();
+console.log(calc.multiply(4, 5)); // 20
+```
+
+You can combine default and named exports:
+
+```typescript
+// math.ts
+export default function add(a: number, b: number): number {
+  return a + b;
+}
+export function subtract(a: number, b: number): number {
+  return a - b;
+}
+export class Calculator {
+  multiply(a: number, b: number): number {
+    return a * b;
+  }
+}
+```
+
+```typescript
+// main.ts
+import add, { subtract, Calculator } from './math';
+console.log(add(2, 3)); // 5
+console.log(subtract(5, 3)); // 2
+const calc = new Calculator();
+console.log(calc.multiply(4, 5)); // 20
+```
+
+#### Best Practices for Modules
+
+* **Use ES Modules**: Prefer ES modules over namespaces for modern projects.
+* **Explicit Imports**: Favor named imports over `import * as` for clarity and tree-shaking.
+* **Organize by Feature**: Group related files into feature folders (e.g., `src/app/feature/math/`).
+* **Export Only What’s Needed**: Only export items intended for external use to maintain encapsulation.
+
+### Namespaces vs. Modules
+
+* **Namespaces**: Best for grouping code in scripts without a module system (e.g., `<script>` tags). They don’t require a module loader but can pollute the global scope.
+* **Modules**: Preferred for modern applications, integrating with bundlers (Webpack, Rollup) and supporting lazy loading, tree-shaking, and encapsulation.
+
+### Conclusion
+
+Namespaces provide a way to group related code, with exported functions and other members accessible outside the namespace. However, ES modules are the cornerstone of modern TypeScript development, offering superior modularity and ecosystem compatibility. By explicitly exporting only necessary items (functions, classes, variables, etc.), you maintain encapsulation and clarity, enabling scalable, maintainable codebases.
 
 ## Object-Oriented Programming
 
