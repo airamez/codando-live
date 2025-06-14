@@ -31,9 +31,9 @@
 
 * **Official Angular Website**: Explore Angular’s features, tutorials, and community resources.
   * (<https://angular.dev>)
-* **Official Documentation**: Detailed guides, API references, and best practices for Angular 20.
+* **Official Documentation**: Detailed guides, API references, and best practices.
   * (<https://angular.dev/docs>)
-* **Angular Blog**: Latest news, release notes, and updates on Angular 20.
+* **Angular Blog**: Latest news, release notes, and updates on Angular.
   * (<https://blog.angular.io>)
 * **Oficial Tutorial**: You can learn Angular interactively with this tutorial from Angular team:
   * (<https://angular.dev/tutorials/learn-angular>)
@@ -41,7 +41,9 @@
 
 ## Getting Started
 
-* Install the Angular CLI globally:
+* Install the Angular and [CLI](https://angular.dev/tools/cli) globally
+  * The Angular CLI is a command-line interface tool which allows you to scaffold, develop, test, deploy, and maintain Angular applications directly from a command shell.
+  * It provides the ng (short for a*ng*ular) command and tools for scaffolding, building, and managing Angular projects.
 
   ```bash
   sudo npm install -g @angular/cli@20
