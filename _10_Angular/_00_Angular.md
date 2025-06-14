@@ -86,3 +86,140 @@
 | `/my-app/src/app/` | `app.css`           | Styles for the root component (CSS by default, based on CLI prompt).            |
 | `/my-app/src/app/` | `app.spec.ts`       | Unit test file for the root component.                                          |
 | `/my-app/src/app/` | `app.routes.ts`     | Defines application routes (included if routing is enabled during `ng new`).    |
+
+## Components
+
+* A [**component**](https://angular.dev/api/core/Component) is a fundamental building block in Angular applications.
+* Components are modular, reusable, and encapsulate their functionality, making it easier to build and maintain complex applications.
+* It represents a reusable piece of the user interface (UI) that combines:
+  * **HTML Template**: Defines the structure and layout of the UI.
+  * **TypeScript Class**: Contains the logic and data for the component.
+  * **CSS Styles**: Specifies the component's appearance.
+  * **Metadata**: Configures the component using Angular decorators like `@Component`.
+
+### Key Characteristics of Components
+
+* **Encapsulation**: Each component manages its own template, styles, and logic, isolated from others.
+* **Reusability**: Components can be reused across different parts of the app.
+* **Hierarchy**: Components form a tree-like structure, with parent and child components communicating through inputs and outputs.
+* **Data Binding**: Connects the component’s data to the template for dynamic rendering.
+
+### Creating a Component
+
+Let’s create a simple component called `hello-world` to display a welcome message in your Angular app.
+
+* Step 1: Generate a Component
+  * Use the Angular CLI to create a new component.
+  * Run the following command in your project’s root directory:
+
+  ```bash
+  ng generate component hello-world
+  ```
+
+  * This command:
+  * Creates a `hello-world` folder under `src/app/hello-world`.
+  * Generates four files:
+    * `hello-world.css`: The component’s styles.
+    * `hello-world.html`: The HTML template.
+    * `hello-world.spec.ts`: The unit test file.
+    * `hello-world.ts`: The TypeScript class with component logic.
+  * Updates the `app.module.ts` to declare the new component.
+
+* Step 2: Component Structure
+
+  ```typescript
+  import { Component } from '@angular/core';
+
+  @Component({
+    selector: 'hello-world',
+    imports: [],
+    templateUrl: './hello-world.html',
+    styleUrl: './hello-world.css'
+  })
+  export class HelloWorld {
+
+  }
+  ```
+
+  * **@Component Decorator**: Configures the component with:
+    * `selector`: The custom HTML tag (`<hello-world>`) used to include the component in templates.
+    * `imports`: Imported components.
+    * `templateUrl`: Path to the HTML template.
+    * `styleUrls`: Array of paths to CSS files.
+  * **Class**: Defines the component’s properties and methods.
+
+* Step 3: Customize the Component
+  * Update the Template (`hello-world.html`):
+
+  ```html
+  <h2>Welcome to Our Angular App!</h2>
+  <p>{{ message }}</p>
+  ```
+
+  * Update the Component Class (`hello-world.ts`):
+
+  ```typescript
+  import { Component } from '@angular/core';
+
+  @Component({
+    selector: 'hello-world',
+    imports: [],
+    templateUrl: './hello-world.html',
+    styleUrl: './hello-world.css'
+  })
+  export class HelloWorld {
+    message: string = 'Hello Angular World!';
+  }
+  ```
+
+  * The `message` property is bound to the template using Angular’s interpolation (`{{ message }}`).
+
+* Style the Component (`hello-world.css`):
+
+  ```css
+  h2 {
+    color: #007bff;
+    text-align: center;
+  }
+  p {
+    font-size: 1.2em;
+    color: #333;
+  }
+  ```
+
+* Step 4: Add the Component to Your App
+  * Add the the component to the App `imports`
+
+  ```typescript
+  import { Component } from '@angular/core';
+  import { RouterOutlet } from '@angular/router';
+  import { HelloWorld } from './hello-world/hello-world';
+
+  @Component({
+    selector: 'app-root',
+    imports: [RouterOutlet, HelloWorld],
+    templateUrl: './app.html',
+    styleUrl: './app.css'
+  })
+  export class App {
+    protected title = 'my-app';
+  }
+  ```
+
+  * Add the component selector to the App HTML `app.html` template:
+
+  ```html
+  ...
+  <hello-world></hello-world>
+  ...
+  ```
+
+* Step 5: Run the Application
+  * Ensure your development server is running:
+
+  ```bash
+  ng serve
+  ```
+
+  * Open your browser at `http://localhost:4200`
+  
