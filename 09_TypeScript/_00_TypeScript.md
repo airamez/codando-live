@@ -608,7 +608,7 @@ console.log(productMap.get(1)?.name); // Laptop
 
 ## Modules and Namespaces
 
-TypeScript’s support for [modules](https://www.typescriptlang.org/docs/handbook/2/modules.html) and [namespaces](https://www.typescriptlang.org/docs/handbook/namespaces.html) enables developers to organize code effectively, promoting modularity, reusability, and maintainability. Below, we explore namespaces and modules in detail, including their syntax, use cases, and best practices.
+TypeScript’s support for [modules](https://www.typescriptlang.org/docs/handbook/2/modules.html) and [namespaces](https://www.typescriptlang.org/docs/handbook/namespaces.html) enables developers to organize code effectively, promoting modularity, reusability, and maintainability.
 
 ### Namespaces
 
@@ -829,47 +829,76 @@ Namespaces provide a way to group related code, with exported functions and othe
 
 ## Object-Oriented Programming
 
-TypeScript enhances JavaScript’s object-oriented capabilities with features like interfaces, classes, and access modifiers, which are critical for Angular’s component-based structure.
-
-### Interfaces
-
-Define the shape of objects:
-
-```typescript
-interface User {
-  name: string;
-  age: number;
-  email?: string; // Optional property
-}
-
-let user: User = {
-  name: "Leila",
-  age: 25,
-};
-```
+TypeScript enhances JavaScript’s [object-oriented capabilities](https://www.typescriptlang.org/docs/handbook/classes.html) with features like interfaces, classes, and access modifiers, which are critical for Angular’s component-based structure.
 
 ### Classes
 
 TypeScript supports classes with access modifiers (`public`, `private`, `protected`) and other OOP features:
 
 ```typescript
-class Person {
-  private name: string;
-  public age: number;
+class BankAccount {
+  protected balance: number;
+  public readonly id: string;
+  private _customerName: string;
 
-  constructor(name: string, age: number) {
-    this.name = name;
-    this.age = age;
+  constructor(id: string, customerName: string, initialBalance: number = 0) {
+    this.id = id;
+    this._customerName = customerName;
+    this.balance = initialBalance;
   }
 
-  public greet(): string {
-    return `Hello, my name is ${this.name}`;
+  get customerName(): string {
+    return this._customerName;
+  }
+
+  set customerName(name: string) {
+    if (name.trim().length > 0) {
+      this._customerName = name;
+      console.log(`Customer name updated to: ${name}`);
+    } else {
+      throw new Error("Customer name cannot be empty.");
+    }
+  }
+
+  deposit(amount: number): void {
+    if (amount <= 0) {
+      throw new Error("Deposit amount must be positive.");
+    }
+    this.balance += amount;
+    console.log(`Deposited $${amount}. New balance: $${this.balance}`);
+  }
+
+  withdraw(amount: number): void {
+    if (amount <= 0) {
+      throw new Error("Withdrawal amount must be positive.");
+    }
+    if (amount > this.balance) {
+      throw new Error("Insufficient funds.");
+    }
+    this.balance -= amount;
+    console.log(`Withdrawn $${amount}. New balance: $${this.balance}`);
+  }
+
+  getBalance(): number {
+    return this.balance;
   }
 }
 
-let person = new Person("Leila", 25);
-console.log(person.greet()); // Hello, my name is Leila
-console.log(person.name); // Error: Property 'name' is private
+// Demonstration
+const account = new BankAccount("12345", "José", 1000);
+console.log(`Account ID: ${account.id}`);
+console.log(`Customer Name: ${account.customerName}`);
+account.customerName = "José Santos";
+console.log(`Updated Customer Name: ${account.customerName}`);
+account.deposit(500);
+account.withdraw(200);
+console.log(`Final balance: $${account.getBalance()}`);
+
+try {
+  account.withdraw(2000);
+} catch (error) {
+  console.error(`Error: ${(error as Error).message}`);
+}
 ```
 
 ### Inheritance
@@ -877,22 +906,29 @@ console.log(person.name); // Error: Property 'name' is private
 Extend classes to reuse and specialize behavior:
 
 ```typescript
-class Student extends Person {
-  private grade: number;
-
-  constructor(name: string, age: numberiterals, grade: number) {
-    super(name, age);
-    this.grade = grade;
-  }
-
-  public study(): string {
-    return `${this.greet()} and I'm studying with grade ${this.grade}`;
+class SpecialAccount extends BankAccount {
+  withdraw(amount: number): void {
+    if (amount > 0) {
+      this.balance -= amount; // Allows overdraft (negative balance)
+      console.log(`Withdrawn $${amount}. New balance: $${this.getBalance()}`);
+    } else {
+      console.log("Withdrawal amount must be positive.");
+    }
   }
 }
 
-let student = new Student("Jose", 20, 85);
-console.log(student.study()); // Hello, my name is Jose and I'm studying with grade 85
+// Special Account Demonstration
+const specialAccount = new SpecialAccount("67890", "Leila VIP", 500);
+console.log(`Special Account ID: ${specialAccount.id}`);
+console.log(`Customer Name: ${specialAccount.customerName}`);
+
+specialAccount.deposit(300);
+specialAccount.withdraw(1000); // Overdraft allowed
+console.log(`Final balance: $${specialAccount.getBalance()}`);
+
 ```
+
+>Note: In TypeScript, method overriding works differently from C#. Unlike C#, TypeScript does not require virtual or override keywords. Instead, any method in a subclass automatically overrides a method with the same name in the parent class.
 
 ### Abstract Classes
 
@@ -918,21 +954,204 @@ dog.makeSound(); // Woof!
 console.log(dog.move()); // Moving...
 ```
 
-## Advanced Types
+### Interfaces
 
-TypeScript offers advanced features to handle complex scenarios, especially useful in Angular.
+* Interfaces in TypeScript define the shape or structure of objects, specifying the required properties and their types.
+* They can also describe function signatures, arrays, and more.
+* Interfaces are a powerful way to enforce a contract for objects and classes.
+
+#### Define the shape of objects
+
+```typescript
+interface User {
+  name: string;
+  age: number;
+  email?: string; // Optional property
+}
+
+let user: User = {
+  name: "Leila",
+  age: 25,
+};
+
+// Example of using an interface with a function
+interface Greetable {
+  greet(): string;
+}
+
+const person: User & Greetable = {
+  name: "Leila",
+  age: 25,
+  greet() {
+    return `Hello, ${this.name}!`;
+  },
+};
+
+console.log(person.greet()); // Output: Hello, Leila!
+```
+
+#### Extending Multiple Interfaces with Classes
+
+* A class can implement multiple interfaces in TypeScript using the `implements` keyword.
+* This allows a class to adhere to the contracts defined by multiple interfaces, ensuring it provides all required properties and methods from each interface.
+* Use a comma to separate the interfaces in the `implements` clause.
+
+```typescript
+interface Printable {
+  print(): void;
+}
+
+interface Loggable {
+  log(message: string): void;
+}
+
+class Document implements Printable, Loggable {
+  content: string;
+
+  constructor(content: string = "") {
+    this.content = content;
+  }
+
+  print() {
+    console.log(`Printing document: ${this.content}`);
+  }
+
+  log(message: string) {
+    console.log(`Document Log: ${message}`);
+  }
+}
+
+const doc = new Document("Sample content");
+doc.print();
+doc.log("Error occurred");
+```
+
+### Static Members in TypeScript
+
+In TypeScript, **static members** belong to the class itself rather than an instance of the class. This means they are shared across all instances and can be accessed directly through the class name.
+
+* To define a static property or method, use the `static` keyword inside a class:
+
+```typescript
+class Logger {
+  static logLevel: string = "INFO";
+
+  static log(message: string): void {
+    console.log(`[${this.logLevel}] ${message}`);
+  }
+}
+
+// Accessing static members
+console.log(Logger.logLevel); // Outputs: INFO
+Logger.log("Application started");
+```
 
 ### Generics
 
-Create reusable components with flexible types:
+* Generics in TypeScript allow you to create reusable components, functions, classes, or interfaces that work with a variety of types while maintaining type safety.
+* Instead of hardcoding specific types, generics use type parameters to make code flexible and reusable, enabling developers to write functions or classes that can operate on different data types without sacrificing TypeScript’s type-checking capabilities.
+
+#### Create reusable code with flexible types
 
 ```typescript
-function identity<T>(value: T): T {
-  return value;
+interface Printable {
+  print(): string;
 }
 
-let number = identity<number>(42); // Type-safe number
-let text = identity<string>("Hello"); // Type-safe string
+function printItem<T extends Printable>(item: T): string {
+  return item.print();
+}
+
+class MyDocument implements Printable {
+  print() {
+    return "Document content";
+  }
+}
+
+class MyImage implements Printable {
+  print() {
+    return "Image data";
+  }
+}
+
+const doc = new MyDocument();
+const img = new MyImage();
+
+console.log(printItem(doc)); // Output: Document content
+console.log(printItem(img)); // Output: Image data
+// console.log(printItem("string")); // Error: string does not satisfy Printable
+```
+
+#### Create flexible, type-safe data structures
+
+```typescript
+interface Stackable<T> {
+  push(item: T): void;
+  pop(): T | undefined;
+  peek(): T | undefined;
+  isEmpty(): boolean;
+}
+
+class Stack<T> implements Stackable<T> {
+  private items: T[] = [];
+
+  push(item: T): void {
+    this.items.push(item);
+  }
+
+  pop(): T | undefined {
+    return this.items.pop();
+  }
+
+  peek(): T | undefined {
+    return this.items.at(-1);
+  }
+
+  isEmpty(): boolean {
+    return this.items.length === 0;
+  }
+
+  size(): number {
+    return this.items.length;
+  }
+}
+
+// Example usage with numbers
+const numberStack = new Stack<number>();
+numberStack.push(10);
+numberStack.push(20);
+numberStack.push(30);
+console.log(numberStack.peek()); // Output: 30
+console.log(numberStack.pop()); // Output: 30
+console.log(numberStack.size()); // Output: 2
+console.log(numberStack.isEmpty()); // Output: false
+// numberStack.push("string"); // Error: Argument of type 'string' is not assignable to parameter of type 'number'
+
+// Example usage with strings
+const stringStack = new Stack<string>();
+stringStack.push("Hello");
+stringStack.push("TypeScript");
+console.log(stringStack.peek()); // Output: TypeScript
+console.log(stringStack.pop()); // Output: TypeScript
+console.log(stringStack.size()); // Output: 1
+console.log(stringStack.isEmpty()); // Output: false
+
+// Example usage with custom objects
+interface User {
+  name: string;
+  id: number;
+}
+
+const userStack = new Stack<User>();
+userStack.push({ name: "Leila", id: 1 });
+userStack.push({ name: "Jose", id: 2 });
+userStack.push({ name: "Artur", id: 2 });
+
+console.log('Peak:', userStack.peek());
+while (!userStack.isEmpty()) {
+  const user = userStack.pop();
+  console.log(user);
+}
 ```
 
 ### Utility Types in TypeScript
@@ -991,216 +1210,3 @@ const omittedUser: OmittedUser = {
   name: "Leila",
 }; // 'age' and 'email' are omitted
 ```
-
-## HTTP Requests
-
-While TypeScript itself does not handle HTTP requests, it is commonly used with libraries like `fetch` or Angular’s `HttpClient`. TypeScript’s type system ensures type safety when making HTTP requests.
-
-### Using `fetch` with TypeScript
-
-Define interfaces for API responses:
-
-```typescript
-interface Post {
-  id: number;
-  title: string;
-  body: string;
-}
-
-async function fetchPosts(): Promise<Post[]> {
-  const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-  const posts: Post[] = await response.json();
-  return posts;
-}
-
-fetchPosts().then(posts => {
-  console.log(posts[0].title); // Access typed property
-}).catch(error => {
-  console.error("Error fetching posts:", error);
-});
-```
-
-## Preparing for Angular’s HttpClient
-
-Angular’s `HttpClient` leverages TypeScript’s type system and RxJS Observables to handle HTTP requests, offering significant improvements over the vanilla JavaScript Fetch API (which uses Promises).
-
-### Understanding Observables
-
-Observables, provided by the RxJS library, are a powerful abstraction for handling asynchronous data streams in Angular. Unlike Promises, which resolve to a single value, Observables can emit multiple values over time, making them ideal for scenarios like real-time updates, user input streams, or HTTP responses. Observables are lazy, meaning they don’t execute until subscribed to, and they support cancellation and advanced data manipulation through RxJS operators.
-
-### Example with Angular’s HttpClient
-
-Angular’s `HttpClient` returns Observables, allowing typed, reactive HTTP requests. Here’s an example in a service, using TypeScript interfaces from your module:
-
-```typescript
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
-interface Post {
-  id: number;
-  title: string;
-  body: string;
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-class PostService {
-  constructor(private http: HttpClient) {}
-
-  getPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>('https://jsonplaceholder.typicode.com/posts');
-  }
-}
-```
-
-### Observables vs. Promises: Differences and Improvements
-
-* In vanilla JavaScript, you used the Fetch API, which returns Promises (e.g., `fetch('...').then(res => res.json())`).
-* While Promises are effective for single-value asynchronous operations, Observables offer several advantages:
-
-* **Multiple Values**:
-  * **Promises**: Resolve to a single value (e.g., one HTTP response).
-
-     ```javascript
-     // Vanilla JavaScript Fetch
-     fetch('https://jsonplaceholder.typicode.com/posts')
-       .then(res => res.json())
-       .then(posts => console.log(posts));
-     ```
-
-  * **Observables**: Can emit multiple values over time, ideal for streaming data (e.g., WebSockets, form input changes).
-
-     ```typescript
-     import { interval } from 'rxjs';
-     interval(1000).subscribe(value => console.log(value)); // Emits 0, 1, 2, ... every second
-     ```
-
-* **Cancellation**:
-  * **Promises**: Cannot be cancelled once initiated, potentially wasting resources if the user navigates away.
-  * **Observables**: Support cancellation via `unsubscribe`, improving performance in Angular apps.
-
-    ```typescript
-    const subscription = this.postService.getPosts().subscribe(posts => console.log(posts));
-    subscription.unsubscribe(); // Cancel the request
-    ```
-
-* **RxJS Operators**:
-  * **Promises**: Require chaining `.then()` for transformations, which can be cumbersome.
-
-    ```javascript
-    fetch('...')
-    .then(res => res.json())
-    .then(posts => posts.filter(p => p.id > 10));
-    ```
-
-  * **Observables**: Offer powerful RxJS operators (e.g., `map`, `filter`, `switchMap`) for declarative data manipulation.
-
-    ```typescript
-    import { map } from 'rxjs/operators';
-    this.postService.getPosts().pipe(
-      map(posts => posts.filter(post => post.id > 10))
-    ).subscribe(filteredPosts => console.log(filteredPosts));
-    ```
-
-  * **Lazy Execution**:
-    * **Promises**: Execute immediately upon creation.
-    * **Observables**: Only execute when subscribed to, allowing control over when requests are made.
-
-      ```typescript
-      // $ is a naming convention used in Angular and RxJS to indicate that a variable holds an Observable
-      const posts$ = this.postService.getPosts(); // No request yet
-      posts$.subscribe(); // Request starts now
-      ```
-
-  * **Async Pipe in Angular**:
-    * **Promises**: Require manual subscription management in components, risking memory leaks.
-
-     ```javascript
-     fetch('...').then(res => res.json()).then(posts => this.posts = posts);
-     ```
-
-    * **Observables**: Integrate with Angular’s `async` pipe, which handles subscription and cleanup automatically, reducing boilerplate.
-
-     ```html
-     <div *ngIf="posts$ | async as posts">{{ posts[0].title }}</div>
-     ```
-
-### Why Observables Are Preferred in Angular
-
-* Angular’s architecture is built around RxJS Observables for several reasons:
-  * **Reactive Programming**: Observables enable a reactive approach, where components react to data changes (e.g., API responses, user inputs) declaratively, aligning with Angular’s change detection.
-  * **Integration with HttpClient**: `HttpClient` natively returns Observables, making it seamless to use RxJS operators for tasks like retrying requests or combining multiple APIs.
-
-  ```typescript
-  import { retry, catchError } from 'rxjs/operators';
-  import { throwError } from 'rxjs';
-  this.http.get<Post[]>('...').pipe(
-    retry(3), // Retry up to 3 times
-    catchError(err => throwError(() => new Error('Failed to fetch posts')))
-  );
-  ```
-
-  * **Event Handling**: Observables power Angular’s `EventEmitter` for component communication, unlike Promises, which are unsuitable for continuous events.
-  * **Type Safety**: Observables work with TypeScript’s type system (e.g., `Observable<Post[]>`), ensuring type-safe HTTP responses, as shown in your module’s interfaces.
-  * **Scalability**: Observables handle complex asynchronous scenarios (e.g., polling, throttling) more effectively than Promises, critical for large Angular applications.
-
-### Converting Between Promises and Observables
-
-You may encounter Promises in legacy code or third-party libraries. RxJS provides utilities to bridge them:
-
-* **Promise to Observable**:
-
-  ```typescript
-  import { from } from 'rxjs';
-  const observable$ = from(fetch('https://jsonplaceholder.typicode.com/posts').then(res => res.json()));
-  ```
-
-* **Observable to Promise**:
-
-  ```typescript
-  import { firstValueFrom } from 'rxjs';
-  async function getPosts(): Promise<Post[]> {
-    return await firstValueFrom(this.postService.getPosts());
-  }
-  ```
-
-  Use `firstValueFrom` sparingly, as Observables are preferred in Angular.
-
-### Best Practices for Observables in Angular
-
-1. **Use Async Pipe**: Prefer the `async` pipe in templates to manage subscriptions and avoid memory leaks.
-2. **Unsubscribe When Necessary**: For manual subscriptions, use `takeUntil` or unsubscribe in `ngOnDestroy`:
-
-   ```typescript
-   import { Subject, takeUntil } from 'rxjs';
-   export class MyComponent implements OnDestroy {
-     private destroy$ = new Subject<void>();
-     constructor(private postService: PostService) {
-       this.postService.getPosts()
-         .pipe(takeUntil(this.destroy$))
-         .subscribe(posts => console.log(posts));
-     }
-     ngOnDestroy() {
-       this.destroy$.next();
-       this.destroy$.complete();
-     }
-   }
-   ```
-
-3. **Leverage Operators**: Use RxJS operators to transform data before reaching components.
-4. **Type Responses**: Always define interfaces (e.g., `Post`) for `HttpClient` responses to ensure type safety.
-
-### Relevance to TypeScript and Your Module
-
-This builds on your module’s TypeScript HTTP request section, where you introduced `fetch` with Promises and `HttpClient` with Observables. Observables enhance type safety (e.g., `Observable<Post[]>` aligns with your `interface Post`) and prepare students for Angular’s reactive architecture. The multi-project solution (Console, WebAPI, TypeScript) benefits from understanding Observables, as they’re central to Angular’s HTTP and event handling, complementing your VS Code debugging setup.
-
-## Why TypeScript for Angular?
-
-Angular heavily relies on TypeScript for:
-
-* **Component Typing**: Define component inputs, outputs, and services with interfaces.
-* **Dependency Injection**: Type-safe service injection.
-* **RxJS Integration**: Typed Observables for reactive programming.
-* **Tooling**: Enhanced IDE support for Angular templates and code navigation.
