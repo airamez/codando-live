@@ -1,0 +1,16 @@
+<h1>binding-demo</h1>
+<p>{{title}}</p>
+
+<button [disabled]="isDisabled" (click)="clicked()">Click Me</button>
+<button (click)="enable()">Enable/Disable</button>
+
+<br>
+<p>Counter: {{ counter }}</p>
+<button (click)="increment()">Increment</button>
+<button (click)="decrement()">Decrement</button>
+
+<br>
+<br>
+<input [(ngModel)]="userName" placeholder="Enter your name">
+<p>Hello, {{ userName }}!</p>
+<button (click)="resetName()">Reset Name to 'Jose'</button>

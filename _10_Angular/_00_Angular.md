@@ -17,7 +17,7 @@
 * **Routing and Navigation**: Built-in router for creating SPAs with client-side navigation and lazy loading for performance.
 * **Forms Handling**: Robust support for template-driven and reactive forms with validation and dynamic controls.
 * **Testing Support**: Integrated tools like Jasmine and Karma for unit and end-to-end testing to ensure code quality.
-* **Cross-Platform Development**: Enables web, mobile (via Ionic), and desktop (via Electron) applications from a single codebase.
+* **Cross-Platform Development**: Enables web, mobile (via [Ionic](https://ionicframework.com/)), and desktop (via [Electron](https://www.electronjs.org/)) applications from a single codebase.
 
 ## Why Use Angular?
 
@@ -61,6 +61,8 @@
   cd my-app
   ng serve
   ```
+
+>Class Note: Do a demo creating a new app :)
 
 ![Angular](./images/angular.png)
 
@@ -206,7 +208,7 @@ Let’s create a simple component called `hello-world` to display a welcome mess
   }
   ```
 
-  * Add the component selector to the App HTML `app.html` template:
+  * Add the component `selector` to the App HTML `app.html` template:
 
   ```html
   ...
@@ -215,11 +217,161 @@ Let’s create a simple component called `hello-world` to display a welcome mess
   ```
 
 * Step 5: Run the Application
-  * Ensure your development server is running:
+  * Run the development server:
 
   ```bash
   ng serve
   ```
 
   * Open your browser at `http://localhost:4200`
-  
+
+## Component Data Binding
+
+* Data binding in Angular allows seamless interaction between a component's code and its HTML template.
+* It enables dynamic updates to the UI when data changes in the component and vice versa.
+
+### Key Binding Concepts
+
+* **Interpolation (`{{ }}`)**: Displays component data in the template as text.
+* **Property Binding (`[property]="value"`)**: Binds a component variable to an HTML element's property.
+* **Event Binding (`(event)="handler()"`)**: Listens for user actions (e.g., clicks) and triggers component methods.
+* **Two-Way Binding (`[(ngModel)]="value"`)**: Combines property and event binding for bidirectional data flow, typically used with form inputs.
+
+### Binding from Component to HTML
+
+#### 1. Interpolation
+
+Interpolation uses double curly braces `{{ }}` to display component variable values in the template.
+
+```html
+<!-- Template (app.component.html) -->
+<h1>{{ title }}</h1>
+```
+
+```typescript
+// Component (app.component.ts)
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  title = 'Welcome to Angular!';
+}
+```
+
+* Explanation
+  * Renders "Welcome to Angular!" in the `<h1>` tag.
+  * When `title` changes, the UI updates automatically.
+
+#### 2. Property Binding
+
+Property binding sets an HTML element's property to a component variable using square brackets `[ ]`.
+
+```html
+<!-- Template (component.html) -->
+<button [disabled]="isDisabled">Click Me</button>
+```
+
+```typescript
+// Component (component.ts)
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  isDisabled = true;
+}
+```
+
+* Explanation
+  * The `disabled` property of the button is bound to `isDisabled`. If `isDisabled` is `true`, the button is disabled.
+  * The `src` attribute of the `<img>` tag is bound to `imageUrl`, dynamically setting the image source.
+
+#### 3. Event Binding
+
+Event binding listens for DOM events (e.g., `click`, `input`) and calls a component method using parentheses `( )`.
+
+```html
+<!-- Template (component.html) -->
+<p>Counter: {{ counter }}</p>
+<button (click)="increment()">Increment</button>
+```
+
+```typescript
+// Component (component.ts)
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  counter = 0;
+
+  increment() {
+    this.counter++;
+  }
+}
+```
+
+* Explanation
+  * Clicking the button triggers the `increment()` method, updating `counter`, which is reflected in the UI via interpolation.
+
+### 4. Two-Way Binding
+
+* Two-way binding syncs data between the component and template using `[(ngModel)]`.
+* Requires the `FormsModule` to be imported in the module.
+
+```html
+<!-- Template (app.component.html) -->
+<input [(ngModel)]="userName" placeholder="Enter your name">
+<p>Hello, {{ userName }}!</p>
+```
+
+```typescript
+// Module (app.module.ts)
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [FormsModule],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+>Note: Add the FormsModule to the `imports
+
+```typescript
+// Component (app.component.ts)
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  userName = '';
+}
+```
+
+* Explanation
+  * As the user types in the input, `name` updates in the component, and the updated value is displayed in the `<p>` tag.
+
+### Summary
+
+* **Interpolation**: Display component data in the template (`{{ variable }}`).
+* **Property Binding**: Bind component variables to element properties (`[property]="variable"`).
+* **Event Binding**: Handle user events to trigger component methods (`(event)="method()"`).
+* **Two-Way Binding**: Sync data bidirectionally with `[(ngModel)]` (requires `FormsModule`).
+
+>Note: These binding techniques allow you to create dynamic, interactive Angular applications by connecting component logic to the UI.
+
+## Binding Demo
+
