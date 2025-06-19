@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './binding-demo.css'
 })
 export class BindingDemo {
-  title = 'Welcome to Angular!';
+  title = 'Welcome to Angular Data bind!';
   isDisabled = true;
 
   enable() {
@@ -20,11 +20,11 @@ export class BindingDemo {
   }
 
   counter = 0;
-  
+
   increment() {
     this.counter++;
   }
-  
+
   decrement() {
     this.counter--;
   }

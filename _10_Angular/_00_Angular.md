@@ -227,7 +227,7 @@ Let’s create a simple component called `hello-world` to display a welcome mess
 
 ## Component Data Binding
 
-* Data binding in Angular allows seamless interaction between a component's code and its HTML template.
+* [Data binding](https://v17.angular.io/guide/binding-syntax) in Angular allows seamless interaction between a component's code and its HTML template.
 * It enables dynamic updates to the UI when data changes in the component and vice versa.
 
 ### Key Binding Concepts

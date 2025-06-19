@@ -1,0 +1,141 @@
+/* Reset default margins and set global styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* Container for the app */
+div {
+  max-width: 600px;
+  width: 100%;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Heading styles */
+h1 {
+  font-size: 2.2rem;
+  color: #1a73e8;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* Paragraph styles */
+p {
+  font-size: 1.1rem;
+  margin: 10px 0;
+  color: #555;
+}
+
+/* Button styles */
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #1a73e8;
+  color: #fff;
+}
+
+button:hover:not(:disabled) {
+  background-color: #1557b0;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Specific button for enable/disable */
+button:nth-of-type(2) {
+  background-color: #34c759;
+}
+
+button:nth-of-type(2):hover:not(:disabled) {
+  background-color: #2aa647;
+}
+
+/* Increment/Decrement buttons */
+button:nth-of-type(3),
+button:nth-of-type(4) {
+  background-color: #ff9500;
+}
+
+button:nth-of-type(3):hover:not(:disabled),
+button:nth-of-type(4):hover:not(:disabled) {
+  background-color: #cc7a00;
+}
+
+/* Reset Name button */
+button:last-of-type {
+  background-color: #ff3b30;
+}
+
+button:last-of-type:hover:not(:disabled) {
+  background-color: #cc2f27;
+}
+
+/* Input styles */
+input {
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+  max-width: 300px;
+  font-size: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+input:focus {
+  border-color: #1a73e8;
+}
+
+/* Spacing for sections */
+br {
+  display: block;
+  margin: 10px 0;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  div {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
+
+  input {
+    font-size: 0.9rem;
+  }
+}
