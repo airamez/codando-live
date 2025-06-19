@@ -1,0 +1,30 @@
+<h2>Data Form Demo</h2>
+<form>
+  <label>Name:</label>
+  <input type="text" [(ngModel)]="formData.name" name="name">
+  <br><br>
+
+  <label>Age:</label>
+  <input type="number" step="1" min="0" [(ngModel)]="formData.age" name="age">
+  <br><br>
+
+  <label>Salary:</label>
+  <input type="number" step="0.01" [(ngModel)]="formData.salary" name="salary">
+  <br><br>
+
+  <label>Start Date:</label>
+  <input type="date" [(ngModel)]="formData.startDate" name="startDate">
+  <br><br>
+
+  <label>
+    <input type="checkbox" [(ngModel)]="formData.isSubscribed" name="isSubscribed">
+    Subscribe to Newsletter
+  </label>
+  <br><br>
+  <button (click)="submitForm()">Submit</button>
+</form>
+
+<hr>
+
+<h3>Form Preview:</h3>
+<pre>{{ formData | json }}</pre>
