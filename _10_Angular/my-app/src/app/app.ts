@@ -8,8 +8,8 @@ import { DataFormDemo } from './data-form-demo/data-form-demo';
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    // HelloWorld,
-    // BindingDemo,
+    HelloWorld,
+    BindingDemo,
     DataFormDemo],
   templateUrl: './app.html',
   styleUrl: './app.css'
