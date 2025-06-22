@@ -373,7 +373,7 @@ export class AppComponent {
 
 >Note: These binding techniques allow you to create dynamic, interactive Angular applications by connecting component logic to the UI.
 
-## Binding Demo
+### Binding Demo
 
 * Demo 1: All binding types
   * [_10_Angular/my-app/src/app/binding-demo/binding-demo.css](../_10_Angular/my-app/src/app/binding-demo/binding-demo.css)
@@ -385,40 +385,235 @@ export class AppComponent {
   * [_10_Angular/my-app/src/app/data-form-demo/data-form-demo.html](../_10_Angular/my-app/src/app/data-form-demo/data-form-demo.html)
   * [_10_Angular/my-app/src/app/data-form-demo/data-form-demo.ts](../_10_Angular/my-app/src/app/data-form-demo/data-form-demo.ts)
 
-## Structural Directives: `*ngIf` and `*ngFor`
+### Angular Structural Directives
 
-* [Structural directives](https://angular.dev/guide/directives/structural-directives) in Angular modify the DOM by adding, removing, or manipulating elements based on conditions or data.
-* They are prefixed with an asterisk (`*`), which is syntactic sugar for Angular’s template syntax.
-* The two most commonly used structural directives are `*ngIf` and `*ngFor`, which control element visibility and iteration over collections, respectively.
+* Structural directives in Angular are powerful tools for dynamically modifying the DOM by adding, removing, or repeating elements based on data or conditions.
+* Built into Angular’s template syntax, they use an asterisk (`*`) to indicate structural changes, such as conditionally rendering elements or iterating over collections.
+* In Angular 20 (released May 2025), structural directives like `*ngIf` and `*ngFor` remain core features, with new built-in control flow syntax (`@if`, `@for`) introduced as modern alternatives.
 
-### 1. `*ngIf` Directive
+* Key Concepts
+  * **Structural Directives**: Directives that alter the DOM structure by adding, removing, or repeating elements.
+    * Prefixed with `*` (e.g., `*ngIf`, `*ngFor`), which Angular expands into `<ng-template>` internally.
+  * **Dynamic HTML**: Structural directives enable dynamic UI updates by binding to component data, making apps interactive and responsive.
+  * **CommonModule**: Provides `*ngIf` and `*ngFor` for standalone components; not needed for `@if` and `@for`.
+  * **New Control Flow**: Angular 20’s `@if` and `@for` offer a concise, built-in alternative to directives, with improved performance and readability.
 
-* The `*ngIf` directive conditionally includes or removes an element and its children from the DOM based on a boolean expression.
-* It is useful for showing or hiding content dynamically, improving performance by avoiding unnecessary DOM rendering.
+* Resources
+  * **Official Documentation**:
+    * `*ngIf`: [https://angular.dev/api/common/NgIf](https://angular.dev/api/common/NgIf)
+    * `*ngFor`: [https://angular.dev/api/common/NgFor](https://angular.dev/api/common/NgFor)
+    * Control Flow (`@if`, `@for`): [https://angular.dev/guide/templates/control-flow](https://angular.dev/guide/templates/control-flow)
+  * **Angular Tutorials**: Interactive guides for learning directives and control flow.
+    * [https://angular.dev/tutorials](https://angular.dev/tutorials)
 
-#### Syntax
+#### `*ngIf` Directive
+
+* The `*ngIf` directive conditionally adds or removes an element and its children from the DOM based on a boolean expression.
+* Ideal for showing/hiding content dynamically, such as user authentication states or toggling UI elements.
+
+* Syntax
+
+  ```html
+  <div *ngIf="condition">Content to show if condition is true</div>
+  ```
+
+  * `condition`: A boolean expression from the component.
+  * If `true`, the element is rendered; if `false`, it’s removed from the DOM.
+
+* Example: Create a component to show a login status message.
+
+  ```typescript
+  // src/app/login-status/login-status.ts
+  import { Component } from '@angular/core';
+  import { CommonModule } from '@angular/common';
+
+  @Component({
+    selector: 'app-login-status',
+    standalone: true,
+    imports: [CommonModule],
+    templateUrl: './login-status.html',
+    styleUrl: './login-status.css'
+  })
+  export class LoginStatusComponent {
+    isLoggedIn = false;
+
+    toggleLogin() {
+      this.isLoggedIn = !this.isLoggedIn;
+    }
+  }
+  ```
+
+  ```html
+  <!-- src/app/login-status/login-status.html -->
+  <div>
+    <button (click)="toggleLogin()">{{ isLoggedIn ? 'Log Out' : 'Log In' }}</button>
+    <p *ngIf="isLoggedIn">Welcome, you are logged in!</p>
+  </div>
+  ```
+
+  ```css
+  /* src/app/login-status/login-status.css */
+  p {
+    color: green;
+    font-weight: bold;
+  }
+  button {
+    padding: 8px 16px;
+    margin-bottom: 10px;
+  }
+  ```
+
+  * **Explanation**:
+    * The `<p>` is rendered only when `isLoggedIn` is `true`.
+    * Clicking the button toggles `isLoggedIn`, dynamically updating the DOM.
+    * `*ngIf` removes the element entirely, unlike CSS `display: none`.
+
+#### `*ngIf` with `else`
+
+Use `else` to display alternative content when the condition is `false`.
 
 ```html
-<div *ngIf="condition">Content to show if condition is true</div>
+<!-- src/app/login-status/login-status.html -->
+<div>
+  <button (click)="toggleLogin()">{{ isLoggedIn ? 'Log Out' : 'Log In' }}</button>
+  <p *ngIf="isLoggedIn; else notLoggedIn">Welcome, you are logged in!</p>
+  <ng-template #notLoggedIn>
+    <p>Please log in to continue.</p>
+  </ng-template>
+</div>
 ```
 
-* `condition`: A boolean expression from the component that determines whether the element is rendered.
-* If `condition` is `true`, the element is added to the DOM; if `false`, it is removed.
+* **Explanation**:
+  * Shows the welcome message if `isLoggedIn` is `true`; otherwise, renders the `<ng-template>` content.
 
-#### Example: Using `*ngIf`
+#### `*ngFor` Directive
 
-Let’s create a component that shows a message only if a user is logged in.
+* The `*ngFor` directive iterates over a collection (e.g., an array) to render a template for each item.
+* Perfect for displaying lists, tables, or any repeated UI elements.
+
+* Syntax
+
+```html
+<div *ngFor="let item of items">{{ item }}</div>
+```
+
+* `items`: The collection to iterate over.
+* `item`: A local variable for each item in the iteration.
+
+* Example: Task List. Create a component to display and add tasks.
+
+```html
+<div>
+  <input [(ngModel)]="task" placeholder="Add a new task">
+  <button (click)="addTask()">Add</button>
+  <p *ngIf="tasks.length === 0">No tasks available.</p>
+  <ul *ngIf="tasks.length > 0">
+    <li *ngFor="let task of tasks; let i = index;">
+      {{ i + 1 }}. {{ task }}
+    </li>
+  </ul>
+</div>
+```
 
 ```typescript
-// Component (user-status.component.ts)
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'task-list',
+  imports: [FormsModule, CommonModule],
+  templateUrl: './task-list.html',
+  styleUrl: './task-list.css'
+})
+export class TaskList {
+  task = "";
+  tasks: string[] = [];
+
+  addTask() {
+    if (this.task.length > 0) {
+      this.tasks.push(this.task);
+    }
+    this.task = "";
+  }
+}
+```
+
+```css
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+input {
+  padding: 8px;
+  margin-bottom: 10px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+p {
+  color: #888;
+  text-align: left;
+}
+button {
+  padding: 8px 16px;
+  margin-left: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
+```
+
+* **Explanation**:
+  * `*ngFor` renders an `<li>` for each task in the `tasks` array.
+  * `let i = index` provides a numbered list.
+  * `*ngIf` shows a message when the list is empty.
+
+* Example: Task List
+  * [_10_Angular/my-app/src/app/task-list/task-list.css](../_10_Angular/my-app/src/app/task-list/task-list.css)
+  * [_10_Angular/my-app/src/app/task-list/task-list.html](../_10_Angular/my-app/src/app/task-list/task-list.html)
+  * [_10_Angular/my-app/src/app/task-list/task-list.ts](../_10_Angular/my-app/src/app/task-list/task-list.ts)
+
+
+#### Modern Control Flow: `@if` and `@for`
+
+* Angular 20 introduces `@if` and `@for` as built-in control flow syntax, offering a concise alternative to `*ngIf` and `*ngFor`.
+* No `CommonModule` import is needed, and they integrate directly into templates.
+
+##### `@if`
+
+* Conditionally renders content without `<ng-template>`.
+
+```html
+@if (condition) {
+  <div>Content to show if condition is true.</div>
+} @else {
+  <div>Content to show if condition is false.</div>
+}
+```
+
+##### Example: Login Status with `@if`
+
+```typescript
+// src/app/login-status-modern/login-status-modern.ts
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-user-status',
-  templateUrl: './user-status.component.html',
-  styleUrl: './user-status.component.css'
+  selector: 'app-login-status-modern',
+  standalone: true,
+  templateUrl: './login-status-modern.html',
+  styleUrl: './login-status-modern.css'
 })
-export class UserStatusComponent {
+export class LoginStatusModernComponent {
   isLoggedIn = false;
 
   toggleLogin() {
@@ -428,15 +623,19 @@ export class UserStatusComponent {
 ```
 
 ```html
-<!-- Template (user-status.component.html) -->
+<!-- src/app/login-status-modern/login-status-modern.html -->
 <div>
   <button (click)="toggleLogin()">{{ isLoggedIn ? 'Log Out' : 'Log In' }}</button>
-  <p *ngIf="isLoggedIn">Welcome, you are logged in!</p>
+  @if (isLoggedIn) {
+    <p>Welcome, you are logged in!</p>
+  } @else {
+    <p>Please log in to continue.</p>
+  }
 </div>
 ```
 
 ```css
-/* Styles (user-status.component.css) */
+/* src/app/login-status-modern/login-status-modern.css */
 p {
   color: green;
   font-weight: bold;
@@ -448,83 +647,62 @@ button {
 ```
 
 * **Explanation**:
-  * The `<p>` element is only rendered when `isLoggedIn` is `true`.
-  * Clicking the button toggles `isLoggedIn`, adding or removing the `<p>` from the DOM.
-  * Unlike CSS `display: none`, `*ngIf` completely removes the element from the DOM, which is more performant for conditional content.
+  * `@if` is more concise than `*ngIf` and doesn’t require `CommonModule`.
+  * Achieves the same conditional rendering.
 
-#### `*ngIf` with `else`
+##### `@for`
 
-You can use `*ngIf` with an `else` clause to display alternative content when the condition is `false`.
-
-```html
-<!-- Template (user-status.component.html) -->
-<div>
-  <button (click)="toggleLogin()">{{ isLoggedIn ? 'Log Out' : 'Log In' }}</button>
-  <p *ngIf="isLoggedIn; else notLoggedIn">Welcome, you are logged in!</p>
-  <ng-template #notLoggedIn>
-    <p>Please log in to continue.</p>
-  </ng-template>
-</div>
-```
-
-* **Explanation**:
-  * If `isLoggedIn` is `true`, the welcome message is shown.
-  * If `isLoggedIn` is `false`, the `<ng-template>` with the `#notLoggedIn` reference is rendered instead.
-  * The `else` clause requires an `<ng-template>` to define the alternative content.
-
-### 2. `*ngFor` Directive
-
-* The `*ngFor` directive iterates over a collection (e.g., an array) and renders a template for each item.
-* It is ideal for displaying lists, tables, or any repeated UI elements based on data.
-
-#### Syntax
+* Iterates over collections with a mandatory `track` expression for performance.
 
 ```html
-<div *ngFor="let item of items">{{ item }}</div>
+@for (item of items; track item) {
+  <div>{{ item }}</div>
+} @empty {
+  <div>No items available.</div>
+}
 ```
 
-* `items`: The collection (e.g., array) to iterate over.
-* `item`: A local variable representing the current item in each iteration.
-* The `*ngFor` directive repeats the host element for each item in the collection.
+##### Example: Task List with `@for`
 
-#### Example: Using `*ngFor`
-
-Let’s create a component that displays a list of tasks.
+```bash
+ng generate component task-list-modern
+```
 
 ```typescript
-// Component (task-list.component.ts)
+// src/app/task-list-modern/task-list-modern.ts
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-task-list',
-  templateUrl: './task-list.component.html',
-  styleUrl: './task-list.component.css'
+  selector: 'app-task-list-modern',
+  standalone: true,
+  templateUrl: './task-list-modern.html',
+  styleUrl: './task-list-modern.css'
 })
-export class TaskListComponent {
+export class TaskListModernComponent {
   tasks = ['Write code', 'Test app', 'Deploy to production'];
 
   addTask(newTask: string) {
-    if (newTask) {
-      this.tasks.push(newTask);
+    if (newTask.trim()) {
+      this.tasks.push(newTask.trim());
     }
   }
 }
 ```
 
 ```html
-<!-- Template (task-list.component.html) -->
+<!-- src/app/task-list-modern/task-list-modern.html -->
 <div>
   <input #taskInput placeholder="Add a new task" (keyup.enter)="addTask(taskInput.value); taskInput.value=''">
-  <ul>
-    <li *ngFor="let task of tasks; let i = index">
-      {{ i + 1 }}. {{ task }}
-    </li>
-  </ul>
+  @for (task of tasks; track task; let i = $index) {
+    <li>{{ i + 1 }}. {{ task }}</li>
+  } @empty {
+    <p>No tasks available.</p>
+  }
 </div>
 ```
 
 ```css
-/* Styles (task-list.component.css) */
+/* src/app/task-list-modern/task-list-modern.css */
 ul {
   list-style-type: none;
   padding: 0;
@@ -538,98 +716,44 @@ input {
   margin-bottom: 10px;
   width: 200px;
 }
-```
-
-* **Explanation**:
-  * The `*ngFor` directive iterates over the `tasks` array, rendering an `<li>` for each task.
-  * The `let i = index` assigns the current iteration’s index to `i`, used to display a numbered list.
-  * The input field allows adding new tasks, which updates the `tasks` array and triggers re-rendering of the list.
-
-#### `*ngFor` Features
-
-* **Index**: Use `let i = index` to access the loop index (0-based).
-* **TrackBy**: Improves performance for large lists by tracking items with a unique identifier, reducing DOM updates.
-
-```typescript
-// Component (task-list.component.ts)
-trackByTask(index: number, task: string): string {
-  return task; // Use task as a unique identifier
+p {
+  color: #888;
+  text-align: center;
 }
 ```
 
-```html
-<!-- Template (task-list.component.html) -->
-<li *ngFor="let task of tasks; trackBy: trackByTask">{{ task }}</li>
-```
-
 * **Explanation**:
-  * The `trackBy` function helps Angular identify which items have changed, added, or removed, optimizing rendering for large datasets.
+  * `@for` iterates over `tasks`, with `track task` optimizing updates.
+  * `@empty` replaces the need for a separate `*ngIf` check.
+  * No `CommonModule` import is required.
 
-### Combining `*ngIf` and `*ngFor`
-
-You can combine `*ngIf` and `*ngFor` for conditional rendering of lists.
-
-```html
-<!-- Template (task-list.component.html) -->
-<div>
-  <input #taskInput placeholder="Add a new task" (keyup.enter)="addTask(taskInput.value); taskInput.value=''">
-  <p *ngIf="tasks.length === 0">No tasks available.</p>
-  <ul *ngIf="tasks.length > 0">
-    <li *ngFor="let task of tasks; let i = index">
-      {{ i + 1 }}. {{ task }}
-    </li>
-  </ul>
-</div>
-```
-
-* **Explanation**:
-  * If `tasks` is empty, a "No tasks available" message is shown using `*ngIf`.
-  * If `tasks` has items, the `<ul>` is rendered with `*ngIf`, and `*ngFor` generates the list items.
-
-### Key Notes
+#### Key Notes
 
 * **Performance**:
-  * `*ngIf` removes elements from the DOM, unlike CSS `display: none`, which keeps them in memory.
-  * Use `trackBy` with `*ngFor` for large lists to minimize DOM manipulation.
-* **Syntax**:
-  * The asterisk (`*`) indicates a structural directive, which Angular expands into an `<ng-template>` internally.
+  * `*ngIf` and `@if` remove elements from the DOM for efficiency.
+  * Use `trackBy` with `*ngFor` or `track` with `@for` for large lists.
 * **Best Practices**:
-  * Avoid complex logic in templates; move it to the component.
-  * Use `*ngIf` for conditional rendering and `*ngFor` for lists to keep templates clean and maintainable.
+  * Move complex logic to the component, keeping templates simple.
+  * Use `@if` and `@for` for new projects; `*ngIf` and `*ngFor` for compatibility.
+* **Compatibility**:
+  * `*ngIf` and `*ngFor` are unchanged since Angular 10 and remain widely used.
+  * `@if` and `@for` are Angular 20 innovations, optional but recommended.
 
-### Directives Demo
+### Demos
 
-* Demo: Combining `*ngIf` and `*ngFor`
-  * Create a component to demonstrate both directives together, showing a dynamic task list with conditional messages.
-  * **Files**:
-    * `_10_Angular/my-app/src/app/task-manager/task-manager.css`
-    * `_10_Angular/my-app/src/app/task-manager/task-manager.html`
-    * `_10_Angular/my-app/src/app/task-manager/task-manager.ts`
-  * **Steps**:
-    1. Generate the component:
-       ```bash
-       ng generate component task-manager
-       ```
-    2. Implement the component with a task list, an input to add tasks, and conditional messages (e.g., "No tasks" when empty).
-    3. Use `*ngFor` to render the task list and `*ngIf` to show/hide messages based on the list’s length.
-    4. Add styles for a clean UI.
-    5. Run `ng serve` and demonstrate adding tasks and toggling the list.
+* Demo 1: `*ngIf` Login Status
+  * [_10_Angular/dynamic-content-app/src/app/login-status/login-status.css](../_10_Angular/dynamic-content-app/src/app/login-status/login-status.css)
+  * [_10_Angular/dynamic-content-app/src/app/login-status/login-status.html](../_10_Angular/dynamic-content-app/src/app/login-status/login-status.html)
+  * [_10_Angular/dynamic-content-app/src/app/login-status/login-status.ts](../_10_Angular/dynamic-content-app/src/app/login-status/login-status.ts)
 
-> **Class Note**: Walk through the demo live, showing how `*ngIf` toggles messages and `*ngFor` updates the list dynamically. Encourage students to experiment with adding/removing tasks.
+* Demo 2: `*ngFor` Task List
+  * [_10_Angular/dynamic-content-app/src/app/task-list/task-list.css](../_10_Angular/dynamic-content-app/src/app/task-list/task-list.css)
+  * [_10_Angular/dynamic-content-app/src/app/task-list/task-list.html](../_10_Angular/dynamic-content-app/src/app/task-list/task-list.html)
+  * [_10_Angular/dynamic-content-app/src/app/task-list/task-list.ts](../_10_Angular/dynamic-content-app/src/app/task-list/task-list.ts)
 
-## Binding and Directives Demo
+* Demo 3: `@if` and `@for` Modern Task List
+  * [_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.css](../_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.css)
+  * [_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.html](../_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.html)
+  * [_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.ts](../_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.ts)
 
-* Demo 1: All binding types
-  * [_10_Angular/my-app/src/app/binding-demo/binding-demo.css](../_10_Angular/my-app/src/app/binding-demo/binding-demo.css)
-  * [_10_Angular/my-app/src/app/binding-demo/binding-demo.html](../_10_Angular/my-app/src/app/binding-demo/binding-demo.html)
-  * [_10_Angular/my-app/src/app/binding-demo/binding-demo.ts](../_10_Angular/my-app/src/app/binding-demo/binding-demo.ts)
-
-* Demo 2: Form demo
-  * [_10_Angular/my-app/src/app/data-form-demo/data-form-demo.css](../_10_Angular/my-app/src/app/data-form-demo/data-form-demo.css)
-  * [_10_Angular/my-app/src/app/data-form-demo/data-form-demo.html](../_10_Angular/my-app/src/app/data-form-demo/data-form-demo.html)
-  * [_10_Angular/my-app/src/app/data-form-demo/data-form-demo.ts](../_10_Angular/my-app/src/app/data-form-demo/data-form-demo.ts)
-
-* Demo 3: `*ngIf` and `*ngFor` directives
-  * [_10_Angular/my-app/src/app/task-manager/task-manager.css](../_10_Angular/my-app/src/app/task-manager/task-manager.css)
-  * [_10_Angular/my-app/src/app/task-manager/task-manager.html](../_10_Angular/my-app/src/app/task-manager/task-manager.html)
-  * [_10_Angular/my-app/src/app/task-manager/task-manager.ts](../_10_Angular/my-app/src/app/task-manager/task-manager.ts)
+> **Class Note**: Walk through each demo, showing how to add tasks and toggle login status. Compare `*ngIf`/`@if` and `*ngFor`/`@for` syntax. Encourage students to modify the demos (e.g., add a remove task button).

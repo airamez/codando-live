@@ -1,0 +1,10 @@
+<div>
+  <input [(ngModel)]="task" placeholder="Add a new task">
+  <button (click)="addTask()">Add</button>
+  <p *ngIf="tasks.length === 0">No tasks available.</p>
+  <ul *ngIf="tasks.length > 0">
+    <li *ngFor="let task of tasks; let i = index;">
+      {{ i + 1 }}. {{ task }}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,31 @@
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+}
+input {
+  padding: 8px;
+  margin-bottom: 10px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+p {
+  color: #888;
+  text-align: left;
+}
+button {
+  padding: 8px 16px;
+  margin-left: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
