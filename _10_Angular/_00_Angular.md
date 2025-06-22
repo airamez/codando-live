@@ -385,7 +385,7 @@ export class AppComponent {
   * [_10_Angular/my-app/src/app/data-form-demo/data-form-demo.html](../_10_Angular/my-app/src/app/data-form-demo/data-form-demo.html)
   * [_10_Angular/my-app/src/app/data-form-demo/data-form-demo.ts](../_10_Angular/my-app/src/app/data-form-demo/data-form-demo.ts)
 
-### Angular Structural Directives
+## Angular Structural Directives
 
 * Structural directives in Angular are powerful tools for dynamically modifying the DOM by adding, removing, or repeating elements based on data or conditions.
 * Built into Angular’s template syntax, they use an asterisk (`*`) to indicate structural changes, such as conditionally rendering elements or iterating over collections.
@@ -406,7 +406,7 @@ export class AppComponent {
   * **Angular Tutorials**: Interactive guides for learning directives and control flow.
     * [https://angular.dev/tutorials](https://angular.dev/tutorials)
 
-#### `*ngIf` Directive
+### `*ngIf` Directive
 
 * The `*ngIf` directive conditionally adds or removes an element and its children from the DOM based on a boolean expression.
 * Ideal for showing/hiding content dynamically, such as user authentication states or toggling UI elements.
@@ -468,7 +468,7 @@ export class AppComponent {
     * Clicking the button toggles `isLoggedIn`, dynamically updating the DOM.
     * `*ngIf` removes the element entirely, unlike CSS `display: none`.
 
-#### `*ngIf` with `else`
+### `*ngIf` with `else`
 
 Use `else` to display alternative content when the condition is `false`.
 
@@ -486,7 +486,7 @@ Use `else` to display alternative content when the condition is `false`.
 * **Explanation**:
   * Shows the welcome message if `isLoggedIn` is `true`; otherwise, renders the `<ng-template>` content.
 
-#### `*ngFor` Directive
+### `*ngFor` Directive
 
 * The `*ngFor` directive iterates over a collection (e.g., an array) to render a template for each item.
 * Perfect for displaying lists, tables, or any repeated UI elements.
@@ -578,18 +578,17 @@ button:hover {
   * `let i = index` provides a numbered list.
   * `*ngIf` shows a message when the list is empty.
 
-* Example: Task List
+* Demo: Task List
   * [_10_Angular/my-app/src/app/task-list/task-list.css](../_10_Angular/my-app/src/app/task-list/task-list.css)
   * [_10_Angular/my-app/src/app/task-list/task-list.html](../_10_Angular/my-app/src/app/task-list/task-list.html)
   * [_10_Angular/my-app/src/app/task-list/task-list.ts](../_10_Angular/my-app/src/app/task-list/task-list.ts)
 
-
-#### Modern Control Flow: `@if` and `@for`
+### Modern Control Flow: `@if` and `@for`
 
 * Angular 20 introduces `@if` and `@for` as built-in control flow syntax, offering a concise alternative to `*ngIf` and `*ngFor`.
 * No `CommonModule` import is needed, and they integrate directly into templates.
 
-##### `@if`
+#### `@if`
 
 * Conditionally renders content without `<ng-template>`.
 
