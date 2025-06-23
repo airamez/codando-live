@@ -1,0 +1,10 @@
+<div>
+  <h2>Task Manager Modern</h2>
+  <input [(ngModel)]="task" placeholder="Add a new task">
+  <button (click)="addTask()">Add</button>
+  @for (task of tasks; track task; let i = $index) {
+    <li>{{ i + 1 }}. {{ task }}</li>
+  } @empty {
+    <p>No tasks available.</p>
+  }
+</div>

@@ -420,10 +420,9 @@ export class AppComponent {
   * `condition`: A boolean expression from the component.
   * If `true`, the element is rendered; if `false`, it’s removed from the DOM.
 
-* Example: Create a component to show a login status message.
+* Example: Component to show a login status message.
 
   ```typescript
-  // src/app/login-status/login-status.ts
   import { Component } from '@angular/core';
   import { CommonModule } from '@angular/common';
 
@@ -444,7 +443,6 @@ export class AppComponent {
   ```
 
   ```html
-  <!-- src/app/login-status/login-status.html -->
   <div>
     <button (click)="toggleLogin()">{{ isLoggedIn ? 'Log Out' : 'Log In' }}</button>
     <p *ngIf="isLoggedIn">Welcome, you are logged in!</p>
@@ -452,7 +450,6 @@ export class AppComponent {
   ```
 
   ```css
-  /* src/app/login-status/login-status.css */
   p {
     color: green;
     font-weight: bold;
@@ -473,7 +470,6 @@ export class AppComponent {
 Use `else` to display alternative content when the condition is `false`.
 
 ```html
-<!-- src/app/login-status/login-status.html -->
 <div>
   <button (click)="toggleLogin()">{{ isLoggedIn ? 'Log Out' : 'Log In' }}</button>
   <p *ngIf="isLoggedIn; else notLoggedIn">Welcome, you are logged in!</p>
@@ -585,174 +581,144 @@ button:hover {
 
 ### Modern Control Flow: `@if` and `@for`
 
-* Angular 20 introduces `@if` and `@for` as built-in control flow syntax, offering a concise alternative to `*ngIf` and `*ngFor`.
+* Angular 17 introduces [`@if`](https://blog.angular-university.io/angular-if/) and [`@for`](https://blog.angular-university.io/angular-for/) as built-in control flow syntax, offering a concise alternative to `*ngIf` and `*ngFor`.
 * No `CommonModule` import is needed, and they integrate directly into templates.
 
 #### `@if`
 
 * Conditionally renders content without `<ng-template>`.
 
-```html
-@if (condition) {
-  <div>Content to show if condition is true.</div>
-} @else {
-  <div>Content to show if condition is false.</div>
-}
-```
-
-##### Example: Login Status with `@if`
-
-```typescript
-// src/app/login-status-modern/login-status-modern.ts
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-login-status-modern',
-  standalone: true,
-  templateUrl: './login-status-modern.html',
-  styleUrl: './login-status-modern.css'
-})
-export class LoginStatusModernComponent {
-  isLoggedIn = false;
-
-  toggleLogin() {
-    this.isLoggedIn = !this.isLoggedIn;
-  }
-}
-```
-
-```html
-<!-- src/app/login-status-modern/login-status-modern.html -->
-<div>
-  <button (click)="toggleLogin()">{{ isLoggedIn ? 'Log Out' : 'Log In' }}</button>
-  @if (isLoggedIn) {
-    <p>Welcome, you are logged in!</p>
+  ```html
+  @if (condition) {
+    <div>Content to show if condition is true.</div>
   } @else {
-    <p>Please log in to continue.</p>
+    <div>Content to show if condition is false.</div>
   }
-</div>
-```
+  ```
 
-```css
-/* src/app/login-status-modern/login-status-modern.css */
-p {
-  color: green;
-  font-weight: bold;
-}
-button {
-  padding: 8px 16px;
-  margin-bottom: 10px;
-}
-```
+* Example: Login Status with `@if`
+
+  ```typescript
+  import { Component } from '@angular/core';
+
+  @Component({
+    selector: 'app-login-status-modern',
+    standalone: true,
+    templateUrl: './login-status-modern.html',
+    styleUrl: './login-status-modern.css'
+  })
+  export class LoginStatusModernComponent {
+    isLoggedIn = false;
+
+    toggleLogin() {
+      this.isLoggedIn = !this.isLoggedIn;
+    }
+  }
+  ```
+
+  ```html
+  <div>
+    <button (click)="toggleLogin()">{{ isLoggedIn ? 'Log Out' : 'Log In' }}</button>
+    @if (isLoggedIn) {
+      <p>Welcome, you are logged in!</p>
+    } @else {
+      <p>Please log in to continue.</p>
+    }
+  </div>
+  ```
+
+  ```css
+  p {
+    color: green;
+    font-weight: bold;
+  }
+  button {
+    padding: 8px 16px;
+    margin-bottom: 10px;
+  }
+  ```
 
 * **Explanation**:
   * `@if` is more concise than `*ngIf` and doesn’t require `CommonModule`.
   * Achieves the same conditional rendering.
 
-##### `@for`
+#### `@for`
 
 * Iterates over collections with a mandatory `track` expression for performance.
 
-```html
-@for (item of items; track item) {
-  <div>{{ item }}</div>
-} @empty {
-  <div>No items available.</div>
-}
-```
+  ```html
+  @for (item of items; track item) {
+    <div>{{ item }}</div>
+  } @empty {
+    <div>No items available.</div>
+  }
+  ```
 
-##### Example: Task List with `@for`
+  * Example: Task List with `@for`
 
-```bash
-ng generate component task-list-modern
-```
+  ```html
+  <div>
+    <h2>Task Manager Modern</h2>
+    <input [(ngModel)]="task" placeholder="Add a new task">
+    <button (click)="addTask()">Add</button>
+    @for (task of tasks; track task; let i = $index) {
+      <li>{{ i + 1 }}. {{ task }}</li>
+    } @empty {
+      <p>No tasks available.</p>
+    }
+  </div>
+  ```
 
-```typescript
-// src/app/task-list-modern/task-list-modern.ts
-import { Component } from '@angular/core';
+  ```typescript
+  import { Component } from '@angular/core';
+  import { FormsModule } from '@angular/forms';
 
-@Component({
-  selector: 'app-task-list-modern',
-  standalone: true,
-  templateUrl: './task-list-modern.html',
-  styleUrl: './task-list-modern.css'
-})
-export class TaskListModernComponent {
-  tasks = ['Write code', 'Test app', 'Deploy to production'];
+  @Component({
+    selector: 'task-list-modern',
+    imports: [FormsModule],
+    templateUrl: './task-list-modern.html',
+    styleUrl: './task-list-modern.css'
+  })
+  export class TaskListModern {
+    task = "";
+    tasks: string[] = [];
 
-  addTask(newTask: string) {
-    if (newTask.trim()) {
-      this.tasks.push(newTask.trim());
+    addTask() {
+      if (this.task.length > 0) {
+        this.tasks.push(this.task);
+      }
+      this.task = "";
     }
   }
-}
-```
+  ```
 
-```html
-<!-- src/app/task-list-modern/task-list-modern.html -->
-<div>
-  <input #taskInput placeholder="Add a new task" (keyup.enter)="addTask(taskInput.value); taskInput.value=''">
-  @for (task of tasks; track task; let i = $index) {
-    <li>{{ i + 1 }}. {{ task }}</li>
-  } @empty {
-    <p>No tasks available.</p>
+  ```css
+  /* src/app/task-list-modern/task-list-modern.css */
+  ul {
+    list-style-type: none;
+    padding: 0;
   }
-</div>
-```
+  li {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  input {
+    padding: 8px;
+    margin-bottom: 10px;
+    width: 200px;
+  }
+  p {
+    color: #888;
+    text-align: center;
+  }
+  ```
 
-```css
-/* src/app/task-list-modern/task-list-modern.css */
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-}
-input {
-  padding: 8px;
-  margin-bottom: 10px;
-  width: 200px;
-}
-p {
-  color: #888;
-  text-align: center;
-}
-```
+  * **Explanation**:
+    * `@for` iterates over `tasks`, with `track task` optimizing updates.
+    * `@empty` replaces the need for a separate `*ngIf` check.
+    * No `CommonModule` import is required.
 
-* **Explanation**:
-  * `@for` iterates over `tasks`, with `track task` optimizing updates.
-  * `@empty` replaces the need for a separate `*ngIf` check.
-  * No `CommonModule` import is required.
-
-#### Key Notes
-
-* **Performance**:
-  * `*ngIf` and `@if` remove elements from the DOM for efficiency.
-  * Use `trackBy` with `*ngFor` or `track` with `@for` for large lists.
-* **Best Practices**:
-  * Move complex logic to the component, keeping templates simple.
-  * Use `@if` and `@for` for new projects; `*ngIf` and `*ngFor` for compatibility.
-* **Compatibility**:
-  * `*ngIf` and `*ngFor` are unchanged since Angular 10 and remain widely used.
-  * `@if` and `@for` are Angular 20 innovations, optional but recommended.
-
-### Demos
-
-* Demo 1: `*ngIf` Login Status
-  * [_10_Angular/dynamic-content-app/src/app/login-status/login-status.css](../_10_Angular/dynamic-content-app/src/app/login-status/login-status.css)
-  * [_10_Angular/dynamic-content-app/src/app/login-status/login-status.html](../_10_Angular/dynamic-content-app/src/app/login-status/login-status.html)
-  * [_10_Angular/dynamic-content-app/src/app/login-status/login-status.ts](../_10_Angular/dynamic-content-app/src/app/login-status/login-status.ts)
-
-* Demo 2: `*ngFor` Task List
-  * [_10_Angular/dynamic-content-app/src/app/task-list/task-list.css](../_10_Angular/dynamic-content-app/src/app/task-list/task-list.css)
-  * [_10_Angular/dynamic-content-app/src/app/task-list/task-list.html](../_10_Angular/dynamic-content-app/src/app/task-list/task-list.html)
-  * [_10_Angular/dynamic-content-app/src/app/task-list/task-list.ts](../_10_Angular/dynamic-content-app/src/app/task-list/task-list.ts)
-
-* Demo 3: `@if` and `@for` Modern Task List
+* Demo: `@if` and `@for` Modern Task List
   * [_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.css](../_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.css)
   * [_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.html](../_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.html)
   * [_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.ts](../_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.ts)
-
-> **Class Note**: Walk through each demo, showing how to add tasks and toggle login status. Compare `*ngIf`/`@if` and `*ngFor`/`@for` syntax. Encourage students to modify the demos (e.g., add a remove task button).
