@@ -3,8 +3,8 @@ import { RouterOutlet } from '@angular/router';
 // import { HelloWorld } from './hello-world/hello-world';
 // import { BindingDemo } from './binding-demo/binding-demo';
 // import { DataFormDemo } from './data-form-demo/data-form-demo';
+// import { TaskList } from './task-list/task-list';
 import { TaskListModern } from './task-list-modern/task-list-modern';
-import { TaskList } from './task-list/task-list';
 
 @Component({
   selector: 'app-root',
