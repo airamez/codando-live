@@ -722,3 +722,337 @@ button:hover {
   * [_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.css](../_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.css)
   * [_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.html](../_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.html)
   * [_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.ts](../_10_Angular/dynamic-content-app/src/app/task-list-modern/task-list-modern.ts)
+
+## ng-container
+
+`ng-container` is a logical container in Angular that allows you to group elements or apply structural directives without adding extra DOM elements. It’s a lightweight utility for managing template structure, especially useful when you need to apply directives like `*ngIf` or `*ngFor` but don’t want to wrap content in a `<div>` or other HTML element that affects styling or layout.
+
+* Key Characteristics
+  * **No DOM Output**: `ng-container` is a template-only construct and does not render as an HTML element in the DOM.
+  * **Use Cases**: Apply structural directives, group elements for conditional rendering, or manage multiple directives without cluttering the DOM.
+  * **Common Scenarios**: Combine with `*ngIf`, `*ngFor` to keep templates clean.
+
+* Syntax
+
+  ```html
+  <ng-container *ngDirective>
+    <!-- Content here -->
+  </ng-container>
+  ```
+
+* Example: Conditional Grouping with `ng-container`
+  * Component to display a user profile conditionally without adding extra DOM elements.
+
+  ```html
+  <div class="container">
+    <div class="left-panel">
+      <h2>User Profile</h2>
+      <div>
+        <input type="text" [(ngModel)]="inputUsername" placeholder="Enter username">
+        <button (click)="checkPremiumStatus()">Login</button>
+      </div>
+      <ng-container *ngIf="user.name; else noUsername">
+        <ng-container *ngIf="user.isPremium; else notPremium">
+          <p>Premium Member: {{ user.name }}</p>
+          <p>Enjoy exclusive benefits!</p>
+        </ng-container>
+        <ng-template #notPremium>
+          <p>{{ user.name }} is a standard user.</p>
+        </ng-template>
+      </ng-container>
+      <ng-template #noUsername>
+        <p>Please enter a username.</p>
+      </ng-template>
+    </div>
+    <div class="right-panel">
+      <h3>Premium Users</h3>
+      <ul>
+        <ng-container *ngFor="let premiumUser of premiumUsers">
+          <li>{{ premiumUser }}</li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+  ```
+
+  ```typescript
+  import { Component } from '@angular/core';
+  import { CommonModule } from '@angular/common';
+  import { FormsModule } from '@angular/forms';
+
+  @Component({
+    selector: 'user-profile',
+    standalone: true,
+    imports: [CommonModule, FormsModule],
+    templateUrl: './user-profile.html',
+    styleUrl: './user-profile.css'
+  })
+  export class UserProfile {
+    user = { name: '', isPremium: false };
+    premiumUsers = ['leila', 'jose', 'artur'];
+    inputUsername: string = '';
+
+    checkPremiumStatus() {
+      this.user.name = this.inputUsername;
+      this.user.isPremium = this.premiumUsers.includes(this.inputUsername.toLowerCase());
+    }
+  }
+  ```
+
+  ```css
+  .container {
+    display: flex;
+    gap: 20px;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    padding: 16px;
+    border-radius: 8px;
+  }
+  .left-panel, .right-panel {
+    flex: 1;
+  }
+  p {
+    margin: 8px 0;
+  }
+  input {
+    padding: 8px;
+    margin: 8px 0;
+    border: 1px solid #444;
+    border-radius: 4px;
+    width: 100px;
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+  }
+  input:focus {
+    outline: none;
+    border-color: #1e90ff;
+    box-shadow: 0 0 4px rgba(30, 144, 255, 0.5);
+  }
+  input::placeholder {
+    color: #888;
+  }
+  h3 {
+    margin: 8px 0;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  li {
+    padding: 4px 0;
+    border-bottom: 1px solid #444;
+  }
+  button {
+    padding: 8px 16px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    background-color: #1e90ff;
+    color: #e0e0e0;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+  }
+
+  button:hover {
+    background-color: #1c86ee;
+  }
+
+  button:focus {
+    outline: none;
+    box-shadow: 0 0 4px rgba(30, 144, 255, 0.5);
+  }
+  ```
+
+* Explanation
+  * The `<ng-container *ngIf="user.isPremium">` groups two `<p>` elements without adding a wrapper `<div>` to the DOM.
+  * If `user.isPremium` is `true`, both premium messages are shown; if `false`, only the standard user message appears.
+  * Inspecting the DOM shows no extra elements from `ng-container`, keeping the structure clean.
+
+## ViewChild
+
+`ViewChild` is a decorator in Angular that allows a component to query and interact with a child element or component in its template. It’s essential for accessing DOM elements, directives, or child components programmatically, enabling dynamic manipulation or communication.
+
+### Key Characteristics
+- **Purpose**: Access a single child element, directive, or component in the template.
+- **Decorator**: `@ViewChild` queries the template using a selector (e.g., component class, element reference, or template reference variable).
+- **Timing**: Available after the component’s view is initialized (`ngAfterViewInit` lifecycle hook).
+- **Use Cases**: Manipulate DOM elements (e.g., focus an input), call methods on child components, or access directive properties.
+
+### Syntax
+```typescript
+@ViewChild(selector, { static: boolean }) propertyName: Type;
+```
+- `selector`: The child component, directive, or template reference variable (e.g., `#myInput`).
+- `static`: Set to `true` for elements available in `ngOnInit` (static queries) or `false` for dynamic elements (available in `ngAfterViewInit`).
+- `propertyName`: The property in the component to store the reference.
+- `Type`: The type of the queried element (e.g., `ElementRef`, `ChildComponent`).
+
+### Example: Accessing a DOM Element
+Create a component that focuses an input field using `ViewChild`.
+
+#### Component Code
+```typescript
+// src/app/input-focus/input-focus.ts
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+
+@Component({
+  selector: 'app-input-focus',
+  standalone: true,
+  templateUrl: './input-focus.html',
+  styleUrl: './input-focus.css'
+})
+export class InputFocusComponent implements AfterViewInit {
+  @ViewChild('myInput', { static: false }) inputElement!: ElementRef<HTMLInputElement>;
+
+  ngAfterViewInit() {
+    this.inputElement.nativeElement.focus();
+  }
+
+  clearInput() {
+    this.inputElement.nativeElement.value = '';
+    this.inputElement.nativeElement.focus();
+  }
+}
+```
+
+#### Template
+```html
+<!-- src/app/input-focus/input-focus.html -->
+<div>
+  <h2>Input Focus Demo</h2>
+  <input #myInput placeholder="Type something">
+  <button (click)="clearInput()">Clear and Focus</button>
+</div>
+```
+
+#### Styles
+```css
+/* src/app/input-focus/input-focus.css */
+input {
+  padding: 8px;
+  margin-right: 10px;
+  width: 200px;
+}
+button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;tasks.length === 0"
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
+```
+
+#### Explanation
+- `@ViewChild('myInput')` queries the input element with the `#myInput` template reference.
+- `ElementRef` provides access to the native DOM element (`nativeElement`).
+- `ngAfterViewInit` ensures the view is ready before calling `focus()`.
+- The `clearInput` method clears the input and refocuses it.
+
+### Example: Interacting with a Child Component
+Create a parent component that interacts with a child component using `ViewChild`.
+
+#### Child Component
+```typescript
+// src/app/child/child.ts
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-child',
+  standalone: true,
+  template: `<p>Child Counter: {{ counter }}</p>`
+})
+export class ChildComponent {
+  counter = 0;
+
+  increment() {
+    this.counter++;
+  }
+}
+```
+
+#### Parent Component
+```typescript
+// src/app/parent/parent.ts
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { ChildComponent } from '../child/child';
+
+@Component({
+  selector: 'app-parent',
+  standalone: true,
+  imports: [ChildComponent],
+  templateUrl: './parent.html',
+  styleUrl: './parent.css'
+})
+export class ParentComponent implements AfterViewInit {
+  @ViewChild(ChildComponent) child!: ChildComponent;
+
+  ngAfterViewInit() {
+    console.log('Child component loaded:', this.child);
+  }
+
+  incrementChildCounter() {
+    this.child.increment();
+  }
+}
+```
+
+#### Template
+```html
+<!-- src/app/parent/parent.html -->
+<div>
+  <h2>Parent Component</h2>
+  <app-child></app-child>
+  <button (click)="incrementChildCounter()">Increment Child Counter</button>
+</div>
+```
+
+#### Styles
+```css
+/* src/app/parent/parent.css */
+button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+button:hover {
+  background-color: #0056b3;
+}
+```
+
+#### Explanation
+- `@ViewChild(ChildComponent)` queries the `ChildComponent` instance.
+- The parent calls `increment()` on the child to update its counter.
+- `ngAfterViewInit` ensures the child is available before interaction.
+
+### Teaching Tips
+- **Demo**: Build the input focus example live using `ng generate component input-focus`. Show how to inspect the focused input in the browser.
+- **Exercise**: Create a parent-child component pair where the parent resets a child’s form input using `ViewChild`.
+- **Key Point**: Highlight the importance of lifecycle hooks (`ngAfterViewInit`) and the difference between static and dynamic queries.
+
+## Resources
+- **Official Documentation**:
+  - `ng-container`: [https://angular.dev/guide/templates/structural-directives#ng-container](https://angular.dev/guide/templates/structural-directives#ng-container)
+  - `ViewChild`: [https://angular.dev/api/core/ViewChild](https://angular.dev/api/core/ViewChild)
+- **Angular Tutorials**: [https://angular.dev/tutorials](https://angular.dev/tutorials)
+
+## Exercises
+1. **ng-container**: Refactor the task list from the structural directives section to use `ng-container` with `@for`, adding a conditional “Completed” badge for tasks.
+2. **ViewChild**: Create a component with a text area and a button. Use `ViewChild` to count the words in the text area when the button is clicked and display the count.
+3. **Combined**: Build a component that uses `ng-container` to conditionally display a list of users and `ViewChild` to focus an input field for adding new users.
+
+## Additional Content
+
+* Pipes
+* Component Communication (Input/Output)
+* Reactive Forms
+* Routing and Navigation
+* Services and Dependency Injection

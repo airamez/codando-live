@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
 // import { DataFormDemo } from './data-form-demo/data-form-demo';
 // import { TaskList } from './task-list/task-list';
 import { TaskListModern } from './task-list-modern/task-list-modern';
+import { UserProfile } from './user-profile/user-profile';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ import { TaskListModern } from './task-list-modern/task-list-modern';
     // BindingDemo,
     // DataFormDemo,
     // TaskList,
-    TaskListModern
+    // TaskListModern,
+    UserProfile
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="left-panel">
+    <h2>User Profile</h2>
+    <div>
+      <input type="text" [(ngModel)]="inputUsername" placeholder="Enter username">
+      <button (click)="checkPremiumStatus()">Login</button>
+    </div>
+    <ng-container *ngIf="user.name; else noUsername">
+      <ng-container *ngIf="user.isPremium; else notPremium">
+        <p>Premium Member: {{ user.name }}</p>
+        <p>Enjoy exclusive benefits!</p>
+      </ng-container>
+      <ng-template #notPremium>
+        <p>{{ user.name }} is a standard user.</p>
+      </ng-template>
+    </ng-container>
+    <ng-template #noUsername>
+      <p>Please enter a username.</p>
+    </ng-template>
+  </div>
+  <div class="right-panel">
+    <h3>Premium Users</h3>
+    <ul>
+      <ng-container *ngFor="let premiumUser of premiumUsers">
+        <li>{{ premiumUser }}</li>
+      </ng-container>
+    </ul>
+  </div>
+</div>
