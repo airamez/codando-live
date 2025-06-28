@@ -868,6 +868,10 @@ button:hover {
   * The `<ng-container *ngIf="user.isPremium">` groups two `<p>` elements without adding a wrapper `<div>` to the DOM.
   * If `user.isPremium` is `true`, both premium messages are shown; if `false`, only the standard user message appears.
   * Inspecting the DOM shows no extra elements from `ng-container`, keeping the structure clean.
+* Demo
+  * [_10_Angular/my-app/src/app/user-profile/user-profile.css](../_10_Angular/src/app/user-profile/user-profile.css)
+  * [_10_Angular/src/app/user-profile/user-profile.html](../_10_Angular/src/app/user-profile/user-profile.html)
+  * [_10_Angular/src/app/user-profile/user-profile.ts](../_10_Angular/src/app/user-profile/user-profile.ts)
 
 ## ViewChild
 
