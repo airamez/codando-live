@@ -265,7 +265,7 @@
 
 ### TypeScript
 
-### Angular
+### Angular 
 
 ## VIM
 
