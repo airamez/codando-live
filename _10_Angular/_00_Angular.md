@@ -875,188 +875,100 @@ button:hover {
 
 ## ViewChild
 
-`ViewChild` is a decorator in Angular that allows a component to query and interact with a child element or component in its template. It’s essential for accessing DOM elements, directives, or child components programmatically, enabling dynamic manipulation or communication.
+* [`ViewChild`](https://angular.dev/api/core/ViewChild) is a decorator in Angular that allows a component to query and interact with a child element or component in its template.
+* It’s essential for accessing DOM elements, directives, or child components programmatically, enabling dynamic manipulation or communication.
 
-### Key Characteristics
-- **Purpose**: Access a single child element, directive, or component in the template.
-- **Decorator**: `@ViewChild` queries the template using a selector (e.g., component class, element reference, or template reference variable).
-- **Timing**: Available after the component’s view is initialized (`ngAfterViewInit` lifecycle hook).
-- **Use Cases**: Manipulate DOM elements (e.g., focus an input), call methods on child components, or access directive properties.
+* Key Characteristics
+  * **Purpose**: Access a single child element, directive, or component in the template.
+  * **Decorator**: `@ViewChild` queries the template using a selector (e.g., component class, element reference, or template reference variable).
+  * **Timing**: Available after the component’s view is initialized (`ngAfterViewInit` lifecycle hook).
+  * **Use Cases**: Manipulate DOM elements (e.g., focus an input), call methods on child components, or access directive properties.
 
-### Syntax
-```typescript
-@ViewChild(selector, { static: boolean }) propertyName: Type;
-```
-- `selector`: The child component, directive, or template reference variable (e.g., `#myInput`).
-- `static`: Set to `true` for elements available in `ngOnInit` (static queries) or `false` for dynamic elements (available in `ngAfterViewInit`).
-- `propertyName`: The property in the component to store the reference.
-- `Type`: The type of the queried element (e.g., `ElementRef`, `ChildComponent`).
+* Syntax
 
-### Example: Accessing a DOM Element
+  ```typescript
+  @ViewChild(selector, { static: boolean }) propertyName: Type;
+  ```
+
+  * `selector`: The child component, directive, or template reference variable (e.g., `#myInput`).
+  * `static`: Set to `true` for elements available in `ngOnInit` (static queries) or `false` for dynamic elements (available in `ngAfterViewInit`).
+  * `propertyName`: The property in the component to store the reference.
+  * `Type`: The type of the queried element (e.g., `ElementRef`, `ChildComponent`).
+
+* Example: Accessing a DOM Element
 Create a component that focuses an input field using `ViewChild`.
 
-#### Component Code
-```typescript
-// src/app/input-focus/input-focus.ts
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+  * Template
 
-@Component({
-  selector: 'app-input-focus',
-  standalone: true,
-  templateUrl: './input-focus.html',
-  styleUrl: './input-focus.css'
-})
-export class InputFocusComponent implements AfterViewInit {
-  @ViewChild('myInput', { static: false }) inputElement!: ElementRef<HTMLInputElement>;
+    ```html
+    <!-- src/app/input-focus/input-focus.html -->
+    <div>
+      <h2>Input Focus Demo</h2>
+      <input #myInput placeholder="Type something">
+      <button (click)="clearInput()">Clear and Focus</button>
+    </div>
+    ```
 
-  ngAfterViewInit() {
-    this.inputElement.nativeElement.focus();
-  }
+  * Component Code
+  
+    ```typescript
+    // src/app/input-focus/input-focus.ts
+    import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
-  clearInput() {
-    this.inputElement.nativeElement.value = '';
-    this.inputElement.nativeElement.focus();
-  }
-}
-```
+    @Component({
+      selector: 'app-input-focus',
+      standalone: true,
+      templateUrl: './input-focus.html',
+      styleUrl: './input-focus.css'
+    })
+    export class InputFocusComponent implements AfterViewInit {
+      @ViewChild('myInput', { static: false }) inputElement!: ElementRef<HTMLInputElement>;
 
-#### Template
-```html
-<!-- src/app/input-focus/input-focus.html -->
-<div>
-  <h2>Input Focus Demo</h2>
-  <input #myInput placeholder="Type something">
-  <button (click)="clearInput()">Clear and Focus</button>
-</div>
-```
+      ngAfterViewInit() {
+        this.inputElement.nativeElement.focus();
+      }
 
-#### Styles
-```css
-/* src/app/input-focus/input-focus.css */
-input {
-  padding: 8px;
-  margin-right: 10px;
-  width: 200px;
-}
-button {
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;tasks.length === 0"
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button:hover {
-  background-color: #0056b3;
-}
-```
+      clearInput() {
+        this.inputElement.nativeElement.value = '';
+        this.inputElement.nativeElement.focus();
+      }
+    }
+    ```
 
-#### Explanation
-- `@ViewChild('myInput')` queries the input element with the `#myInput` template reference.
-- `ElementRef` provides access to the native DOM element (`nativeElement`).
-- `ngAfterViewInit` ensures the view is ready before calling `focus()`.
-- The `clearInput` method clears the input and refocuses it.
+  * Styles
 
-### Example: Interacting with a Child Component
-Create a parent component that interacts with a child component using `ViewChild`.
+    ```css
+    /* src/app/input-focus/input-focus.css */
+    input {
+      padding: 8px;
+      margin-right: 10px;
+      width: 200px;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;tasks.length === 0"
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    ```
 
-#### Child Component
-```typescript
-// src/app/child/child.ts
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-child',
-  standalone: true,
-  template: `<p>Child Counter: {{ counter }}</p>`
-})
-export class ChildComponent {
-  counter = 0;
-
-  increment() {
-    this.counter++;
-  }
-}
-```
-
-#### Parent Component
-```typescript
-// src/app/parent/parent.ts
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { ChildComponent } from '../child/child';
-
-@Component({
-  selector: 'app-parent',
-  standalone: true,
-  imports: [ChildComponent],
-  templateUrl: './parent.html',
-  styleUrl: './parent.css'
-})
-export class ParentComponent implements AfterViewInit {
-  @ViewChild(ChildComponent) child!: ChildComponent;
-
-  ngAfterViewInit() {
-    console.log('Child component loaded:', this.child);
-  }
-
-  incrementChildCounter() {
-    this.child.increment();
-  }
-}
-```
-
-#### Template
-```html
-<!-- src/app/parent/parent.html -->
-<div>
-  <h2>Parent Component</h2>
-  <app-child></app-child>
-  <button (click)="incrementChildCounter()">Increment Child Counter</button>
-</div>
-```
-
-#### Styles
-```css
-/* src/app/parent/parent.css */
-button {
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-button:hover {
-  background-color: #0056b3;
-}
-```
-
-#### Explanation
-- `@ViewChild(ChildComponent)` queries the `ChildComponent` instance.
-- The parent calls `increment()` on the child to update its counter.
-- `ngAfterViewInit` ensures the child is available before interaction.
-
-### Teaching Tips
-- **Demo**: Build the input focus example live using `ng generate component input-focus`. Show how to inspect the focused input in the browser.
-- **Exercise**: Create a parent-child component pair where the parent resets a child’s form input using `ViewChild`.
-- **Key Point**: Highlight the importance of lifecycle hooks (`ngAfterViewInit`) and the difference between static and dynamic queries.
-
-## Resources
-- **Official Documentation**:
-  - `ng-container`: [https://angular.dev/guide/templates/structural-directives#ng-container](https://angular.dev/guide/templates/structural-directives#ng-container)
-  - `ViewChild`: [https://angular.dev/api/core/ViewChild](https://angular.dev/api/core/ViewChild)
-- **Angular Tutorials**: [https://angular.dev/tutorials](https://angular.dev/tutorials)
-
-## Exercises
-1. **ng-container**: Refactor the task list from the structural directives section to use `ng-container` with `@for`, adding a conditional “Completed” badge for tasks.
-2. **ViewChild**: Create a component with a text area and a button. Use `ViewChild` to count the words in the text area when the button is clicked and display the count.
-3. **Combined**: Build a component that uses `ng-container` to conditionally display a list of users and `ViewChild` to focus an input field for adding new users.
+  * Explanation
+    * `@ViewChild('myInput')` queries the input element with the `#myInput` template reference.
+    * `ElementRef` provides access to the native DOM element (`nativeElement`).
+    * `ngAfterViewInit` ensures the view is ready before calling `focus()`.
+    * The `clearInput` method clears the input and refocuses it.
 
 ## Additional Content
 
-* Pipes
+* Component life cicle
+* Inner components
 * Component Communication (Input/Output)
+* Pipes
 * Reactive Forms
 * Routing and Navigation
 * Services and Dependency Injection
