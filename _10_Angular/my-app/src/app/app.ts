@@ -5,7 +5,8 @@ import { RouterOutlet } from '@angular/router';
 // import { DataFormDemo } from './data-form-demo/data-form-demo';
 // import { TaskList } from './task-list/task-list';
 // import { TaskListModern } from './task-list-modern/task-list-modern';
-import { UserProfile } from './user-profile/user-profile';
+// import { UserProfile } from './user-profile/user-profile';
+import { TextEditor } from './text-editor/text-editor';
 
 @Component({
   selector: 'app-root',
@@ -16,7 +17,8 @@ import { UserProfile } from './user-profile/user-profile';
     // DataFormDemo,
     // TaskList,
     // TaskListModern,
-    UserProfile
+    // UserProfile,
+    TextEditor
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

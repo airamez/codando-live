@@ -875,14 +875,13 @@ button:hover {
 
 ## ViewChild
 
-* [`ViewChild`](https://angular.dev/api/core/ViewChild) is a decorator in Angular that allows a component to query and interact with a child element or component in its template.
-* It’s essential for accessing DOM elements, directives, or child components programmatically, enabling dynamic manipulation or communication.
+`@ViewChild` is an Angular decorator that allows a component to access and interact with a child element, directive, or component in its template. It’s ideal for dynamic DOM manipulation, calling methods on child components, or accessing directive properties.
 
-* Key Characteristics
-  * **Purpose**: Access a single child element, directive, or component in the template.
-  * **Decorator**: `@ViewChild` queries the template using a selector (e.g., component class, element reference, or template reference variable).
-  * **Timing**: Available after the component’s view is initialized (`ngAfterViewInit` lifecycle hook).
-  * **Use Cases**: Manipulate DOM elements (e.g., focus an input), call methods on child components, or access directive properties.
+* Key Features
+  * **Purpose**: Query a single child element, directive, or component.
+  * **Selector**: Use a component class, element reference, or template reference variable (e.g., `#myRef`).
+  * **Static Option**: `{ static: true }` for queries in `ngOnInit`, `{ static: false }` for dynamic queries in `ngAfterViewInit`.
+   **Use Cases**: Focus inputs, manipulate child component state, interact with third-party libraries, or control DOM properties.
 
 * Syntax
 
@@ -890,64 +889,103 @@ button:hover {
   @ViewChild(selector, { static: boolean }) propertyName: Type;
   ```
 
-  * `selector`: The child component, directive, or template reference variable (e.g., `#myInput`).
-  * `static`: Set to `true` for elements available in `ngOnInit` (static queries) or `false` for dynamic elements (available in `ngAfterViewInit`).
-  * `propertyName`: The property in the component to store the reference.
-  * `Type`: The type of the queried element (e.g., `ElementRef`, `ChildComponent`).
+  * **`selector`**: Specifies what to query:
+    * A component class (e.g., `ChildComponent`).
+    * A string (e.g., `'#myElement'`) for a template reference variable.
+    * A directive (e.g., `NgModel`).
+  * **`{ static: boolean }`**: Optional configuration:
+    * `static: true`: Query resolves before view initialization (`ngOnInit`), for always-present elements.
+    * `static: false`: Query resolves after view initialization (`ngAfterViewInit`), for conditional or dynamic elements.
+    * Defaults to `false` if omitted.
+  * **`propertyName`**: The parent component’s property storing the child reference.
+  * **`Type`**: TypeScript type of the child (e.g., `ChildComponent`, `ElementRef`, `NgModel`) for type safety.
 
-* Example: Accessing a DOM Element
-Create a component that focuses an input field using `ViewChild`.
 
-  * Template
+* Example
 
-    ```html
-    <!-- src/app/input-focus/input-focus.html -->
-    <div>
-      <h2>Input Focus Demo</h2>
-      <input #myInput placeholder="Type something">
-      <button (click)="clearInput()">Clear and Focus</button>
+  * Template (`text-editor.component.html`)
+
+  ```html
+  <div class="editor-container">
+    <h2>Text Editor</h2>
+    <textarea #textArea placeholder="Write something..."></textarea>
+    <div class="controls">
+      <button (click)="focusTextArea()">Focus</button>
+      <button (click)="changeTextColor()">Change Color</button>
+      <button (click)="resizeTextArea()">Toggle Size</button>
+      <button (click)="countWords()">Count Words</button>
     </div>
-    ```
+    <p *ngIf="wordCount !== null">Word Count: {{ wordCount }}</p>
+  </div>
+  ```
 
-  * Component Code
-  
+  * Component (`input-focus.component.ts`)
+
     ```typescript
-    // src/app/input-focus/input-focus.ts
     import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
     @Component({
-      selector: 'app-input-focus',
+      selector: 'app-text-editor',
       standalone: true,
-      templateUrl: './input-focus.html',
-      styleUrl: './input-focus.css'
+      templateUrl: './text-editor.component.html',
+      styleUrls: ['./text-editor.component.css']
     })
-    export class InputFocusComponent implements AfterViewInit {
-      @ViewChild('myInput', { static: false }) inputElement!: ElementRef<HTMLInputElement>;
+    export class TextEditorComponent implements AfterViewInit {
+      @ViewChild('textArea', { static: false }) textArea!: ElementRef<HTMLTextAreaElement>;
+      wordCount: number | null = null;
+      isLarge: boolean = false;
+      colors: string[] = ['#000000', '#ff0000', '#00ff00', '#0000ff'];
+      colorIndex: number = 0;
 
       ngAfterViewInit() {
-        this.inputElement.nativeElement.focus();
+        this.textArea.nativeElement.focus();
       }
 
-      clearInput() {
-        this.inputElement.nativeElement.value = '';
-        this.inputElement.nativeElement.focus();
+      focusTextArea() {
+        this.textArea.nativeElement.focus();
+      }
+
+      changeTextColor() {
+        this.colorIndex = (this.colorIndex + 1) % this.colors.length;
+        this.textArea.nativeElement.style.color = this.colors[this.colorIndex];
+      }
+
+      resizeTextArea() {
+        this.isLarge = !this.isLarge;
+        this.textArea.nativeElement.style.height = this.isLarge ? '300px' : '100px';
+      }
+
+      countWords() {
+        const text = this.textArea.nativeElement.value.trim();
+        this.wordCount = text ? text.split(/\s+/).length : 0;
       }
     }
     ```
 
-  * Styles
+  * Styles (`input-focus.component.css`)
 
     ```css
-    /* src/app/input-focus/input-focus.css */
-    input {
-      padding: 8px;
-      margin-right: 10px;
-      width: 200px;
+    .editor-container {
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    .controls {
+      margin-top: 10px;
     }
     button {
       padding: 8px 16px;
+      margin-right: 10px;
       background-color: #007bff;
-      color: white;tasks.length === 0"
+      color: white;
       border: none;
       border-radius: 4px;
       cursor: pointer;
@@ -955,13 +993,11 @@ Create a component that focuses an input field using `ViewChild`.
     button:hover {
       background-color: #0056b3;
     }
+    p {
+      margin-top: 10px;
+      font-size: 16px;
+    }
     ```
-
-  * Explanation
-    * `@ViewChild('myInput')` queries the input element with the `#myInput` template reference.
-    * `ElementRef` provides access to the native DOM element (`nativeElement`).
-    * `ngAfterViewInit` ensures the view is ready before calling `focus()`.
-    * The `clearInput` method clears the input and refocuses it.
 
 ## Additional Content
 

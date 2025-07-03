@@ -1,0 +1,14 @@
+<div class="editor-container">
+  <h2>Text Editor</h2>
+  <textarea #textArea placeholder="Write something..."></textarea>
+  <div class="controls">
+    <button (click)="focusTextArea()">Focus</button>
+    <button (click)="changeTextColor()">Change Color</button>
+    <button (click)="resizeTextArea()">Toggle Size</button>
+    <button (click)="countWords()">Count Words</button>
+  </div>
+
+  @if (wordCount !== null){
+  <p>Word Count: {{ wordCount }}</p>
+  }
+</div>
