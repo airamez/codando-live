@@ -1,0 +1,83 @@
+.editor-container {
+  padding: 20px;
+  max-width: 500px;
+  margin: 20px auto;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  font-family: 'Arial', sans-serif;
+}
+
+h2,
+h3 {
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+select {
+  padding: 8px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #2a2a2a;
+  color: #ffffff;
+  width: 150px;
+}
+
+select:focus {
+  outline: none;
+  border-color: #888;
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #2a2a2a;
+  color: #ffffff;
+  box-sizing: border-box;
+}
+
+textarea::placeholder {
+  color: #888;
+}
+
+textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+textarea[readonly] {
+  background-color: #333;
+  height: 250px;
+  /* Tall log textarea */
+}
+
+p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #cccccc;
+}

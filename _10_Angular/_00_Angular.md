@@ -1003,11 +1003,258 @@ button:hover {
     }
     ```
 
+## Component Lifecycle
+
+* The [Angular component lifecycle](https://v17.angular.io/guide/lifecycle-hooks) consists of a series of stages that a component goes through from creation to destruction.
+* Angular provides **lifecycle hooks**—methods that allow developers to tap into these stages and execute custom logic.
+* Understanding the lifecycle is crucial for managing component initialization, updates, and cleanup effectively.
+
+### Key Lifecycle Hooks
+
+* Each lifecycle hook corresponds to a specific phase in a component’s lifecycle.
+* Below is a comprehensive list of the primary hooks, their purposes, and common use cases.
+
+1. **`ngOnChanges`**
+   - **Purpose**: Called when Angular detects changes to **input properties** of a component or directive (before `ngOnInit` and whenever inputs change).
+   - **When**: Invoked before the first rendering and after each change to input-bound properties.
+   - **Use Cases**:
+     - Respond to changes in `@Input` properties.
+     - Perform calculations or updates based on new input values.
+   - **Parameters**: Receives a `SimpleChanges` object containing current and previous values of changed inputs.
+   - **Example**:
+     ```typescript
+     ngOnChanges(changes: SimpleChanges) {
+       if (changes['inputData']) {
+         console.log('Input changed:', changes['inputData'].currentValue);
+       }
+     }
+     ```
+
+2. **`ngOnInit`**
+   - **Purpose**: Called **once** after the component’s inputs are set and the component is initialized.
+   - **When**: After the first `ngOnChanges` and before the view is rendered.
+   - **Use Cases**:
+     - Initialize component data, fetch initial data from services, or set up subscriptions.
+     - Perform setup that depends on input properties or component state.
+   - **Example**:
+     ```typescript
+     ngOnInit() {
+       this.loadData();
+     }
+     ```
+
+3. **`ngDoCheck`**
+   - **Purpose**: Called during every **change detection cycle**, allowing custom change detection logic.
+   - **When**: After `ngOnChanges` and `ngOnInit`, and on every change detection run.
+   - **Use Cases**:
+     - Implement custom change detection for complex objects or non-input properties.
+     - Rarely used due to performance implications; prefer Angular’s default change detection or `ngOnChanges`.
+   - **Example**:
+     ```typescript
+     ngDoCheck() {
+       if (this.customConditionChanged()) {
+         this.updateComponent();
+       }
+     }
+     ```
+
+4. **`ngAfterContentInit`**
+   - **Purpose**: Called **once** after Angular finishes projecting external content into the component’s view (via `<ng-content>`).
+   - **When**: After `ngDoCheck` and content projection is complete.
+   - **Use Cases**:
+     - Initialize logic that depends on projected content.
+     - Access queried content using `@ContentChild` or `@ContentChildren`.
+   - **Example**:
+     ```typescript
+     ngAfterContentInit() {
+       console.log('Projected content initialized');
+     }
+     ```
+
+5. **`ngAfterContentChecked`**
+   - **Purpose**: Called after every change detection cycle for projected content.
+   - **When**: After `ngAfterContentInit` and during every change detection run.
+   - **Use Cases**:
+     - Update state or perform checks on projected content after changes.
+   - **Example**:
+     ```typescript
+     ngAfterContentChecked() {
+       this.validateContent();
+     }
+     ```
+
+6. **`ngAfterViewInit`**
+   - **Purpose**: Called **once** after Angular fully initializes the component’s view and all child views.
+   - **When**: After `ngAfterContentChecked` and view initialization.
+   - **Use Cases**:
+     - Access or manipulate DOM elements or child components via `@ViewChild` or `@ViewChildren`.
+     - Perform initialization that requires the view to be fully rendered.
+   - **Example**:
+     ```typescript
+     ngAfterViewInit() {
+       this.textArea.nativeElement.focus();
+     }
+     ```
+
+7. **`ngAfterViewChecked`**
+   - **Purpose**: Called after every change detection cycle for the component’s view and child views.
+   - **When**: After `ngAfterViewInit` and during every change detection run.
+   - **Use Cases**:
+     - Perform checks or updates after the view and child views are updated.
+   - **Example**:
+     ```typescript
+     ngAfterViewChecked() {
+       this.checkViewState();
+     }
+     ```
+
+8. **`ngOnDestroy`**
+   - **Purpose**: Called **once** just before Angular destroys the component or directive.
+   - **When**: When the component is removed from the DOM.
+   - **Use Cases**:
+     - Clean up subscriptions, timers, or event listeners to prevent memory leaks.
+     - Perform final logging or state persistence.
+   - **Example**:
+     ```typescript
+     ngOnDestroy() {
+       this.subscription.unsubscribe();
+     }
+     ```
+
+### Lifecycle Sequence
+
+The lifecycle hooks are executed in the following order during a component’s lifecycle:
+
+1. `ngOnChanges` (if inputs change)
+2. `ngOnInit`
+3. `ngDoCheck`
+4. `ngAfterContentInit`
+5. `ngAfterContentChecked`
+6. `ngAfterViewInit`
+7. `ngAfterViewChecked`
+8. `ngOnChanges` (if inputs change again), `ngDoCheck`, `ngAfterContentChecked`, `ngAfterViewChecked` (repeated for each change detection cycle)
+9. `ngOnDestroy` (when component is destroyed)
+
+### Example: Component with Lifecycle Hooks
+
+* Template
+
+  ```html
+  <div class="editor-container">
+    <h2>Lifecycle Demo</h2>
+    <input [(ngModel)]="inputData" placeholder="Enter title" />
+    <textarea #textArea placeholder="Write something..."></textarea>
+    @if (wordCount !== null) {
+      <p>Word Count: {{ wordCount }}</p>
+    }
+    @if (charCount !== null) {
+      <p>Character Count: {{ charCount }}</p>
+    }
+  </div>
+  ```
+
+* Component
+
+  ```typescript
+  import { Component, ViewChild, ElementRef, AfterViewInit, OnChanges, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
+  import { FormsModule } from '@angular/forms';
+
+  @Component({
+    selector: 'app-lifecycle-demo',
+    standalone: true,
+    imports: [FormsModule],
+    templateUrl: './lifecycle-demo.component.html',
+    styleUrls: ['./lifecycle-demo.component.css']
+  })
+  export class LifecycleDemoComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
+    @ViewChild('textArea', { static: false }) textArea!: ElementRef<HTMLTextAreaElement>;
+    inputData: string = '';
+    wordCount: number | null = null;
+    charCount: number | null = null;
+    private intervalId: any; // Example timer
+
+    ngOnChanges(changes: SimpleChanges) {
+      console.log('ngOnChanges: Input changed', changes);
+      if (changes['inputData'] && this.textArea) {
+        this.textArea.nativeElement.value = this.inputData;
+        this.updateCounts();
+      }
+    }
+
+    ngOnInit() {
+      console.log('ngOnInit: Component initialized');
+      this.intervalId = setInterval(() => {
+        console.log('Component still active');
+      }, 5000);
+    }
+
+    ngAfterViewInit() {
+      console.log('ngAfterViewInit: View initialized');
+      this.textArea.nativeElement.focus();
+      // Add event listener for textarea changes
+      this.textArea.nativeElement.addEventListener('input', () => this.updateCounts());
+    }
+
+    ngOnDestroy() {
+      console.log('ngOnDestroy: Component destroyed');
+      clearInterval(this.intervalId);
+      // Remove event listener to prevent memory leaks
+      this.textArea.nativeElement.removeEventListener('input', () => this.updateCounts());
+    }
+
+    private updateCounts() {
+      const text = this.textArea.nativeElement.value.trim();
+      this.wordCount = text ? text.split(/\s+/).length : 0;
+      this.charCount = this.textArea.nativeElement.value.length;
+    }
+  }
+  ```
+
+* Style
+
+  ```css
+  .editor-container {
+    padding: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  textarea {
+    height: 100px;
+  }
+  p {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+  ```
+
+## Best Practices
+
+- **Use `ngOnInit` for Initialization**: Perform setup tasks like data fetching or subscriptions in `ngOnInit` rather than the constructor, as inputs are available here.
+- **Clean Up in `ngOnDestroy`**: Always unsubscribe from observables, clear intervals, or remove event listeners to prevent memory leaks.
+- **Avoid Heavy Logic in `ngDoCheck`**: This hook runs frequently, so keep it lightweight to avoid performance issues.
+- **Use `ngAfterViewInit` for View Access**: Access `@ViewChild` or `@ViewChildren` in `ngAfterViewInit` for dynamic queries to ensure the view is fully initialized.
+- **Leverage `ngOnChanges` for Input Changes**: Use this hook to react to input property changes efficiently instead of relying on `ngDoCheck`.
+- **Minimize DOM Manipulation**: Prefer Angular’s data-binding and directives over direct DOM manipulation, even when using `@ViewChild`.
+
+## Common Pitfalls
+
+- **Accessing `@ViewChild` Too Early**: If `{ static: false }`, ensure you access `@ViewChild` properties in `ngAfterViewInit`, not `ngOnInit`.
+- **Forgetting Cleanup**: Failing to unsubscribe in `ngOnDestroy` can cause memory leaks, especially with long-lived subscriptions.
+- **Overusing `ngDoCheck`**: Relying on `ngDoCheck` for change detection can degrade performance; use Angular’s change detection or `ngOnChanges` instead.
+- **Misusing `static` in `@ViewChild`**: Use `{ static: true }` only for elements or components that are always present; otherwise, use `{ static: false }`.
+
 ## Additional Content
 
-* Component life cicle
-* Inner components
 * Component Communication (Input/Output)
+* Inner components
 * Pipes
 * Reactive Forms
 * Routing and Navigation
