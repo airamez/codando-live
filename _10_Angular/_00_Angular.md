@@ -875,13 +875,14 @@ button:hover {
 
 ## ViewChild
 
-`@ViewChild` is an Angular decorator that allows a component to access and interact with a child element, directive, or component in its template. It’s ideal for dynamic DOM manipulation, calling methods on child components, or accessing directive properties.
+* [`@ViewChild`](https://angular.dev/api/core/ViewChild) is an Angular decorator that allows a component to access and interact with a child element, directive, or component in its template.
+* It’s ideal for dynamic DOM manipulation, calling methods on child components, or accessing directive properties.
 
 * Key Features
   * **Purpose**: Query a single child element, directive, or component.
   * **Selector**: Use a component class, element reference, or template reference variable (e.g., `#myRef`).
   * **Static Option**: `{ static: true }` for queries in `ngOnInit`, `{ static: false }` for dynamic queries in `ngAfterViewInit`.
-   **Use Cases**: Focus inputs, manipulate child component state, interact with third-party libraries, or control DOM properties.
+  * **Use Cases**: Focus inputs, manipulate child component state, interact with third-party libraries, or control DOM properties.
 
 * Syntax
 
@@ -903,23 +904,26 @@ button:hover {
 
 * Example
 
-  * Template (`text-editor.component.html`)
+  * Template
 
-  ```html
-  <div class="editor-container">
-    <h2>Text Editor</h2>
-    <textarea #textArea placeholder="Write something..."></textarea>
-    <div class="controls">
-      <button (click)="focusTextArea()">Focus</button>
-      <button (click)="changeTextColor()">Change Color</button>
-      <button (click)="resizeTextArea()">Toggle Size</button>
-      <button (click)="countWords()">Count Words</button>
+    ```html
+    <div class="editor-container">
+      <h2>Text Editor</h2>
+      <textarea #textArea placeholder="Write something..."></textarea>
+      <div class="controls">
+        <button (click)="focusTextArea()">Focus</button>
+        <button (click)="changeTextColor()">Change Color</button>
+        <button (click)="resizeTextArea()">Toggle Size</button>
+        <button (click)="countWords()">Count Words</button>
+      </div>
+
+      @if (wordCount !== null){
+      <p>Word Count: {{ wordCount }}</p>
+      }
     </div>
-    <p *ngIf="wordCount !== null">Word Count: {{ wordCount }}</p>
-  </div>
-  ```
+    ```
 
-  * Component (`input-focus.component.ts`)
+  * Component
 
     ```typescript
     import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
@@ -962,7 +966,7 @@ button:hover {
     }
     ```
 
-  * Styles (`input-focus.component.css`)
+  * Style
 
     ```css
     .editor-container {
