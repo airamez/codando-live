@@ -1024,9 +1024,15 @@ button:hover {
    - **Example**:
      ```typescript
      ngOnChanges(changes: SimpleChanges) {
-       if (changes['inputData']) {
-         console.log('Input changed:', changes['inputData'].currentValue);
+       let logMessage = 'ngOnChanges: Changes detected\n';
+       for (const propName of Object.keys(changes)) {
+         const change = changes[propName];
+         const from = JSON.stringify(change.previousValue);
+         const to = JSON.stringify(change.currentValue);
+         logMessage += `  ${propName}: Previous = ${from}, Current = ${to}\n`;
        }
+       this.logs.push(logMessage);
+       console.log(logMessage.trim());
      }
      ```
 

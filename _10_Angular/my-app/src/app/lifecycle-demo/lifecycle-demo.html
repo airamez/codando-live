@@ -1,11 +1,12 @@
 <div class="editor-container">
   <h2>Lifecycle Demo</h2>
   <div class="controls">
-    <select #colorSelect></select>
-    <select #targetSelect>
-      <option value="color">Text Color</option>
-      <option value="background-color">Background Color</option>
+    <select #colorSelect>
+      @for (color of colors; track color.value) {
+      <option [value]="color.value">{{ color.label }}</option>
+      }
     </select>
+    <select #targetSelect></select>
     <button #applyButton>Apply</button>
   </div>
   <textarea #textArea placeholder="Write something..."></textarea>
