@@ -1,0 +1,8 @@
+<div class="color-selector">
+  <label>{{ label }}</label>
+  <select [(ngModel)]="selectedColor" (ngModelChange)="onColorChange()">
+    @for (color of colors; track color.value) {
+    <option [value]="color.value">{{ color.label }}</option>
+    }
+  </select>
+</div>

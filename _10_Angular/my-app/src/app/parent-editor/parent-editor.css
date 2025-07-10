@@ -1,0 +1,41 @@
+.editor-container {
+  padding: 20px;
+  max-width: 1250px;
+  margin: 20px auto;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  font-family: 'Arial', sans-serif;
+}
+
+h2 {
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #444;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: #2a2a2a;
+  color: #ffffff;
+  box-sizing: border-box;
+}
+
+textarea::placeholder {
+  color: #888;
+}
+
+textarea {
+  height: 100px;
+  resize: vertical;
+}

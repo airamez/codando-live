@@ -498,86 +498,14 @@ Use `else` to display alternative content when the condition is `false`.
 
 * Example: Task List. Create a component to display and add tasks.
 
-```html
-<div>
-  <input [(ngModel)]="task" placeholder="Add a new task">
-  <button (click)="addTask()">Add</button>
-  <p *ngIf="tasks.length === 0">No tasks available.</p>
-  <ul *ngIf="tasks.length > 0">
-    <li *ngFor="let task of tasks; let i = index;">
-      {{ i + 1 }}. {{ task }}
-    </li>
-  </ul>
-</div>
-```
-
-```typescript
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-
-@Component({
-  selector: 'task-list',
-  imports: [FormsModule, CommonModule],
-  templateUrl: './task-list.html',
-  styleUrl: './task-list.css'
-})
-export class TaskList {
-  task = "";
-  tasks: string[] = [];
-
-  addTask() {
-    if (this.task.length > 0) {
-      this.tasks.push(this.task);
-    }
-    this.task = "";
-  }
-}
-```
-
-```css
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-}
-input {
-  padding: 8px;
-  margin-bottom: 10px;
-  width: 200px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-p {
-  color: #888;
-  text-align: left;
-}
-button {
-  padding: 8px 16px;
-  margin-left: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-button:hover {
-  background-color: #0056b3;
-}
-```
-
-* **Explanation**:
-  * `*ngFor` renders an `<li>` for each task in the `tasks` array.
-  * `let i = index` provides a numbered list.
-  * `*ngIf` shows a message when the list is empty.
-
 * Demo: Task List
   * [_10_Angular/my-app/src/app/task-list/task-list.css](../_10_Angular/my-app/src/app/task-list/task-list.css)
   * [_10_Angular/my-app/src/app/task-list/task-list.html](../_10_Angular/my-app/src/app/task-list/task-list.html)
   * [_10_Angular/my-app/src/app/task-list/task-list.ts](../_10_Angular/my-app/src/app/task-list/task-list.ts)
+  * **Explanation**:
+    * `*ngFor` renders an `<li>` for each task in the `tasks` array.
+    * `let i = index` provides a numbered list.
+    * `*ngIf` shows a message when the list is empty.
 
 ### Modern Control Flow: `@if` and `@for`
 
@@ -655,63 +583,9 @@ button:hover {
   ```
 
   * Example: Task List with `@for`
-
-  ```html
-  <div>
-    <h2>Task Manager Modern</h2>
-    <input [(ngModel)]="task" placeholder="Add a new task">
-    <button (click)="addTask()">Add</button>
-    @for (task of tasks; track task; let i = $index) {
-      <li>{{ i + 1 }}. {{ task }}</li>
-    } @empty {
-      <p>No tasks available.</p>
-    }
-  </div>
-  ```
-
-  ```typescript
-  import { Component } from '@angular/core';
-  import { FormsModule } from '@angular/forms';
-
-  @Component({
-    selector: 'task-list-modern',
-    imports: [FormsModule],
-    templateUrl: './task-list-modern.html',
-    styleUrl: './task-list-modern.css'
-  })
-  export class TaskListModern {
-    task = "";
-    tasks: string[] = [];
-
-    addTask() {
-      if (this.task.length > 0) {
-        this.tasks.push(this.task);
-      }
-      this.task = "";
-    }
-  }
-  ```
-
-  ```css
-  /* src/app/task-list-modern/task-list-modern.css */
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  li {
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
-  }
-  input {
-    padding: 8px;
-    margin-bottom: 10px;
-    width: 200px;
-  }
-  p {
-    color: #888;
-    text-align: center;
-  }
-  ```
+    * [user-profile.html](./my-app/src/app/task-list-modern/task-list-modern.html)
+    * [user-profile.css](./my-app/src/app/task-list-modern/task-list-modern.css)
+    * [user-profile.ts](./my-app/src/app/task-list-modern/task-list-modern.ts)
 
   * **Explanation**:
     * `@for` iterates over `tasks`, with `track task` optimizing updates.
@@ -743,126 +617,11 @@ button:hover {
 * Example: Conditional Grouping with `ng-container`
   * Component to display a user profile conditionally without adding extra DOM elements.
 
-  ```html
-  <div class="container">
-    <div class="left-panel">
-      <h2>User Profile</h2>
-      <div>
-        <input type="text" [(ngModel)]="inputUsername" placeholder="Enter username">
-        <button (click)="checkPremiumStatus()">Login</button>
-      </div>
-      <ng-container *ngIf="user.name; else noUsername">
-        <ng-container *ngIf="user.isPremium; else notPremium">
-          <p>Premium Member: {{ user.name }}</p>
-          <p>Enjoy exclusive benefits!</p>
-        </ng-container>
-        <ng-template #notPremium>
-          <p>{{ user.name }} is a standard user.</p>
-        </ng-template>
-      </ng-container>
-      <ng-template #noUsername>
-        <p>Please enter a username.</p>
-      </ng-template>
-    </div>
-    <div class="right-panel">
-      <h3>Premium Users</h3>
-      <ul>
-        <ng-container *ngFor="let premiumUser of premiumUsers">
-          <li>{{ premiumUser }}</li>
-        </ng-container>
-      </ul>
-    </div>
-  </div>
-  ```
-
-  ```typescript
-  import { Component } from '@angular/core';
-  import { CommonModule } from '@angular/common';
-  import { FormsModule } from '@angular/forms';
-
-  @Component({
-    selector: 'user-profile',
-    standalone: true,
-    imports: [CommonModule, FormsModule],
-    templateUrl: './user-profile.html',
-    styleUrl: './user-profile.css'
-  })
-  export class UserProfile {
-    user = { name: '', isPremium: false };
-    premiumUsers = ['leila', 'jose', 'artur'];
-    inputUsername: string = '';
-
-    checkPremiumStatus() {
-      this.user.name = this.inputUsername;
-      this.user.isPremium = this.premiumUsers.includes(this.inputUsername.toLowerCase());
-    }
-  }
-  ```
-
-  ```css
-  .container {
-    display: flex;
-    gap: 20px;
-    background-color: #1e1e1e;
-    color: #e0e0e0;
-    padding: 16px;
-    border-radius: 8px;
-  }
-  .left-panel, .right-panel {
-    flex: 1;
-  }
-  p {
-    margin: 8px 0;
-  }
-  input {
-    padding: 8px;
-    margin: 8px 0;
-    border: 1px solid #444;
-    border-radius: 4px;
-    width: 100px;
-    background-color: #2a2a2a;
-    color: #e0e0e0;
-  }
-  input:focus {
-    outline: none;
-    border-color: #1e90ff;
-    box-shadow: 0 0 4px rgba(30, 144, 255, 0.5);
-  }
-  input::placeholder {
-    color: #888;
-  }
-  h3 {
-    margin: 8px 0;
-  }
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  li {
-    padding: 4px 0;
-    border-bottom: 1px solid #444;
-  }
-  button {
-    padding: 8px 16px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    background-color: #1e90ff;
-    color: #e0e0e0;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s ease;
-  }
-
-  button:hover {
-    background-color: #1c86ee;
-  }
-
-  button:focus {
-    outline: none;
-    box-shadow: 0 0 4px rgba(30, 144, 255, 0.5);
-  }
-  ```
+* Example
+  * [user-profile.html](./my-app/src/app/user-profile/user-profile.html)
+  * [user-profile.css](./my-app/src/app/user-profile/user-profile.css)
+  * [user-profile.ts](./my-app/src/app/user-profile/user-profile.ts)
+ 
 
 * Explanation
   * The `<ng-container *ngIf="user.isPremium">` groups two `<p>` elements without adding a wrapper `<div>` to the DOM.
@@ -903,105 +662,9 @@ button:hover {
 
 
 * Example
-
-  * Template
-
-    ```html
-    <div class="editor-container">
-      <h2>Text Editor</h2>
-      <textarea #textArea placeholder="Write something..."></textarea>
-      <div class="controls">
-        <button (click)="focusTextArea()">Focus</button>
-        <button (click)="changeTextColor()">Change Color</button>
-        <button (click)="resizeTextArea()">Toggle Size</button>
-        <button (click)="countWords()">Count Words</button>
-      </div>
-
-      @if (wordCount !== null){
-      <p>Word Count: {{ wordCount }}</p>
-      }
-    </div>
-    ```
-
-  * Component
-
-    ```typescript
-    import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-
-    @Component({
-      selector: 'app-text-editor',
-      standalone: true,
-      templateUrl: './text-editor.component.html',
-      styleUrls: ['./text-editor.component.css']
-    })
-    export class TextEditorComponent implements AfterViewInit {
-      @ViewChild('textArea', { static: false }) textArea!: ElementRef<HTMLTextAreaElement>;
-      wordCount: number | null = null;
-      isLarge: boolean = false;
-      colors: string[] = ['#000000', '#ff0000', '#00ff00', '#0000ff'];
-      colorIndex: number = 0;
-
-      ngAfterViewInit() {
-        this.textArea.nativeElement.focus();
-      }
-
-      focusTextArea() {
-        this.textArea.nativeElement.focus();
-      }
-
-      changeTextColor() {
-        this.colorIndex = (this.colorIndex + 1) % this.colors.length;
-        this.textArea.nativeElement.style.color = this.colors[this.colorIndex];
-      }
-
-      resizeTextArea() {
-        this.isLarge = !this.isLarge;
-        this.textArea.nativeElement.style.height = this.isLarge ? '300px' : '100px';
-      }
-
-      countWords() {
-        const text = this.textArea.nativeElement.value.trim();
-        this.wordCount = text ? text.split(/\s+/).length : 0;
-      }
-    }
-    ```
-
-  * Style
-
-    ```css
-    .editor-container {
-      padding: 20px;
-      max-width: 500px;
-      margin: 0 auto;
-    }
-    textarea {
-      width: 100%;
-      height: 100px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-    .controls {
-      margin-top: 10px;
-    }
-    button {
-      padding: 8px 16px;
-      margin-right: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    p {
-      margin-top: 10px;
-      font-size: 16px;
-    }
-    ```
+  * [text-editor.html](./my-app/src/app/text-editor/text-editor.html)
+  * [text-editor.css](./my-app/src/app/text-editor/text-editor.css)
+  * [text-editor.ts](./my-app/src/app/text-editor/text-editor.ts)
 
 ## Component Lifecycle
 
@@ -1141,126 +804,148 @@ The lifecycle hooks are executed in the following order during a component’s l
 8. `ngOnChanges` (if inputs change again), `ngDoCheck`, `ngAfterContentChecked`, `ngAfterViewChecked` (repeated for each change detection cycle)
 9. `ngOnDestroy` (when component is destroyed)
 
-### Example: Component with Lifecycle Hooks
+## Nested Components
 
-* Template
+* In Angular, **Nested components** refer to scenarios where one component (the parent) contains or depends on another component (the child) within its template.
+* This parent-child relationship enables **component composition**, allowing reusable, modular, and maintainable UI structures.
+* Nested components communicate through **input properties** (`@Input`), **output events** (`@Output`), or **services**, facilitating data flow and interaction.
 
-  ```html
-  <div class="editor-container">
-    <h2>Lifecycle Demo</h2>
-    <input [(ngModel)]="inputData" placeholder="Enter title" />
-    <textarea #textArea placeholder="Write something..."></textarea>
-    @if (wordCount !== null) {
-      <p>Word Count: {{ wordCount }}</p>
-    }
-    @if (charCount !== null) {
-      <p>Character Count: {{ charCount }}</p>
-    }
-  </div>
-  ```
+### Key Concepts of Nested Components
 
-* Component
+* **Parent-Child Relationship**: A parent component includes a child component in its template using the child’s selector (e.g., `<child><child>`).
+* **Component Communication**:
+  - **Inputs**: Pass data from parent to child using `@Input` bindings.
+  - **Outputs**: Emit events from child to parent using `@Output` and `EventEmitter`.
+  - **ViewChild/ContentChild**: Access child component instances for direct interaction.
+* **Lifecycle Interaction**: Child components have their own lifecycle hooks, which are triggered within the context of the parent’s lifecycle.
+* Understanding Nested components is essential for building complex UIs with reusable, encapsulated functionality.
 
-  ```typescript
-  import { Component, ViewChild, ElementRef, AfterViewInit, OnChanges, OnInit, OnDestroy, SimpleChanges } from '@angular/core';
-  import { FormsModule } from '@angular/forms';
+### Mechanisms for Nested Components
 
-  @Component({
-    selector: 'app-lifecycle-demo',
-    standalone: true,
-    imports: [FormsModule],
-    templateUrl: './lifecycle-demo.component.html',
-    styleUrls: ['./lifecycle-demo.component.css']
-  })
-  export class LifecycleDemoComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('textArea', { static: false }) textArea!: ElementRef<HTMLTextAreaElement>;
-    inputData: string = '';
-    wordCount: number | null = null;
-    charCount: number | null = null;
-    private intervalId: any; // Example timer
+1. **Using `@Input` for Parent-to-Child Communication**
+   - **Purpose**: Allows a parent component to pass data to a child component’s input properties.
+   - **When**: Used when the child needs data or configuration from the parent.
+   - **Use Cases**:
+     - Displaying data provided by the parent (e.g., a list of items).
+     - Configuring child component behavior (e.g., setting a default color).
+   - **Example**:
+     ```typescript
+     // Child Component
+     @Component({
+       selector: 'app-child',
+       template: '<p>Received: {{ data }}</p>'
+     })
+     export class ChildComponent {
+       @Input() data: string = '';
+     }
 
-    ngOnChanges(changes: SimpleChanges) {
-      console.log('ngOnChanges: Input changed', changes);
-      if (changes['inputData'] && this.textArea) {
-        this.textArea.nativeElement.value = this.inputData;
-        this.updateCounts();
-      }
-    }
+     // Parent Template
+     <app-child [data]="parentData"></app-child>
+     ```
 
-    ngOnInit() {
-      console.log('ngOnInit: Component initialized');
-      this.intervalId = setInterval(() => {
-        console.log('Component still active');
-      }, 5000);
-    }
+2. **Using `@Output` for Child-to-Parent Communication**
+   - **Purpose**: Enables a child component to emit events to notify the parent of changes or actions.
+   - **When**: Triggered when the child performs an action (e.g., button click) that the parent needs to handle.
+   - **Use Cases**:
+     - Notifying the parent of user interactions (e.g., form submission).
+     - Sending updated data back to the parent.
+   - **Example**:
+     ```typescript
+     // Child Component
+     @Component({
+       selector: 'app-child',
+       template: '<button (click)="emitEvent()">Click</button>'
+     })
+     export class ChildComponent {
+       @Output() action = new EventEmitter<string>();
+       emitEvent() {
+         this.action.emit('Child clicked');
+       }
+     }
 
-    ngAfterViewInit() {
-      console.log('ngAfterViewInit: View initialized');
-      this.textArea.nativeElement.focus();
-      // Add event listener for textarea changes
-      this.textArea.nativeElement.addEventListener('input', () => this.updateCounts());
-    }
+     // Parent Template
+     <app-child (action)="handleChildEvent($event)"></app-child>
+     ```
 
-    ngOnDestroy() {
-      console.log('ngOnDestroy: Component destroyed');
-      clearInterval(this.intervalId);
-      // Remove event listener to prevent memory leaks
-      this.textArea.nativeElement.removeEventListener('input', () => this.updateCounts());
-    }
+3. **Using `@ViewChild` to Access Child Components**
+   - **Purpose**: Allows the parent to directly access and interact with a child component’s properties or methods.
+   - **When**: After the view is initialized (`ngAfterViewInit`), when direct manipulation of the child is needed.
+   - **Use Cases**:
+     - Calling a child’s method (e.g., reset a form).
+     - Reading or updating a child’s state programmatically.
+   - **Example**:
+     ```typescript
+     // Parent Component
+     @Component({
+       selector: 'app-parent',
+       template: '<child #childRef></child><button (click)="callChild()">Call Child</button>'
+     })
+     export class ParentComponent {
+       @ViewChild('childRef') child!: ChildComponent;
+       callChild() {
+         this.child.someMethod();
+       }
+     }
+     ```
 
-    private updateCounts() {
-      const text = this.textArea.nativeElement.value.trim();
-      this.wordCount = text ? text.split(/\s+/).length : 0;
-      this.charCount = this.textArea.nativeElement.value.length;
-    }
-  }
-  ```
+4. **Using `<ng-content>` for Content Projection**
+   - **Purpose**: Allows the parent to project content (HTML or components) into the child’s template.
+   - **When**: When the child component acts as a container or wrapper for custom content.
+   - **Use Cases**:
+     - Creating reusable layouts (e.g., modals) with customizable content.
+     - Embedding dynamic content in a child component.
+   - **Example**:
+     ```typescript
+     // Child Component
+     @Component({
+       selector: 'child',
+       template: '<div class="container"><ng-content></ng-content></div>'
+     })
+     export class ChildComponent {}
 
-* Style
+     // Parent Template
+     <child><p>Projected content</p></child>
+     ```
 
-  ```css
-  .editor-container {
-    padding: 20px;
-    max-width: 500px;
-    margin: 0 auto;
-  }
-  input, textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  textarea {
-    height: 100px;
-  }
-  p {
-    margin-top: 10px;
-    font-size: 16px;
-  }
-  ```
+### Nested Component Lifecycle Interaction
 
-## Best Practices
+* **Child Lifecycle**: Each child component has its own lifecycle hooks (`ngOnInit`, `ngAfterViewInit`, etc.), which run independently but are triggered within the parent’s lifecycle.
+* **Order**:
+  - Parent’s `ngOnInit` runs before child’s `ngOnInit`.
+  - Child’s view initialization (`ngAfterViewInit`) completes before the parent’s `ngAfterViewInit`.
+  - When the parent is destroyed, all children are destroyed, triggering their `ngOnDestroy` before the parent’s.
+* **Use Case**: Use child lifecycle hooks to initialize child-specific data or clean up child resources, while coordinating with the parent’s lifecycle for overall control.
 
-- **Use `ngOnInit` for Initialization**: Perform setup tasks like data fetching or subscriptions in `ngOnInit` rather than the constructor, as inputs are available here.
-- **Clean Up in `ngOnDestroy`**: Always unsubscribe from observables, clear intervals, or remove event listeners to prevent memory leaks.
-- **Avoid Heavy Logic in `ngDoCheck`**: This hook runs frequently, so keep it lightweight to avoid performance issues.
-- **Use `ngAfterViewInit` for View Access**: Access `@ViewChild` or `@ViewChildren` in `ngAfterViewInit` for dynamic queries to ensure the view is fully initialized.
-- **Leverage `ngOnChanges` for Input Changes**: Use this hook to react to input property changes efficiently instead of relying on `ngDoCheck`.
-- **Minimize DOM Manipulation**: Prefer Angular’s data-binding and directives over direct DOM manipulation, even when using `@ViewChild`.
-
-## Common Pitfalls
-
-- **Accessing `@ViewChild` Too Early**: If `{ static: false }`, ensure you access `@ViewChild` properties in `ngAfterViewInit`, not `ngOnInit`.
-- **Forgetting Cleanup**: Failing to unsubscribe in `ngOnDestroy` can cause memory leaks, especially with long-lived subscriptions.
-- **Overusing `ngDoCheck`**: Relying on `ngDoCheck` for change detection can degrade performance; use Angular’s change detection or `ngOnChanges` instead.
-- **Misusing `static` in `@ViewChild`**: Use `{ static: true }` only for elements or components that are always present; otherwise, use `{ static: false }`.
+* Example: Parent-Child Component Demo
+  * [color-selector.html](./my-app/src/app/color-selector/color-selector.html)
+  * [color-selector.css](./my-app/src/app/color-selector/color-selector.css)
+  * [color-selector.ts](./my-app/src/app/color-selector/color-selector.ts)
+  * [parent-editor.html](./my-app/src/app/parent-editor/parent-editor.html)
+  * [parent-editor.css](./my-app/src/app/parent-editor/parent-editor.css)
+  * [parent-editor.ts](./my-app/src/app/parent-editor/parent-editor.ts)
 
 ## Additional Content
 
-* Component Communication (Input/Output)
-* Inner components
+* Component Communication
+  * **Using Services for Communication**
+   - **Purpose**: Facilitates communication between parent and child (or unrelated components) via a shared service.
+   - **When**: When direct input/output binding is insufficient or components are not directly nested.
+   - **Use Cases**:
+     - Sharing state across multiple components.
+     - Broadcasting events to multiple components.
+   - **Example**:
+     ```typescript
+     // Shared Service
+     @Injectable({ providedIn: 'root' })
+     export class DataService {
+       private dataSubject = new BehaviorSubject<string>('');
+       data$ = this.dataSubject.asObservable();
+       updateData(data: string) {
+         this.dataSubject.next(data);
+       }
+     }
+     ```
+* Nested components
 * Pipes
 * Reactive Forms
 * Routing and Navigation

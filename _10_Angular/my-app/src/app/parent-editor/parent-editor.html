@@ -1,0 +1,11 @@
+<div class="editor-container">
+  <h2>Inner Components Demo</h2>
+  <div class="controls">
+    <color-selector [colors]="textColors" (colorChange)="handleColorChange('text', $event)" label="Text Color">
+    </color-selector>
+    <color-selector [colors]="backgroundColors" (colorChange)="handleColorChange('background', $event)"
+      label="Background Color">
+    </color-selector>
+  </div>
+  <textarea #textArea placeholder="Write something..."></textarea>
+</div>
