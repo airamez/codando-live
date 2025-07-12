@@ -963,6 +963,11 @@ Angular provides a set of built-in pipes in the `@angular/common` package.
 
 ___
 
+>Note: Which `pipe` has to be imported from `@angular/common`
+
+```typescript
+import { CurrencyPipe, DatePipe, TitleCasePipe } from '@angular/common';
+```
 
 #### LowerCasePipe
 
@@ -1235,6 +1240,6 @@ Pipes can be chained to apply multiple transformations in sequence. The output o
 
 ## Additional Content
 
-* Reactive Forms
 * Routing and Navigation
+* Reactive Forms
 * Services and Dependency Injection
