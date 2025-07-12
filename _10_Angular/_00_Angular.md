@@ -68,26 +68,26 @@
 
 ## File Structure
 
-| **Location**       | **File/Directory**  | **Description**                                                                 |
-|--------------------|---------------------|---------------------------------------------------------------------------------|
-| `/my-app/`         | `angular.json`      | Workspace configuration file defining project settings, build, and test options.|
-| `/my-app/`         | `package.json`      | Defines project metadata, dependencies, and scripts for npm.                    |
-| `/my-app/`         | `package-lock.json` | Locks exact versions of dependencies for consistent installs.                   |
-| `/my-app/`         | `tsconfig.json`     | Root TypeScript configuration for the workspace, including compiler options.    |
-| `/my-app/`         | `README.md`         | Introductory documentation with basic instructions for the project.             |
-| `/my-app/`         | `.gitignore`        | Specifies files and directories Git should ignore.                              |
-| `/my-app/`         | `.editorconfig`     | Standardizes code formatting across editors for consistent coding styl.         |
-| `/my-app/`         | `node_modules/`     | Contains all npm dependencies installed for the project.                        |
-| `/my-app/src/`     | `src/`              | Root directory for application source code, assets, and configurations.         |
+| **Location**       | **File/Directory**  | **Description**                                                                     |
+| ------------------ | ------------------- | ----------------------------------------------------------------------------------- |
+| `/my-app/`         | `angular.json`      | Workspace configuration file defining project settings, build, and test options.    |
+| `/my-app/`         | `package.json`      | Defines project metadata, dependencies, and scripts for npm.                        |
+| `/my-app/`         | `package-lock.json` | Locks exact versions of dependencies for consistent installs.                       |
+| `/my-app/`         | `tsconfig.json`     | Root TypeScript configuration for the workspace, including compiler options.        |
+| `/my-app/`         | `README.md`         | Introductory documentation with basic instructions for the project.                 |
+| `/my-app/`         | `.gitignore`        | Specifies files and directories Git should ignore.                                  |
+| `/my-app/`         | `.editorconfig`     | Standardizes code formatting across editors for consistent coding styl.             |
+| `/my-app/`         | `node_modules/`     | Contains all npm dependencies installed for the project.                            |
+| `/my-app/src/`     | `src/`              | Root directory for application source code, assets, and configurations.             |
 | `/my-app/src/`     | `index.html`        | Main HTML file served by the app, with `<app-root>` as the root component selector. |
-| `/my-app/src/`     | `main.ts`           | Entry point for the application, bootstrapping the standalone `AppComponent`.   |
-| `/my-app/src/`     | `styles.css`        | Global styles applied across the entire application.                            |
-| `/my-app/src/app/` | `app/`              | Contains the main application logic, including components and services          |
-| `/my-app/src/app/` | `app.ts`            | Root component (standalone by default) defining the app's entry point.          |
-| `/my-app/src/app/` | `app.html`          | Template for the root component, defining its HTML structure.                   |
-| `/my-app/src/app/` | `app.css`           | Styles for the root component (CSS by default, based on CLI prompt).            |
-| `/my-app/src/app/` | `app.spec.ts`       | Unit test file for the root component.                                          |
-| `/my-app/src/app/` | `app.routes.ts`     | Defines application routes (included if routing is enabled during `ng new`).    |
+| `/my-app/src/`     | `main.ts`           | Entry point for the application, bootstrapping the standalone `AppComponent`.       |
+| `/my-app/src/`     | `styles.css`        | Global styles applied across the entire application.                                |
+| `/my-app/src/app/` | `app/`              | Contains the main application logic, including components and services              |
+| `/my-app/src/app/` | `app.ts`            | Root component (standalone by default) defining the app's entry point.              |
+| `/my-app/src/app/` | `app.html`          | Template for the root component, defining its HTML structure.                       |
+| `/my-app/src/app/` | `app.css`           | Styles for the root component (CSS by default, based on CLI prompt).                |
+| `/my-app/src/app/` | `app.spec.ts`       | Unit test file for the root component.                                              |
+| `/my-app/src/app/` | `app.routes.ts`     | Defines application routes (included if routing is enabled during `ng new`).        |
 
 ## Components
 
@@ -924,29 +924,317 @@ The lifecycle hooks are executed in the following order during a component’s l
   * [parent-editor.css](./my-app/src/app/parent-editor/parent-editor.css)
   * [parent-editor.ts](./my-app/src/app/parent-editor/parent-editor.ts)
 
+## Pipes in Angular
+
+* [Pipes](https://angular.dev/guide/templates/pipes) are a powerful feature for transforming and formatting data directly in templates.
+* They allow developers to display data in a user-friendly way without modifying the underlying data source.
+* Pipes are commonly used for tasks like formatting dates, numbers, or strings, and can be chained or customized to meet specific needs. 
+* Key Concepts of Pipes
+  * **Purpose**: Pipes transform data in templates for display purposes, keeping the original data unchanged.
+  * **Syntax**: In templates, pipes are applied using the `|` operator, e.g., `{{ value | pipeName }}`.
+  * **Types**:
+    * **Built-in Pipes**: Provided by Angular for common transformations (e.g., `date`, `uppercase`, `currency`).
+    * **Custom Pipes**: Developer-defined pipes for specific transformation logic.
+  * **Chaining**: Multiple pipes can be applied sequentially, e.g., `{{ value | pipe1 | pipe2 }}`.
+  * **Use Cases**:
+    * Formatting data (e.g., dates, currencies, percentages).
+    * Filtering or sorting lists.
+    * Custom transformations (e.g., truncating text, formatting phone numbers).
+
+### Built-in Pipes
+
+Angular provides a set of built-in pipes in the `@angular/common` package.
+
+| Pipe Name      | Description                                                                |
+| -------------- | -------------------------------------------------------------------------- |
+| AsyncPipe      | Reads the value from a Promise or RxJS Observable.                         |
+| CurrencyPipe   | Transforms a number to a currency string, formatted according to locale.   |
+| DatePipe       | Formats a Date value according to locale rules.                            |
+| DecimalPipe    | Transforms a number into a decimal string, formatted according to locale.  |
+| I18nPluralPipe | Maps a value to a string that pluralizes the value according to locale.    |
+| I18nSelectPipe | Maps a key to a custom selector that returns a desired value.              |
+| JsonPipe       | Transforms an object to a JSON string via JSON.stringify, for debugging.   |
+| KeyValuePipe   | Transforms Object or Map into an array of key-value pairs.                 |
+| LowerCasePipe  | Transforms text to all lowercase.                                          |
+| PercentPipe    | Transforms a number to a percentage string, formatted according to locale. |
+| SlicePipe      | Creates a new Array or String containing a subset of elements.             |
+| TitleCasePipe  | Transforms text to title case.                                             |
+| UpperCasePipe  | Transforms text to all uppercase.                                          |
+
+___
+
+
+#### LowerCasePipe
+
+* **Purpose**: Converts a string to lowercase.
+* **Usage**: `{{ text | lowercase }}`
+* **Example**:
+
+  ```html
+  {{ 'Angular' | lowercase }} <!-- Output: angular -->
+  ```
+
+#### UpperCasePipe
+
+* **Purpose**: Converts a string to uppercase.
+* **Usage**: `{{ text | uppercase }}`
+* **Example**:
+
+  ```html
+  {{ 'Angular' | uppercase }} <!-- Output: ANGULAR -->
+  ```
+
+#### TitleCasePipe
+
+* **Purpose**: Converts a string to title case (capitalizes the first letter of each word).
+* **Usage**: `{{ text | titlecase }}`
+* **Example**:
+
+  ```html
+  {{ 'angular framework' | titlecase }} <!-- Output: Angular Framework -->
+  ```
+
+#### CurrencyPipe
+
+* **Purpose**: Formats a number as currency with a currency code and symbol.
+* **Usage**: `{{ number | currency:'code':'symbol':'digitsInfo' }}`
+* **Example**:
+
+  ```html
+  {{ 1234.56 | currency:'USD' }} <!-- Output: $1,234.56 -->
+  {{ 1234.56 | currency:'EUR':'symbol' }} <!-- Output: €1,234.56 -->
+  ```
+
+#### DatePipe
+
+* **Purpose**: Formats a date value into a string based on a specified format or locale.
+* **Usage**: `{{ dateValue | date:'format' }}`
+* **Example**:
+
+  ```html
+  {{ today | date:'fullDate' }} <!-- Output: Saturday, July 12, 2025 -->
+  {{ today | date:'short' }} <!-- Output: 7/12/25, 10:23 AM -->
+  ```
+
+#### DecimalPipe
+
+* **Purpose**: Formats a number into a decimal string, with customizable digits.
+* **Usage**: `{{ number | number:'digitsInfo' }}`
+* **Example**:
+
+  ```html
+  {{ 1234.5678 | number:'1.2-2' }} <!-- Output: 1,234.57 -->
+  {{ 1234 | number:'1.0-0' }} <!-- Output: 1,234 -->
+  ```
+
+#### PercentPipe
+
+* **Purpose**: Formats a number as a percentage.
+* **Usage**: `{{ number | percent:'digitsInfo' }}`
+* **Example**:
+
+  ```html
+  {{ 0.75 | percent }} <!-- Output: 75% -->
+  {{ 0.75 | percent:'1.1-1' }} <!-- Output: 75.0% -->
+  ```
+
+#### I18nPluralPipe
+
+* **Purpose**: Maps a numeric value to a string based on pluralization rules.
+* **Usage**: `{{ value | i18nPlural:mapping }}`
+* **Example**:
+
+  ```html
+  {{ count | i18nPlural: pluralMap }}
+  <!-- Component -->
+  count = 2;
+  pluralMap = { '=0': 'No items', '=1': 'One item', 'other': '# items' };
+  <!-- Output: 2 items -->
+  ```
+
+#### I18nSelectPipe
+
+* **Purpose**: Maps a value to a string based on a predefined key-value mapping.
+* **Usage**: `{{ value | i18nSelect:mapping }}`
+* **Example**:
+
+  ```html
+  {{ status | i18nSelect: statusMap }}
+  <!-- Component -->
+  status = 'active';
+  statusMap = { active: 'User is active', inactive: 'User is inactive', other: 'Unknown' };
+  <!-- Output: User is active -->
+  ```
+
+#### JsonPipe
+
+* **Purpose**: Converts an object to a JSON string for debugging or display.
+* **Usage**: `{{ object | json }}`
+* **Example**:
+
+  ```html
+  {{ { name: 'John', age: 30 } | json }}
+  <!-- Output: { "name": "John", "age": 30 } -->
+  ```
+
+#### KeyValuePipe
+
+* **Purpose**: Transforms an Object or Map into an array of key-value pairs.
+* **Usage**: `{{ object | keyvalue }}`
+* **Example**:
+
+  ```html
+  <div *ngFor="let item of user | keyvalue">
+    {{ item.key }}: {{ item.value }}
+  </div>
+  <!-- Component -->
+  user = { name: 'John', age: 30 };
+  <!-- Output:
+    name: John
+    age: 30 -->
+  ```
+
+#### SlicePipe
+
+* **Purpose**: Extracts a subset of an array or string.
+* **Usage**: `{{ array | slice:start:end }}`
+* **Example**:
+
+  ```html
+  {{ [1, 2, 3, 4, 5] | slice:1:4 }} <!-- Output: [2, 3, 4] -->
+  {{ 'Angular' | slice:0:3 }} <!-- Output: Ang -->
+  ```
+
+### Creating Custom Pipes
+
+Custom pipes are used when built-in pipes don’t meet specific requirements. They are simple to create and integrate into Angular applications.
+
+- **Purpose**: Implement custom transformation logic for unique formatting or data manipulation.
+- **When**: When you need reusable transformations not covered by built-in pipes (e.g., formatting phone numbers, truncating text).
+- **How It Works**:
+  - Create a class implementing the `PipeTransform` interface.
+  - Use the `@Pipe` decorator with `standalone: true` to define the pipe’s metadata.
+  - Import the pipe directly in standalone components that use it.
+
+#### Example: Custom Pipe for Truncating Text
+
+* This example demonstrates a custom pipe (`TruncatePipe`) that shortens a string to a specified length and appends an ellipsis if truncated.
+* The pipe is used in a standalone component to display a list of descriptions, ensuring they don’t exceed a certain length.
+
+##### Step 1: Create the Custom Pipe
+
+```typescript
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'truncate',
+  standalone: true
+})
+export class TruncatePipe implements PipeTransform {
+  transform(value: string, limit: number = 20, ellipsis: string = '...'): string {
+    if (!value) return '';
+    return value.length > limit ? value.substring(0, limit) + ellipsis : value;
+  }
+}
+```
+
+- **Parameters**:
+  - `value`: The input string to truncate.
+  - `limit`: Maximum length (default: 20).
+  - `ellipsis`: Suffix to append if truncated (default: '...').
+- **Logic**: If the string exceeds the limit, it’s truncated and appended with the ellipsis; otherwise, it’s returned unchanged.
+
+##### Step 2: Component Using the Pipe
+
+The standalone component displays a list of product descriptions, applying the `truncate` pipe to keep them concise.
+
+```typescript
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TruncatePipe } from './truncate.pipe';
+
+@Component({
+  selector: 'app-product-list',
+  standalone: true,
+  imports: [CommonModule, TruncatePipe],
+  template: `
+    <h1>Product List</h1>
+    <ul>
+      <li *ngFor="let product of products">
+        {{ product.name }}: {{ product.description | truncate:30 }}
+      </li>
+    </ul>
+    <h3>Example with Custom Limit</h3>
+    <p>{{ sampleText | truncate:15:'...' }}</p>
+  `
+})
+export class ProductListComponent {
+  today: Date = new Date();
+  sampleText: string = 'This is a long description that needs truncation for display purposes.';
+  products = [
+    { name: 'Laptop', description: 'A high-performance laptop for professionals and gamers.' },
+    { name: 'Phone', description: 'A sleek smartphone with advanced camera features.' },
+    { name: 'Tablet', description: 'A lightweight tablet for productivity and entertainment.' }
+  ];
+}
+```
+
+- **Note**: The `CommonModule` is imported to provide directives like `*ngFor`, and `TruncatePipe` is imported to use the custom pipe.
+
+##### Step 3: Example Output
+
+Assuming the component is rendered, the template produces output like:
+
+- **Product List**:
+  - Laptop: A high-performance laptop...
+  - Phone: A sleek smartphone with...
+  - Tablet: A lightweight tablet for...
+- **Example with Custom Limit**:
+  - This is a long des...
+
+##### How It Works
+
+- The `TruncatePipe` is applied in the template using `| truncate:30` or `| truncate:15:'...'`.
+- For each product description, the pipe checks if the string exceeds the specified limit (e.g., 30 characters).
+- If truncated, it appends the ellipsis; otherwise, it displays the full string.
+- The pipe is reusable across the application and can accept custom parameters for flexibility.
+
+### Chaining Pipes
+
+Pipes can be chained to apply multiple transformations in sequence. The output of one pipe becomes the input for the next.
+
+- **Example**:
+  ```html
+  {{ 'angular framework' | uppercase | truncate:10 }} <!-- Output: ANGULAR FR... -->
+  ```
+- **Explanation**: The string is first converted to uppercase (`ANGULAR FRAMEWORK`), then truncated to 10 characters with an ellipsis.
+
+### Best Practices for Pipes
+
+- **Use Built-in Pipes First**: Leverage Angular’s built-in pipes for common tasks to avoid reinventing the wheel.
+- **Keep Pipes Simple**: Pipes should focus on transformation logic, not complex business logic.
+- **Make Pipes Reusable**: Design custom pipes with parameters for flexibility (e.g., configurable limits).
+- **Document Parameters**: Clearly document pipe parameters for team collaboration.
+
+### When to Use Pipes
+
+- **Built-in Pipes**: For quick formatting of dates, numbers, strings, or arrays.
+- **Custom Pipes**: For specific transformations not covered by built-in pipes.
+- **Alternatives**: If transformation logic is complex or requires side effects, consider using component methods or services instead.
+
+### Example: Combining Built-in and Custom Pipes
+
+* This example shows a template using both the `date` pipe and the `truncate` pipe:
+
+  ```html
+  <p>Today: {{ today | date:'medium' | truncate:20 }}</p>
+  <!-- Output: Jul 12, 2025, 10:01... -->
+  ```
+
+  * The `date` pipe formats the date, and the `truncate` pipe shortens the result to 20 characters.
+
 ## Additional Content
 
-* Component Communication
-  * **Using Services for Communication**
-   - **Purpose**: Facilitates communication between parent and child (or unrelated components) via a shared service.
-   - **When**: When direct input/output binding is insufficient or components are not directly nested.
-   - **Use Cases**:
-     - Sharing state across multiple components.
-     - Broadcasting events to multiple components.
-   - **Example**:
-     ```typescript
-     // Shared Service
-     @Injectable({ providedIn: 'root' })
-     export class DataService {
-       private dataSubject = new BehaviorSubject<string>('');
-       data$ = this.dataSubject.asObservable();
-       updateData(data: string) {
-         this.dataSubject.next(data);
-       }
-     }
-     ```
-* Nested components
-* Pipes
 * Reactive Forms
 * Routing and Navigation
 * Services and Dependency Injection

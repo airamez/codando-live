@@ -7,7 +7,8 @@ import { RouterOutlet } from '@angular/router';
 // import { TaskListModern } from './task-list-modern/task-list-modern';
 // import { UserProfile } from './user-profile/user-profile';
 // import { TextEditor } from './text-editor/text-editor';
-import { ParentEditor } from './parent-editor/parent-editor';
+// import { ParentEditor } from './parent-editor/parent-editor';
+import { ProductList } from './product-list';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +21,8 @@ import { ParentEditor } from './parent-editor/parent-editor';
     // TaskListModern,
     // UserProfile,
     // TextEditor,
-    ParentEditor
+    // ParentEditor
+    ProductList
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
