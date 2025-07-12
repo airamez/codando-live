@@ -8,7 +8,6 @@ import { RouterOutlet } from '@angular/router';
 // import { UserProfile } from './user-profile/user-profile';
 // import { TextEditor } from './text-editor/text-editor';
 import { ParentEditor } from './parent-editor/parent-editor';
-// import { LifecycleDemo } from './lifecycle-demo/lifecycle-demo';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +21,6 @@ import { ParentEditor } from './parent-editor/parent-editor';
     // UserProfile,
     // TextEditor,
     ParentEditor
-    // LifecycleDemo,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'

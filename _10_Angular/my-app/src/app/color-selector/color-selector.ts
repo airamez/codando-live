@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -8,15 +8,21 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './color-selector.html',
   styleUrls: ['./color-selector.css']
 })
-export class ColorSelector implements AfterViewInit {
+export class ColorSelector implements AfterViewInit, OnChanges {
   @Input() colors: { value: string, label: string }[] = [];
   @Input() label: string = 'Select Color';
   @Output() colorChange = new EventEmitter<string>();
 
-  selectedColor: string;
+  selectedColor: string = '';
 
   constructor() {
-    this.selectedColor = this.colors.length > 0 ? this.colors[0].value : '';
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['colors'] && changes['colors'].currentValue?.length > 0) {
+      this.selectedColor = this.colors[0].value;
+      this.colorChange.emit(this.selectedColor);
+    }
   }
 
   ngAfterViewInit() {

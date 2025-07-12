@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ColorSelector } from '../color-selector/color-selector';
 
@@ -9,40 +9,33 @@ import { ColorSelector } from '../color-selector/color-selector';
   templateUrl: './parent-editor.html',
   styleUrls: ['./parent-editor.css']
 })
-export class ParentEditor {
+export class ParentEditor implements OnInit {
   @ViewChild('textArea', { static: false }) textArea!: ElementRef<HTMLTextAreaElement>;
 
-  textColors: { value: string, label: string }[] = [
-    { value: 'red', label: 'Red' },
-    { value: 'blue', label: 'Blue' },
-    { value: 'green', label: 'Green' }
-  ];
+  textColors: { value: string, label: string }[] = [];
 
-  backgroundColors: { value: string, label: string }[] = [
-    { value: 'lightgray', label: 'Light Gray' },
-    { value: 'beige', label: 'Beige' },
-    { value: 'lightyellow', label: 'Light Yellow' }
-  ];
-
-  private inputHandler: () => void;
+  backgroundColors: { value: string, label: string }[] = [];
 
   constructor() {
-    this.inputHandler = () => {
-      const text = this.textArea?.nativeElement?.value || '';
-      console.log(`Textarea input changed: ${text}`);
-    };
   }
 
-  setInputListener() {
-    if (this.textArea) {
-      this.textArea.nativeElement.addEventListener('input', this.inputHandler);
-    }
-  }
+  ngOnInit() {
+    // Pretend to load the colors asynchronously, e.g., from a service or API
+    setTimeout(() => {
+      this.textColors = [
+        { value: 'black', label: 'Black' },
+        { value: 'red', label: 'Red' },
+        { value: 'blue', label: 'Blue' },
+        { value: 'green', label: 'Green' }
+      ];
 
-  removeInputListener() {
-    if (this.textArea) {
-      this.textArea.nativeElement.removeEventListener('input', this.inputHandler);
-    }
+      this.backgroundColors = [
+        { value: 'white', label: 'White' },
+        { value: 'lightgray', label: 'Light Gray' },
+        { value: 'beige', label: 'Beige' },
+        { value: 'lightyellow', label: 'Light Yellow' }
+      ];
+    }, 3000); // Simulate a 1-second delay for loading
   }
 
   handleColorChange(type: 'text' | 'background', color: string) {
