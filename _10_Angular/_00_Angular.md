@@ -1170,7 +1170,7 @@ import { TruncatePipe } from './truncate.pipe';
       </li>
     </ul>
     <h3>Example with Custom Limit</h3>
-    <p>{{ sampleText | truncate:15:'...' }}</p>
+    <p>{{ sampleText | truncate:15:'***' }}</p>
   `
 })
 export class ProductListComponent {
@@ -1186,16 +1186,9 @@ export class ProductListComponent {
 
 - **Note**: The `CommonModule` is imported to provide directives like `*ngFor`, and `TruncatePipe` is imported to use the custom pipe.
 
-##### Step 3: Example Output
-
-Assuming the component is rendered, the template produces output like:
-
-- **Product List**:
-  - Laptop: A high-performance laptop...
-  - Phone: A sleek smartphone with...
-  - Tablet: A lightweight tablet for...
-- **Example with Custom Limit**:
-  - This is a long des...
+* Files
+  * [truncate.pipe.ts](./my-app/src/app/truncate.pipe.ts)
+  * [product-list.ts](./my-app/src/app/product-list.ts)
 
 ##### How It Works
 
