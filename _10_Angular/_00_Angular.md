@@ -621,7 +621,6 @@ Use `else` to display alternative content when the condition is `false`.
   * [user-profile.html](./my-app/src/app/user-profile/user-profile.html)
   * [user-profile.css](./my-app/src/app/user-profile/user-profile.css)
   * [user-profile.ts](./my-app/src/app/user-profile/user-profile.ts)
- 
 
 * Explanation
   * The `<ng-container *ngIf="user.isPremium">` groups two `<p>` elements without adding a wrapper `<div>` to the DOM.
@@ -660,7 +659,6 @@ Use `else` to display alternative content when the condition is `false`.
   * **`propertyName`**: The parent component’s property storing the child reference.
   * **`Type`**: TypeScript type of the child (e.g., `ChildComponent`, `ElementRef`, `NgModel`) for type safety.
 
-
 * Example
   * [text-editor.html](./my-app/src/app/text-editor/text-editor.html)
   * [text-editor.css](./my-app/src/app/text-editor/text-editor.css)
@@ -678,13 +676,13 @@ Use `else` to display alternative content when the condition is `false`.
 * Below is a comprehensive list of the primary hooks, their purposes, and common use cases.
 
 1. **`ngOnChanges`**
-   - **Purpose**: Called when Angular detects changes to **input properties** of a component or directive (before `ngOnInit` and whenever inputs change).
-   - **When**: Invoked before the first rendering and after each change to input-bound properties.
-   - **Use Cases**:
-     - Respond to changes in `@Input` properties.
-     - Perform calculations or updates based on new input values.
-   - **Parameters**: Receives a `SimpleChanges` object containing current and previous values of changed inputs.
-   - **Example**:
+   * **Purpose**: Called when Angular detects changes to **input properties** of a component or directive (before `ngOnInit` and whenever inputs change).
+   * **When**: Invoked before the first rendering and after each change to input-bound properties.
+   * **Use Cases**:
+     * Respond to changes in `@Input` properties.
+     * Perform calculations or updates based on new input values.
+   * **Parameters**: Receives a `SimpleChanges` object containing current and previous values of changed inputs.
+   * **Example**:
      ```typescript
      ngOnChanges(changes: SimpleChanges) {
        let logMessage = 'ngOnChanges: Changes detected\n';
@@ -700,12 +698,13 @@ Use `else` to display alternative content when the condition is `false`.
      ```
 
 2. **`ngOnInit`**
-   - **Purpose**: Called **once** after the component’s inputs are set and the component is initialized.
-   - **When**: After the first `ngOnChanges` and before the view is rendered.
-   - **Use Cases**:
-     - Initialize component data, fetch initial data from services, or set up subscriptions.
-     - Perform setup that depends on input properties or component state.
-   - **Example**:
+   * **Purpose**: Called **once** after the component’s inputs are set and the component is initialized.
+   * **When**: After the first `ngOnChanges` and before the view is rendered.
+   * **Use Cases**:
+     * Initialize component data, fetch initial data from services, or set up subscriptions.
+     * Perform setup that depends on input properties or component state.
+   * **Example**:
+
      ```typescript
      ngOnInit() {
        this.loadData();
@@ -713,12 +712,13 @@ Use `else` to display alternative content when the condition is `false`.
      ```
 
 3. **`ngDoCheck`**
-   - **Purpose**: Called during every **change detection cycle**, allowing custom change detection logic.
-   - **When**: After `ngOnChanges` and `ngOnInit`, and on every change detection run.
-   - **Use Cases**:
-     - Implement custom change detection for complex objects or non-input properties.
-     - Rarely used due to performance implications; prefer Angular’s default change detection or `ngOnChanges`.
-   - **Example**:
+   * **Purpose**: Called during every **change detection cycle**, allowing custom change detection logic.
+   * **When**: After `ngOnChanges` and `ngOnInit`, and on every change detection run.
+   * **Use Cases**:
+     * Implement custom change detection for complex objects or non-input properties.
+     * Rarely used due to performance implications; prefer Angular’s default change detection or `ngOnChanges`.
+   * **Example**:
+
      ```typescript
      ngDoCheck() {
        if (this.customConditionChanged()) {
@@ -728,12 +728,13 @@ Use `else` to display alternative content when the condition is `false`.
      ```
 
 4. **`ngAfterContentInit`**
-   - **Purpose**: Called **once** after Angular finishes projecting external content into the component’s view (via `<ng-content>`).
-   - **When**: After `ngDoCheck` and content projection is complete.
-   - **Use Cases**:
-     - Initialize logic that depends on projected content.
-     - Access queried content using `@ContentChild` or `@ContentChildren`.
-   - **Example**:
+   * **Purpose**: Called **once** after Angular finishes projecting external content into the component’s view (via `<ng-content>`).
+   * **When**: After `ngDoCheck` and content projection is complete.
+   * **Use Cases**:
+     * Initialize logic that depends on projected content.
+     * Access queried content using `@ContentChild` or `@ContentChildren`.
+   * **Example**:
+
      ```typescript
      ngAfterContentInit() {
        console.log('Projected content initialized');
@@ -741,11 +742,12 @@ Use `else` to display alternative content when the condition is `false`.
      ```
 
 5. **`ngAfterContentChecked`**
-   - **Purpose**: Called after every change detection cycle for projected content.
-   - **When**: After `ngAfterContentInit` and during every change detection run.
-   - **Use Cases**:
-     - Update state or perform checks on projected content after changes.
-   - **Example**:
+   * **Purpose**: Called after every change detection cycle for projected content.
+   * **When**: After `ngAfterContentInit` and during every change detection run.
+   * **Use Cases**:
+     * Update state or perform checks on projected content after changes.
+   * **Example**:
+
      ```typescript
      ngAfterContentChecked() {
        this.validateContent();
@@ -753,12 +755,13 @@ Use `else` to display alternative content when the condition is `false`.
      ```
 
 6. **`ngAfterViewInit`**
-   - **Purpose**: Called **once** after Angular fully initializes the component’s view and all child views.
-   - **When**: After `ngAfterContentChecked` and view initialization.
-   - **Use Cases**:
-     - Access or manipulate DOM elements or child components via `@ViewChild` or `@ViewChildren`.
-     - Perform initialization that requires the view to be fully rendered.
-   - **Example**:
+   * **Purpose**: Called **once** after Angular fully initializes the component’s view and all child views.
+   * **When**: After `ngAfterContentChecked` and view initialization.
+   * **Use Cases**:
+     * Access or manipulate DOM elements or child components via `@ViewChild` or `@ViewChildren`.
+     * Perform initialization that requires the view to be fully rendered.
+   * **Example**:
+
      ```typescript
      ngAfterViewInit() {
        this.textArea.nativeElement.focus();
@@ -766,11 +769,12 @@ Use `else` to display alternative content when the condition is `false`.
      ```
 
 7. **`ngAfterViewChecked`**
-   - **Purpose**: Called after every change detection cycle for the component’s view and child views.
-   - **When**: After `ngAfterViewInit` and during every change detection run.
-   - **Use Cases**:
-     - Perform checks or updates after the view and child views are updated.
-   - **Example**:
+   * **Purpose**: Called after every change detection cycle for the component’s view and child views.
+   * **When**: After `ngAfterViewInit` and during every change detection run.
+   * **Use Cases**:
+     * Perform checks or updates after the view and child views are updated.
+   * **Example**:
+
      ```typescript
      ngAfterViewChecked() {
        this.checkViewState();
@@ -778,12 +782,13 @@ Use `else` to display alternative content when the condition is `false`.
      ```
 
 8. **`ngOnDestroy`**
-   - **Purpose**: Called **once** just before Angular destroys the component or directive.
-   - **When**: When the component is removed from the DOM.
-   - **Use Cases**:
-     - Clean up subscriptions, timers, or event listeners to prevent memory leaks.
-     - Perform final logging or state persistence.
-   - **Example**:
+   * **Purpose**: Called **once** just before Angular destroys the component or directive.
+   * **When**: When the component is removed from the DOM.
+   * **Use Cases**:
+     * Clean up subscriptions, timers, or event listeners to prevent memory leaks.
+     * Perform final logging or state persistence.
+   * **Example**:
+
      ```typescript
      ngOnDestroy() {
        this.subscription.unsubscribe();
@@ -814,22 +819,23 @@ The lifecycle hooks are executed in the following order during a component’s l
 
 * **Parent-Child Relationship**: A parent component includes a child component in its template using the child’s selector (e.g., `<child><child>`).
 * **Component Communication**:
-  - **Inputs**: Pass data from parent to child using `@Input` bindings.
-  - **Outputs**: Emit events from child to parent using `@Output` and `EventEmitter`.
-  - **ViewChild/ContentChild**: Access child component instances for direct interaction.
+  * **Inputs**: Pass data from parent to child using `@Input` bindings.
+  * **Outputs**: Emit events from child to parent using `@Output` and `EventEmitter`.
+  * **ViewChild/ContentChild**: Access child component instances for direct interaction.
 * **Lifecycle Interaction**: Child components have their own lifecycle hooks, which are triggered within the context of the parent’s lifecycle.
 * Understanding Nested components is essential for building complex UIs with reusable, encapsulated functionality.
 
 ### Mechanisms for Nested Components
 
 1. **Using `@Input` for Parent-to-Child Communication**
-   - **Purpose**: Allows a parent component to pass data to a child component’s input properties.
-   - **When**: Used when the child needs data or configuration from the parent.
-   - **Use Cases**:
-     - Displaying data provided by the parent (e.g., a list of items).
-     - Configuring child component behavior (e.g., setting a default color).
-   - **Example**:
-     ```typescript
+   * **Purpose**: Allows a parent component to pass data to a child component’s input properties.
+   * **When**: Used when the child needs data or configuration from the parent.
+   * **Use Cases**:
+     * Displaying data provided by the parent (e.g., a list of items).
+     * Configuring child component behavior (e.g., setting a default color).
+   * **Example**:
+
+    ```typescript
      // Child Component
      @Component({
        selector: 'app-child',
@@ -844,12 +850,14 @@ The lifecycle hooks are executed in the following order during a component’s l
      ```
 
 2. **Using `@Output` for Child-to-Parent Communication**
-   - **Purpose**: Enables a child component to emit events to notify the parent of changes or actions.
-   - **When**: Triggered when the child performs an action (e.g., button click) that the parent needs to handle.
-   - **Use Cases**:
-     - Notifying the parent of user interactions (e.g., form submission).
-     - Sending updated data back to the parent.
-   - **Example**:
+   * **Purpose**: Enables a child component to emit events to notify the parent of changes or actions.
+   * **When**: Triggered when the child performs an action (e.g., button click) that the parent needs to handle.
+   * **Use Cases**:
+     * Notifying the parent of user interactions (e.g., form submission).
+     * Sending updated data back to the parent.
+
+   * **Example**:
+
      ```typescript
      // Child Component
      @Component({
@@ -868,12 +876,13 @@ The lifecycle hooks are executed in the following order during a component’s l
      ```
 
 3. **Using `@ViewChild` to Access Child Components**
-   - **Purpose**: Allows the parent to directly access and interact with a child component’s properties or methods.
-   - **When**: After the view is initialized (`ngAfterViewInit`), when direct manipulation of the child is needed.
-   - **Use Cases**:
-     - Calling a child’s method (e.g., reset a form).
-     - Reading or updating a child’s state programmatically.
-   - **Example**:
+   * **Purpose**: Allows the parent to directly access and interact with a child component’s properties or methods.
+   * **When**: After the view is initialized (`ngAfterViewInit`), when direct manipulation of the child is needed.
+   * **Use Cases**:
+     * Calling a child’s method (e.g., reset a form).
+     * Reading or updating a child’s state programmatically.
+   * **Example**:
+
      ```typescript
      // Parent Component
      @Component({
@@ -889,12 +898,13 @@ The lifecycle hooks are executed in the following order during a component’s l
      ```
 
 4. **Using `<ng-content>` for Content Projection**
-   - **Purpose**: Allows the parent to project content (HTML or components) into the child’s template.
-   - **When**: When the child component acts as a container or wrapper for custom content.
-   - **Use Cases**:
-     - Creating reusable layouts (e.g., modals) with customizable content.
-     - Embedding dynamic content in a child component.
-   - **Example**:
+   * **Purpose**: Allows the parent to project content (HTML or components) into the child’s template.
+   * **When**: When the child component acts as a container or wrapper for custom content.
+   * **Use Cases**:
+     * Creating reusable layouts (e.g., modals) with customizable content.
+     * Embedding dynamic content in a child component.
+   * **Example**:
+
      ```typescript
      // Child Component
      @Component({
@@ -911,9 +921,9 @@ The lifecycle hooks are executed in the following order during a component’s l
 
 * **Child Lifecycle**: Each child component has its own lifecycle hooks (`ngOnInit`, `ngAfterViewInit`, etc.), which run independently but are triggered within the parent’s lifecycle.
 * **Order**:
-  - Parent’s `ngOnInit` runs before child’s `ngOnInit`.
-  - Child’s view initialization (`ngAfterViewInit`) completes before the parent’s `ngAfterViewInit`.
-  - When the parent is destroyed, all children are destroyed, triggering their `ngOnDestroy` before the parent’s.
+  * Parent’s `ngOnInit` runs before child’s `ngOnInit`.
+  * Child’s view initialization (`ngAfterViewInit`) completes before the parent’s `ngAfterViewInit`.
+  * When the parent is destroyed, all children are destroyed, triggering their `ngOnDestroy` before the parent’s.
 * **Use Case**: Use child lifecycle hooks to initialize child-specific data or clean up child resources, while coordinating with the parent’s lifecycle for overall control.
 
 * Example: Parent-Child Component Demo
@@ -940,6 +950,16 @@ The lifecycle hooks are executed in the following order during a component’s l
     * Formatting data (e.g., dates, currencies, percentages).
     * Filtering or sorting lists.
     * Custom transformations (e.g., truncating text, formatting phone numbers).
+
+### Bash Example
+
+```bash
+find ./src -name "*.ts" | sed 's|.*/||' | sort
+```
+
+* `find ./src -name "*.ts"`: Recursively finds all .ts files starting from the ./src
+* `sed 's|.*/||'`: Uses sed (stream editor) to replace the path prefix (matched by .*/, meaning any characters followed by a /) with nothing, leaving just the file name
+* `sort`: Sorts the resulting file names alphabetically.
 
 ### Built-in Pipes
 
@@ -1114,12 +1134,12 @@ import { CurrencyPipe, DatePipe, TitleCasePipe } from '@angular/common';
 
 Custom pipes are used when built-in pipes don’t meet specific requirements. They are simple to create and integrate into Angular applications.
 
-- **Purpose**: Implement custom transformation logic for unique formatting or data manipulation.
-- **When**: When you need reusable transformations not covered by built-in pipes (e.g., formatting phone numbers, truncating text).
-- **How It Works**:
-  - Create a class implementing the `PipeTransform` interface.
-  - Use the `@Pipe` decorator with `standalone: true` to define the pipe’s metadata.
-  - Import the pipe directly in standalone components that use it.
+* **Purpose**: Implement custom transformation logic for unique formatting or data manipulation.
+* **When**: When you need reusable transformations not covered by built-in pipes (e.g., formatting phone numbers, truncating text).
+* **How It Works**:
+  * Create a class implementing the `PipeTransform` interface.
+  * Use the `@Pipe` decorator with `standalone: true` to define the pipe’s metadata.
+  * Import the pipe directly in standalone components that use it.
 
 #### Example: Custom Pipe for Truncating Text
 
@@ -1143,11 +1163,11 @@ export class TruncatePipe implements PipeTransform {
 }
 ```
 
-- **Parameters**:
-  - `value`: The input string to truncate.
-  - `limit`: Maximum length (default: 20).
-  - `ellipsis`: Suffix to append if truncated (default: '...').
-- **Logic**: If the string exceeds the limit, it’s truncated and appended with the ellipsis; otherwise, it’s returned unchanged.
+* **Parameters**:
+  * `value`: The input string to truncate.
+  * `limit`: Maximum length (default: 20).
+  * `ellipsis`: Suffix to append if truncated (default: '...').
+* **Logic**: If the string exceeds the limit, it’s truncated and appended with the ellipsis; otherwise, it’s returned unchanged.
 
 ##### Step 2: Component Using the Pipe
 
@@ -1184,7 +1204,7 @@ export class ProductListComponent {
 }
 ```
 
-- **Note**: The `CommonModule` is imported to provide directives like `*ngFor`, and `TruncatePipe` is imported to use the custom pipe.
+> **Note**: The `CommonModule` is imported to provide directives like `*ngFor`, and `TruncatePipe` is imported to use the custom pipe.
 
 * Files
   * [truncate.pipe.ts](./my-app/src/app/truncate.pipe.ts)
@@ -1192,33 +1212,35 @@ export class ProductListComponent {
 
 ##### How It Works
 
-- The `TruncatePipe` is applied in the template using `| truncate:30` or `| truncate:15:'...'`.
-- For each product description, the pipe checks if the string exceeds the specified limit (e.g., 30 characters).
-- If truncated, it appends the ellipsis; otherwise, it displays the full string.
-- The pipe is reusable across the application and can accept custom parameters for flexibility.
+* The `TruncatePipe` is applied in the template using `| truncate:30` or `| truncate:15:'...'`.
+* For each product description, the pipe checks if the string exceeds the specified limit (e.g., 30 characters).
+* If truncated, it appends the ellipsis; otherwise, it displays the full string.
+* The pipe is reusable across the application and can accept custom parameters for flexibility.
 
 ### Chaining Pipes
 
 Pipes can be chained to apply multiple transformations in sequence. The output of one pipe becomes the input for the next.
 
-- **Example**:
+* **Example**:
+
   ```html
   {{ 'angular framework' | uppercase | truncate:10 }} <!-- Output: ANGULAR FR... -->
   ```
-- **Explanation**: The string is first converted to uppercase (`ANGULAR FRAMEWORK`), then truncated to 10 characters with an ellipsis.
+
+> **Explanation**: The string is first converted to uppercase (`ANGULAR FRAMEWORK`), then truncated to 10 characters with an ellipsis.
 
 ### Best Practices for Pipes
 
-- **Use Built-in Pipes First**: Leverage Angular’s built-in pipes for common tasks to avoid reinventing the wheel.
-- **Keep Pipes Simple**: Pipes should focus on transformation logic, not complex business logic.
-- **Make Pipes Reusable**: Design custom pipes with parameters for flexibility (e.g., configurable limits).
-- **Document Parameters**: Clearly document pipe parameters for team collaboration.
+* **Use Built-in Pipes First**: Leverage Angular’s built-in pipes for common tasks to avoid reinventing the wheel.
+* **Keep Pipes Simple**: Pipes should focus on transformation logic, not complex business logic.
+* **Make Pipes Reusable**: Design custom pipes with parameters for flexibility (e.g., configurable limits).
+* **Document Parameters**: Clearly document pipe parameters for team collaboration.
 
 ### When to Use Pipes
 
-- **Built-in Pipes**: For quick formatting of dates, numbers, strings, or arrays.
-- **Custom Pipes**: For specific transformations not covered by built-in pipes.
-- **Alternatives**: If transformation logic is complex or requires side effects, consider using component methods or services instead.
+* **Built-in Pipes**: For quick formatting of dates, numbers, strings, or arrays.
+* **Custom Pipes**: For specific transformations not covered by built-in pipes.
+* **Alternatives**: If transformation logic is complex or requires side effects, consider using component methods or services instead.
 
 ### Example: Combining Built-in and Custom Pipes
 

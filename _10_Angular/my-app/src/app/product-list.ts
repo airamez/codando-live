@@ -12,11 +12,11 @@ import { TruncatePipe } from './truncate.pipe';
     <h1>Product List</h1>
     <ul>
       <li *ngFor="let product of products">
-        {{ product.name }}: {{ product.description | truncate:30 }}
+        {{ product.name }}: {{ product.description | truncate:50 }}
       </li>
     </ul>
     <h3>Example with Custom Limit</h3>
-    <p>{{ sampleText | truncate:20:'...' }}</p>
+    <p>{{ sampleText | truncate:20:'###' }}</p>
     <p>Today: {{ today | date:'medium' }}</p>
     <p>Today: {{ today | date:'medium' | truncate:20 }}</p>
   `,
