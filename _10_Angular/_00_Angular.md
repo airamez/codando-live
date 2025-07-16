@@ -1253,8 +1253,330 @@ Pipes can be chained to apply multiple transformations in sequence. The output o
 
   * The `date` pipe formats the date, and the `truncate` pipe shortens the result to 20 characters.
 
+## Routing and Navigation in Angular
+
+* Angular's routing system is a powerful feature that enables developers to build **Single Page Applications (SPAs)** with multiple views, allowing seamless navigation without full page reloads.
+* The `@angular/router` package provides a robust toolkit for managing client-side navigation, mapping URLs to components, and handling dynamic data through route parameters, query parameters, and more.
+* Routing in Angular enhances user experience by enabling fast, fluid transitions between views while maintaining modularity and scalability in applications.
+* Documentation
+  * [Overview](https://v17.angular.io/guide/routing-overview)
+  * [Guide](https://angular.dev/guide/routing)
+
+### Key Components of Angular Routing
+
+* **Routes**: Define mappings between URL paths and components.
+* **RouterOutlet**: A directive (`<router-outlet>`) that acts as a placeholder where components are dynamically loaded based on the current route.
+* **RouterLink**: A directive for declarative navigation in templates (e.g., `<a routerLink="/path">`).
+* **Router Service**: Enables programmatic navigation using methods like `navigate()` and `navigateByUrl()`.
+* **Route Guards**: Control access to routes for authentication or authorization.
+* **Route Parameters and Query Parameters**: Allow dynamic data passing through URLs.
+
+### Benefits of Angular Routing
+
+* **Seamless User Experience**: Routing enables smooth transitions between views without reloading the entire page, mimicking native app behavior.
+* **Faster Page Transitions**: Only the necessary components and data are loaded, reducing load times.
+* **Modularity and Maintainability**: Routes organize the application into distinct views, making code easier to manage and scale.
+* **Dynamic Content Loading**: Route parameters and query parameters allow dynamic rendering of content based on URL data.[](https://medium.com/%40jaydeepvpatil225/routing-in-angular-924066bde43)
+* **Security with Route Guards**: Control access to routes, ensuring users only access authorized views.
+* **Nested Routes**: Support hierarchical navigation for complex applications, such as dashboards with sub-sections.
+* **Lazy Loading**: Load modules only when needed, improving performance for large applications.
+
+### Syntax for Declaring Routes
+
+Routes are defined as an array of `Route` objects in a separate file, typically `app.routes.ts`, and provided to the application using the `provideRouter` function in a standalone setup.
+
+#### Basic Route Declaration
+
+* Define routes in `src/app/app.routes.ts`:
+
+  ```typescript
+  import { Routes } from '@angular/router';
+  import { Home } from './home/home';
+  import { About } from './about/about';
+
+  export const routes: Routes = [
+    { path: '', component: Home }, // Default route
+    { path: 'about', component: About }, // Static route
+    { path: '**', redirectTo: '', pathMatch: 'full' } // Wildcard route for 404
+  ];
+  ```
+
+#### Using RouterOutlet and RouterLink
+
+* In your root component (e.g., app.html), include the `<router-outlet>` to render routed components and `<a routerLink>` for navigation:
+
+  ```html
+  <nav>
+    <a routerLink="/">Home</a>
+    <a routerLink="/about">About</a>
+  </nav>
+  <router-outlet></router-outlet>
+  ```
+
+#### Route with Parameters
+
+* To handle dynamic data, include parameters in the path:
+
+  ```typesecript
+  { path: 'user/:id', component: UserComponent }
+  ```
+
+* Access the parameter in the component using `ActivatedRoute`
+
+  ```typescript
+  import { Component, OnInit } from '@angular/core';
+  import { ActivatedRoute } from '@angular/router';
+
+  @Component({
+    selector: 'app-user',
+    template: `<p>User ID: {{ userId }}</p>`
+  })
+  export class UserComponent implements OnInit {
+    userId: string | null = null;
+
+    constructor(private route: ActivatedRoute) {}
+
+    ngOnInit(): void {
+      this.route.paramMap.subscribe(params => {
+        this.userId = params.get('id');
+      });
+    }
+  }
+  ```
+
+### Setting Up Routing in Angular
+
+* To use routing, you need to configure the `RouterModule` in your Angular application.
+* The Angular CLI simplifies this process.
+
+### Example 1: Basic Routing Setup
+
+This example creates an Angular application with two components (`HomeComponent` and `AboutComponent`) and configures routing to navigate between them.
+
+#### Step 1: Create a New Angular Project
+
+* Command to create a new application with routing enabled:
+
+  ```bash
+  ng new my-routing-app --routing
+  ```
+
+* Command to add routing to an existing aplication
+
+  ```bash
+  ng add @angular/router
+  ```
+
+#### Step 2: Generate Components
+
+* Create two components:
+
+  ```bash
+  ng generate component home
+  ng generate component about
+  ```
+
+#### Step 3: Configure Routes
+
+* Edit `src/app/app.routes.ts` to define the routes:
+
+  ```typescript
+  import { Routes } from '@angular/router';
+  import { HomeComponent } from './home/home.component';
+  import { AboutComponent } from './about/about.component';
+
+  export const routes: Routes = [
+    { path: '', component: HomeComponent }, // Default route
+    { path: 'about', component: AboutComponent }, // About route
+    { path: '**', redirectTo: '', pathMatch: 'full' } // Wildcard route for 404
+  ];
+  ```
+
+#### Step 4: Update the App Component
+
+* Edit `src/app/app.ts` to include `RouterLink`
+
+  ```typescript
+  import { Component } from '@angular/core';
+  import { RouterOutlet, RouterLink } from '@angular/router';
+
+  @Component({
+    selector: 'app-root',
+    imports: [
+      RouterOutlet,
+      RouterLink,
+    ],
+    templateUrl: './app.html',
+    styleUrl: './app.css'
+  })
+  export class App {
+    protected title = 'my-app';
+  }
+
+  ```
+
+* Edit `src/app/app.html` to include navigation links and the router outlet:
+
+  ```html
+  <h1>Angular Routing Example</h1>
+  <nav>
+    <ul>
+      <li><a routerLink="/">Home</a></li>
+      <li><a routerLink="/about">About</a></li>
+    </ul>
+  </nav>
+  <router-outlet></router-outlet>
+  ```
+
+#### Step 5: Run the Application
+
+* Start the development server:
+
+  ```bash
+  ng serve
+  ```
+
+* Navigate to `http://localhost:4200` to see the app.
+* Clicking "Home" or "About" will load the respective components without a full page reload.
+
+>Note: Pay attention to the browser URL
+
+### Example 2: Route Parameters
+
+This example demonstrates passing and retrieving a dynamic parameter (e.g., a user ID) through the URL.
+
+#### Step 1: Create a User Component
+
+  Generate a new component:
+
+  ```bash
+  ng generate component user
+  ```
+
+#### Step 2: Update Routes
+
+* Add a route with a parameter in `src/app/app.routes.ts`:
+
+  ```typescript
+  import { Routes } from '@angular/router';
+  import { HomeComponent } from './home/home.component';
+  import { AboutComponent } from './about/about.component';
+  import { UserComponent } from './user/user.component';
+
+  export const routes: Routes = [
+    { path: '', component: HomeComponent },
+    { path: 'about', component: AboutComponent },
+    { path: 'user/:id', component: UserComponent }, // Route with parameter
+    { path: '**', redirectTo: '', pathMatch: 'full' }
+  ];
+  ```
+
+#### Step 3: Retrieve the Parameter
+
+* Edit `src/app/user/user.ts` to access the `id` parameter:
+
+  ```typescript
+  import { Component, OnInit } from '@angular/core';
+  import { ActivatedRoute } from '@angular/router';
+
+  @Component({
+    selector: 'app-user',
+    imports: [],
+    templateUrl: './user.html',
+    styleUrl: './user.css'
+  })
+  export class User {
+      userId: string | null = null;
+
+      constructor(private route: ActivatedRoute) {}
+
+      ngOnInit(): void {
+        this.route.paramMap.subscribe(params => {
+          this.userId = params.get('id');
+        });
+      }
+  }
+  ```
+
+#### Step 4: Add Navigation
+
+* Update `src/app/app.html` to include a link to the user route:
+
+```html
+<h1>Angular Routing Example</h1>
+<nav>
+  <ul>
+    <li><a routerLink="/">Home</a></li>
+    <li><a routerLink="/about">About</a></li>
+    <li><a [routerLink]="['/user', '123']">User 123</a></li>
+  </ul>
+</nav>
+<router-outlet></router-outlet>
+```
+
+#### Step 5: Test the Route
+
+* Run `ng serve` and navigate to `/user/123`
+* The `UserComponent` will display "User ID: 123"
+* Try changing the ID in the URL (e.g., `/user/456`) to see dynamic updates
+
+* For more on route parameters, check:
+  * [Dynamic Route Parameters](https://angular.dev/guide/routing/router-reference#route-parameters).
+  * [Code Academy](https://www.codecademy.com/learn/angular-routing-and-navigation/modules/angular-routing-and-navigation-next-steps/cheatsheet)
+
+### Example 3: Programmatic Navigation
+
+This example shows how to navigate programmatically using the `Router` service.
+
+#### Step 1: Update the Home Component
+
+* Edit `src/app/home/home.ts` to include a button that navigates to the User page passing the User ID field:
+
+  ```html
+  <h2>Home Page</h2>
+  <p>Welcome to the Home page!</p>
+  <div>
+    <input type="text" [(ngModel)]="userId" placeholder="Enter User ID">
+    <button (click)="navigateToUser()">Go to User</button>
+  </div>
+  ```
+
+  ```typescript
+  import { Component } from '@angular/core';
+  import { Router } from '@angular/router';
+  import { FormsModule } from '@angular/forms';
+
+  @Component({
+    selector: 'app-home',
+    imports: [FormsModule],
+    templateUrl: './home.html',
+    styleUrl: './home.css'
+  })
+  export class Home {
+
+    userId: string = '';
+    
+    constructor(private router: Router) {}
+
+    navigateToUser() {
+      if (this.userId) {
+        this.router.navigate(['/user', this.userId]);
+      }
+    }
+  }
+  ```
+
+* Mode Details
+  * [Navigate to routes](https://angular.dev/guide/routing/navigate-to-routes)
+
+## Best Practices
+
+* **Use Descriptive Route Paths**: Choose clear, meaningful paths (e.g., `/products` instead of `/p`).
+* **Handle 404s**: Always include a wildcard route (`**`) to redirect invalid URLs to a default route or a "Not Found" component.
+* **Use Relative URLs**: Prefer relative URLs for maintainability, as they adapt to the application's root domain.[](https://angular.dev/guide/routing/navigate-to-routes)
+* **Test Navigation**: Ensure routes work as expected, including edge cases like invalid parameters or unauthorized access.
+
 ## Additional Content
 
-* Routing and Navigation
 * Reactive Forms
 * Services and Dependency Injection
