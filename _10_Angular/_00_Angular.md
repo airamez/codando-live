@@ -1179,7 +1179,7 @@ import { CommonModule } from '@angular/common';
 import { TruncatePipe } from './truncate.pipe';
 
 @Component({
-  selector: 'app-product-list',
+  selector: 'product-list',
   standalone: true,
   imports: [CommonModule, TruncatePipe],
   template: `
