@@ -1,0 +1,29 @@
+.posts-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.posts-table th, .posts-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.posts-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.posts-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.posts-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}

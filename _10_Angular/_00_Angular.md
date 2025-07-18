@@ -938,7 +938,7 @@ The lifecycle hooks are executed in the following order during a component’s l
 
 * [Pipes](https://angular.dev/guide/templates/pipes) are a powerful feature for transforming and formatting data directly in templates.
 * They allow developers to display data in a user-friendly way without modifying the underlying data source.
-* Pipes are commonly used for tasks like formatting dates, numbers, or strings, and can be chained or customized to meet specific needs. 
+* Pipes are commonly used for tasks like formatting dates, numbers, or strings, and can be chained or customized to meet specific needs.
 * Key Concepts of Pipes
   * **Purpose**: Pipes transform data in templates for display purposes, keeping the original data unchanged.
   * **Syntax**: In templates, pipes are applied using the `|` operator, e.g., `{{ value | pipeName }}`.
@@ -1575,6 +1575,341 @@ This example shows how to navigate programmatically using the `Router` service.
 * **Handle 404s**: Always include a wildcard route (`**`) to redirect invalid URLs to a default route or a "Not Found" component.
 * **Use Relative URLs**: Prefer relative URLs for maintainability, as they adapt to the application's root domain.[](https://angular.dev/guide/routing/navigate-to-routes)
 * **Test Navigation**: Ensure routes work as expected, including edge cases like invalid parameters or unauthorized access.
+
+## HTTP Requests
+
+* HTTP (Hypertext Transfer Protocol) is the foundation of data communication on the web.
+* HTTP requests allow your application to communicate with servers to fetch or send data, such as retrieving JSON from an API or submitting form data.
+* In Angular, HTTP requests are typically handled using the `HttpClient` module, which provides a powerful, observable-based API for making requests.
+* Understanding HTTP Requests
+  * HTTP requests are how clients (like browsers) communicate with servers.
+  * HTTP methods include:
+    * **GET**: Retrieve data from a server (e.g., fetching a list of users).
+    * **POST**: Send data to a server (e.g., submitting a form).
+    * **PUT**: Update existing data on a server.
+    * **DELETE**: Remove data from a server.
+  * Status Codes
+    * **200 OK**: Request succeeded.
+    * **404 Not Found**: Resource not found.
+    * **500 Internal Server Error**: Server-side error.
+* Web APIs
+  * A Web API (Web Application Programming Interface) is a server endpoint that provides data or services.
+  * This is a public API used for tests and demos:
+    * `https://jsonplaceholder.typicode.com`
+* Official Angular Documentation
+  * [HTTP Client Guide](https://angular.dev/guide/http)
+  * [Observables Guide](https://angular.dev/guide/observables)
+
+### Angular's HttpClient
+
+* The [`HttpClient`](https://angular.dev/api/common/http/HttpClient) is Angular's built-in module for making HTTP requests.
+* It is part of `@angular/common/http` and returns Observables by default, making it easy to handle asynchronous data streams.
+* It replaces older methods like XMLHttpRequest or the Fetch API in vanilla JavaScript, offering features like interceptors, typed responses, and progress events.
+* The nature of `HttpClient` requests is **Async**, leveraging RxJS Observables for handling responses.
+* Setup: In standalone applications (default since Angular v17), provide `HttpClient` in `app.config.ts`:
+
+  ```typescript
+  import { ApplicationConfig } from '@angular/core';
+  import { provideHttpClient } from '@angular/common/http';
+
+  export const appConfig: ApplicationConfig = {
+    providers: [provideHttpClient()]
+  };
+  ```
+
+* Note: In older NgModule-based apps, import `HttpClientModule` in `app.module.ts` instead.
+
+* Note: For GET requests, the `body` is not needed.
+* GET Request
+
+  ```typescript
+  this.http.get('https://jsonplaceholder.typicode.com/users').subscribe({
+    next: (data) => console.log(data),
+    error: (error) => console.error('Error:', error)
+  });
+  ```
+
+* Get Request with Type (RECOMMENTED)
+
+  ```typescript
+  /*
+   * Using Type: Recommended
+   */
+  interface User {
+    id: number;
+    name: string;
+    username: string;
+    email: string;
+  }
+
+  this.http.get<User[]>('https://jsonplaceholder.typicode.com/users').subscribe({
+    next: (data: User[]) => console.log(data),
+    error: (error) => console.error('Error:', error)
+  });
+  ```
+
+* POST Request
+
+  ```typescript
+  const data = {
+    title: 'New Post',
+    body: 'This is a new post.',
+    userId: 1
+  };
+  this.http.post('https://jsonplaceholder.typicode.com/posts', data).subscribe({
+    next: (response) => console.log(response),
+    error: (error) => console.error('Error:', error)
+  });
+  ```
+
+* Post Request with Type (RECOMMENTED)
+
+    ```typescript
+    import { HttpHeaders } from '@angular/common/http';
+
+    interface Post {
+      id?: number;
+      title: string;
+      body: string;
+      userId: number;
+    }
+
+    const data: Post = {
+      title: 'New Post',
+      body: 'This is a new post.',
+      userId: 1
+    };
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      // Add other headers if needed, e.g., 'Authorization': 'Bearer your-token-here'
+    });
+
+    this.http.post<Post>('https://jsonplaceholder.typicode.com/posts', data, { headers }).subscribe({
+      next: (response: Post) => console.log(response),
+      error: (error) => console.error('Error:', error)
+    });
+    ```
+
+* Post Request with headers
+
+  ```typescript
+    import { HttpHeaders } from '@angular/common/http';
+
+    const data = {
+      title: 'New Post',
+      body: 'This is a new post.',
+      userId: 1
+    };
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      // Add other headers if needed, e.g., 'Authorization': 'Bearer your-token-here'
+    });
+
+    this.http.post('https://jsonplaceholder.typicode.com/posts', data, { headers }).subscribe({
+      next: (response) => console.log(response),
+      error: (error) => console.error('Error:', error)
+    });
+    ```
+
+#### Promises vs Observables in HTTP Requests
+
+##### Promises
+
+* [Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) are a way to handle asynchronous operations in JavaScript.
+* They represent a single value that will be available in the future (or an error).
+* Promises are eager (execution starts immediately) and can only emit one value.
+
+  * Definition: A Promise is an object that may produce a single value some time in the future: either a resolved value or a reason that it’s not resolved (e.g., a network error occurred). It has three states: **Pending** (initial), **Fulfilled** (success), or **Rejected** (failure).
+  * In Angular: `HttpClient` can return Promises if needed by calling `.toPromise()` (deprecated in newer versions; use `lastValueFrom` from RxJS instead).
+  * Example with Promise (converting Observable):
+
+    ```typescript
+    import { lastValueFrom } from 'rxjs';
+
+    async getDataAsPromise() {
+      const observable = this.http.get('https://jsonplaceholder.typicode.com/users');
+      const data = await lastValueFrom(observable);
+      console.log(data);
+    }
+    ```
+
+##### Observables
+
+* [Observables](https://v17.angular.io/guide/observables-in-angular) (from RxJS) are more powerful than Promises.
+* An Observable is a collection of future values or events.
+* It's like a stream that can push multiple items, complete, or error.
+* Observers subscribe to it to receive notifications.
+* States include: emitting values, completing, or erroring. Unlike Promises, Observables can be canceled and handle sequences of data.
+* They can emit multiple values over time, are lazy (execution starts on subscription), and support cancellation, operators for transformation (e.g., map, filter), and multicasting.
+* In Angular: `HttpClient` natively returns Observables, ideal for HTTP as they handle async data flows efficiently.
+* Example with Observable:
+
+  ```typescript
+  this.http.get('https://jsonplaceholder.typicode.com/users').subscribe({
+    next: (data) => console.log(data),
+    error: (error) => console.error(error),
+    complete: () => console.log('Request complete')
+  });
+  ```
+
+* Key Differences
+
+  | Feature | Promise | Observable |
+  |---------|---------|------------|
+  | Values Emitted | Single value | Multiple values over time |
+  | Execution | Eager (starts immediately) | Lazy (starts on subscribe) |
+  | Cancellation | Not cancellable | Cancellable (unsubscribe) |
+  | Error Handling | .catch() | error callback in subscribe or catchError operator |
+  | Use in Angular HTTP | Possible via conversion | Native and recommended |
+
+* Best Practices
+  * Prefer Observables in Angular for HTTP as they integrate with RxJS operators (e.g., `pipe(map(...))` for data transformation, `retry()` for error recovery).
+  * Use `subscribe` sparingly; favor `async` pipe in templates: `@if (data$ | async; as data) {<div>{{ data }}</div>}`.
+  * Handle errors globally with interceptors or locally with `catchError`.
+  * Avoid mixing Promises and Observables; stick to Observables for consistency.
+  * For concurrent requests, use `forkJoin` (similar to Promise.all):
+
+    ```typescript
+    import { forkJoin } from 'rxjs';
+
+    forkJoin([
+      this.http.get('https://jsonplaceholder.typicode.com/posts?userId=1'),
+      this.http.get('https://jsonplaceholder.typicode.com/posts?userId=2'),
+      this.http.get('https://jsonplaceholder.typicode.com/posts?userId=3')
+    ]).subscribe(results => console.log(results));
+
+    // With error handling
+
+    forkJoin([
+      this.http.get('https://jsonplaceholder.typicode.com/posts?userId=1'),
+      this.http.get('https://jsonplaceholder.typicode.com/posts?userId=2'),
+      this.http.get('https://jsonplaceholder.typicode.com/posts?userId=3')
+
+    ]).subscribe({
+      next: (results) => console.log(results),
+      error: (error) => console.error('Error:', error)
+    });    
+    ```
+
+##### Chaining with Observables
+
+* Use RxJS operators for chaining, similar to Promise chaining.
+
+  ```typescript
+  import { switchMap } from 'rxjs/operators';
+
+  this.http.get<User[]>('https://jsonplaceholder.typicode.com/users')
+    .pipe(
+      switchMap(users => this.http.get(`https://jsonplaceholder.typicode.com/posts?userId=${users[0].id}`))
+    )
+    .subscribe(posts => console.log(posts));
+  ```
+
+##### Async/Await with Observables
+
+* Convert Observables to Promises for async/await if needed, but prefer Observables.
+
+  ```typescript
+  import { lastValueFrom } from 'rxjs';
+
+  async function getUserAndPosts() {
+    try {
+      const users = await lastValueFrom(this.http.get('https://jsonplaceholder.typicode.com/users'));
+      const posts = await lastValueFrom(this.http.get(`https://jsonplaceholder.typicode.com/posts?userId=${users[0].id}`));
+      console.log(users, posts);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+  ```
+
+### Example: Getting Posts from a user
+
+* [user-posts/user-posts.html](./my-app/src/app/user-posts/user-posts.html)
+* [user-posts/user-posts.css](./my-app/src/app/user-posts/user-posts.css)
+* [user-posts/user-posts.ts](./my-app/src/app/user-posts/user-posts.ts)
+
+```html
+<div>
+  <label for="userId">User ID:</label>
+  <input type="number" id="userId" [(ngModel)]="userId">
+  <button (click)="getPosts()">Get Posts</button>
+</div>
+
+@if (posts$ | async; as posts) {
+  @if (posts.length > 0) {
+    <table class="posts-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Body</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (post of posts; track post.id) {
+          <tr>
+            <td>{{ post.id }}</td>
+            <td>{{ post.title }}</td>
+            <td>{{ post.body }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p>No posts found for User ID: {{ userId }}</p>
+  }
+}
+```
+
+```typescript
+// post-list.component.ts
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Observable, catchError, of } from 'rxjs';
+
+interface Post {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}
+
+@Component({
+  selector: 'user-posts',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './user-posts.html',
+  styleUrls: ['./user-posts.css']
+})
+export class UserPosts {
+  userId: number | null = null;
+  posts$: Observable<Post[]> | null = null;
+  errorMessage: string | null = null;
+
+  constructor(private http: HttpClient) {}
+
+  getPosts() {
+    if (this.userId === null || this.userId <= 0) {
+      this.errorMessage = 'Please enter a valid User ID.';
+      this.posts$ = null;
+      return;
+    }
+
+    this.errorMessage = null;
+    this.posts$ = this.http.get<Post[]>(`https://jsonplaceholder.typicode.com/posts?userId=${this.userId}`).pipe(
+      catchError(err => {
+        this.errorMessage = 'An error occurred while fetching posts.';
+        return of([]);
+      })
+    );
+  }
+}
+```
 
 ## Additional Content
 

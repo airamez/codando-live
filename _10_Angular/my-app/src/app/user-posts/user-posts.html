@@ -1,0 +1,30 @@
+<div>
+  <label for="userId">User ID:</label>
+  <input type="number" id="userId" [(ngModel)]="userId">
+  <button (click)="getPosts()">Get Posts</button>
+</div>
+
+@if (posts$ | async; as posts) {
+  @if (posts.length > 0) {
+    <table class="posts-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Body</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (post of posts; track post.id) {
+          <tr>
+            <td>{{ post.id }}</td>
+            <td>{{ post.title }}</td>
+            <td>{{ post.body }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p>No posts found for User ID: {{ userId }}</p>
+  }
+}

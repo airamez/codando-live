@@ -9,21 +9,23 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 // import { TextEditor } from './text-editor/text-editor';
 // import { ParentEditor } from './parent-editor/parent-editor';
 // import { ProductList } from './product-list';
+import { UserPosts } from './user-posts/user-posts';
 
 @Component({
   selector: 'app-root',
   imports: [
     RouterOutlet,
     RouterLink,
-    // HelloWorld,
-    // BindingDemo,
-    // DataFormDemo,
-    // TaskList,
-    // TaskListModern,
-    // UserProfile,
-    // TextEditor,
+    // HelloWorld
+    // BindingDemo
+    // DataFormDemo
+    // TaskList
+    // TaskListModern
+    // UserProfile
+    // TextEditor
     // ParentEditor
     // ProductList
+    UserPosts
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
