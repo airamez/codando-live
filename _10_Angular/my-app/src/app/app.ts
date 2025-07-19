@@ -15,7 +15,7 @@ import { UserPosts } from './user-posts/user-posts';
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    RouterLink,
+    //RouterLink,
     // HelloWorld
     // BindingDemo
     // DataFormDemo

@@ -1598,7 +1598,7 @@ This example shows how to navigate programmatically using the `Router` service.
     * `https://jsonplaceholder.typicode.com`
 * Official Angular Documentation
   * [HTTP Client Guide](https://angular.dev/guide/http)
-  * [Observables Guide](https://angular.dev/guide/observables)
+  * [Observables Guide](https://v17.angular.io/guide/observables-in-angular)
 
 ### Angular's HttpClient
 
@@ -1865,7 +1865,6 @@ This example shows how to navigate programmatically using the `Router` service.
 ```
 
 ```typescript
-// post-list.component.ts
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
