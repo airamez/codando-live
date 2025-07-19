@@ -58,7 +58,7 @@
   * Update Angular
 
   ```shell
-
+  ng update @angular/cli
   ```
 
   ```shell
