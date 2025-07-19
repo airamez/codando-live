@@ -1,0 +1,54 @@
+<div class="container">
+  <p-select [options]="users" [(ngModel)]="selectedUser" placeholder="Select a User" (onChange)="onUserChange($event)" [style]="{ 'width': '100%' }"></p-select>
+
+  <button pButton pRipple type="button" icon="pi pi-plus" label="Add Post" (click)="showDialog(false)" [disabled]="!selectedUser" class="p-mt-2"></button>
+
+  <p-table #dt [value]="posts" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
+        <th pSortableColumn="title">Title <p-sortIcon field="title"></p-sortIcon></th>
+        <th pSortableColumn="body">Body <p-sortIcon field="body"></p-sortIcon></th>
+        <th>Actions</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>
+          <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'title', 'contains')" placeholder="Filter by Title">
+        </th>
+        <th>
+          <input pInputText type="text" (input)="dt.filter($any($event.target).value, 'body', 'contains')" placeholder="Filter by Body">
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-post>
+      <tr>
+        <td>{{ post.id }}</td>
+        <td>{{ post.title }}</td>
+        <td>{{ post.body }}</td>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="showDialog(true, post)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="deletePost(post.id)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog header="{{ isEditing ? 'Edit Post' : 'Add Post' }}" [(visible)]="dialogVisible" [modal]="true" [style]="{ width: '50vw' }" [maximizable]="true" [baseZIndex]="10000">
+    <form [formGroup]="postForm">
+      <div class="p-field">
+        <label for="title">Title</label>
+        <input pInputText id="title" formControlName="title" style="width: 100%;" />
+      </div>
+      <div class="p-field">
+        <label for="body">Body</label>
+        <textarea pInputTextarea id="body" formControlName="body" rows="5" style="width: 100%;"></textarea>
+      </div>
+    </form>
+    <ng-template pTemplate="footer">
+      <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="dialogVisible = false"></button>
+      <button pButton pRipple label="Save" icon="pi pi-check" (click)="savePost()" [disabled]="postForm.invalid"></button>
+    </ng-template>
+  </p-dialog>
+</div>

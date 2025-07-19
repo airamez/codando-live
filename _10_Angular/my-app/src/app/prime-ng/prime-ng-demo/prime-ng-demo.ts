@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'prime-ng-demo',
-  imports: [],
+  imports: [ButtonModule],
   templateUrl: './prime-ng-demo.html',
   styleUrl: './prime-ng-demo.css'
 })
