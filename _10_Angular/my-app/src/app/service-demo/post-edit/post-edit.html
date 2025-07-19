@@ -1,0 +1,14 @@
+<!-- src/app/post-edit/post-edit.component.html -->
+<form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+  <h2>Edit Post</h2>
+  <div>
+    <label for="title">Title:</label>
+    <input id="title" formControlName="title">
+  </div>
+  <div>
+    <label for="body">Body:</label>
+    <textarea id="body" formControlName="body"></textarea>
+  </div>
+  <button type="submit" [disabled]="postForm.invalid">Save</button>
+  <button type="button" (click)="cancel.emit()">Cancel</button>
+</form>

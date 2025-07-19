@@ -1,0 +1,40 @@
+/* src/app/post-list/post-list.component.css */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+button {
+  margin-right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+
+button:first-child {
+  background-color: #ffc107;
+  color: black;
+}
+
+button:first-child:hover {
+  background-color: #e0a800;
+}
+
+button:last-child {
+  background-color: #dc3545;
+  color: white;
+}
+
+button:last-child:hover {
+  background-color: #c82333;
+}

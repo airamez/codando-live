@@ -1,0 +1,11 @@
+<button (click)="onAdd()">Add New Post</button>
+
+@if (showAdd) {
+  <app-post-add [userId]="userId" (saved)="onSaved()" (cancel)="onCancel()"></app-post-add>
+}
+
+@if (selectedPost) {
+  <app-post-edit [post]="selectedPost" (saved)="onSaved()" (cancel)="onCancel()"></app-post-edit>
+}
+
+<app-post-list [posts]="posts" (edit)="onEdit($event)" (delete)="onDelete($event)"></app-post-list>

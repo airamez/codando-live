@@ -1910,7 +1910,135 @@ export class UserPosts {
 }
 ```
 
-## Additional Content
+## Services and Dependency Injection
 
-* Reactive Forms
-* Services and Dependency Injection
+* [Services](https://v17.angular.io/guide/architecture-services) are classes that encapsulate reusable logic, such as data fetching, logging, or business rules.
+  * They are typically singleton instances shared across the application via Dependency Injection.
+* [Dependency injection](https://v17.angular.io/guide/architecture-services#dependency-injection-di) is a mechanism where Angular's injector creates and provides instances of dependencies to classes that need them
+  * Angular provides the ability for you to inject a service into a component to give that component access to the service.
+  * DI enables loose coupling, making code easier to maintain and test.
+
+### Creating a Service
+
+* Use the Angular CLI and decorate the class with `@Injectable()`.
+* This marks it as injectable and allows Angular to provide it via DI.
+* CLI sintaxe
+
+  ```shell
+  ng generate service SERVICE-NAME
+  ```
+
+  ```typescript
+  import { Injectable } from '@angular/core';
+
+  @Injectable({
+    providedIn: 'root'  // Singleton at root level
+  })
+  export class SERVICE-NAME {
+
+    methodOne(): string[] {
+      // Do something
+    }
+
+    method2(hero: string): void {
+      // Do something
+    }
+  }
+  ```
+
+### Services Environment Variables
+
+#### Create the Environment
+
+* CLI Command
+
+  ```shell
+  ng generate environments
+  ```
+
+* This create the folder `environments` in the `src` folder
+* Each file will define the settings for an environment: DEV, E2E, QA, PROD
+
+  ```typescript
+  // .../my-app/src/environments/environment.development.ts
+  export const environment = {
+    production: false,
+    apiUrl: 'https://dev-api.example.com'  // Your dev URL
+  };
+  ```
+
+  ```typescript
+  // .../my-app/src/environments/environment.ts [PRODCUTION]
+  export const environment = {
+    production: true,
+    apiUrl: 'https://prod-api.example.com'  // Your prod URL
+  };
+  ```
+
+  ```typescript
+  import { Injectable } from '@angular/core';
+  import { HttpClient } from '@angular/common/http';
+  import { Observable } from 'rxjs';
+  import { environment } from '../environments/environment';
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class DemoService {
+    private baseUrl = environment.apiUrl; // Using the settings
+  ```
+
+#### Build and Serve
+
+* For development use
+  * `ng serve`
+* For prodcution use
+  * `ng build`
+
+>Note: In `angular.json`, under `projects > your-app > architect > build > configurations > development`, you'll see the file replacement configured
+
+* Demo
+  * Foler: `_10_Angular/my-app/src/app/service-demo`
+  * Models
+    * `.../models/UserPost.ts`
+  * Service
+    * `.../services/user-posts.service.ts`
+  * Components
+    * Posts: `.../posts`
+    * PostList: `.../post-list`
+    * PostEdit: `.../post-add`
+    * PostAdd: `.../post-edit`
+  * Hierarchy and Relations:
+
+    ```text
+    Posts Component (Main entry point, receives userId from route)
+    │
+    ├── Injects: UserPostsService (fetches posts by userId, deletes posts)
+    │
+    ├── Contains: PostList Component (child component for grid display)
+    │   │
+    │   ├── Input: posts (array from PostsComponent)
+    │   │
+    │   └── Outputs: edit (emits Post to Posts Component for editing)
+    │                delete (emits postId to Posts Component for deletion)
+    │
+    ├── Conditionally shows: PostAdd Component (for creating new post)
+    │   │
+    │   ├── Input: userId (from PostsComponent)
+    │   │
+    │   ├── Injects: ApiService (calls createPost)
+    │   │
+    │   └── Outputs: saved (emits to Posts Component to refresh and hide)
+    │                cancel (emits to Posts Component to hide)
+    │
+    └── Conditionally shows: PostEdit Component (for editing existing post)
+        │
+        ├── Input: post (selected Post from Posts Component)
+        │
+        ├── Injects: ApiService (calls updatePost)
+        │
+        └── Outputs: saved (emits to Posts Component to refresh and hide)
+                    cancel (emits to Posts Component to hide)
+    ```
+
+## Third-party components

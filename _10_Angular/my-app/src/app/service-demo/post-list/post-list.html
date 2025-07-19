@@ -1,0 +1,28 @@
+<!-- src/app/post-list/post-list.component.html -->
+@if (posts.length > 0) {
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Body</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (post of posts; track post.id) {
+        <tr>
+          <td>{{ post.id }}</td>
+          <td>{{ post.title }}</td>
+          <td>{{ post.body }}</td>
+          <td>
+            <button (click)="edit.emit(post)">Edit</button>
+            <button (click)="delete.emit(post.id)">Delete</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+} @else {
+  <p>No posts found for this user.</p>
+}

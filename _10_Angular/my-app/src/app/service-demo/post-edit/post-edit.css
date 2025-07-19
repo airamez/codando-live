@@ -1,0 +1,46 @@
+/* src/app/post-edit/post-edit.component.css */
+form {
+  margin-bottom: 1rem;
+}
+
+div {
+  margin-bottom: 0.5rem;
+}
+
+label {
+  display: block;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 0.5rem;
+}
+
+button {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+button[type="submit"] {
+  background-color: #28a745;
+  color: white;
+}
+
+button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+button[type="button"] {
+  background-color: #6c757d;
+  color: white;
+}
+
+button[type="button"]:hover {
+  background-color: #5a6268;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
