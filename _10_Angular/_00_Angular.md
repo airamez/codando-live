@@ -2151,3 +2151,6 @@ export class UserPosts {
   })
   export class ButtonDemo {}
   ```
+
+* Demo: CRUD for User's Posts
+  * [my-app/src/app/prime-ng/users-and-posts/](./my-app/src/app/prime-ng/users-and-posts/)
