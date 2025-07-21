@@ -9,8 +9,8 @@ import { RouterOutlet, RouterLink } from '@angular/router';
 // import { TextEditor } from './text-editor/text-editor';
 // import { ParentEditor } from './parent-editor/parent-editor';
 // import { ProductList } from './product-list';
-import { PrimeNgDemo } from './prime-ng/prime-ng-demo/prime-ng-demo';
-// import { UsersAndPosts } from './prime-ng/users-and-posts/users-and-posts';
+// import { PrimeNgDemo } from './prime-ng/prime-ng-demo/prime-ng-demo';
+import { UsersAndPosts } from './prime-ng/users-and-posts/users-and-posts';
 
 @Component({
   selector: 'app-root',
@@ -26,8 +26,8 @@ import { PrimeNgDemo } from './prime-ng/prime-ng-demo/prime-ng-demo';
     // TextEditor
     // ParentEditor
     // ProductList
-    PrimeNgDemo
-    // UsersAndPosts
+    // PrimeNgDemo
+    UsersAndPosts
   ],
   templateUrl: './app.html',
   styleUrl: './app.css'
