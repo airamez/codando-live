@@ -16,7 +16,7 @@ import { UsersAndPosts } from './prime-ng/users-and-posts/users-and-posts';
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    //RouterLink,
+    // RouterLink,
     // HelloWorld
     // BindingDemo
     // DataFormDemo
