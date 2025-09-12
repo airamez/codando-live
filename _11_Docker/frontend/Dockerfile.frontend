@@ -1,9 +1,0 @@
-FROM node:20.19.0 AS build
-WORKDIR /app
-COPY . .
-RUN npm ci && npm run build --prod
-
-# Use lightweight, production-ready Nginx base
-FROM nginx:stable-alpine
-COPY --from=build /app/dist/my-angular-app /usr/share/nginx/html
-EXPOSE 80

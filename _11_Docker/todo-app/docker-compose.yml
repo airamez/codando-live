@@ -1,11 +1,10 @@
 services:
-
   postgres:
     image: postgres:latest
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
+      POSTGRES_DB: todo_db
     ports:
       - "5432:5432"
 
@@ -16,7 +15,7 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - postgres # Wait for postgress
+      - postgres
 
   frontend:
     build:
@@ -25,4 +24,4 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - api # Wait for api
+      - api

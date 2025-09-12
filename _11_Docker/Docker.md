@@ -30,7 +30,7 @@
   * Download from [Docker Official Site](https://www.docker.com/products/docker-desktop/)
   * Follow the installation wizard
 
-* On Linux:
+* On Ubuntu/Federa Linux:
 
   ```bash
   # Update your system first
@@ -38,6 +38,8 @@
   # Install Docker package
   sudo apt-get install docker-ce docker-ce-cli containerd.io
   ```
+
+* On Arch Linux
 
   ```bash
   # Update your system first
@@ -62,18 +64,6 @@
 
   ```
 
-![Docker Install](images/DockerInstallationArchLinux.png)
-
-* Basic Commands
-
-  | Command                     | Description                      |
-  | --------------------------- | -------------------------------- |
-  | `docker run hello-world`    | Test Docker installation         |
-  | `docker ps`                 | List running containers          |
-  | `docker images`             | List downloaded images           |
-  | `docker build -t appname .` | Build image from Dockerfile      |
-  | `docker exec -it <id> bash` | Access running container's shell |
-
 ```bash
 # Start Docker
 sudo systemctl start docker
@@ -90,9 +80,15 @@ sudo docker-compose down
 docker ps
 ```
 
-![Docker Hello World](images/docker-hello-world.png)
+* Basic Commands
 
----
+  | Command                     | Description                      |
+  | --------------------------- | -------------------------------- |
+  | `docker run hello-world`    | Test Docker installation         |
+  | `docker ps`                 | List running containers          |
+  | `docker images`             | List downloaded images           |
+  | `docker build -t appname .` | Build image from Dockerfile      |
+  | `docker exec -it <id> bash` | Access running container's shell |
 
 ## Dockerfile
 
@@ -116,7 +112,7 @@ docker ps
 | Server/API | ASP.NET Core Web API | `mcr.microsoft.com/dotnet/aspnet` + custom build |
 | Frontend   | Angular              | `node:20` for build + `nginx` to serve           |
 
-We’ll define each container individually and orchestrate them using **Docker Compose**.
+>Note: We’ll define each container individually and orchestrate them using **Docker Compose**.
 
 ### Dockerfiles (Summarized)
 
@@ -199,7 +195,3 @@ We’ll define each container individually and orchestrate them using **Docker C
       depends_on:
         - api # Wait for api
   ```
-
->Note: The Container Tools Extension for VS Code is helpful
-
-![Container Tools](images/VSCODE_ContainterTools.png)
