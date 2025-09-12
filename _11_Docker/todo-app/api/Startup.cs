@@ -11,7 +11,18 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddDbContext<TodoContext>(options =>
-            options.UseNpgsql("Host=postgres;Database=mydb;Username=user;Password=password"));
+            options.UseNpgsql("Host=postgres;Database=todo_db;Username=user;Password=password"));
+        
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowFrontend",
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
+                });
+        });
         
         services.AddControllers();
     }
@@ -23,7 +34,16 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
+        // Ensure database is created
+        using (var scope = app.ApplicationServices.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<TodoContext>();
+            context.Database.EnsureCreated();
+        }
+
         app.UseRouting();
+        
+        app.UseCors("AllowFrontend");
 
         app.UseAuthorization();
 

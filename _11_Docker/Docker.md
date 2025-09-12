@@ -130,22 +130,24 @@ docker ps
   WORKDIR /app
   COPY --from=build /app/publish .
   EXPOSE 5000
+  ENV ASPNETCORE_URLS=http://+:5000
   ENTRYPOINT ["dotnet", "WebApi.dll"]
   ```
 
 * Frontend - Angular App: `Dockerfile.frontend`
 
   ```dockerfile
-  # Use latest compatible Node.js for Angular 20
-  FROM node:20.19.0 AS build
+  FROM node:latest AS build
   WORKDIR /app
+  COPY package.json package-lock.json ./
+  RUN npm install
   COPY . .
-  RUN npm ci && npm run build --prod
+  RUN npm run build
 
-  # Use lightweight, production-ready Nginx base
-  FROM nginx:stable-alpine
-  COPY --from=build /app/dist/my-angular-app /usr/share/nginx/html
+  FROM nginx:alpine
+  COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
   EXPOSE 80
+  CMD ["nginx", "-g", "daemon off;"]
   ```
 
 >Note: The name convention for docker files is to start with `Dockerfile.`
@@ -163,35 +165,129 @@ docker ps
   * Stream the log output of running services
   * Run a one-off command on a service
 
-* Docker Componser file: `docker-compose.yml`
+* Docker Composer file: `docker-compose.yml`
 
   ```yaml
   services:
-
     postgres:
+      container_name: todo-postgres
       image: postgres:latest
       environment:
         POSTGRES_USER: user
         POSTGRES_PASSWORD: password
-        POSTGRES_DB: mydb
+        POSTGRES_DB: todo_db
       ports:
         - "5432:5432"
 
     api:
+      container_name: todo-api
       build:
         context: ./api
         dockerfile: Dockerfile.api
       ports:
         - "5000:5000"
       depends_on:
-        - postgres # Wait for postgress
+        - postgres
 
     frontend:
+      container_name: todo-frontend
       build:
         context: ./frontend
         dockerfile: Dockerfile.frontend
       ports:
         - "80:80"
       depends_on:
-        - api # Wait for api
+        - api
   ```
+
+## Docker Commands Reference
+
+### Prerequisites
+
+Before running the application, ensure Docker is installed and running:
+
+| Command | Description |
+|---------|-------------|
+| `sudo systemctl start docker` | Start Docker service (Linux) |
+| `sudo systemctl status docker` | Check Docker service status |
+| `docker --version` | Verify Docker installation |
+| `docker-compose --version` | Verify Docker Compose installation |
+
+### Application Lifecycle Commands
+
+| Command | Description | Use Case |
+|---------|-------------|----------|
+| `sudo docker-compose up --build` | Build and start all services | Initial deployment or major changes |
+| `sudo docker-compose up` | Start existing containers | Regular startup after containers exist |
+| `sudo docker-compose up -d` | Start containers in background (detached) | Production deployment |
+| `sudo docker-compose down` | Stop and remove all containers | Clean shutdown |
+| `sudo docker-compose stop` | Stop containers without removing them | Temporary pause |
+| `sudo docker-compose start` | Start stopped containers | Resume after stop |
+| `sudo docker-compose restart` | Restart all services | Quick restart |
+
+### Development Workflow Commands
+
+| Scenario | Command | Description |
+|----------|---------|-------------|
+| **Frontend Code Changes** | `sudo docker-compose up --build frontend` | Rebuild only frontend container |
+| **Backend Code Changes** | `sudo docker-compose up --build api` | Rebuild only API container |
+| **Database Changes** | `sudo docker-compose down && sudo docker-compose up --build` | Full rebuild (recreates database) |
+| **Configuration Changes** | `sudo docker-compose down && sudo docker-compose up --build` | Apply docker-compose.yml changes |
+
+### Container Management Commands
+
+| Command | Description |
+|---------|-------------|
+| `sudo docker ps` | List running containers |
+| `sudo docker ps -a` | List all containers (including stopped) |
+| `sudo docker logs todo-frontend` | View frontend container logs |
+| `sudo docker logs todo-api` | View API container logs |
+| `sudo docker logs todo-postgres` | View database container logs |
+| `sudo docker exec -it todo-api bash` | Access API container shell |
+| `sudo docker exec -it todo-postgres psql -U user -d todo_db` | Access database directly |
+
+### Cleanup Commands
+
+| Command | Description | Use Case |
+|---------|-------------|----------|
+| `sudo docker-compose down --volumes` | Remove containers and volumes | Complete cleanup including data |
+| `sudo docker system prune` | Remove unused containers, networks, images | Free up disk space |
+| `sudo docker image prune` | Remove unused images | Clean up old builds |
+| `sudo docker volume prune` | Remove unused volumes | Clean up orphaned data |
+
+### Quick Start Guide
+
+1. **Start Docker service:**
+   ```bash
+   sudo systemctl start docker
+   ```
+
+2. **Navigate to project directory:**
+   ```bash
+   cd /path/to/todo-app
+   ```
+
+3. **Build and run the application:**
+   ```bash
+   sudo docker-compose up --build
+   ```
+
+4. **Access the application:**
+   - Frontend: http://localhost
+   - API: http://localhost:5000
+   - Database: localhost:5432
+
+5. **Stop the application:**
+   ```bash
+   sudo docker-compose down
+   ```
+
+### Troubleshooting Commands
+
+| Issue | Command | Solution |
+|-------|---------|----------|
+| **Containers won't start** | `sudo docker-compose logs` | Check logs for errors |
+| **Port conflicts** | `sudo docker-compose down && sudo docker-compose up` | Restart to release ports |
+| **Database connection issues** | `sudo docker-compose restart postgres` | Restart database container |
+| **Frontend not updating** | `sudo docker-compose up --build frontend` | Rebuild frontend with changes |
+| **API errors** | `sudo docker logs todo-api --tail 50` | Check recent API logs |
