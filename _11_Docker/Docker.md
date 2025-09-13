@@ -114,7 +114,74 @@ docker ps
 
 >Note: We’ll define each container individually and orchestrate them using **Docker Compose**.
 
-### Dockerfiles (Summarized)
+#### Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        HOST MACHINE                             │
+│                                                                 │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌──────────────┐ │
+│  │   Frontend      │    │      API        │    │  Database    │ │
+│  │   Container     │    │   Container     │    │  Container   │ │
+│  │                 │    │                 │    │              │ │
+│  │  ┌───────────┐  │    │  ┌───────────┐  │    │ ┌──────────┐ │ │
+│  │  │   nginx   │  │    │  │ ASP.NET   │  │    │ │PostgreSQL│ │ │
+│  │  │  (Alpine) │  │    │  │ Core API  │  │    │ │          │ │ │
+│  │  │           │  │    │  │   (.NET)  │  │    │ │          │ │ │
+│  │  │  Angular  │  │    │  │           │  │    │ │          │ │ │
+│  │  │    App    │  │    │  │           │  │    │ │          │ │ │
+│  │  └───────────┘  │    │  └───────────┘  │    │ └──────────┘ │ │
+│  │                 │    │                 │    │              │ │
+│  │  Port: 80       │    │  Port: 5000     │    │ Port: 5432   │ │
+│  │  Name:          │    │  Name:          │    │ Name:        │ │
+│  │  todo-frontend  │    │  todo-api       │    │ todo-postgres│ │
+│  └─────────────────┘    └─────────────────┘    └──────────────┘ │
+│           │                       │                       │     │
+│           │                       │                       │     │
+│  ┌────────▼────────┐    ┌─────────▼────────┐    ┌─────────▼───┐ │
+│  │ localhost:80    │    │ localhost:5000   │    │ Internal    │ │
+│  │ (External)      │    │ (External)       │    │ Network     │ │
+│  └─────────────────┘    └──────────────────┘    │ Only        │ │
+│                                                 └─────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+
+                    ┌─────────────────┐
+                    │     Browser     │
+                    │  (User Access)  │
+                    └─────────────────┘
+                             │
+                             │ HTTP Requests
+                             ▼
+                    ┌─────────────────┐
+                    │ localhost:80    │
+                    │  (Frontend)     │
+                    └─────────────────┘
+```
+
+#### Detailed Container Information
+
+##### Frontend Container (todo-frontend)
+- **Base Image**: nginx:alpine
+- **Build Process**: Multi-stage (Node.js build → nginx serve)
+- **Port Mapping**: 80:80
+- **Purpose**: Serves Angular application via nginx
+- **Dependencies**: Depends on API container
+
+##### API Container (todo-api)
+- **Base Image**: mcr.microsoft.com/dotnet/aspnet
+- **Framework**: ASP.NET Core (.NET 9.0)
+- **Port Mapping**: 5000:5000
+- **Purpose**: REST API for todo operations
+- **Dependencies**: Depends on PostgreSQL container
+
+##### Database Container (todo-postgres)
+- **Base Image**: postgres:latest
+- **Port Mapping**: 5432:5432
+- **Database Name**: todo_db
+- **Credentials**: user/password
+- **Purpose**: Data persistence for todo items
+
+#### Dockerfiles (Summarized)
 
 * Database - PostgreSQL (No Dockerfile needed)
   * Use the official image directly in Docker Compose.
@@ -151,6 +218,39 @@ docker ps
   ```
 
 >Note: The name convention for docker files is to start with `Dockerfile.`
+
+#### Network Configuration
+
+```
+Docker Network: Default bridge network
+- Frontend can communicate with API via container name
+- API can communicate with Database via container name
+- Only Frontend and API ports are exposed to host
+- Database is accessible only within Docker network
+```
+
+#### Container Interactions Flow
+
+```
+1. User Request Flow:
+   Browser → nginx (Port 80) → Angular App → API Calls → ASP.NET Core (Port 5000)
+
+2. Data Flow:
+   ASP.NET Core API → PostgreSQL (Port 5432) → Database Operations
+
+3. Response Flow:
+   PostgreSQL → ASP.NET Core → Angular App → nginx → Browser
+```
+
+#### Build and Deployment
+
+```
+Command: sudo docker-compose up --build
+
+Build Order:
+1. PostgreSQL container starts first
+2. API container builds and starts (waits for PostgreSQL)
+3. Frontend container builds and starts (waits for API)
 
 #### Docker Compose File
 
