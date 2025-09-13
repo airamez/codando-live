@@ -929,6 +929,18 @@ There are several tools available for Docker and Docker Compose administration. 
 * [Docker Hub](https://hub.docker.com/)
 * [Portainer](https://portainer.io/)
 
+## Docker Desktop
+
+* On Arch Linux it is necessary to uninstall Docker Composer
+
+* Commands replacing the Docker Composer commands
+
+  ```shell
+  docker compose up -d  # Builds and starts services from your compose file
+  docker compose down   # Stops and removes
+  docker compose logs   # View logs
+  ```
+
 ## Portainer
 
 [Portainer](https://portainer.io/) is a lightweight management UI for Docker and Docker Compose.
