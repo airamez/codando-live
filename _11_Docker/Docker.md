@@ -64,21 +64,20 @@
 
   ```
 
-```bash
-# Start Docker
-sudo systemctl start docker
+* Start/Stop Docker
 
-# Start Docker Componer
-sudo docker-compose up
+  ```bash
+  # Start Docker
+  sudo systemctl start docker
 
-# Stop
-sudo systemctl stop docker.socket
-sudo systemctl stop docker.service
-sudo docker-compose down
+  # Start Docker Componer
+  sudo docker-compose up
 
-# Confirm
-docker ps
-```
+  # Stop
+  sudo systemctl stop docker.socket
+  sudo systemctl stop docker.service
+  sudo docker-compose down
+  ```
 
 * Basic Commands
 
@@ -104,15 +103,15 @@ docker ps
 ### Multi-Container Setup
 
 * For a full-stack web app, we often split responsibilities across containers for modularity and scalability.
-* Here’s a setup using **three containers(layers)**:
+* This is a setup using **three containers(layers)** for full-stack application:
 
-| Layer      | Tech Stack           | Docker Image Used                                |
-| ---------- | -------------------- | ------------------------------------------------ |
-| Database   | PostgreSQL           | `postgres:latest`                                |
-| Server/API | ASP.NET Core Web API | `mcr.microsoft.com/dotnet/aspnet` + custom build |
-| Frontend   | Angular              | `node:20` for build + `nginx` to serve           |
+  | Layer      | Tech Stack           | Docker Image Used                                |
+  | ---------- | -------------------- | ------------------------------------------------ |
+  | Database   | PostgreSQL           | `postgres:latest`                                |
+  | Server/API | ASP.NET Core Web API | `mcr.microsoft.com/dotnet/aspnet` + custom build |
+  | Frontend   | Angular              | `node:20` for build + `nginx` to serve           |
 
->Note: We’ll define each container individually and orchestrate them using **Docker Compose**.
+>Note: We’ll define each container individually and orchestrate them using **Docker Compose** (Details Below).
 
 #### Architecture Diagram
 
@@ -126,9 +125,9 @@ docker ps
 │  │                 │    │                 │    │              │ │
 │  │  ┌───────────┐  │    │  ┌───────────┐  │    │ ┌──────────┐ │ │
 │  │  │   nginx   │  │    │  │ ASP.NET   │  │    │ │PostgreSQL│ │ │
-│  │  │  (Alpine) │  │    │  │ Core API  │  │    │ │          │ │ │
+│  │  │  (Alpine) │  │---►│  │ Core API  │  │---►│ │          │ │ │
 │  │  │           │  │    │  │   (.NET)  │  │    │ │          │ │ │
-│  │  │  Angular  │  │    │  │           │  │    │ │          │ │ │
+│  │  │  Angular  │  │◄---│  │           │  |◄---│ │          │ │ │
 │  │  │    App    │  │    │  │           │  │    │ │          │ │ │
 │  │  └───────────┘  │    │  └───────────┘  │    │ └──────────┘ │ │
 │  │                 │    │                 │    │              │ │
@@ -158,30 +157,28 @@ docker ps
                     └─────────────────┘
 ```
 
-#### Detailed Container Information
-
-##### Frontend Container (todo-frontend)
+#### Frontend Container (todo-frontend)
 - **Base Image**: nginx:alpine
 - **Build Process**: Multi-stage (Node.js build → nginx serve)
 - **Port Mapping**: 80:80
 - **Purpose**: Serves Angular application via nginx
 - **Dependencies**: Depends on API container
 
-##### API Container (todo-api)
+#### API Container (todo-api)
 - **Base Image**: mcr.microsoft.com/dotnet/aspnet
 - **Framework**: ASP.NET Core (.NET 9.0)
 - **Port Mapping**: 5000:5000
 - **Purpose**: REST API for todo operations
 - **Dependencies**: Depends on PostgreSQL container
 
-##### Database Container (todo-postgres)
+#### Database Container (todo-postgres)
 - **Base Image**: postgres:latest
 - **Port Mapping**: 5432:5432
 - **Database Name**: todo_db
 - **Credentials**: user/password
 - **Purpose**: Data persistence for todo items
 
-#### Dockerfiles (Summarized)
+#### Dockerfiles
 
 * Database - PostgreSQL (No Dockerfile needed)
   * Use the official image directly in Docker Compose.
@@ -218,29 +215,6 @@ docker ps
   ```
 
 >Note: The name convention for docker files is to start with `Dockerfile.`
-
-#### Network Configuration
-
-```
-Docker Network: Default bridge network
-- Frontend can communicate with API via container name
-- API can communicate with Database via container name
-- Only Frontend and API ports are exposed to host
-- Database is accessible only within Docker network
-```
-
-#### Container Interactions Flow
-
-```
-1. User Request Flow:
-   Browser → nginx (Port 80) → Angular App → API Calls → ASP.NET Core (Port 5000)
-
-2. Data Flow:
-   ASP.NET Core API → PostgreSQL (Port 5432) → Database Operations
-
-3. Response Flow:
-   PostgreSQL → ASP.NET Core → Angular App → nginx → Browser
-```
 
 #### Build and Deployment
 
