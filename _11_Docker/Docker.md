@@ -220,59 +220,212 @@
 
 ```
 Command: sudo docker-compose up --build
+```
 
 Build Order:
 1. PostgreSQL container starts first
 2. API container builds and starts (waits for PostgreSQL)
 3. Frontend container builds and starts (waits for API)
 
-#### Docker Compose File
+## Docker Compose Overview
 
-* [Docker Compose](https://docs.docker.com/compose/) is a tool for defining and managing multi-container Docker applications.
-* It allows developers to describe an entire application stack—including services, networks, and volumes—in a single declarative YAML file (docker-compose.yml).
-* With just one command, you can spin up all the containers and their dependencies, streamlining both development and deployment workflows.
-* Compose simplifies the control of your entire application stack, making it easy to manage services, networks, and volumes in a single YAML configuration file
-* Then, with a single command, you create and start all the services from your configuration file.
-* Compose works in all environments - production, staging, development, testing, as well as CI workflows. It also has commands for managing the whole lifecycle of your application:
-  * Start, stop, and rebuild services
-  * View the status of running services
-  * Stream the log output of running services
-  * Run a one-off command on a service
+[Docker Compose](https://docs.docker.com/compose/) is a powerful orchestration tool that simplifies multi-container application management through a single YAML configuration file.
 
-* Docker Composer file: `docker-compose.yml`
+**Key Benefits:**
+- **Single Configuration**: Define entire application stack in one `docker-compose.yml` file
+- **Service Orchestration**: Manage dependencies between containers automatically  
+- **Environment Consistency**: Works across development, staging, and production
+- **Simple Commands**: Control entire application lifecycle with basic commands
+- **Network Management**: Automatic service discovery and communication
+- **Volume Management**: Persistent data storage across container restarts
 
-  ```yaml
-  services:
-    postgres:
-      container_name: todo-postgres
-      image: postgres:latest
-      environment:
-        POSTGRES_USER: user
-        POSTGRES_PASSWORD: password
-        POSTGRES_DB: todo_db
-      ports:
-        - "5432:5432"
+**Core Capabilities:**
+- Start, stop, and rebuild services
+- View real-time logs from all services
+- Scale services up or down
+- Run one-off commands on specific services
+- Health checks and dependency management
 
-    api:
-      container_name: todo-api
-      build:
-        context: ./api
-        dockerfile: Dockerfile.api
-      ports:
-        - "5000:5000"
-      depends_on:
-        - postgres
+#### Docker Compose Configuration
 
-    frontend:
-      container_name: todo-frontend
-      build:
-        context: ./frontend
-        dockerfile: Dockerfile.frontend
-      ports:
-        - "80:80"
-      depends_on:
-        - api
-  ```
+**File Structure: `docker-compose.yml`**
+
+The compose file defines three main sections:
+1. **Services**: Individual containers and their configurations
+2. **Networks**: Communication channels between containers  
+3. **Volumes**: Persistent storage for data
+
+**Complete Configuration Example:**
+
+```yaml
+services:
+  # Database Service
+  postgres:
+    container_name: todo-postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: todo_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d todo_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend API Service
+  api:
+    container_name: todo-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile.api
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_URLS=http://+:5000
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=todo_db;Username=user;Password=password
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend Service
+  frontend:
+    container_name: todo-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "80:80"
+    environment:
+      - API_URL=http://localhost:5000
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+# Named volumes for data persistence
+volumes:
+  postgres_data:
+    driver: local
+
+# Custom network (optional - Docker creates default network)
+networks:
+  todo-network:
+    driver: bridge
+```
+
+#### Configuration Breakdown
+
+**Service Definitions:**
+
+1. **Database Service (`postgres`)**
+   ```yaml
+   postgres:
+     container_name: todo-postgres     # Custom container name
+     image: postgres:latest            # Official PostgreSQL image
+     environment:                      # Database configuration
+       POSTGRES_USER: user
+       POSTGRES_PASSWORD: password
+       POSTGRES_DB: todo_db
+     ports:
+       - "5432:5432"                  # Host:Container port mapping
+     volumes:
+       - postgres_data:/var/lib/postgresql/data  # Data persistence
+     restart: unless-stopped          # Auto-restart policy
+     healthcheck:                     # Container health monitoring
+       test: ["CMD-SHELL", "pg_isready -U user -d todo_db"]
+       interval: 30s
+       timeout: 10s
+       retries: 3
+   ```
+
+2. **API Service (`api`)**
+   ```yaml
+   api:
+     container_name: todo-api
+     build:                           # Build from Dockerfile
+       context: ./api                 # Build context directory
+       dockerfile: Dockerfile.api     # Dockerfile name
+     ports:
+       - "5000:5000"
+     environment:                     # Runtime environment variables
+       - ASPNETCORE_URLS=http://+:5000
+       - ConnectionStrings__DefaultConnection=Host=postgres;Database=todo_db;Username=user;Password=password
+     depends_on:                      # Service dependencies
+       postgres:
+         condition: service_healthy   # Wait for healthy database
+     restart: unless-stopped
+   ```
+
+3. **Frontend Service (`frontend`)**
+   ```yaml
+   frontend:
+     container_name: todo-frontend
+     build:
+       context: ./frontend
+       dockerfile: Dockerfile.frontend
+     ports:
+       - "80:80"
+     depends_on:
+       api:
+         condition: service_healthy   # Wait for healthy API
+     restart: unless-stopped
+   ```
+
+#### Key Configuration Options
+
+| Option | Purpose | Example |
+|--------|---------|---------|
+| `container_name` | Custom container identifier | `todo-postgres` |
+| `image` | Pre-built image to use | `postgres:latest` |
+| `build` | Build from Dockerfile | `context: ./api` |
+| `ports` | Port mapping (host:container) | `"80:80"` |
+| `environment` | Environment variables | `POSTGRES_USER: user` |
+| `volumes` | Data persistence | `postgres_data:/var/lib/postgresql/data` |
+| `depends_on` | Service startup order | `condition: service_healthy` |
+| `restart` | Restart policy | `unless-stopped` |
+| `healthcheck` | Container health monitoring | `pg_isready` command |
+
+#### Advanced Features
+
+**Volume Management:**
+```yaml
+volumes:
+  postgres_data:        # Named volume for database
+    driver: local
+  api_logs:            # Volume for API logs
+    driver: local
+```
+
+**Network Configuration:**
+```yaml
+networks:
+  todo-network:        # Custom network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+```
+
+**Environment Files:**
+```yaml
+services:
+  api:
+    env_file:
+      - .env           # Load environment from file
+      - .env.local     # Override with local settings
+```
 
 ## Docker Commands Reference
 
