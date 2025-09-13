@@ -30,7 +30,7 @@
   * Download from [Docker Official Site](https://www.docker.com/products/docker-desktop/)
   * Follow the installation wizard
 
-* On Ubuntu/Federa Linux:
+* On Ubuntu Linux:
 
   ```bash
   # Update your system first
