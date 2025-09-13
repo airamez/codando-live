@@ -176,6 +176,21 @@
 
 #### Dockerfiles
 
+Dockerfiles use a **multi-stage build** approach to optimize image size and security. This technique separates the build environment (with development tools) from the runtime environment (minimal production image).
+
+**Key Benefits of Multi-Stage Builds:**
+- **Smaller final images**: Build tools and dependencies are not included in the final image
+- **Better security**: Fewer components in production = smaller attack surface
+- **Faster deployments**: Smaller images transfer and start faster
+- **Clean separation**: Build artifacts vs runtime requirements
+
+**Multi-Stage Build Process:**
+1. **Build Stage**: Uses full SDK/development image with all build tools
+2. **Runtime Stage**: Uses minimal runtime image and copies only compiled artifacts
+3. **Final Image**: Contains only what's needed to run the application
+
+---
+
 * Database - PostgreSQL (No Dockerfile needed)
   * Use the official image directly in Docker Compose.
 * Backend - ASP.NET Core Web API: `Dockerfile.api`
@@ -194,6 +209,72 @@
   ENTRYPOINT ["dotnet", "WebApi.dll"]
   ```
 
+  **Detailed Breakdown:**
+
+  **Stage 1: Build Stage**
+  ```dockerfile
+  FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+  ```
+  - Uses Microsoft's official .NET SDK image (contains compiler, build tools)
+  - Names this stage "build" for reference in later stages
+  - SDK image is ~700MB but contains everything needed to compile .NET applications
+
+  ```dockerfile
+  WORKDIR /src
+  ```
+  - Sets working directory inside container to `/src`
+  - All subsequent commands will run from this directory
+
+  ```dockerfile
+  COPY . .
+  ```
+  - Copies all files from build context (current directory) to `/src` in container
+  - Includes source code, project files, dependencies
+
+  ```dockerfile
+  RUN dotnet publish "WebApi.csproj" -c Release -o /app/publish
+  ```
+  - Compiles the application in Release mode (optimized for production)
+  - Outputs compiled binaries to `/app/publish` directory
+  - Creates self-contained deployment package
+
+  **Stage 2: Runtime Stage**
+  ```dockerfile
+  FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+  ```
+  - Starts fresh with ASP.NET Core runtime image (~200MB)
+  - Contains only runtime components, no build tools
+  - Much smaller and more secure than SDK image
+
+  ```dockerfile
+  WORKDIR /app
+  ```
+  - Sets working directory to `/app` in the runtime container
+
+  ```dockerfile
+  COPY --from=build /app/publish .
+  ```
+  - Copies compiled application from build stage to runtime stage
+  - Only the necessary compiled files, not source code or build tools
+
+  ```dockerfile
+  EXPOSE 5000
+  ```
+  - Documents that the application listens on port 5000
+  - Doesn't actually publish the port (done in docker-compose.yml)
+
+  ```dockerfile
+  ENV ASPNETCORE_URLS=http://+:5000
+  ```
+  - Sets environment variable to configure ASP.NET Core to listen on all interfaces
+  - `+` means bind to all available IP addresses on port 5000
+
+  ```dockerfile
+  ENTRYPOINT ["dotnet", "WebApi.dll"]
+  ```
+  - Defines the command that runs when container starts
+  - Executes the compiled .NET application
+
 * Frontend - Angular App: `Dockerfile.frontend`
 
   ```dockerfile
@@ -209,6 +290,77 @@
   EXPOSE 80
   CMD ["nginx", "-g", "daemon off;"]
   ```
+
+  **Detailed Breakdown:**
+
+  **Stage 1: Build Stage**
+  ```dockerfile
+  FROM node:latest AS build
+  ```
+  - Uses official Node.js image (contains npm, node, build tools)
+  - Names this stage "build" for reference in the runtime stage
+  - Node.js image is ~400MB but includes everything needed to build Angular apps
+
+  ```dockerfile
+  WORKDIR /app
+  ```
+  - Sets working directory inside container to `/app`
+  - All subsequent commands will execute from this directory
+
+  ```dockerfile
+  COPY package.json package-lock.json ./
+  ```
+  - Copies only dependency files first (optimization technique)
+  - Allows Docker to cache npm install step if dependencies haven't changed
+  - Faster rebuilds when only source code changes
+
+  ```dockerfile
+  RUN npm install
+  ```
+  - Downloads and installs all Node.js dependencies
+  - Creates `node_modules` folder with all required packages
+  - This step is cached unless package files change
+
+  ```dockerfile
+  COPY . .
+  ```
+  - Copies all remaining source code files to the container
+  - Includes TypeScript files, components, assets, configuration
+
+  ```dockerfile
+  RUN npm run build
+  ```
+  - Executes Angular build process (typically `ng build`)
+  - Compiles TypeScript to JavaScript, optimizes assets
+  - Creates production-ready static files in `dist/` folder
+
+  **Stage 2: Runtime Stage**
+  ```dockerfile
+  FROM nginx:alpine
+  ```
+  - Starts fresh with lightweight nginx web server (~15MB)
+  - Alpine Linux base for minimal size and security
+  - Perfect for serving static files (HTML, CSS, JS)
+
+  ```dockerfile
+  COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+  ```
+  - Copies built Angular application from build stage
+  - Places files in nginx's default web root directory
+  - Only static files, no source code or build tools
+
+  ```dockerfile
+  EXPOSE 80
+  ```
+  - Documents that nginx serves on port 80 (standard HTTP port)
+  - Doesn't actually publish the port (done in docker-compose.yml)
+
+  ```dockerfile
+  CMD ["nginx", "-g", "daemon off;"]
+  ```
+  - Starts nginx web server when container runs
+  - `-g "daemon off;"` keeps nginx running in foreground (required for containers)
+  - Serves the Angular application to web browsers
 
 >Note: The name convention for docker files is to start with `Dockerfile.`
 
@@ -321,64 +473,6 @@ networks:
     driver: bridge
 ```
 
-#### Configuration Breakdown
-
-**Service Definitions:**
-
-1. **Database Service (`postgres`)**
-   ```yaml
-   postgres:
-     container_name: todo-postgres     # Custom container name
-     image: postgres:latest            # Official PostgreSQL image
-     environment:                      # Database configuration
-       POSTGRES_USER: user
-       POSTGRES_PASSWORD: password
-       POSTGRES_DB: todo_db
-     ports:
-       - "5432:5432"                  # Host:Container port mapping
-     volumes:
-       - postgres_data:/var/lib/postgresql/data  # Data persistence
-     restart: unless-stopped          # Auto-restart policy
-     healthcheck:                     # Container health monitoring
-       test: ["CMD-SHELL", "pg_isready -U user -d todo_db"]
-       interval: 30s
-       timeout: 10s
-       retries: 3
-   ```
-
-2. **API Service (`api`)**
-   ```yaml
-   api:
-     container_name: todo-api
-     build:                           # Build from Dockerfile
-       context: ./api                 # Build context directory
-       dockerfile: Dockerfile.api     # Dockerfile name
-     ports:
-       - "5000:5000"
-     environment:                     # Runtime environment variables
-       - ASPNETCORE_URLS=http://+:5000
-       - ConnectionStrings__DefaultConnection=Host=postgres;Database=todo_db;Username=user;Password=password
-     depends_on:                      # Service dependencies
-       postgres:
-         condition: service_healthy   # Wait for healthy database
-     restart: unless-stopped
-   ```
-
-3. **Frontend Service (`frontend`)**
-   ```yaml
-   frontend:
-     container_name: todo-frontend
-     build:
-       context: ./frontend
-       dockerfile: Dockerfile.frontend
-     ports:
-       - "80:80"
-     depends_on:
-       api:
-         condition: service_healthy   # Wait for healthy API
-     restart: unless-stopped
-   ```
-
 #### Key Configuration Options
 
 | Option | Purpose | Example |
@@ -392,36 +486,6 @@ networks:
 | `depends_on` | Service startup order | `condition: service_healthy` |
 | `restart` | Restart policy | `unless-stopped` |
 | `healthcheck` | Container health monitoring | `pg_isready` command |
-
-#### Advanced Features
-
-**Volume Management:**
-```yaml
-volumes:
-  postgres_data:        # Named volume for database
-    driver: local
-  api_logs:            # Volume for API logs
-    driver: local
-```
-
-**Network Configuration:**
-```yaml
-networks:
-  todo-network:        # Custom network
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
-```
-
-**Environment Files:**
-```yaml
-services:
-  api:
-    env_file:
-      - .env           # Load environment from file
-      - .env.local     # Override with local settings
-```
 
 ## Docker Commands Reference
 
@@ -856,3 +920,39 @@ services:
           cpus: '0.25'
           memory: 128M
 ```
+
+## Administration Tools
+
+There are several tools available for Docker and Docker Compose administration. The most popular ones are:
+
+* [Docker Desktop](https://www.docker.com/products/docker-desktop)
+* [Docker Hub](https://hub.docker.com/)
+* [Portainer](https://portainer.io/)
+
+## Portainer
+
+[Portainer](https://portainer.io/) is a lightweight management UI for Docker and Docker Compose.
+
+### Installation
+
+```bash
+# Install via Docker (easiest method)
+sudo docker run -d -p 9000:9000 --name portainer \
+  --restart=always \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  portainer/portainer-ce
+
+# Access at: http://localhost:9000
+
+```
+
+### Accessing Portainer
+
+Open your browser and navigate to `https://localhost:9000`.
+Accept the self-signed certificate warning.
+The default credentials are:
+* Username: `admin`
+* Password: `P@ssw0rd`
+
+![Portainer Login](images/Portainer.IO.png)
