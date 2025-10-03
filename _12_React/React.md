@@ -142,6 +142,22 @@
 * **Configuration**: CRA has no config file (requires ejecting), Vite has `vite.config.js`
 * **Assets**: Vite includes a dedicated `src/assets/` directory
 
+## Our Demo Application
+
+```
+cd [YOUR_FOLDER]/codando-live/_12_React/
+npm create vite@latest react-demo-app -- --template react
+
+```
+
+### Structural elements
+
+| File | Description |
+| --- | --- |
+| `index.html` | The static HTML shell. Vite serves this and the `<script type="module" src="/src/main.jsx">` loads your app. Contains the DOM mount node (e.g. `<div id="root"></div>`). |
+| `src/main.jsx` | Entry module. Imports React, ReactDOM and your root component, then mounts it into the DOM node from `index.html`. |
+| `src/App.jsx` | Root React component (default export). Composes the app UI and child components. |
+
 ## Components
 
 * A [**component**](https://react.dev/learn/your-first-component) is the fundamental building block of React applications.
