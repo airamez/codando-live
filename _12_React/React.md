@@ -144,10 +144,15 @@
 
 ## Our Demo Application
 
-```
+```bash
 cd [YOUR_FOLDER]/codando-live/_12_React/
+
+# Creating a react app called react-demo-app
 npm create vite@latest react-demo-app -- --template react
 
+# Running the app in development mode
+cd react-demo-app
+npm run dev
 ```
 
 ### Structural elements
@@ -176,10 +181,10 @@ npm create vite@latest react-demo-app -- --template react
 
 #### 1. Functional Components (Modern Approach)
 
-Functional components are JavaScript functions that return JSX. They use React Hooks for state and lifecycle management.
+* Functional components are JavaScript functions that return JSX.
+* They use React Hooks for state and lifecycle management.
 
 ```jsx
-// HelloWorld.js
 import React from 'react';
 
 function HelloWorld() {
@@ -194,12 +199,14 @@ function HelloWorld() {
 export default HelloWorld;
 ```
 
+>Warning: React components are regular JavaScript functions, but their names must start with a capital letter or they won’t work!
+
 #### 2. Class Components (Legacy Approach)
 
-Class components extend React.Component and use lifecycle methods. While still supported, functional components with hooks are preferred.
+* Class components extend React.Component and use lifecycle methods.
+* While still supported, functional components with hooks are preferred.
 
 ```jsx
-// HelloWorldClass.js
 import React, { Component } from 'react';
 
 class HelloWorldClass extends Component {
@@ -216,16 +223,67 @@ class HelloWorldClass extends Component {
 export default HelloWorldClass;
 ```
 
-### Creating Your First Component
+### Creating Your First Functional Component
 
-Let's create a simple `HelloWorld` component step by step:
+* Create a file called `HelloWorld.jsx` inside the `components` folder
+* Import the new componet in the App.jsx
+  * `import HelloWorld from './components/HelloWorld'`
+* Add the new component to the App.jsx body
+  * `<HelloWorld /> {/* render the new component without breaking existing layout */}`
+* Paste the content below
 
-* **Step 1**: Create a new file `src/components/HelloWorld.js`
-* **Step 2**: Write the component function
-* **Step 3**: Export the component
-* **Step 4**: Import and use it in App.js
+  ```jsx
+  import React from 'react';
 
-See the examples in the `examples/` directory for complete implementations.
+  function HelloWorld() {
+    return (
+      <div>
+        <h2>Welcome to Our React App!</h2>
+        <p>Hello React World!</p>
+      </div>
+    );
+  }
+
+  export default HelloWorld;
+  ```
+
+* App.jsx after the changes
+
+  ```jsx
+  import { useState } from 'react'
+  import './App.css'
+
+  import HelloWorld from './components/HelloWorld'
+
+  function App() {
+
+    return (
+      <>
+        <HelloWorld />
+      </>
+    )
+  }
+
+  export default App
+  ```
+
+### Parts of a functional component
+- Imports
+  - (Optional) `import React from 'react'` — not required with modern toolchains but fine.
+  - Hooks: `useState`, `useEffect`, etc.
+- Component function
+  - Must start with a capital letter (e.g. `HelloWorld`).
+  - Accepts `props` (e.g. `function HelloWorld({ name }) { ... }`).
+- Local state and hooks
+  - `const [state, setState] = useState(initial)` and other hooks.
+- Event handlers and helper functions
+  - Defined inside the component so they can access props/state.
+- Return (JSX)
+  - The function returns JSX. This is the UI the component renders.
+- Export
+  - `export default HelloWorld` or named export.
+
+---
 
 ## JSX (JavaScript XML)
 
