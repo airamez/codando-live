@@ -226,10 +226,6 @@ export default HelloWorldClass;
 ### Creating Your First Functional Component
 
 * Create a file called `HelloWorld.jsx` inside the `components` folder
-* Import the new componet in the App.jsx
-  * `import HelloWorld from './components/HelloWorld'`
-* Add the new component to the App.jsx body
-  * `<HelloWorld /> {/* render the new component without breaking existing layout */}`
 * Paste the content below
 
   ```jsx
@@ -246,6 +242,11 @@ export default HelloWorldClass;
 
   export default HelloWorld;
   ```
+
+* Import the new componet in the App.jsx
+  * `import HelloWorld from './components/HelloWorld'`
+* Add the new component to the App.jsx body
+  * `<HelloWorld /> {/* render the new component without breaking existing layout */}`
 
 * App.jsx after the changes
 
@@ -267,10 +268,7 @@ export default HelloWorldClass;
   export default App
   ```
 
-### Parts of a functional component
-- Imports
-  - (Optional) `import React from 'react'` — not required with modern toolchains but fine.
-  - Hooks: `useState`, `useEffect`, etc.
+### Functional component content
 - Component function
   - Must start with a capital letter (e.g. `HelloWorld`).
   - Accepts `props` (e.g. `function HelloWorld({ name }) { ... }`).
@@ -282,6 +280,132 @@ export default HelloWorldClass;
   - The function returns JSX. This is the UI the component renders.
 - Export
   - `export default HelloWorld` or named export.
+
+#### Props
+Props (properties) are the read-only inputs a parent component passes to a child. They configure and customize a component's behavior and appearance without the child modifying them. Props are received as a single object argument (often destructured) and enable composition and reuse by decoupling data from implementation.
+
+#### useState
+
+`useState` is a hook that gives a component its own local piece of data (state) and a setter to update it.
+
+#### useEffect
+
+`useEffect` is the hook for running side effects after a component renders. Side effects are interactions with the outside world (network requests, subscriptions, timers, or manual DOM updates).
+
+#### Example:
+
+* MonthsDropDown component
+
+```css
+/* Basic styles for the MonthsDropdown component */
+select {
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  color: #111;
+  appearance: none;
+  /* remove native arrow in some browsers */
+}
+
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(21, 156, 228, 0.15);
+  border-color: #159ce4;
+}
+
+/* optional small responsive tweak */
+@media (max-width: 480px) {
+  select {
+    width: 100%;
+    font-size: 16px;
+  }
+}
+```
+
+```jsx
+import { useState } from 'react';
+import './MonthsDropdown.css'; // <-- import the CSS file
+
+function MonthsDropdown({ value = '', onChange }) {
+  // Props:
+  // - value: initial / controlled selected month (string)
+  // - onChange: callback invoked when the user selects a month
+
+  // Local constant array of month names.
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  // Hooks:
+  // useState -> local state for the currently selected month
+  const [month, setMonth] = useState(value);
+
+  // handleMonthChange uses the useState setter to update local state
+  // and calls the onChange prop to notify the parent of the new selection
+  function handleMonthChange(e) {
+    const selectedMonth = e.target.value;
+    setMonth(selectedMonth); // updates local state (useState)
+    onChange(selectedMonth); // notifies parent (prop)
+  }
+
+  return (
+    <select value={month} onChange={handleMonthChange} >
+      <option value="">Select month</option>
+      {
+        months.map((m) => (
+          <option key={m} value={m}>{m}</option>
+        ))
+      }
+    </select>
+  );
+}
+
+export default MonthsDropdown;
+```
+
+* App.jsx
+
+```jsx
+import { useState } from 'react' // Hook: useState for local component state
+import './App.css'
+
+import HelloWorld from './components/HelloWorld'
+import MonthsDropdown from './components/MonthsDropdown' // Child component that uses props and hooks
+
+function App() {
+
+  // useState: parent keeps the currently selected month
+  // - month: current value
+  // - setMonth: setter passed down to child so it can notify the parent
+  const [month1, setMonth1] = useState('')
+
+  const [month2, setMonth2] = useState('')
+
+  return (
+    <>
+      {/* <HelloWorld /> */}
+      <label>
+        Choose month 1:{' '}
+        {
+          /* Props:
+            - value: current selected month (from parent state)
+            - onChange: callback the child calls with the new month
+          */
+        }
+        <MonthsDropdown value={month1} onChange={setMonth1} />
+        <MonthsDropdown value={month2} onChange={setMonth2} />
+      </label>
+
+      <p>Selected months: {month1} - {month2}</p>
+    </>
+  )
+}
+
+export default App
+```
 
 ---
 
@@ -387,232 +511,17 @@ function Button({ text = "Click me", color = "blue" }) {
 * The `useState` hook is the modern way to add state to functional components.
 * When state changes, React automatically re-renders the component with the new data.
 
-### Basic useState Example
-
-```jsx
-import React, { useState } from 'react';
-
-function Counter() {
-  // Declare state variable with initial value
-  const [count, setCount] = useState(0);
-
-  return (
-    <div>
-      <h2>Counter: {count}</h2>
-      <button onClick={() => setCount(count + 1)}>
-        Increment
-      </button>
-      <button onClick={() => setCount(count - 1)}>
-        Decrement
-      </button>
-      <button onClick={() => setCount(0)}>
-        Reset
-      </button>
-    </div>
-  );
-}
-```
-
 ### Multiple State Variables
-
-```jsx
-function UserProfile() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [isVisible, setIsVisible] = useState(true);
-
-  return (
-    <div>
-      {isVisible && (
-        <div>
-          <input 
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter name"
-          />
-          <input 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter email"
-          />
-          <p>Name: {name}</p>
-          <p>Email: {email}</p>
-        </div>
-      )}
-      <button onClick={() => setIsVisible(!isVisible)}>
-        {isVisible ? 'Hide' : 'Show'} Profile
-      </button>
-    </div>
-  );
-}
-```
 
 ## Event Handling
 
 * React uses [SyntheticEvents](https://react.dev/reference/react-dom/components/common#applying-css-styles) to handle user interactions consistently across different browsers.
 * Event handlers are functions that respond to user actions like clicks, form submissions, and keyboard input.
 
-### Common Event Handlers
-
-```jsx
-function EventDemo() {
-  const [message, setMessage] = useState('');
-
-  const handleClick = () => {
-    setMessage('Button was clicked!');
-  };
-
-  const handleInputChange = (event) => {
-    setMessage(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    alert(`Submitted: ${message}`);
-  };
-
-  return (
-    <div>
-      <button onClick={handleClick}>Click Me</button>
-      
-      <form onSubmit={handleSubmit}>
-        <input 
-          type="text"
-          value={message}
-          onChange={handleInputChange}
-          placeholder="Type something..."
-        />
-        <button type="submit">Submit</button>
-      </form>
-      
-      <p>Message: {message}</p>
-    </div>
-  );
-}
-```
-
 ## Conditional Rendering
 
 * React allows you to conditionally render different content based on component state or props.
 * Use JavaScript conditional operators like `if`, ternary operator (`?:`), and logical AND (`&&`).
-
-### Conditional Rendering Examples
-
-```jsx
-function LoginStatus({ isLoggedIn, username }) {
-  // Using if statement
-  if (isLoggedIn) {
-    return <h2>Welcome back, {username}!</h2>;
-  }
-  return <h2>Please log in.</h2>;
-}
-
-function UserDashboard({ user }) {
-  return (
-    <div>
-      {/* Using ternary operator */}
-      {user ? (
-        <div>
-          <h2>Welcome, {user.name}!</h2>
-          <p>Email: {user.email}</p>
-        </div>
-      ) : (
-        <p>No user data available.</p>
-      )}
-      
-      {/* Using logical AND */}
-      {user && user.isPremium && (
-        <div>
-          <h3>Premium Features</h3>
-          <p>You have access to premium content!</p>
-        </div>
-      )}
-    </div>
-  );
-}
-```
-
-## Lists and Keys
-
-* Render lists of data using JavaScript's `map()` function.
-* Each list item needs a unique `key` prop to help React efficiently update the DOM.
-
-### Rendering Lists
-
-```jsx
-function TodoList() {
-  const [todos, setTodos] = useState([
-    { id: 1, text: 'Learn React', completed: false },
-    { id: 2, text: 'Build a project', completed: false },
-    { id: 3, text: 'Deploy to production', completed: true }
-  ]);
-
-  const toggleTodo = (id) => {
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    ));
-  };
-
-  return (
-    <div>
-      <h2>Todo List</h2>
-      <ul>
-        {todos.map(todo => (
-          <li key={todo.id}>
-            <span 
-              style={{ 
-                textDecoration: todo.completed ? 'line-through' : 'none' 
-              }}
-              onClick={() => toggleTodo(todo.id)}
-            >
-              {todo.text}
-            </span>
-          </li>
-        ))}
-      </ul>
-      {todos.length === 0 && <p>No todos available.</p>}
-    </div>
-  );
-}
-```
-
-## Interactive Demo Application
-
-All React examples are consolidated into a single interactive demo application in the `react-demo/` directory. This provides a seamless way to demonstrate concepts and show source code side-by-side.
-
-### Available Examples:
-
-* **Hello World** - Basic component creation, JSX syntax, and props
-* **Counter App** - State management with useState hook and event handling  
-* **Todo List** - Complex state management, arrays, forms, and filtering
-* **User Profile** - Form validation, controlled components, and object state
-* **Lifecycle Demo** - useEffect hook, side effects, cleanup, and data fetching
-* **React 19 Actions** - useActionState, useOptimistic, and modern form handling (NEW!)
-
-### Running the Demo:
-
-```bash
-cd _12_React/react-demo
-npm install
-npm run dev
-# Open http://localhost:5173/ in your browser
-```
-
-### Teaching with the Demo:
-
-1. **Show the Home Page**: Start with the overview and learning path
-2. **Navigate Between Examples**: Use the top navigation to switch between concepts
-3. **Show Source Code**: Open your IDE alongside the browser to show the actual component code
-4. **Encourage Interaction**: Have students modify the code and see immediate results
-5. **Use Browser DevTools**: Show React Developer Tools and console logs
-
-### Demo Features:
-
-- **Interactive Navigation**: Easy switching between different React concepts
-- **Visual Learning Path**: Recommended progression from beginner to advanced
-- **Teaching Tips**: Built-in guidance for instructors
-- **Responsive Design**: Works on all screen sizes
-- **Modern UI**: Clean, professional interface for presentations
 
 ## React 19 New Features
 
@@ -621,157 +530,16 @@ npm run dev
 * [useEffect](https://react.dev/reference/react/useEffect) allows you to perform side effects in functional components.
 * Side effects include data fetching, subscriptions, DOM manipulation, and cleanup.
 
-```jsx
-import React, { useState, useEffect } from 'react';
-
-function UserProfile({ userId }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Effect runs after component mounts and when userId changes
-    const fetchUser = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/users/${userId}`);
-        const userData = await response.json();
-        setUser(userData);
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
-
-    // Cleanup function (optional)
-    return () => {
-      // Cancel any ongoing requests or subscriptions
-    };
-  }, [userId]); // Dependency array
-
-  if (loading) return <div>Loading...</div>;
-  if (!user) return <div>User not found</div>;
-
-  return (
-    <div>
-      <h2>{user.name}</h2>
-      <p>Email: {user.email}</p>
-    </div>
-  );
-}
-```
-
-### Actions (React 19)
+### Actions
 
 * Actions provide a built-in way to handle form submissions and data mutations.
 * They automatically handle loading states, error handling, and optimistic updates.
 
-```jsx
-import { useActionState } from 'react';
 
-function ContactForm() {
-  const [state, submitAction, isPending] = useActionState(
-    async (prevState, formData) => {
-      try {
-        const response = await fetch('/api/contact', {
-          method: 'POST',
-          body: formData,
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to submit form');
-        }
-        
-        return { success: true, message: 'Message sent successfully!' };
-      } catch (error) {
-        return { success: false, error: error.message };
-      }
-    },
-    { success: false, message: '' }
-  );
-
-  return (
-    <form action={submitAction}>
-      <input name="name" placeholder="Your name" required />
-      <input name="email" type="email" placeholder="Your email" required />
-      <textarea name="message" placeholder="Your message" required />
-      
-      <button type="submit" disabled={isPending}>
-        {isPending ? 'Sending...' : 'Send Message'}
-      </button>
-      
-      {state.success && <p style={{color: 'green'}}>{state.message}</p>}
-      {state.error && <p style={{color: 'red'}}>{state.error}</p>}
-    </form>
-  );
-}
-```
-
-### Server Components (React 19)
+### Server Components
 
 * Server Components run on the server and can directly access databases and APIs.
 * They reduce bundle size and improve initial page load performance.
 
-```jsx
-// ServerComponent.js (runs on server)
-import { db } from './database';
 
-async function ProductList() {
-  // This runs on the server - can access database directly
-  const products = await db.products.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: 10
-  });
 
-  return (
-    <div>
-      <h2>Latest Products</h2>
-      {products.map(product => (
-        <div key={product.id}>
-          <h3>{product.name}</h3>
-          <p>{product.description}</p>
-          <span>${product.price}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-export default ProductList;
-```
-
-### Enhanced Suspense
-
-* React 19 improves Suspense for better loading states and error boundaries.
-
-```jsx
-import { Suspense } from 'react';
-
-function App() {
-  return (
-    <div>
-      <h1>My App</h1>
-      <Suspense fallback={<div>Loading products...</div>}>
-        <ProductList />
-      </Suspense>
-    </div>
-  );
-}
-```
-
-## Next Steps
-
-After mastering these fundamentals, explore:
-
-* **Custom Hooks** - Reusable stateful logic
-* **Context API** - Global state management
-* **React Router** - Client-side routing for SPAs
-* **Server Components** - Advanced server-side rendering patterns
-* **Actions and Forms** - Modern form handling with React 19
-* **State Management** - Redux, Zustand, or other libraries
-* **Testing** - Jest and React Testing Library
-* **Performance** - Optimization techniques and best practices
-
->Class Note: Work through the examples together, encouraging students to modify and experiment with the code!

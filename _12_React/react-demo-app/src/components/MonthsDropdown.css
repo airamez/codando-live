@@ -1,0 +1,25 @@
+/* Basic styles for the MonthsDropdown component */
+select {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  color: #111;
+  appearance: none;
+  /* remove native arrow in some browsers */
+}
+
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(21, 156, 228, 0.15);
+  border-color: #159ce4;
+}
+
+/* optional small responsive tweak */
+@media (max-width: 480px) {
+  select {
+    width: 100%;
+    font-size: 16px;
+  }
+}
