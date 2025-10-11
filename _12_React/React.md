@@ -481,17 +481,269 @@ function Greeting({ name }) {
 
 ### Combining JSX and JavaScript (common patterns)
 
+Below are the most common patterns when you mix JavaScript and JSX. The repo includes small example components under `react-demo-app/src/components` that demonstrate each pattern — the code snippets below match those components so you can copy/paste them easily.
+
 * 1. Comments
 * 2. Store JSX in variables
 * 3. Embed expressions
 * 4. Conditional rendering
-* 5. Render lists
+* 5. Render lists (map)
+* 5b. Render lists (for loop)
 * 6. Functions that return JSX
 * 7. Event handlers
 * 8. Dynamic attributes
 * 9. Spread props
 
 #### 1. Comments
+
+Short: use normal JS comments in logic, and {/* ... */} inside JSX.
+
+Example (component: `ExampleComments.jsx`):
+
+```jsx
+import React from 'react';
+
+export default function ExampleComments() {
+  // JS comment above
+  const count = 3;
+
+  return (
+    <div>
+      {/* JSX comment: explains the header */}
+      <h1>Inbox</h1>
+
+      {/* Multi-line JSX comment:
+          - documents group intent
+      */}
+      <ul>
+        <li>Message 1</li>
+        <li>Message 2</li>
+      </ul>
+
+      {/* Commenting out an element */}
+      {/* <LegacyBadge /> */}
+
+      {process.env.NODE_ENV === 'development' && (
+        <small>Dev mode — debug info visible</small>
+      )}
+      <div>Count example: {count}</div>
+    </div>
+  );
+}
+```
+
+#### 2. Store JSX in variables
+
+Short: put reusable fragments into constants for clarity.
+
+Example (component: `SimpleLayout.jsx`):
+
+```jsx
+const header = <h1>My Static Header</h1>;
+const content = (
+  <div>
+    <ul>
+      <li>Apples</li>
+      <li>Bananas</li>
+      <li>Cherries</li>
+    </ul>
+  </div>
+);
+const footer = <footer><small>Static Footer — © 2025</small></footer>;
+
+return (
+  <>
+    {header}
+    {content}
+    {footer}
+  </>
+);
+```
+
+#### 3. Embed expressions
+
+Short: use `{}` to evaluate JavaScript expressions inside JSX.
+
+Example (component: `Price.jsx`):
+
+```jsx
+export default function Price({ amount = 0, taxRate = 0.1 }) {
+  const total = (amount * (1 + taxRate)).toFixed(2);
+  return <div>Total: ${total} = ({amount} + {taxRate})</div>;
+}
+```
+
+#### 4. Conditional rendering
+
+Short: use ternary, `&&`, or early return to show/hide UI.
+
+Example (component: `UserStatus.jsx`):
+
+```jsx
+export default function UserStatus({ user }) {
+  if (!user) return <div>Please sign in.</div>;
+
+  return (
+    <div>
+      {user.isAdmin ? <strong>Admin</strong> : <span>User</span>}
+      {user.notifications && user.notifications.length > 0 && (
+        <span> • {user.notifications.length}</span>
+      )}
+    </div>
+  );
+}
+```
+
+#### 5. Render lists (map)
+
+Short: use `Array.map` to turn data into elements — provide stable keys.
+
+Example (component: `TodoList.jsx`):
+
+```jsx
+export default function TodoList({ todos = [] }) {
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id}>{todo.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+#### 5b. Render lists (for loop)
+
+Short: useful when per-item logic is complex; build an array of nodes and render it.
+
+Example (component: `TodoListWithLoop.jsx`):
+
+```jsx
+export default function TodoListWithLoop({ todos = [] }) {
+  const items = [];
+  for (let i = 0; i < todos.length; i++) {
+    const todo = todos[i];
+    if (todo.hidden) continue; // complex per-item logic
+    items.push(<li key={todo.id ?? i}>{todo.title}</li>);
+  }
+  return <ul>{items}</ul>;
+}
+```
+
+#### 6. Functions that return JSX
+
+Short: extract repeated or complex fragments into small helper functions that return JSX.
+
+Example (component: `ExampleFunctionsReturnJSX.jsx`):
+
+```jsx
+export default function ExampleFunctionsReturnJSX({ comment = { author: 'Bob', time: '2h', text: 'Looks good!' } }) {
+  function Meta(author, time) {
+    return <div className="meta">{author} • {time}</div>;
+  }
+
+  return (
+    <article>
+      <p>{comment.text}</p>
+      {Meta(comment.author, comment.time)}
+    </article>
+  );
+}
+```
+
+#### 7. Event handlers
+
+Short: attach handlers (onClick, onChange) and use hooks like `useState` to respond to user actions.
+
+Example (component: `Counter.jsx`):
+
+```jsx
+import { useState } from 'react';
+
+export default function Counter() {
+  const [n, setN] = useState(0);
+  return (
+    <div>
+      <button onClick={() => setN((s) => s + 1)}>+1</button>
+      <span> Count: {n}</span>
+      <button onClick={() => alert('Hello from Counter')}>Say Hello</button>
+    </div>
+  );
+}
+```
+
+#### 8. Dynamic attributes
+
+Short: compute `className` or inline `style` from props/state for dynamic styling.
+
+Example (component: `Notification.jsx`):
+
+```jsx
+export default function Notification({ unread = false }) {
+  const className = unread ? 'notif unread' : 'notif';
+  const style = { borderLeft: unread ? '4px solid #007bff' : '4px solid transparent', padding: 8 };
+  return <div className={className} style={style}>You have messages</div>;
+}
+```
+
+#### 9. Spread props
+
+Short: forward multiple props easily using `{...props}` when building passthrough components.
+
+Example (component: `TextInput.jsx`):
+
+```jsx
+export default function TextInput(props) {
+  return <input type="text" {...props} />;
+}
+```
+
+More realistic TextInput usages
+
+```jsx
+// 1) Controlled input (parent manages value)
+function ControlledExample() {
+  const [value, setValue] = useState('Alice');
+  return <TextInput value={value} onChange={(e) => setValue(e.target.value)} aria-label="name" />;
+}
+
+// 2) Uncontrolled with defaultValue
+<TextInput defaultValue="Bob" />
+
+// 3) Disabled / readOnly
+<TextInput placeholder="Can't edit" disabled />
+<TextInput value="Read only" readOnly />
+
+// 4) Styling & className via spread
+const styleProps = { className: 'form-input', style: { padding: 8, borderRadius: 4 } };
+<TextInput {...styleProps} placeholder="Styled input" />
+
+// 5) Accessibility (ARIA props forwarded)
+<TextInput aria-label="email" aria-required={true} />
+
+// 6) Conditional props
+const maybeProps = isMobile ? { inputMode: 'numeric' } : {};
+<TextInput {...maybeProps} />
+
+// 7) Merge/override pattern (later props override earlier ones)
+const base = { placeholder: 'base', maxLength: 30 };
+<TextInput {...base} placeholder="overridden" />
+
+// 8) Forwarding props from parent to child
+function Parent(props) {
+  return <TextInput {...props} />; // Parent forwards all received props
+}
+
+// 9) Small demo component is included: TextInputExamples
+//    shows inline props, spread-from-object, and merged props
+//    Usage: <TextInputExamples />
+```
+
+Notes
+- Prefer stable keys for lists (use IDs, not array indexes, unless the list is static).
+- Keep heavy computations out of JSX — move them to variables or helpers for readability.
+- Use helper functions/components to keep JSX compact and testable.
+
 
 * Use normal JavaScript comments (`//` single-line or `/* */` multi-line) in JS code.
 * Inside JSX you must use JS expressions for comments: `{/*` comment `*/}`.
