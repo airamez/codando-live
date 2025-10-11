@@ -2,7 +2,10 @@ import React from 'react';
 
 export default function ExampleComments() {
   // JS-level comments
-  const count = 3;
+  const count = 1;
+  /*
+    Multi-line JS comment:
+   */
 
   return (
     <div>
@@ -21,10 +24,6 @@ export default function ExampleComments() {
       {/* Commenting out an element */}
       {/* <LegacyBadge /> */}
 
-      {/* Conditional comment usage: only render in development */}
-      {process.env.NODE_ENV === 'development' && (
-        <small>Dev mode — debug info visible</small>
-      )}
       <div>Count example: {count}</div>
     </div>
   );

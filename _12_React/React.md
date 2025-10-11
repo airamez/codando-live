@@ -487,8 +487,7 @@ Below are the most common patterns when you mix JavaScript and JSX. The repo inc
 * 2. Store JSX in variables
 * 3. Embed expressions
 * 4. Conditional rendering
-* 5. Render lists (map)
-* 5b. Render lists (for loop)
+* 5. Render lists
 * 6. Functions that return JSX
 * 7. Event handlers
 * 8. Dynamic attributes

@@ -42,14 +42,14 @@ function App() {
   return (
     <>
       <div style={{ marginTop: 12 }}>
-        <label htmlFor="exampleSelect">Show example: </label>
+        <label htmlFor="exampleSelect">Show example: {selectedExample}</label>
         <select
           id="exampleSelect"
           value={selectedExample}
           onChange={(e) => setSelectedExample(e.target.value)}
           style={{ marginLeft: 8 }}
         >
-          <option value="">-- Select an example --</option>
+          <option value="">Select an example</option>
           <option value="hello">Hello World [HelloWorld]</option>
           <option value="months">Select months [MonthsDropdown]</option>
           <option value="comments">1) Comments [ExampleComments]</option>
@@ -62,7 +62,7 @@ function App() {
           <option value="events">7) Event handlers [Counter]</option>
           <option value="dynamic">8) Dynamic attributes [Notification]</option>
           <option value="spread">9) Spread props [TextInput]</option>
-          <option value="choice">Choice example [ChoiceContent]</option>
+          <option value="choice">10) Choice example [ChoiceContent]</option>
         </select>
       </div>
 
