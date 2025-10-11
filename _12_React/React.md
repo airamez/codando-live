@@ -415,6 +415,8 @@ export default App
 * It makes React components more readable and intuitive by combining the power of JavaScript with the familiarity of HTML.
 * JSX is transpiled to regular JavaScript function calls by tools like Babel.
 
+>Note: [Great JSX Tutorial from W3 School](https://www.w3schools.com/react/react_jsx.asp)
+
 ### JSX Rules
 
 1. **Return a single root element**: Components must return a single parent element or React Fragment.
@@ -422,10 +424,27 @@ export default App
 3. **Use camelCase for attributes**: HTML attributes use camelCase (e.g., `className` instead of `class`).
 4. **JavaScript expressions in curly braces**: Use `{}` to embed JavaScript expressions.
 
-### JSX Examples
+####  Why do multiple JSX tags need to be wrapped?
+
+* JSX looks like HTML, but under the hood it is transformed into plain JavaScript objects. 
+* You can’t return two objects from a function without wrapping them into an array.
+* This explains why you also can’t return two JSX tags without wrapping them into another tag or a Fragment.
+
+#### Why use camelCase
+
+* JSX turns into JavaScript and attributes written in JSX become keys of JavaScript objects.
+* In your own components, you will often want to read those attributes into variables.
+* But JavaScript has limitations on variable names. 
+* For example, their names can’t contain dashes or be reserved words like class.
+* This is why, in React, many HTML and SVG attributes are written in camelCase. 
+* For example, instead of stroke-width you use strokeWidth. 
+* Since class is a reserved word, in React you write className instead
+
+### Basic JSX Examples
 
 ```jsx
-// Valid JSX - Single root element
+// Valid JSX - Single root element.
+// Returning a div
 function MyComponent() {
   return (
     <div>
@@ -436,6 +455,7 @@ function MyComponent() {
 }
 
 // Valid JSX - React Fragment
+// Returning two paragraphs inside <> </>
 function MyComponent() {
   return (
     <>
@@ -456,6 +476,293 @@ function Greeting({ name }) {
       <p>Random number: {Math.floor(Math.random() * 100)}</p>
     </div>
   );
+}
+```
+
+### Combining JSX and JavaScript (common patterns)
+
+* 1. Comments
+* 2. Store JSX in variables
+* 3. Embed expressions
+* 4. Conditional rendering
+* 5. Render lists
+* 6. Functions that return JSX
+* 7. Event handlers
+* 8. Dynamic attributes
+* 9. Spread props
+
+#### 1. Comments
+
+* Use normal JavaScript comments (`//` single-line or `/* */` multi-line) in JS code.
+* Inside JSX you must use JS expressions for comments: `{/*` comment `*/}`.
+* Do not use HTML comments (<!-- -->) inside JSX — they are invalid.
+* You can "comment out" JSX elements by wrapping them in `{/*` ... `*/}`
+
+```jsx
+// JS-level comments
+function ExampleA() {
+
+  // counter value
+  const count = 3;
+
+  /* 
+   * multi-line style also works in JS 
+   *
+   */
+
+  return (
+    <div>
+      {/* JSX comment: explains the header */}
+      <h1>Inbox</h1>
+
+      {/* Multi-line JSX comment:
+          - used to document groups of elements
+          - keeps intent near the markup
+       */}
+      <ul>
+        <li>Message 1</li>
+        <li>Message 2</li>
+      </ul>
+
+      {/* Commenting out an element */}
+      {/* <LegacyBadge /> */}
+    </div>
+  );
+}
+```
+
+* Invalid example (do NOT use):
+
+```jsx
+function Broken() {
+  return (
+    <div>
+      <!-- This looks like HTML but will break JSX -->
+      <p>Will not compile</p>
+    </div>
+  );
+}
+```
+
+#### 2. Store JSX in variables
+
+* It is possible to create variable/constants with JSX content
+* Keep static or pre-composed pieces of UI in variables for clarity and reuse within the same render.
+
+```jsx
+function SimpleLayout() {
+  const header = <h1>My Static Header</h1>;
+  const content = (
+    <div>
+      <ul>
+        <li>Apples</li>
+        <li>Bananas</li>
+        <li>Cherries</li>
+      </ul>
+   </div>
+  );
+  const footer = (
+    <div>
+      <small>Static Footer — © 2025</small>
+    </div>
+  );
+
+  return (
+    <>
+      {header}
+      {content}
+      {footer}
+    </>
+  );
+}
+```
+
+#### 3. Embed expressions
+
+* Use {} to evaluate JavaScript expressions directly inside JSX (variables, math, function calls).
+
+```jsx
+function Price({ amount = 0, taxRate = 0.1 }) {
+
+  const total = (amount * (1 + taxRate)).toFixed(2);
+
+  return (
+    <div>
+      Total: ${total} = ({amount} + {taxRate})
+    </div>
+  );
+}
+```
+
+#### 4. Conditional rendering
+
+* Render different UI based on conditions using ternary, && short-circuit, or early return.
+
+```jsx
+function UserStatus({ user }) {
+  if (!user) return <div>Please sign in.</div>;
+
+  return (
+    <div>
+      {user.isAdmin ? <strong>Admin</strong> : <span>User</span>} {/* ternary */}
+      {user.notifications.length > 0 && <span> • {user.notifications.length}</span>} {/* && */}
+    </div>
+  );
+}
+```
+
+```jsx
+import { useState } from 'react'
+import './App.css'
+
+// Import UserStatus
+
+function App() {
+
+  const [user, setUser] = useState({
+    name: 'Alice',
+    isAdmin: true,
+    notifications: ['Welcome!', 'New message']
+  })
+
+  return (
+    <>
+      <UserStatus user={user} />
+    </>
+  )
+}
+
+export default App
+```
+
+```jsx
+// Component that receives a choice (1-5) as a prop and renders the corresponding content.
+function ChoiceContent({ choice = 1 }) {
+  const content = (() => {
+    switch (choice) {
+      case 1:
+        return <p>Tip: Break large tasks into 25-minute focused blocks to stay productive.</p>;
+      case 2:
+        return <p>Quote: "Simplicity is the soul of efficiency." — keep your components small.</p>;
+      case 3:
+        return <p>News: The build finished successfully — check the dev server at http://localhost:5173.</p>;
+      case 4:
+        return <p>Reminder: Commit early and often with clear messages to keep history useful.</p>;
+      case 5:
+        return <p>Suggestion: Add unit tests for edge cases like empty arrays and null props.</p>;
+      default:
+        return <p>Nothing to show.</p>;
+    }
+  })();
+
+  return (
+    <section>
+      <h3>Selected content ({choice})</h3>
+      {content}
+    </section>
+  );
+}
+
+// Usage examples:
+// <ChoiceContent choice={1} />
+// <ChoiceContent choice={3} />
+```
+
+#### 5. Render lists
+
+* It is very comon to use array or collections to return a list of `HTML` elements
+* Always provide stable keys when rendering lists.
+  * Stable key: Does not change between renders for the same logical item.
+  * Keys let React identify which items changed, were added, or removed during reconciliation.
+
+* Using Array.map
+
+```jsx
+function TodoList({ todos }) {
+  return (
+    <ul>
+      {todos.map((todo) => (
+        <li key={todo.id}>{todo.title}</li>
+      ))}
+    </ul>
+  );
+}
+```
+
+* Using for
+
+```jsx
+function TodoListWithLoop({ todos = [] }) {
+  const items = [];
+  for (let i = 0; i < todos.length; i++) {
+    const todo = todos[i];
+    items.push(<li key={todo.id}>{todo.title}</li>);
+  }
+  return <ul>{items}</ul>;
+}
+```
+
+#### 6. Functions that return JSX
+
+* Extract repeated or complex fragments into small helper functions or components that return JSX for readability.
+
+```jsx
+function Avatar({ user }) {
+  return <img src={user.avatar} alt={user.name} className="avatar" />;
+}
+
+function Comment({ comment }) {
+  function Meta() {
+    return <div className="meta">{comment.author} • {comment.time}</div>;
+  }
+
+  return (
+    <article>
+      <Avatar user={comment.authorInfo} />
+      <p>{comment.text}</p>
+      <Meta />
+    </article>
+  );
+}
+```
+
+#### 7. Event handlers
+
+* Attach functions to events (onClick, onChange).
+* Use useState or callbacks to react to user actions.
+
+Example:
+```jsx
+import { useState } from 'react';
+
+function Counter() {
+  const [n, setN] = useState(0);
+
+  function sayHello () {
+    alert("Hello");
+  }
+
+  return (
+    <div>
+      <button onClick={() => setN((s) => s + 1)}>+1</button>
+      <span> Count: {n}</span>
+      <button onClick={sayHello()}>Say Hello</button>
+    </div>
+  );
+}
+```
+
+#### 8. Dynamic attributes (className, style)
+
+* Compute attributes like className or inline styles from state/props for conditional styling.
+
+Example:
+```jsx
+function Notification({ unread }) {
+  const className = unread ? 'notif unread' : 'notif';
+  const style = { borderLeft: unread ? '4px solid #007bff' : '4px solid transparent' };
+
+  return <div className={className} style={style}>You have messages</div>;
 }
 ```
 
