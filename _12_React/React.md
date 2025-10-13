@@ -559,7 +559,74 @@ return (
 );
 ```
 
-#### 3. Embed expressions
+#### 3. Dynamic CSS Styles
+
+Short: create style objects dynamically using JavaScript expressions and state.
+
+Example (component: `DynamicStyles.jsx`):
+
+```jsx
+import React, { useState } from 'react';
+
+export default function DynamicStyles({ initialColor = 'blue', initialSize = 16 }) {
+  const [color, setColor] = useState(initialColor);
+  const [size, setSize] = useState(initialSize);
+  const [isBold, setIsBold] = useState(false);
+
+  // Dynamic style object
+  const textStyle = {
+    color: color,
+    fontSize: `${size}px`,
+    fontWeight: isBold ? 'bold' : 'normal',
+    padding: '8px',
+    border: `2px solid ${color}`,
+    borderRadius: '4px',
+    transition: 'all 0.3s ease',
+  };
+
+  return (
+    <div>
+      <p style={textStyle}>
+        This text style is dynamic! Color: {color}, Size: {size}px, Bold: {isBold ? 'Yes' : 'No'}
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', marginTop: '12px', flexWrap: 'wrap' }}>
+        <button onClick={() => setColor('red')} style={{ padding: '4px 8px' }}>Red</button>
+        <button onClick={() => setColor('green')} style={{ padding: '4px 8px' }}>Green</button>
+        <button onClick={() => setColor('blue')} style={{ padding: '4px 8px' }}>Blue</button>
+        <button onClick={() => setColor('purple')} style={{ padding: '4px 8px' }}>Purple</button>
+      </div>
+
+      <div style={{ marginTop: '12px' }}>
+        <label>
+          Font size: {size}px
+          <input
+            type="range"
+            min="12"
+            max="48"
+            value={size}
+            onChange={(e) => setSize(Number(e.target.value))}
+            style={{ marginLeft: '8px' }}
+          />
+        </label>
+      </div>
+
+      <div style={{ marginTop: '12px' }}>
+        <label>
+          <input
+            type="checkbox"
+            checked={isBold}
+            onChange={(e) => setIsBold(e.target.checked)}
+          />
+          {' '}Bold
+        </label>
+      </div>
+    </div>
+  );
+}
+```
+
+#### 4. Embed expressions
 
 Short: use `{}` to evaluate JavaScript expressions inside JSX.
 
@@ -572,7 +639,7 @@ export default function Price({ amount = 0, taxRate = 0.1 }) {
 }
 ```
 
-#### 4. Conditional rendering
+#### 5. Conditional rendering
 
 Short: use ternary, `&&`, or early return to show/hide UI.
 
@@ -593,9 +660,10 @@ export default function UserStatus({ user }) {
 }
 ```
 
-#### 5. Render lists (map)
+#### 6. Render lists
 
-Short: use `Array.map` to turn data into elements — provide stable keys.
+* Using `Array.map` to turn data into elements.
+* Provide stable keys.
 
 Example (component: `TodoList.jsx`):
 
@@ -611,9 +679,8 @@ export default function TodoList({ todos = [] }) {
 }
 ```
 
-#### 5b. Render lists (for loop)
-
-Short: useful when per-item logic is complex; build an array of nodes and render it.
+* Using `for` when per-item logic is complex
+* Build an array of nodes and render it.
 
 Example (component: `TodoListWithLoop.jsx`):
 
@@ -629,7 +696,7 @@ export default function TodoListWithLoop({ todos = [] }) {
 }
 ```
 
-#### 6. Functions that return JSX
+#### 7. Functions that return JSX
 
 Short: extract repeated or complex fragments into small helper functions that return JSX.
 
@@ -637,20 +704,27 @@ Example (component: `ExampleFunctionsReturnJSX.jsx`):
 
 ```jsx
 export default function ExampleFunctionsReturnJSX({ comment = { author: 'Bob', time: '2h', text: 'Looks good!' } }) {
+  // helper function that accepts parameters and returns JSX
   function Meta(author, time) {
-    return <div className="meta">{author} • {time}</div>;
+    return (
+      <div className="meta" style={{ color: '#666', fontSize: 12 }}>
+        {author} • {time}
+      </div>
+    );
   }
 
   return (
-    <article>
-      <p>{comment.text}</p>
+    <article style={{ border: '1px solid #eee', padding: 8, borderRadius: 6 }}>
+      <p style={{ margin: 0 }}>{comment.text}</p>
+      {/* call the helper with parameters */}
       {Meta(comment.author, comment.time)}
     </article>
   );
 }
+
 ```
 
-#### 7. Event handlers
+#### 8. Event handlers
 
 Short: attach handlers (onClick, onChange) and use hooks like `useState` to respond to user actions.
 
@@ -671,7 +745,7 @@ export default function Counter() {
 }
 ```
 
-#### 8. Dynamic attributes
+#### 9. Dynamic attributes
 
 Short: compute `className` or inline `style` from props/state for dynamic styling.
 
@@ -685,7 +759,7 @@ export default function Notification({ unread = false }) {
 }
 ```
 
-#### 9. Spread props
+#### 10. Spread props
 
 Short: forward multiple props easily using `{...props}` when building passthrough components.
 

@@ -5,6 +5,7 @@ import HelloWorld from './components/HelloWorld'
 import MonthsDropdown from './components/MonthsDropdown' // Child component that uses props and hooks
 import ExampleComments from './components/ExampleComments'
 import SimpleLayout from './components/SimpleLayout'
+import DynamicStyles from './components/DynamicStyles'
 import Price from './components/Price'
 import UserStatus from './components/UserStatus'
 import TodoList from './components/TodoList'
@@ -28,6 +29,9 @@ function App() {
     { id: '1', title: 'Buy milk' },
     { id: '2', title: 'Fix bug', due: 'tomorrow' },
     { id: '3', title: 'Read docs', hidden: true },
+    { id: '4', title: 'Code review' },
+    { id: '5', title: 'Deployt to prod' },
+    { id: '6', title: '1:1 with manager' },
   ]
 
   const adminUser = { name: 'Leila', isAdmin: true, notifications: ['Welcome!', 'Update available'] }
@@ -54,15 +58,16 @@ function App() {
           <option value="months">Select months [MonthsDropdown]</option>
           <option value="comments">1) Comments [ExampleComments]</option>
           <option value="storeJSX">2) Store JSX in variables [SimpleLayout]</option>
-          <option value="embed">3) Embed expressions [Price]</option>
-          <option value="conditional">4) Conditional rendering [UserStatus]</option>
-          <option value="listsMap">5) Render lists (map) [TodoList]</option>
-          <option value="listsLoop">5) Render lists (for loop) [TodoListWithLoop]</option>
-          <option value="functionsReturn">6) Functions that return JSX [ExampleFunctionsReturnJSX]</option>
-          <option value="events">7) Event handlers [Counter]</option>
-          <option value="dynamic">8) Dynamic attributes [Notification]</option>
-          <option value="spread">9) Spread props [TextInput]</option>
-          <option value="choice">10) Choice example [ChoiceContent]</option>
+          <option value="dynamicStyles">3) Dynamic CSS Styles [DynamicStyles]</option>
+          <option value="embed">4) Embed expressions [Price]</option>
+          <option value="conditional">5) Conditional rendering [UserStatus]</option>
+          <option value="listsMap">6) Render lists (map) [TodoList]</option>
+          <option value="listsLoop">6) Render lists (for loop) [TodoListWithLoop]</option>
+          <option value="functionsReturn">7) Functions that return JSX [ExampleFunctionsReturnJSX]</option>
+          <option value="events">8) Event handlers [Counter]</option>
+          <option value="dynamic">9) Dynamic attributes [Notification]</option>
+          <option value="spread">10) Spread props [TextInput]</option>
+          <option value="choice">11) Choice example [ChoiceContent]</option>
         </select>
       </div>
 
@@ -90,55 +95,70 @@ function App() {
       {/* Sections toggle visibility via CSS (display) */}
       <div style={{ marginTop: 16 }}>
 
-        <section style={{ marginTop: 12, display: selectedExample === 'comments' ? 'block' : 'none' }}>
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'comments' ? 'block' : 'none' }}>
           <h3>1) Comments</h3>
           <ExampleComments />
         </section>
 
-        <section style={{ marginTop: 12, display: selectedExample === 'storeJSX' ? 'block' : 'none' }}>
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'storeJSX' ? 'block' : 'none' }}>
           <h3>2) Store JSX in variables</h3>
           <SimpleLayout />
         </section>
 
-        <section style={{ marginTop: 12, display: selectedExample === 'embed' ? 'block' : 'none' }}>
-          <h3>3) Embed expressions</h3>
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'dynamicStyles' ? 'block' : 'none' }}>
+          <h3>3) Dynamic CSS Styles</h3>
+          <DynamicStyles initialColor="white" initialSize={18} />
+        </section>
+
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'embed' ? 'block' : 'none' }}>
+          <h3>4) Embed expressions</h3>
           <Price amount={42} taxRate={0.07} />
         </section>
 
-        <section style={{ marginTop: 12, display: selectedExample === 'conditional' ? 'block' : 'none' }}>
-          <h3>4) Conditional rendering</h3>
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'conditional' ? 'block' : 'none' }}>
+          <h3>5) Conditional rendering</h3>
           <UserStatus user={adminUser} />
           <UserStatus user={regularUser} />
         </section>
 
-        <section style={{ marginTop: 12, display: selectedExample === 'listsMap' ? 'block' : 'none' }}>
-          <h3>5) Render lists (map)</h3>
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'listsMap' ? 'block' : 'none' }}>
+          <h3>6) Render lists (map)</h3>
           <TodoList todos={sampleTodos} />
         </section>
 
-        <section style={{ marginTop: 12, display: selectedExample === 'listsLoop' ? 'block' : 'none' }}>
-          <h3>5b) Render lists (for loop)</h3>
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'listsLoop' ? 'block' : 'none' }}>
+          <h3>6b) Render lists (for loop)</h3>
           <TodoListWithLoop todos={sampleTodos} />
         </section>
 
-        <section style={{ marginTop: 12, display: selectedExample === 'functionsReturn' ? 'block' : 'none' }}>
-          <h3>6) Functions that return JSX</h3>
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'functionsReturn' ? 'block' : 'none' }}>
+          <h3>7) Functions that return JSX</h3>
           <ExampleFunctionsReturnJSX comment={sampleComment} />
         </section>
 
-        <section style={{ marginTop: 12, display: selectedExample === 'events' ? 'block' : 'none' }}>
-          <h3>7) Event handlers</h3>
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'events' ? 'block' : 'none' }}>
+          <h3>8) Event handlers</h3>
           <Counter />
         </section>
 
-        <section style={{ marginTop: 12, display: selectedExample === 'dynamic' ? 'block' : 'none' }}>
-          <h3>8) Dynamic attributes</h3>
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'dynamic' ? 'block' : 'none' }}>
+          <h3>9) Dynamic attributes</h3>
           <Notification unread={true} />
           <Notification unread={false} />
         </section>
 
         <section style={{ marginTop: 12, display: selectedExample === 'spread' ? 'block' : 'none' }}>
-          <h3>9) Spread props</h3>
+          <h3>10) Spread props</h3>
           <p>Single inline usage:</p>
           <TextInput placeholder="Your name" />
 
@@ -177,8 +197,11 @@ function App() {
         </section>
 
         <section style={{ marginTop: 12, display: selectedExample === 'choice' ? 'block' : 'none' }}>
-          <h3>Choice example</h3>
+          <h3>11) Choice example</h3>
+          <ChoiceContent choice={1} />
+          <ChoiceContent choice={2} />
           <ChoiceContent choice={3} />
+          <ChoiceContent choice={5} />
         </section>
       </div>
     </>
