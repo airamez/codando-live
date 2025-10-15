@@ -103,7 +103,7 @@ function App() {
 
         <section
           style={{ marginTop: 12, display: selectedExample === 'storeJSX' ? 'block' : 'none' }}>
-          <h3>2) Store JSX in variables</h3>
+          <h3>2) JSX as variables</h3>
           <SimpleLayout />
         </section>
 
@@ -115,8 +115,10 @@ function App() {
 
         <section
           style={{ marginTop: 12, display: selectedExample === 'embed' ? 'block' : 'none' }}>
-          <h3>4) Embed expressions</h3>
-          <Price amount={42} taxRate={0.07} />
+          <h3>4) Embed expressions Demo</h3>
+          <Price amount={95.10} taxRate={0.35} />
+          <Price amount={29.90} taxRate={0.12} />
+          <Price amount={150.00} taxRate={0.50} />
         </section>
 
         <section
