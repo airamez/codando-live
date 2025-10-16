@@ -34,7 +34,7 @@ function App() {
     { id: '6', title: '1:1 with manager' },
   ]
 
-  const adminUser = { name: 'Leila', isAdmin: true, notifications: ['Welcome!', 'Update available'] }
+  const adminUser = { name: 'Leila', isAdmin: true, notifications: ['Welcome!', 'Update available', 'Gym', 'Meeting at 10AM'] }
 
   const regularUser = { name: 'Jose', isAdmin: false, notifications: ['Welcome!', 'Update available', 'Prepare classes'] }
 
@@ -126,6 +126,7 @@ function App() {
           <h3>5) Conditional rendering</h3>
           <UserStatus user={adminUser} />
           <UserStatus user={regularUser} />
+          <UserStatus user={null} />
         </section>
 
         <section

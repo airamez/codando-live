@@ -495,7 +495,7 @@ Below are the most common patterns when you mix JavaScript and JSX. The repo inc
 
 #### 1. Comments
 
-Short: use normal JS comments in logic, and {/* ... */} inside JSX.
+Use normal JS comments in logic, and {/* ... */} inside JSX.
 
 Example (component: `ExampleComments.jsx`):
 
@@ -561,7 +561,7 @@ return (
 
 #### 3. Dynamic CSS Styles
 
-Short: create style objects dynamically using JavaScript expressions and state.
+Create style objects dynamically using JavaScript expressions and state.
 
 Example (component: `DynamicStyles.jsx`):
 
@@ -628,7 +628,7 @@ export default function DynamicStyles({ initialColor = 'blue', initialSize = 16 
 
 #### 4. Embed expressions
 
-Short: use `{}` to evaluate JavaScript expressions inside JSX.
+Use `{}` to evaluate JavaScript expressions inside JSX.
 
 Example (component: `Price.jsx`):
 
@@ -641,7 +641,7 @@ export default function Price({ amount = 0, taxRate = 0.1 }) {
 
 #### 5. Conditional rendering
 
-Short: use ternary, `&&`, or early return to show/hide UI.
+It is very common to render results based on conditions
 
 Example (component: `UserStatus.jsx`):
 

@@ -6,9 +6,9 @@ export default function UserStatus({ user }) {
   } else {
     return (
       <div>
-        {user.isAdmin ? <strong>Admin</strong> : <span>User</span>}
+        {user.name}: {user.isAdmin ? <strong>Admin</strong> : <span>User</span>}
         {user.notifications && user.notifications.length > 0 && (
-          <span> • {user.notifications.length}</span>
+          <span> ({user.notifications.length})</span>
         )}
       </div>
     );
