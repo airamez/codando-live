@@ -30,7 +30,7 @@ function App() {
     { id: '2', title: 'Fix bug', due: 'tomorrow' },
     { id: '3', title: 'Read docs', hidden: true },
     { id: '4', title: 'Code review' },
-    { id: '5', title: 'Deployt to prod' },
+    { id: '5', title: 'Deploy to prod' },
     { id: '6', title: '1:1 with manager' },
   ]
 
