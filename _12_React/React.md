@@ -698,30 +698,60 @@ export default function TodoListWithLoop({ todos = [] }) {
 
 #### 7. Functions that return JSX
 
-Short: extract repeated or complex fragments into small helper functions that return JSX.
+Extract repeated or complex fragments into small helper functions that return JSX.
 
-Example (component: `ExampleFunctionsReturnJSX.jsx`):
+Example (component: `PRsReview.jsx`):
 
 ```jsx
-export default function ExampleFunctionsReturnJSX({ comment = { author: 'Bob', time: '2h', text: 'Looks good!' } }) {
-  // helper function that accepts parameters and returns JSX
-  function Meta(author, time) {
-    return (
-      <div className="meta" style={{ color: '#666', fontSize: 12 }}>
-        {author} • {time}
-      </div>
-    );
+export default function PRsReview({ reviews }) {
+
+  // helper function that calculates word count
+  function getWordCount(text) {
+    return text.trim().split(/\s+/).length;
+  }
+
+  // helper function to translate status number to text
+  function getStatusText(statusNumber) {
+    switch (statusNumber) {
+      case 1:
+        return 'Approved';
+      case 2:
+        return 'Approved with comments';
+      case 3:
+        return 'Rejected';
+      default:
+        return 'Unknown';
+    }
   }
 
   return (
-    <article style={{ border: '1px solid #eee', padding: 8, borderRadius: 6 }}>
-      <p style={{ margin: 0 }}>{comment.text}</p>
-      {/* call the helper with parameters */}
-      {Meta(comment.author, comment.time)}
-    </article>
+    <div>
+      <h4>Pull Request Reviews</h4>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Author</th>
+            <th>Review Text</th>
+            <th>Word Count</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {reviews.map((review, index) => (
+            <tr key={index}>
+              <td>{review.date}</td>
+              <td>{review.author}</td>
+              <td>{review.text}</td>
+              <td>{getWordCount(review.text)}</td>
+              <td>{getStatusText(review.status)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
-
 ```
 
 #### 8. Event handlers

@@ -10,7 +10,7 @@ import Price from './components/Price'
 import UserStatus from './components/UserStatus'
 import TodoList from './components/TodoList'
 import TodoListWithLoop from './components/TodoListWithLoop'
-import ExampleFunctionsReturnJSX from './components/ExampleFunctionsReturnJSX'
+import PRsReview from './components/PRsReview'
 import Counter from './components/Counter'
 import Notification from './components/Notification'
 import TextInput from './components/TextInput'
@@ -38,7 +38,13 @@ function App() {
 
   const regularUser = { name: 'Jose', isAdmin: false, notifications: ['Welcome!', 'Update available', 'Prepare classes'] }
 
-  const sampleComment = { author: 'Bob', time: '2h', text: 'Looks good!', authorInfo: { avatar: '', name: 'Bob' } }
+  const reviews = [
+    { author: 'Artur', date: '2024-10-15', text: 'Looks good! Everything is well implemented.', status: 1 },
+    { author: 'Jose', date: '2024-10-16', text: 'Please fix the typo in line 42 and add more comments.', status: 2 },
+    { author: 'Leila', date: '2024-10-17', text: 'This breaks the main functionality. Need to refactor.', status: 3 },
+    { author: 'Artur', date: '2024-10-17', text: 'Great work! Clean code and good test coverage.', status: 1 },
+    { author: 'Jose', date: '2024-10-18', text: 'Minor issues with naming conventions, but overall good.', status: 3 }
+  ]
 
   const [selectedExample, setSelectedExample] = useState('')
   const [textControlled, setTextControlled] = useState('Alice')
@@ -63,7 +69,7 @@ function App() {
           <option value="conditional">5) Conditional rendering [UserStatus]</option>
           <option value="listsMap">6) Render lists (map) [TodoList]</option>
           <option value="listsLoop">6) Render lists (for loop) [TodoListWithLoop]</option>
-          <option value="functionsReturn">7) Functions that return JSX [ExampleFunctionsReturnJSX]</option>
+          <option value="functionsReturn">7) Functions that return JSX [PRsReview]</option>
           <option value="events">8) Event handlers [Counter]</option>
           <option value="dynamic">9) Dynamic attributes [Notification]</option>
           <option value="spread">10) Spread props [TextInput]</option>
@@ -143,8 +149,8 @@ function App() {
 
         <section
           style={{ marginTop: 12, display: selectedExample === 'functionsReturn' ? 'block' : 'none' }}>
-          <h3>7) Functions that return JSX</h3>
-          <ExampleFunctionsReturnJSX comment={sampleComment} />
+          <h3>7) Functions that return JSX - PR Reviews</h3>
+          <PRsReview reviews={reviews} />
         </section>
 
         <section
