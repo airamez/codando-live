@@ -754,25 +754,14 @@ export default function PRsReview({ reviews }) {
 }
 ```
 
-#### 8. Event handlers
+#### 8. Event Handling
 
-Short: attach handlers (onClick, onChange) and use hooks like `useState` to respond to user actions.
+Attach handlers (onClick, onChange) and use hooks like `useState` to respond to user actions.
 
 Example (component: `Counter.jsx`):
 
 ```jsx
-import { useState } from 'react';
 
-export default function Counter() {
-  const [n, setN] = useState(0);
-  return (
-    <div>
-      <button onClick={() => setN((s) => s + 1)}>+1</button>
-      <span> Count: {n}</span>
-      <button onClick={() => alert('Hello from Counter')}>Say Hello</button>
-    </div>
-  );
-}
 ```
 
 #### 9. Dynamic attributes

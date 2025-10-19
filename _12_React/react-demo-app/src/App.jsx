@@ -11,7 +11,7 @@ import UserStatus from './components/UserStatus'
 import TodoList from './components/TodoList'
 import TodoListWithLoop from './components/TodoListWithLoop'
 import PRsReview from './components/PRsReview'
-import Counter from './components/Counter'
+import EventHandling from './components/EventHandling'
 import Notification from './components/Notification'
 import TextInput from './components/TextInput'
 import ChoiceContent from './components/ChoiceContent'
@@ -70,7 +70,7 @@ function App() {
           <option value="listsMap">6) Render lists (map) [TodoList]</option>
           <option value="listsLoop">6) Render lists (for loop) [TodoListWithLoop]</option>
           <option value="functionsReturn">7) Functions that return JSX [PRsReview]</option>
-          <option value="events">8) Event handlers [Counter]</option>
+          <option value="events">8) Event handlers [EventHandling]</option>
           <option value="dynamic">9) Dynamic attributes [Notification]</option>
           <option value="spread">10) Spread props [TextInput]</option>
           <option value="choice">11) Choice example [ChoiceContent]</option>
@@ -156,7 +156,7 @@ function App() {
         <section
           style={{ marginTop: 12, display: selectedExample === 'events' ? 'block' : 'none' }}>
           <h3>8) Event handlers</h3>
-          <Counter />
+          <EventHandling />
         </section>
 
         <section
