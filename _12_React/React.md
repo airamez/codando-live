@@ -485,13 +485,16 @@ Below are the most common patterns when you mix JavaScript and JSX. The repo inc
 
 * 1. Comments
 * 2. Store JSX in variables
-* 3. Embed expressions
-* 4. Conditional rendering
-* 5. Render lists
-* 6. Functions that return JSX
-* 7. Event handlers
-* 8. Dynamic attributes
-* 9. Spread props
+* 3. Dynamic CSS Styles
+* 4. Embed expressions
+* 5. Conditional rendering
+* 6. Render lists
+* 7. Functions that return JSX
+* 8. Props (Properties)
+* 9. Event handlers
+* 10. Controlled Components
+* 11. Dynamic attributes
+* 12. Spread props
 
 #### 1. Comments
 
@@ -754,12 +757,41 @@ export default function PRsReview({ reviews }) {
 }
 ```
 
-#### 8. Event Handling
+#### 8. Props (Properties)
+
+* [Props](https://react.dev/learn/passing-props-to-a-component) are how components receive data from their parent components.
+* They are read-only and help make components reusable by allowing different data to be passed in.
+* Props flow down from parent to child components (unidirectional data flow).
+
+### Passing and Using Props
+
+```jsx
+// Parent Component
+function App() {
+  return (
+    <div>
+      <Greeting name="Alice" age={25} />
+      <Greeting name="Bob" age={30} />
+    </div>
+  );
+}
+
+// Child Component
+function Greeting({ name, age }) {
+  return (
+    <div>
+      <h2>Hello, {name}!</h2>
+      <p>You are {age} years old.</p>
+    </div>
+  );
+}
+```
+
+#### 9. Event Handling
 
 Attach handlers (onClick, onChange) and use hooks like `useState` to respond to user actions.
 
 * **Overview:**
-
   * **Event names use camelCase**: `onClick`, `onChange`, `onSubmit`, `onMouseEnter`, etc. (not lowercase like HTML)
   * **Pass function references**: `onClick={handleClick}` (not `onClick={handleClick()}`
   * **Inline arrow functions**: `onClick={() => doSomething(arg)}` when you need to pass arguments or call multiple functions
@@ -824,8 +856,7 @@ export default function EventHandling() {
         <input
           type="text"
           value={text}
-          // onChange={(e) => setText(e.target.value)}
-          onChange={(e) => setText(text)}
+          onChange={(e) => setText(e.target.value)}
           placeholder="Type something..."
         />
         <span>Words: {GetWordCount(text)} | Characters: {GetCharCount(text)}</span>
@@ -839,23 +870,42 @@ export default function EventHandling() {
 }
 ```
 
-#### 9. Dynamic attributes
+#### 10. Controlled Components
 
-Short: compute `className` or inline `style` from props/state for dynamic styling.
+Controlled components are form inputs whose values are controlled by React state. The component's state becomes the "single source of truth" for the input value.
+
+**Key Concept:**
+- Input value is bound to state via the `value` attribute (one-way: state → view)
+- Input changes are captured via `onChange` handler which updates state (manual: view → state)
+- This creates a controlled, predictable data flow
+
+**Why use controlled components:**
+- State is always in sync with the input
+- Easy to validate and transform data in real-time
+- Can programmatically set/clear values
+- Single source of truth (the state)
+
+**Basic Pattern:**
+
+```jsx
+const [value, setValue] = useState('');
+
+<input 
+  value={value} // Bind to state
+  onChange={(e) => setValue(e.target.value)} // Update state on change
+/>
+```
+
+#### 11. Dynamic attributes
+
+Compute `className` or inline `style` from props/state for dynamic styling.
 
 Example (component: `Notification.jsx`):
 
-```jsx
-export default function Notification({ unread = false }) {
-  const className = unread ? 'notif unread' : 'notif';
-  const style = { borderLeft: unread ? '4px solid #007bff' : '4px solid transparent', padding: 8 };
-  return <div className={className} style={style}>You have messages</div>;
-}
-```
 
-#### 10. Spread props
+#### 11. Spread props
 
-Short: forward multiple props easily using `{...props}` when building passthrough components.
+Forward multiple props easily using `{...props}` when building passthrough components.
 
 Example (component: `TextInput.jsx`):
 
@@ -864,408 +914,3 @@ export default function TextInput(props) {
   return <input type="text" {...props} />;
 }
 ```
-
-More realistic TextInput usages
-
-```jsx
-// 1) Controlled input (parent manages value)
-function ControlledExample() {
-  const [value, setValue] = useState('Alice');
-  return <TextInput value={value} onChange={(e) => setValue(e.target.value)} aria-label="name" />;
-}
-
-// 2) Uncontrolled with defaultValue
-<TextInput defaultValue="Bob" />
-
-// 3) Disabled / readOnly
-<TextInput placeholder="Can't edit" disabled />
-<TextInput value="Read only" readOnly />
-
-// 4) Styling & className via spread
-const styleProps = { className: 'form-input', style: { padding: 8, borderRadius: 4 } };
-<TextInput {...styleProps} placeholder="Styled input" />
-
-// 5) Accessibility (ARIA props forwarded)
-<TextInput aria-label="email" aria-required={true} />
-
-// 6) Conditional props
-const maybeProps = isMobile ? { inputMode: 'numeric' } : {};
-<TextInput {...maybeProps} />
-
-// 7) Merge/override pattern (later props override earlier ones)
-const base = { placeholder: 'base', maxLength: 30 };
-<TextInput {...base} placeholder="overridden" />
-
-// 8) Forwarding props from parent to child
-function Parent(props) {
-  return <TextInput {...props} />; // Parent forwards all received props
-}
-
-// 9) Small demo component is included: TextInputExamples
-//    shows inline props, spread-from-object, and merged props
-//    Usage: <TextInputExamples />
-```
-
-Notes
-- Prefer stable keys for lists (use IDs, not array indexes, unless the list is static).
-- Keep heavy computations out of JSX — move them to variables or helpers for readability.
-- Use helper functions/components to keep JSX compact and testable.
-
-
-* Use normal JavaScript comments (`//` single-line or `/* */` multi-line) in JS code.
-* Inside JSX you must use JS expressions for comments: `{/*` comment `*/}`.
-* Do not use HTML comments (<!-- -->) inside JSX — they are invalid.
-* You can "comment out" JSX elements by wrapping them in `{/*` ... `*/}`
-
-```jsx
-// JS-level comments
-function ExampleA() {
-
-  // counter value
-  const count = 3;
-
-  /* 
-   * multi-line style also works in JS 
-   *
-   */
-
-  return (
-    <div>
-      {/* JSX comment: explains the header */}
-      <h1>Inbox</h1>
-
-      {/* Multi-line JSX comment:
-          - used to document groups of elements
-          - keeps intent near the markup
-       */}
-      <ul>
-        <li>Message 1</li>
-        <li>Message 2</li>
-      </ul>
-
-      {/* Commenting out an element */}
-      {/* <LegacyBadge /> */}
-    </div>
-  );
-}
-```
-
-* Invalid example (do NOT use):
-
-```jsx
-function Broken() {
-  return (
-    <div>
-      <!-- This looks like HTML but will break JSX -->
-      <p>Will not compile</p>
-    </div>
-  );
-}
-```
-
-#### 2. Store JSX in variables
-
-* It is possible to create variable/constants with JSX content
-* Keep static or pre-composed pieces of UI in variables for clarity and reuse within the same render.
-
-```jsx
-function SimpleLayout() {
-  const header = <h1>My Static Header</h1>;
-  const content = (
-    <div>
-      <ul>
-        <li>Apples</li>
-        <li>Bananas</li>
-        <li>Cherries</li>
-      </ul>
-   </div>
-  );
-  const footer = (
-    <div>
-      <small>Static Footer — © 2025</small>
-    </div>
-  );
-
-  return (
-    <>
-      {header}
-      {content}
-      {footer}
-    </>
-  );
-}
-```
-
-#### 3. Embed expressions
-
-* Use {} to evaluate JavaScript expressions directly inside JSX (variables, math, function calls).
-
-```jsx
-function Price({ amount = 0, taxRate = 0.1 }) {
-
-  const total = (amount * (1 + taxRate)).toFixed(2);
-
-  return (
-    <div>
-      Total: ${total} = ({amount} + {taxRate})
-    </div>
-  );
-}
-```
-
-#### 4. Conditional rendering
-
-* Render different UI based on conditions using ternary, && short-circuit, or early return.
-
-```jsx
-function UserStatus({ user }) {
-  if (!user) return <div>Please sign in.</div>;
-
-  return (
-    <div>
-      {user.isAdmin ? <strong>Admin</strong> : <span>User</span>} {/* ternary */}
-      {user.notifications.length > 0 && <span> • {user.notifications.length}</span>} {/* && */}
-    </div>
-  );
-}
-```
-
-```jsx
-import { useState } from 'react'
-import './App.css'
-
-// Import UserStatus
-
-function App() {
-
-  const [user, setUser] = useState({
-    name: 'Alice',
-    isAdmin: true,
-    notifications: ['Welcome!', 'New message']
-  })
-
-  return (
-    <>
-      <UserStatus user={user} />
-    </>
-  )
-}
-
-export default App
-```
-
-```jsx
-// Component that receives a choice (1-5) as a prop and renders the corresponding content.
-function ChoiceContent({ choice = 1 }) {
-  const content = (() => {
-    switch (choice) {
-      case 1:
-        return <p>Tip: Break large tasks into 25-minute focused blocks to stay productive.</p>;
-      case 2:
-        return <p>Quote: "Simplicity is the soul of efficiency." — keep your components small.</p>;
-      case 3:
-        return <p>News: The build finished successfully — check the dev server at http://localhost:5173.</p>;
-      case 4:
-        return <p>Reminder: Commit early and often with clear messages to keep history useful.</p>;
-      case 5:
-        return <p>Suggestion: Add unit tests for edge cases like empty arrays and null props.</p>;
-      default:
-        return <p>Nothing to show.</p>;
-    }
-  })();
-
-  return (
-    <section>
-      <h3>Selected content ({choice})</h3>
-      {content}
-    </section>
-  );
-}
-
-// Usage examples:
-// <ChoiceContent choice={1} />
-// <ChoiceContent choice={3} />
-```
-
-#### 5. Render lists
-
-* It is very comon to use array or collections to return a list of `HTML` elements
-* Always provide stable keys when rendering lists.
-  * Stable key: Does not change between renders for the same logical item.
-  * Keys let React identify which items changed, were added, or removed during reconciliation.
-
-* Using Array.map
-
-```jsx
-function TodoList({ todos }) {
-  return (
-    <ul>
-      {todos.map((todo) => (
-        <li key={todo.id}>{todo.title}</li>
-      ))}
-    </ul>
-  );
-}
-```
-
-* Using for
-
-```jsx
-function TodoListWithLoop({ todos = [] }) {
-  const items = [];
-  for (let i = 0; i < todos.length; i++) {
-    const todo = todos[i];
-    items.push(<li key={todo.id}>{todo.title}</li>);
-  }
-  return <ul>{items}</ul>;
-}
-```
-
-#### 6. Functions that return JSX
-
-* Extract repeated or complex fragments into small helper functions or components that return JSX for readability.
-
-```jsx
-function Avatar({ user }) {
-  return <img src={user.avatar} alt={user.name} className="avatar" />;
-}
-
-function Comment({ comment }) {
-  function Meta() {
-    return <div className="meta">{comment.author} • {comment.time}</div>;
-  }
-
-  return (
-    <article>
-      <Avatar user={comment.authorInfo} />
-      <p>{comment.text}</p>
-      <Meta />
-    </article>
-  );
-}
-```
-
-#### 7. Event handlers
-
-* Attach functions to events (onClick, onChange).
-* Use useState or callbacks to react to user actions.
-
-Example:
-```jsx
-import { useState } from 'react';
-
-function Counter() {
-  const [n, setN] = useState(0);
-
-  function sayHello () {
-    alert("Hello");
-  }
-
-  return (
-    <div>
-      <button onClick={() => setN((s) => s + 1)}>+1</button>
-      <span> Count: {n}</span>
-      <button onClick={sayHello()}>Say Hello</button>
-    </div>
-  );
-}
-```
-
-#### 8. Dynamic attributes (className, style)
-
-* Compute attributes like className or inline styles from state/props for conditional styling.
-
-Example:
-```jsx
-function Notification({ unread }) {
-  const className = unread ? 'notif unread' : 'notif';
-  const style = { borderLeft: unread ? '4px solid #007bff' : '4px solid transparent' };
-
-  return <div className={className} style={style}>You have messages</div>;
-}
-```
-
-## Props (Properties)
-
-* [Props](https://react.dev/learn/passing-props-to-a-component) are how components receive data from their parent components.
-* They are read-only and help make components reusable by allowing different data to be passed in.
-* Props flow down from parent to child components (unidirectional data flow).
-
-### Passing and Using Props
-
-```jsx
-// Parent Component
-function App() {
-  return (
-    <div>
-      <Greeting name="Alice" age={25} />
-      <Greeting name="Bob" age={30} />
-    </div>
-  );
-}
-
-// Child Component
-function Greeting({ name, age }) {
-  return (
-    <div>
-      <h2>Hello, {name}!</h2>
-      <p>You are {age} years old.</p>
-    </div>
-  );
-}
-```
-
-### Props with Default Values
-
-```jsx
-function Button({ text = "Click me", color = "blue" }) {
-  return (
-    <button style={{ backgroundColor: color }}>
-      {text}
-    </button>
-  );
-}
-
-// Usage
-<Button text="Submit" color="green" />
-<Button /> {/* Uses default values */}
-```
-
-## State and useState Hook
-
-* [State](https://react.dev/learn/state-a-components-memory) allows components to remember and manage data that can change over time.
-* The `useState` hook is the modern way to add state to functional components.
-* When state changes, React automatically re-renders the component with the new data.
-
-### Multiple State Variables
-
-## Event Handling
-
-* React uses [SyntheticEvents](https://react.dev/reference/react-dom/components/common#applying-css-styles) to handle user interactions consistently across different browsers.
-* Event handlers are functions that respond to user actions like clicks, form submissions, and keyboard input.
-
-## Conditional Rendering
-
-* React allows you to conditionally render different content based on component state or props.
-* Use JavaScript conditional operators like `if`, ternary operator (`?:`), and logical AND (`&&`).
-
-## React 19 New Features
-
-### useEffect Hook and Side Effects
-
-* [useEffect](https://react.dev/reference/react/useEffect) allows you to perform side effects in functional components.
-* Side effects include data fetching, subscriptions, DOM manipulation, and cleanup.
-
-### Actions
-
-* Actions provide a built-in way to handle form submissions and data mutations.
-* They automatically handle loading states, error handling, and optimistic updates.
-
-
-### Server Components
-
-* Server Components run on the server and can directly access databases and APIs.
-* They reduce bundle size and improve initial page load performance.
-
-
-

@@ -15,6 +15,7 @@ import EventHandling from './components/EventHandling'
 import Notification from './components/Notification'
 import TextInput from './components/TextInput'
 import ChoiceContent from './components/ChoiceContent'
+import ControlledForm from './components/ControlledForm'
 
 function App() {
 
@@ -71,9 +72,10 @@ function App() {
           <option value="listsLoop">6) Render lists (for loop) [TodoListWithLoop]</option>
           <option value="functionsReturn">7) Functions that return JSX [PRsReview]</option>
           <option value="events">8) Event handlers [EventHandling]</option>
-          <option value="dynamic">9) Dynamic attributes [Notification]</option>
-          <option value="spread">10) Spread props [TextInput]</option>
-          <option value="choice">11) Choice example [ChoiceContent]</option>
+          <option value="controlled">9) Controlled Components [ControlledForm]</option>
+          <option value="dynamic">10) Dynamic attributes [Notification]</option>
+          <option value="spread">11) Spread props [TextInput]</option>
+          <option value="choice">12) Choice example [ChoiceContent]</option>
         </select>
       </div>
 
@@ -160,14 +162,20 @@ function App() {
         </section>
 
         <section
+          style={{ marginTop: 12, display: selectedExample === 'controlled' ? 'block' : 'none' }}>
+          <h3>9) Controlled Components</h3>
+          <ControlledForm />
+        </section>
+
+        <section
           style={{ marginTop: 12, display: selectedExample === 'dynamic' ? 'block' : 'none' }}>
-          <h3>9) Dynamic attributes</h3>
+          <h3>10) Dynamic attributes</h3>
           <Notification unread={true} />
           <Notification unread={false} />
         </section>
 
         <section style={{ marginTop: 12, display: selectedExample === 'spread' ? 'block' : 'none' }}>
-          <h3>10) Spread props</h3>
+          <h3>11) Spread props</h3>
           <p>Single inline usage:</p>
           <TextInput placeholder="Your name" />
 
@@ -206,7 +214,7 @@ function App() {
         </section>
 
         <section style={{ marginTop: 12, display: selectedExample === 'choice' ? 'block' : 'none' }}>
-          <h3>11) Choice example</h3>
+          <h3>12) Choice example</h3>
           <ChoiceContent choice={1} />
           <ChoiceContent choice={2} />
           <ChoiceContent choice={3} />
