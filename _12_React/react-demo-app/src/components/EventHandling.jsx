@@ -55,6 +55,8 @@ export default function EventHandling() {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
+          // ATTENTION: Explain why this does not work. Angular thinking pitfal
+          // onChange={(e) => setText(e.target.value)}
           placeholder="Type something..."
         />
         <span>Words: {GetWordCount(text)} | Characters: {GetCharCount(text)}</span>
