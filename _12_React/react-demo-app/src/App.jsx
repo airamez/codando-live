@@ -16,6 +16,8 @@ import Notification from './components/Notification'
 import TextInput from './components/TextInput'
 import ChoiceContent from './components/ChoiceContent'
 import ControlledForm from './components/ControlledForm'
+import ProductCard from './components/ProductCard'
+import ProductCardImproved from './components/ProductCardImproved'
 
 function App() {
 
@@ -49,6 +51,44 @@ function App() {
 
   const [selectedExample, setSelectedExample] = useState('')
   const [textControlled, setTextControlled] = useState('Alice')
+  const [cart, setCart] = useState([]);
+
+  // Product objects for ProductCardImproved demonstration
+  const products = [
+    {
+      name: "Smart Watch",
+      price: 299.99,
+      category: "Electronics",
+      inStock: true,
+      imageUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop"
+    },
+    {
+      name: "Backpack",
+      price: 79.99,
+      category: "Accessories",
+      inStock: true,
+      imageUrl: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&h=300&fit=crop"
+    },
+    {
+      name: "Sunglasses",
+      price: 149.99,
+      category: "Accessories",
+      inStock: false,
+      imageUrl: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=300&fit=crop"
+    },
+    {
+      name: "Water Bottle",
+      price: 24.99,
+      category: "Sports",
+      inStock: true,
+      imageUrl: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=300&h=300&fit=crop"
+    }
+  ];
+
+  const handleAddToCart = (productName) => {
+    setCart([...cart, productName])
+    alert(`${productName} added to cart! Total items: ${cart.length + 1}`)
+  }
 
   return (
     <>
@@ -71,11 +111,13 @@ function App() {
           <option value="listsMap">6) Render lists (map) [TodoList]</option>
           <option value="listsLoop">6) Render lists (for loop) [TodoListWithLoop]</option>
           <option value="functionsReturn">7) Functions that return JSX [PRsReview]</option>
-          <option value="events">8) Event handlers [EventHandling]</option>
-          <option value="controlled">9) Controlled Components [ControlledForm]</option>
-          <option value="dynamic">10) Dynamic attributes [Notification]</option>
-          <option value="spread">11) Spread props [TextInput]</option>
-          <option value="choice">12) Choice example [ChoiceContent]</option>
+          <option value="props">8) Props [ProductCard]</option>
+          <option value="propsImproved">8) Props with Object [ProductCardImproved]</option>
+          <option value="events">9) Event handlers [EventHandling]</option>
+          <option value="controlled">10) Controlled Components [ControlledForm]</option>
+          <option value="dynamic">11) Dynamic attributes [Notification]</option>
+          <option value="spread">12) Spread props [TextInput]</option>
+          <option value="choice">13) Choice example [ChoiceContent]</option>
         </select>
       </div>
 
@@ -156,26 +198,82 @@ function App() {
         </section>
 
         <section
+          style={{ marginTop: 12, display: selectedExample === 'props' ? 'block' : 'none' }}>
+          <h3>8) Props (Properties) - Product Cards</h3>
+          <p>Cart: {cart.length} items - {cart.join(', ')}</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <ProductCard
+              name="Laptop"
+              price={999.99}
+              category="Electronics"
+              inStock={true}
+              onAddToCart={handleAddToCart}
+              imageUrl="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300&h=300&fit=crop"
+            />
+
+            <ProductCard
+              name="Coffee Mug"
+              price={12.50}
+              category="Kitchen"
+              inStock={true}
+              onAddToCart={handleAddToCart}
+              imageUrl="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=300&h=300&fit=crop"
+            />
+
+            <ProductCard
+              name="Headphones"
+              price={199.99}
+              category="Electronics"
+              inStock={false}
+              onAddToCart={handleAddToCart}
+              imageUrl="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop"
+            />
+
+            <ProductCard
+              name="Mystery Box"
+              price={49.99}
+              onAddToCart={handleAddToCart}
+              imageUrl="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=300&h=300&fit=crop"
+            />
+          </div>
+        </section>
+
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'propsImproved' ? 'block' : 'none' }}>
+          <h3>8b) Props (Properties) - Product Object Approach</h3>
+          <p>Cart: {cart.length} items - {cart.join(', ')}</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            {products.map((product, index) => (
+              <ProductCardImproved
+                key={index}
+                product={product}
+                onAddToCart={handleAddToCart}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section
           style={{ marginTop: 12, display: selectedExample === 'events' ? 'block' : 'none' }}>
-          <h3>8) Event handlers</h3>
+          <h3>9) Event handlers</h3>
           <EventHandling />
         </section>
 
         <section
           style={{ marginTop: 12, display: selectedExample === 'controlled' ? 'block' : 'none' }}>
-          <h3>9) Controlled Components</h3>
+          <h3>10) Controlled Components</h3>
           <ControlledForm />
         </section>
 
         <section
           style={{ marginTop: 12, display: selectedExample === 'dynamic' ? 'block' : 'none' }}>
-          <h3>10) Dynamic attributes</h3>
+          <h3>11) Dynamic attributes</h3>
           <Notification unread={true} />
           <Notification unread={false} />
         </section>
 
         <section style={{ marginTop: 12, display: selectedExample === 'spread' ? 'block' : 'none' }}>
-          <h3>11) Spread props</h3>
+          <h3>12) Spread props</h3>
           <p>Single inline usage:</p>
           <TextInput placeholder="Your name" />
 
@@ -214,7 +312,7 @@ function App() {
         </section>
 
         <section style={{ marginTop: 12, display: selectedExample === 'choice' ? 'block' : 'none' }}>
-          <h3>12) Choice example</h3>
+          <h3>13) Choice example</h3>
           <ChoiceContent choice={1} />
           <ChoiceContent choice={2} />
           <ChoiceContent choice={3} />
