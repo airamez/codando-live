@@ -759,9 +759,7 @@ export default function PRsReview({ reviews }) {
 
 #### 8. Props (Properties)
 
-**Props (properties)** are how components receive data from their parent components. They enable component composition, reusability, and the unidirectional data flow that makes React predictable.
-
----
+**Props (properties)** are how components [receive data from their parent components](https://react.dev/learn/passing-props-to-a-component). They enable component composition, reusability, and the unidirectional data flow that makes React predictable.
 
 **Props vs useState - Understanding the Difference:**
 
@@ -859,12 +857,12 @@ function App() {
 
 When you write:
 ```jsx
-<Greeting name="Alice" age={25} />
+<Greeting name="Leila" age={25} />
 ```
 
 React internally calls:
 ```javascript
-Greeting({ name: "Alice", age: 25 })  // Single object argument
+Greeting({ name: "Leila", age: 25 })  // Single object argument
 ```
 
 **Three Ways to Receive Props:**
@@ -896,7 +894,7 @@ In JSX, you must use the correct syntax for different value types:
 
 ```jsx
 // ✅ Strings: Use quotes (no curly braces needed)
-<Greeting name="Alice" role="Admin" />
+<Greeting name="Leila" role="Admin" />
 
 // ✅ Numbers: Use curly braces
 <Greeting age={25} score={98.5} />
@@ -911,7 +909,7 @@ In JSX, you must use the correct syntax for different value types:
 <Greeting name={userName} age={currentYear - birthYear} />
 
 // ✅ Objects/Arrays: Use curly braces
-<Greeting user={{ name: "Alice", age: 25 }} />
+<Greeting user={{ name: "Leila", age: 25 }} />
 <Greeting tags={["react", "javascript"]} />
 ```
 
@@ -928,8 +926,8 @@ function Greeting({ name = "Guest", age = 0, role = "User" }) {
 }
 
 // Usage
-<Greeting name="Alice" age={25} role="Admin" />  // Hello, Alice! Age: 25 | Role: Admin
-<Greeting name="Bob" />                          // Hello, Bob! Age: 0 | Role: User
+<Greeting name="Leila" age={25} role="Admin" />  // Hello, Leila! Age: 25 | Role: Admin
+<Greeting name="Jose" />                          // Hello, Jose! Age: 0 | Role: User
 <Greeting />                                     // Hello, Guest! Age: 0 | Role: User
 ```
 

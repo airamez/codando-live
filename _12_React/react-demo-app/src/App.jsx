@@ -57,7 +57,7 @@ function App() {
   const products = [
     {
       name: "Smart Watch",
-      price: 299.99,
+      price: 199.99,
       category: "Electronics",
       inStock: true,
       imageUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop"

@@ -18,23 +18,26 @@
 
 .product-card-image {
   width: 100%;
-  border-radius: 4px;
+  border-radius: 20px;
 }
 
 .product-card-title {
-  margin: 8px 0;
+  margin: 2px 0;
+  color: #2c3e50;
+  font-size: 20px;
 }
 
 .product-card-category {
   color: #666;
   font-size: 14px;
+  margin: 0;
 }
 
 .product-card-price {
   font-size: 20px;
   font-weight: bold;
   color: #2c3e50;
-  margin: 8px 0;
+  margin: 1px 0;
 }
 
 .product-card-stock {
@@ -44,6 +47,7 @@
 
 .product-card-stock.in-stock {
   color: green;
+  margin: 0;
 }
 
 .product-card-stock.out-of-stock {
