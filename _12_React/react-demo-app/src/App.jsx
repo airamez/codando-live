@@ -18,6 +18,7 @@ import ChoiceContent from './components/ChoiceContent'
 import ControlledForm from './components/ControlledForm'
 import ProductCard from './components/ProductCard'
 import ProductCardImproved from './components/ProductCardImproved'
+import Parent from './components/ParentChild/Parent'
 
 function App() {
 
@@ -114,10 +115,11 @@ function App() {
           <option value="props">8) Props [ProductCard]</option>
           <option value="propsImproved">8) Props with Object [ProductCardImproved]</option>
           <option value="events">9) Event handlers [EventHandling]</option>
-          <option value="controlled">10) Controlled Components [ControlledForm]</option>
-          <option value="dynamic">11) Dynamic attributes [Notification]</option>
-          <option value="spread">12) Spread props [TextInput]</option>
-          <option value="choice">13) Choice example [ChoiceContent]</option>
+          <option value="parentChild">10) Parent/Child Components [Parent, ChildAdd, ChildRemove]</option>
+          <option value="controlled">11) Controlled Components [ControlledForm]</option>
+          <option value="dynamic">12) Dynamic attributes [Notification]</option>
+          <option value="spread">13) Spread props [TextInput]</option>
+          <option value="choice">14) Choice example [ChoiceContent]</option>
         </select>
       </div>
 
@@ -259,21 +261,28 @@ function App() {
           <EventHandling />
         </section>
 
+
+        <section
+          style={{ marginTop: 12, display: selectedExample === 'parentChild' ? 'block' : 'none' }}>
+          <h3>10) Parent/Child</h3>
+          <Parent />
+        </section>
+
         <section
           style={{ marginTop: 12, display: selectedExample === 'controlled' ? 'block' : 'none' }}>
-          <h3>10) Controlled Components</h3>
+          <h3>11) Controlled Components</h3>
           <ControlledForm />
         </section>
 
         <section
           style={{ marginTop: 12, display: selectedExample === 'dynamic' ? 'block' : 'none' }}>
-          <h3>11) Dynamic attributes</h3>
+          <h3>12) Dynamic attributes</h3>
           <Notification unread={true} />
           <Notification unread={false} />
         </section>
 
         <section style={{ marginTop: 12, display: selectedExample === 'spread' ? 'block' : 'none' }}>
-          <h3>12) Spread props</h3>
+          <h3>13) Spread props</h3>
           <p>Single inline usage:</p>
           <TextInput placeholder="Your name" />
 
