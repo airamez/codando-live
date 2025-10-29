@@ -1423,6 +1423,11 @@ const [value, setValue] = useState('');
 />
 ```
 
+**React Documentation:**
+- [Forms - Controlled Components](https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable)
+- [Managing State - Reacting to Input with State](https://react.dev/learn/reacting-to-input-with-state)
+- [API Reference - Common components (input, textarea, select)](https://react.dev/reference/react-dom/components/common)
+
 #### 12. Dynamic attributes
 
 Compute `className` or inline `style` from props/state for dynamic styling.
