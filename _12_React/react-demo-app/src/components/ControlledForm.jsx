@@ -18,9 +18,9 @@ export default function ControlledForm() {
   const handleNameChange = (e) => {
 
     // NOTE: Inspect e
-    debugger;
-    console.log(e.target.name);
-    console.log(e.target.value)
+    // debugger;
+    // console.log(e.target.name);
+    // console.log(e.target.value)
 
     // e = event object containing information about the change event
     // e.target = the input element that triggered the event
