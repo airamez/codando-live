@@ -15,27 +15,32 @@ export default function Notification({ inputNotifications = [], onMarkAsRead }) 
     color: unreadCount > 0 ? 'red' : 'inherit'
   };
 
+  const getNotificationClassName = (isRead) => {
+    return isRead ? 'notif read' : 'notif unread';
+  };
+
   return (
     <div className="notification-container">
-      <h3>Notifications (<span style={unreadStyle}>{unreadCount} unread</span>)</h3>
+      <h3>Notifications: <span style={unreadStyle}>({unreadCount}) unread</span></h3>
       <div className="notification-list">
-        {inputNotifications.map(notif => {
-          const className = notif.isRead ? 'notif read' : 'notif unread';
-
-          return (
-            <div key={notif.id} className={className}>
-              <span className="notif-text">{notif.message}</span>
-              {!notif.isRead && (
-                <button
-                  onClick={() => onMarkAsRead(notif.id)}
-                  className="mark-read-btn"
-                >
-                  Mark as Read
-                </button>
-              )}
-            </div>
-          );
-        })}
+        {inputNotifications.map(notif => (
+          <div key={notif.id} className={getNotificationClassName(notif.isRead)}>
+            <span className="notif-text">{notif.message}</span>
+            {/* Conditional rendering with && operator:
+              * If !notif.isRead is true, render the button; otherwise, render nothing
+              * The && operator short-circuits: if left side is false, it stops and returns false (which React ignores)
+              * Learn more: https://react.dev/learn/conditional-rendering#logical-and-operator-
+              */}
+            {!notif.isRead &&
+              <button
+                onClick={() => onMarkAsRead(notif.id)}
+                className="mark-read-btn"
+              >
+                Mark as Read
+              </button>
+            }
+          </div>
+        ))}
       </div>
     </div>
   );
