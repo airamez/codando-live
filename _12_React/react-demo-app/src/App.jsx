@@ -50,6 +50,43 @@ function App() {
     { author: 'Jose', date: '2024-10-18', text: 'Minor issues with naming conventions, but overall good.', status: 3 }
   ]
 
+  // useState creates a state variable that React tracks internally
+  // - notificationsList: the current state value (React keeps this in memory)
+  // - setNotificationsList: function to update the state (tells React to update and re-render)
+  // React maintains the connection between these, so when you call setNotificationsList
+  // with a function, React knows to pass the latest notificationsList value as the parameter
+  const [notificationsList, setNotificationsList] = useState([
+    { id: 1, message: 'Welcome to the React world!', isRead: false },
+    { id: 2, message: 'You have a new message from Leila', isRead: false },
+    { id: 3, message: 'System update available', isRead: true },
+    { id: 4, message: 'Meeting scheduled at 3 PM', isRead: false },
+    { id: 5, message: 'Your report is ready', isRead: true },
+    { id: 6, message: 'BJJ class at 8PM', isRead: false },
+    { id: 7, message: 'Review React content', isRead: false },
+  ])
+
+  // Callback function passed to child component to handle marking notifications as read
+  // Uses the functional update pattern for setState to avoid stale state issues
+  const handleMarkAsRead = (id) => {
+    // IMPORTANT: Notice we DON'T reference 'notificationsList' directly here!
+    // Instead, we pass a function to setNotificationsList that receives the current state
+    // The parameter 'prevNotifications' represents the most up-to-date state value
+    // It's called 'prev' (previous) because it's the state value BEFORE this update
+    // React guarantees 'prevNotifications' is always current, even with rapid clicks
+    setNotificationsList(prevNotifications =>
+      // .map() creates a new array by transforming each element
+      prevNotifications.map(notif =>
+        // For the notification with matching id, create a new object with isRead: true
+        // The spread operator {...notif} copies all properties, then we override isRead
+        // For all other notifications, return them unchanged
+        notif.id === id ? { ...notif, isRead: true } : notif
+      )
+    )
+    // Why NOT use: setNotificationsList(notificationsList.map(...)) ?
+    // Because 'notificationsList' could be stale (old value from when function was created)
+    // The functional pattern ensures we always work with the latest state
+  }
+
   const [selectedExample, setSelectedExample] = useState('')
   const [textControlled, setTextControlled] = useState('Alice')
   const [cart, setCart] = useState([]);
@@ -277,8 +314,12 @@ function App() {
         <section
           style={{ marginTop: 12, display: selectedExample === 'dynamic' ? 'block' : 'none' }}>
           <h3>12) Dynamic attributes</h3>
-          <Notification unread={true} />
-          <Notification unread={false} />
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+            <Notification inputNotifications={notificationsList} onMarkAsRead={handleMarkAsRead} />
+            <pre style={{ flex: 1, backgroundColor: '#2d2d2d', color: '#f0f0f0', padding: '10px', borderRadius: '4px', fontSize: '12px', overflow: 'auto', margin: 0, textAlign: 'left' }}>
+              {JSON.stringify(notificationsList, null, 2)}
+            </pre>
+          </div>
         </section>
 
         <section style={{ marginTop: 12, display: selectedExample === 'spread' ? 'block' : 'none' }}>

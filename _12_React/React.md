@@ -1565,12 +1565,53 @@ export default function ControlledForm() {
 }
 ```
 
-
 #### 12. Dynamic attributes
 
-Compute `className` or inline `style` from props/state for dynamic styling.
+**Overview:**
+
+Dynamic attributes allow you to compute `className` and inline `style` values based on props or state, enabling dynamic styling that responds to component data. Instead of hardcoding CSS classes or styles, you can calculate them using JavaScript expressions, making your UI interactive and adaptive.
+
+**Key Techniques:**
+
+* **Dynamic `className`**: Use ternary operators or conditional logic to apply different CSS classes based on component state
+  ```jsx
+  const className = isActive ? 'button active' : 'button';
+  ```
+
+* **Dynamic `style`**: Create style objects with computed values for inline styling
+  ```jsx
+  const style = { 
+    backgroundColor: isError ? 'red' : 'green',
+    padding: '10px' 
+  };
+  ```
+
+* **Combining Both**: Use both dynamic classes (for base styles) and inline styles (for computed values) together
+  ```jsx
+  <div className={className} style={style}>Content</div>
+  ```
+
+**Common Patterns:**
+
+* Conditional styling based on boolean props (active/inactive, read/unread, enabled/disabled)
+* Computing colors, sizes, or positions from numeric props
+* Showing visual indicators based on data state (success, warning, error)
+* Responsive styling that adapts to prop values
+
+**Best Practices:**
+
+* Extract complex logic into variables before the return statement for readability
+* Use CSS classes for static styles and inline styles for truly dynamic values
+* Combine multiple class names using template literals: `` `base-class ${condition ? 'extra' : ''}` ``
+* Keep inline style objects simple; extract complex styles to CSS files
+
+**Related Documentation:**
+
+* [JavaScript in JSX with Curly Braces](https://react.dev/learn/javascript-in-jsx-with-curly-braces) - Using dynamic expressions in JSX
+* [Conditional Rendering](https://react.dev/learn/conditional-rendering) - Conditionally applying different values
 
 Example (component: `Notification.jsx`):
+
 
 
 #### 13. Spread props
