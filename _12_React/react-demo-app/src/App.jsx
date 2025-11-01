@@ -88,7 +88,7 @@ function App() {
   }
 
   const [selectedExample, setSelectedExample] = useState('')
-  const [textControlled, setTextControlled] = useState('Alice')
+  const [textControlled, setTextControlled] = useState('Leila')
   const [cart, setCart] = useState([]);
 
   // Product objects for ProductCardImproved demonstration
@@ -160,11 +160,11 @@ function App() {
         </select>
       </div>
 
-      <section style={{ marginTop: 12, display: selectedExample === 'hello' ? 'block' : 'none' }}>
+      <section style={{ display: selectedExample === 'hello' ? 'block' : 'none' }}>
         <HelloWorld />
       </section>
 
-      <section style={{ marginTop: 12, display: selectedExample === 'months' ? 'block' : 'none' }}>
+      <section style={{ display: selectedExample === 'months' ? 'block' : 'none' }}>
         <div>
           <label>
             Choose month 1:{' '}
@@ -185,25 +185,25 @@ function App() {
       <div style={{ marginTop: 16 }}>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'comments' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'comments' ? 'block' : 'none' }}>
           <h3>1) Comments</h3>
           <ExampleComments />
         </section>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'storeJSX' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'storeJSX' ? 'block' : 'none' }}>
           <h3>2) JSX as variables</h3>
           <SimpleLayout />
         </section>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'dynamicStyles' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'dynamicStyles' ? 'block' : 'none' }}>
           <h3>3) Dynamic CSS Styles</h3>
           <DynamicStyles initialColor="white" initialSize={18} />
         </section>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'embed' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'embed' ? 'block' : 'none' }}>
           <h3>4) Embed expressions Demo</h3>
           <Price amount={95.10} taxRate={0.35} />
           <Price amount={29.90} taxRate={0.12} />
@@ -211,7 +211,7 @@ function App() {
         </section>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'conditional' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'conditional' ? 'block' : 'none' }}>
           <h3>5) Conditional rendering</h3>
           <UserStatus user={adminUser} />
           <UserStatus user={regularUser} />
@@ -219,7 +219,7 @@ function App() {
         </section>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'listsMap' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'listsMap' ? 'block' : 'none' }}>
           <h3>6) Render lists (map)</h3>
           <TodoList todos={sampleTodos} />
         </section>
@@ -231,13 +231,13 @@ function App() {
         </section>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'functionsReturn' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'functionsReturn' ? 'block' : 'none' }}>
           <h3>7) Functions that return JSX - PR Reviews</h3>
           <PRsReview reviews={reviews} />
         </section>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'props' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'props' ? 'block' : 'none' }}>
           <h3>8) Props (Properties) - Product Cards</h3>
           <p>Cart: {cart.length} items - {cart.join(', ')}</p>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -278,7 +278,7 @@ function App() {
         </section>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'propsImproved' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'propsImproved' ? 'block' : 'none' }}>
           <h3>8b) Props (Properties) - Product Object Approach</h3>
           <p>Cart: {cart.length} items - {cart.join(', ')}</p>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -293,26 +293,26 @@ function App() {
         </section>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'events' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'events' ? 'block' : 'none' }}>
           <h3>9) Event handlers</h3>
           <EventHandling />
         </section>
 
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'parentChild' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'parentChild' ? 'block' : 'none' }}>
           <h3>10) Parent/Child</h3>
           <Parent />
         </section>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'controlled' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'controlled' ? 'block' : 'none' }}>
           <h3>11) Controlled Components</h3>
           <ControlledForm />
         </section>
 
         <section
-          style={{ marginTop: 12, display: selectedExample === 'dynamic' ? 'block' : 'none' }}>
+          style={{ display: selectedExample === 'dynamic' ? 'block' : 'none' }}>
           <h3>12) Dynamic attributes</h3>
           <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
             <Notification inputNotifications={notificationsList} onMarkAsRead={handleMarkAsRead} />
@@ -322,42 +322,48 @@ function App() {
           </div>
         </section>
 
-        <section style={{ marginTop: 12, display: selectedExample === 'spread' ? 'block' : 'none' }}>
+        <section style={{ textAlign: 'left', fontSize: 25, marginTop: 12, display: selectedExample === 'spread' ? 'block' : 'none' }}>
           <h3>13) Spread props</h3>
-          <p>Single inline usage:</p>
-          <TextInput placeholder="Your name" />
-
-          <div style={{ marginTop: 12 }}>
-            <div style={{ marginBottom: 8 }}>
-              <label style={{ display: 'block', marginBottom: 4 }}>1. Controlled example:</label>
-              <TextInput
-                value={textControlled}
-                onChange={(e) => setTextControlled(e.target.value)}
-                placeholder="Controlled input"
-                aria-label="controlled-input"
-                maxLength={50}
-                style={{ width: 320, padding: 6 }}
-              />
-              {textControlled} : {textControlled.length}
-            </div>
-
-            <div style={{ marginBottom: 8 }}>
-              <label style={{ display: 'block', marginBottom: 4 }}>2.Styled + ARIA:</label>
-              <TextInput
-                placeholder="Email or username"
-                inputMode="email"
-                aria-required={true}
-                className="form-input"
-                maxLength={100}
-                style={{ width: 320 }}
-              />
-            </div>
-
-            <div style={{ marginBottom: 8 }}>
-              <label style={{ display: 'block', marginBottom: 4 }}>3. Read-only / disabled combo:</label>
-              <TextInput value="Read only value" readOnly aria-label="readonly" disabled />
-            </div>
-
+          <div>
+            1. No attribute:
+            <TextInput />
+          </div>
+          <div>
+            2. Single attribute:
+            <TextInput placeholder="Your name" />
+          </div>
+          <div>
+            3. Read-only / disabled combo:
+            <TextInput value="Read only value" readOnly aria-label="readonly" disabled />
+          </div>
+          <div>
+            4. Controlled example:
+            <TextInput
+              value={textControlled}
+              onChange={(e) => setTextControlled(e.target.value)}
+              placeholder="Controlled input"
+              maxLength={50}
+              style={{ width: 320, padding: 6 }}
+            />
+            Length: {textControlled.length}
+          </div>
+          <div>
+            5.Styled:
+            <TextInput
+              placeholder="Email or username"
+              inputMode="email"
+              className="form-input"
+              maxLength={100}
+              style={{
+                width: 250,
+                backgroundColor: '#0bea68ff',
+                border: '2px solid #4a90e2',
+                color: '#000000ff',
+                padding: '8px',
+                borderRadius: '6px',
+                fontFamily: 'monospace'
+              }}
+            />
           </div>
         </section>
 

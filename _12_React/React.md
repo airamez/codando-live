@@ -1657,7 +1657,72 @@ export default function Notification({ inputNotifications = [], onMarkAsRead }) 
 
 #### 13. Spread props
 
-Forward multiple props easily using `{...props}` when building passthrough components.
+The spread operator (`{...props}`) allows you to forward all props from a parent component to a child element or component in a single expression. This is especially useful when creating wrapper or passthrough components that need to support all the attributes of the underlying element without explicitly listing each one.
+
+**Key Concepts:**
+
+* **Prop Forwarding**: Pass all received props to a child element without explicitly naming them
+* **Wrapper Components**: Build reusable components that enhance existing elements while preserving their full API
+* **Flexibility**: Allows parent components to set any attribute the underlying element supports
+* **Brevity**: Reduces boilerplate code by avoiding prop drilling
+
+**How It Works:**
+
+The spread syntax takes all properties from an object and "spreads" them as individual props:
+
+```jsx
+// Without spread - explicitly passing each prop
+<input 
+  placeholder={props.placeholder}
+  value={props.value}
+  onChange={props.onChange}
+  disabled={props.disabled}
+  maxLength={props.maxLength}
+  // ... and many more possible attributes
+/>
+
+// With spread - automatically forwards all props
+<input {...props} />
+```
+
+**Common Use Cases:**
+
+* Creating wrapper components for native HTML elements (input, button, div)
+* Building reusable UI components with consistent styling
+* Forwarding event handlers and accessibility attributes
+* Enhancing third-party components with additional functionality
+* Creating flexible components that support any valid HTML attribute
+
+**Advanced Patterns:**
+
+1. **Adding Fixed Props**: Combine spread with specific props
+   ```jsx
+   <input type="text" {...props} />  // type="text" is always set
+   ```
+
+2. **Overriding Props**: Props after spread override spread props
+   ```jsx
+   <input {...props} className="always-this-class" />
+   ```
+
+3. **Combining Props**: Merge spread props with additional props
+   ```jsx
+   <input {...props} className={`base-class ${props.className || ''}`} />
+   ```
+
+**Best Practices:**
+
+* Use spread props for wrapper components and component libraries
+* Be careful with prop naming conflicts when combining spread with explicit props
+* Document which props are supported when using spread
+* Consider using TypeScript to type the props being spread
+* Order matters: props after `{...props}` will override spread props
+
+**Related Documentation:**
+
+* [JavaScript Spread Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) - MDN documentation on spread operator
+* [JSX Spread Attributes](https://react.dev/learn/passing-props-to-a-component#forwarding-props-with-the-jsx-spread-syntax) - React documentation on spreading props
+* [Rest Parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) - Related JavaScript feature for collecting props
 
 Example (component: `TextInput.jsx`):
 
@@ -1665,4 +1730,30 @@ Example (component: `TextInput.jsx`):
 export default function TextInput(props) {
   return <input type="text" {...props} />;
 }
+```
+
+**Usage Examples:**
+
+```jsx
+<TextInput placeholder="Your name" />
+
+<TextInput value="Read only value" readOnly aria-label="readonly" disabled />
+
+<TextInput
+    value={textControlled}
+    onChange={(e) => setTextControlled(e.target.value)}
+    placeholder="Controlled input"
+    aria-label="controlled-input"
+    maxLength={50}
+    style={{ width: 320, padding: 6 }}
+  />
+
+<TextInput
+  placeholder="Email or username"
+  inputMode="email"
+  aria-required={true}
+  className="form-input"
+  maxLength={100}
+  style={{ width: 320 }}
+/>
 ```
