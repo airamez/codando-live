@@ -1705,11 +1705,6 @@ The spread syntax takes all properties from an object and "spreads" them as indi
    <input {...props} className="always-this-class" />
    ```
 
-3. **Combining Props**: Merge spread props with additional props
-   ```jsx
-   <input {...props} className={`base-class ${props.className || ''}`} />
-   ```
-
 **Best Practices:**
 
 * Use spread props for wrapper components and component libraries
@@ -1724,7 +1719,7 @@ The spread syntax takes all properties from an object and "spreads" them as indi
 * [JSX Spread Attributes](https://react.dev/learn/passing-props-to-a-component#forwarding-props-with-the-jsx-spread-syntax) - React documentation on spreading props
 * [Rest Parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) - Related JavaScript feature for collecting props
 
-Example (component: `TextInput.jsx`):
+**Example (component: `TextInput.jsx`)**:
 
 ```jsx
 export default function TextInput(props) {

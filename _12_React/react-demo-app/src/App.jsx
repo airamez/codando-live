@@ -279,7 +279,7 @@ function App() {
 
         <section
           style={{ display: selectedExample === 'propsImproved' ? 'block' : 'none' }}>
-          <h3>8b) Props (Properties) - Product Object Approach</h3>
+          <h3>8) Props (Properties) - Product Object Approach</h3>
           <p>Cart: {cart.length} items - {cart.join(', ')}</p>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {products.map((product, index) => (
@@ -333,8 +333,8 @@ function App() {
             <TextInput placeholder="Your name" />
           </div>
           <div>
-            3. Read-only / disabled combo:
-            <TextInput value="Read only value" readOnly aria-label="readonly" disabled />
+            3. Disabled combo:
+            <TextInput value="Disabled value" disabled />
           </div>
           <div>
             4. Controlled example:
