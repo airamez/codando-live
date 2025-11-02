@@ -14,11 +14,19 @@ import PRsReview from './components/PRsReview'
 import EventHandling from './components/EventHandling'
 import Notification from './components/Notification'
 import TextInput from './components/TextInput'
-import ChoiceContent from './components/ChoiceContent'
 import ControlledForm from './components/ControlledForm'
 import ProductCard from './components/ProductCard'
 import ProductCardImproved from './components/ProductCardImproved'
 import Parent from './components/ParentChild/Parent'
+import UseStateExamples from './components/Hooks/UseStateExamples'
+import UseEffectExamples from './components/Hooks/UseEffectExamples'
+import UseContextExample from './components/Hooks/UseContextExample'
+import UseRefExamples from './components/Hooks/UseRefExamples'
+import UseReducerExamples from './components/Hooks/UseReducerExamples'
+import UseMemoExamples from './components/Hooks/UseMemoExamples'
+import UseCallbackExamples from './components/Hooks/UseCallbackExamples'
+import UseLayoutEffectExamples from './components/Hooks/UseLayoutEffectExamples'
+import CustomHooksExample from './components/Hooks/CustomHooksExample'
 
 function App() {
 
@@ -156,7 +164,15 @@ function App() {
           <option value="controlled">11) Controlled Components [ControlledForm]</option>
           <option value="dynamic">12) Dynamic attributes [Notification]</option>
           <option value="spread">13) Spread props [TextInput]</option>
-          <option value="choice">14) Choice example [ChoiceContent]</option>
+          <option value="useState">Hooks - useState</option>
+          <option value="useEffect">Hooks - useEffect</option>
+          <option value="useContext">Hooks - useContext</option>
+          <option value="useRef">Hooks - useRef</option>
+          <option value="useReducer">Hooks - useReducer</option>
+          <option value="useMemo">Hooks - useMemo</option>
+          <option value="useCallback">Hooks - useCallback</option>
+          <option value="useLayoutEffect">Hooks - useLayoutEffect</option>
+          <option value="customHooks">Hooks - Custom Hooks</option>
         </select>
       </div>
 
@@ -367,12 +383,41 @@ function App() {
           </div>
         </section>
 
-        <section style={{ marginTop: 12, display: selectedExample === 'choice' ? 'block' : 'none' }}>
-          <h3>13) Choice example</h3>
-          <ChoiceContent choice={1} />
-          <ChoiceContent choice={2} />
-          <ChoiceContent choice={3} />
-          <ChoiceContent choice={5} />
+        {/* React Hooks Examples */}
+        <section style={{ display: selectedExample === 'useState' ? 'block' : 'none' }}>
+          <UseStateExamples />
+        </section>
+
+        <section style={{ display: selectedExample === 'useEffect' ? 'block' : 'none' }}>
+          <UseEffectExamples />
+        </section>
+
+        <section style={{ display: selectedExample === 'useContext' ? 'block' : 'none' }}>
+          <UseContextExample />
+        </section>
+
+        <section style={{ display: selectedExample === 'useRef' ? 'block' : 'none' }}>
+          <UseRefExamples />
+        </section>
+
+        <section style={{ display: selectedExample === 'useReducer' ? 'block' : 'none' }}>
+          <UseReducerExamples />
+        </section>
+
+        <section style={{ display: selectedExample === 'useMemo' ? 'block' : 'none' }}>
+          <UseMemoExamples />
+        </section>
+
+        <section style={{ display: selectedExample === 'useCallback' ? 'block' : 'none' }}>
+          <UseCallbackExamples />
+        </section>
+
+        <section style={{ display: selectedExample === 'useLayoutEffect' ? 'block' : 'none' }}>
+          <UseLayoutEffectExamples />
+        </section>
+
+        <section style={{ display: selectedExample === 'customHooks' ? 'block' : 'none' }}>
+          <CustomHooksExample />
         </section>
       </div>
     </>
