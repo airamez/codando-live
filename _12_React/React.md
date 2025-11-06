@@ -1659,12 +1659,11 @@ export default function Notification({ inputNotifications = [], onMarkAsRead }) 
 
 The spread operator (`{...props}`) allows you to forward all props from a parent component to a child element or component in a single expression. This is especially useful when creating wrapper or passthrough components that need to support all the attributes of the underlying element without explicitly listing each one.
 
-**Key Concepts:**
+**Related Documentation:**
 
-* **Prop Forwarding**: Pass all received props to a child element without explicitly naming them
-* **Wrapper Components**: Build reusable components that enhance existing elements while preserving their full API
-* **Flexibility**: Allows parent components to set any attribute the underlying element supports
-* **Brevity**: Reduces boilerplate code by avoiding prop drilling
+* [JavaScript Spread Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) - MDN documentation on spread operator
+* [JSX Spread Attributes](https://react.dev/learn/passing-props-to-a-component#forwarding-props-with-the-jsx-spread-syntax) - React documentation on spreading props
+* [Rest Parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) - Related JavaScript feature for collecting props
 
 **How It Works:**
 
@@ -1685,39 +1684,19 @@ The spread syntax takes all properties from an object and "spreads" them as indi
 <input {...props} />
 ```
 
-**Common Use Cases:**
-
-* Creating wrapper components for native HTML elements (input, button, div)
-* Building reusable UI components with consistent styling
-* Forwarding event handlers and accessibility attributes
-* Enhancing third-party components with additional functionality
-* Creating flexible components that support any valid HTML attribute
-
-**Advanced Patterns:**
+**Combining attributes and spread props**
 
 1. **Adding Fixed Props**: Combine spread with specific props
    ```jsx
-   <input type="text" {...props} />  // type="text" is always set
+   // className can be redefined from by props content
+   <input className="my-class-name" {...props} />
    ```
 
 2. **Overriding Props**: Props after spread override spread props
    ```jsx
-   <input {...props} className="always-this-class" />
+   // className is always "my-class-name"
+   <input {...props} className="my-class-name" />
    ```
-
-**Best Practices:**
-
-* Use spread props for wrapper components and component libraries
-* Be careful with prop naming conflicts when combining spread with explicit props
-* Document which props are supported when using spread
-* Consider using TypeScript to type the props being spread
-* Order matters: props after `{...props}` will override spread props
-
-**Related Documentation:**
-
-* [JavaScript Spread Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) - MDN documentation on spread operator
-* [JSX Spread Attributes](https://react.dev/learn/passing-props-to-a-component#forwarding-props-with-the-jsx-spread-syntax) - React documentation on spreading props
-* [Rest Parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) - Related JavaScript feature for collecting props
 
 **Example (component: `TextInput.jsx`)**:
 
@@ -1753,9 +1732,106 @@ export default function TextInput(props) {
 />
 ```
 
+##### Spreading Props with Different Parameters and Callbacks
+
+When you want to spread props to a component but also pass different parameters or override specific props (like callbacks), you can combine the spread operator with explicit prop definitions. The key principle is **order matters**: props defined after `{...props}` will override any matching props from the spread.
+
+**Pattern:**
+
+```jsx
+// Spread first, then override specific props
+<ChildComponent {...props} specificProp={newValue} />
+
+// This allows you to:
+// 1. Forward all props from parent
+// 2. Override or add specific props
+// 3. Transform or wrap callbacks
+```
+
+**Example (component: `TextInputImproved.jsx`)**:
+
+```jsx
+export default function TextInputImproved({ value, onChange, placeholder, ...props }) {
+  return (
+    <input 
+      type="text" 
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      {...props} 
+    />
+  );
+}
+```
+
+**Usage Examples:**
+
+```jsx
+import { useState } from 'react';
+import TextInputImproved from './components/TextInputImproved';
+
+function App() {
+  const [text, setText] = useState('');
+
+  return (
+    <div>
+      <TextInputImproved
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Enter your name"
+        maxLength={50}
+        className="my-input"
+        disabled={false}
+      />
+      <p>Text: {text}</p>
+    </div>
+  );
+}
+```
+
+**Key Points:**
+
+* **Destructure specific props**: Extract the props you want to use explicitly (value, onChange, placeholder)
+* **Use rest operator (`...props`)**: Collect remaining props to spread to the input element
+* **Explicit props first**: Define important props explicitly for clarity and documentation
+* **Spread remaining props**: Use `{...props}` to forward all other props to the underlying input
+* **Flexibility**: Allows parent to pass any valid input attributes (maxLength, className, disabled, etc.)
+
+**More Examples:**
+
+```jsx
+// Example 1: Add logging to any onClick
+function LoggingButton({ onClick, children, ...props }) {
+  const handleClick = (e) => {
+    console.log('Button clicked:', children);
+    if (onClick) onClick(e);
+  };
+  return <button {...props} onClick={handleClick}>{children}</button>;
+}
+
+// Example 2: Add validation before onChange
+function ValidatedInput({ onChange, validate, ...props }) {
+  const handleChange = (e) => {
+    if (!validate || validate(e.target.value)) {
+      if (onChange) onChange(e);
+    }
+  };
+  return <input {...props} onChange={handleChange} />;
+}
+
+// Example 3: Merge className
+function StyledInput({ className, ...props }) {
+  const mergedClassName = `base-input ${className || ''}`.trim();
+  return <input {...props} className={mergedClassName} />;
+}
+```
+
 #### 14. React Hooks
 
 React Hooks are special functions that let you use state and other React features in functional components. Introduced in React 16.8, hooks revolutionized React development by eliminating the need for class components while providing a more intuitive and composable way to manage component logic.
+
+Good Video: https://www.youtube.com/watch?v=LOH1l-MP_9k
+
 
 **Key Concepts:**
 

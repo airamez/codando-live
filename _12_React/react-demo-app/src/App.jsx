@@ -14,6 +14,7 @@ import PRsReview from './components/PRsReview'
 import EventHandling from './components/EventHandling'
 import Notification from './components/Notification'
 import TextInput from './components/TextInput'
+import TextInputImproved from './components/TextInputImproved'
 import ControlledForm from './components/ControlledForm'
 import ProductCard from './components/ProductCard'
 import ProductCardImproved from './components/ProductCardImproved'
@@ -164,6 +165,7 @@ function App() {
           <option value="controlled">11) Controlled Components [ControlledForm]</option>
           <option value="dynamic">12) Dynamic attributes [Notification]</option>
           <option value="spread">13) Spread props [TextInput]</option>
+          <option value="spreadImproved">13) Spread props with override [TextInputImproved]</option>
           <option value="useState">Hooks - useState</option>
           <option value="useEffect">Hooks - useEffect</option>
           <option value="useContext">Hooks - useContext</option>
@@ -346,7 +348,7 @@ function App() {
           </div>
           <div>
             2. Single attribute:
-            <TextInput placeholder="Your name" />
+            <TextInput placeholder="Type your name here" />
           </div>
           <div>
             3. Disabled combo:
@@ -361,7 +363,7 @@ function App() {
               maxLength={50}
               style={{ width: 320, padding: 6 }}
             />
-            Length: {textControlled.length}
+            [{textControlled.length}]
           </div>
           <div>
             5.Styled:
@@ -376,10 +378,33 @@ function App() {
                 border: '2px solid #4a90e2',
                 color: '#000000ff',
                 padding: '8px',
+                borderRadius: '15px',
+                fontFamily: 'monospace'
+              }}
+            />
+          </div>
+        </section>
+
+        <section style={{ textAlign: 'left', fontSize: 25, marginTop: 12, display: selectedExample === 'spreadImproved' ? 'block' : 'none' }}>
+          <h3>13) Spread props combining [TextInputImproved]</h3>
+          <p>This component spreads props but overrides onChange to transform input to uppercase</p>
+          <div>
+            <TextInputImproved
+              value={textControlled}
+              onChange={(e) => setTextControlled(e.target.value)}
+              placeholder="Type something"
+              maxLength={50}
+              style={{
+                width: 250,
+                backgroundColor: '#0bea68ff',
+                border: '2px solid #4a90e2',
+                color: '#000000ff',
+                padding: '8px',
                 borderRadius: '6px',
                 fontFamily: 'monospace'
               }}
             />
+            <p>Value: {textControlled}</p>
           </div>
         </section>
 
