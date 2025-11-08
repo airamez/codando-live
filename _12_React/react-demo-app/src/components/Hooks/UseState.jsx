@@ -13,7 +13,7 @@ function UseState() {
 
   return (
     <div>
-      <h3>useState Examples</h3>
+      <h3>useState Example</h3>
 
       {/* Example 1: Counter */}
       <div className="hook-example-section">
