@@ -75,7 +75,7 @@ function UseEffect() {
 
       {postDetails && !detailsLoading && (
         <div className="use-effect-details">
-          <h4 style={{ marginTop: 0 }}>{postDetails.title}</h4>
+          <h4>{postDetails.title}</h4>
           <p><strong>Post ID:</strong> {postDetails.id}</p>
           <p><strong>Description:</strong> {postDetails.body}</p>
 

@@ -1911,8 +1911,9 @@ const [state, setState] = useState(initialValue);
 
 ```jsx
 import { useState } from 'react';
+import './hooks.css';
 
-function UseStateExamples() {
+function UseState() {
   // Example 1: Counter (number state)
   const [count, setCount] = useState(0);
   
@@ -1923,19 +1924,19 @@ function UseStateExamples() {
   const [isVisible, setIsVisible] = useState(false);
 
   return (
-    <div>
+    <div className="hook-example-section">
       <h3>useState Examples</h3>
       
       {/* Example 1: Counter */}
-      <div>
+      <div className="hook-example-section">
         <p>Count: {count}</p>
         <button onClick={() => setCount(count + 1)}>Increment</button>
-        <button onClick={() => setCount(count - 1)}>Decrement</button>
-        <button onClick={() => setCount(0)}>Reset</button>
+        <button onClick={() => setCount(count - 1)} className="hook-button-spacing">Decrement</button>
+        <button onClick={() => setCount(0)} className="hook-button-spacing">Reset</button>
       </div>
 
       {/* Example 2: Text Input */}
-      <div>
+      <div className="hook-example-section">
         <input
           type="text"
           value={name}
@@ -1946,7 +1947,7 @@ function UseStateExamples() {
       </div>
 
       {/* Example 3: Toggle Visibility */}
-      <div>
+      <div className="hook-example-section">
         <button onClick={() => setIsVisible(!isVisible)}>
           {isVisible ? 'Hide' : 'Show'} Content
         </button>
@@ -1956,7 +1957,7 @@ function UseStateExamples() {
   );
 }
 
-export default UseStateExamples;
+export default UseState;
 ```
 
 ---
@@ -1993,8 +1994,9 @@ useEffect(() => {
 
 ```jsx
 import { useState, useEffect } from 'react';
+import './hooks.css';
 
-function UseEffectExamples() {
+function UseEffect() {
   const [posts, setPosts] = useState([]);
   const [selectedPostId, setSelectedPostId] = useState('');
   const [postDetails, setPostDetails] = useState(null);
@@ -2042,15 +2044,16 @@ function UseEffectExamples() {
   if (loading) return <p>Loading posts...</p>;
 
   return (
-    <div>
+    <div className="hook-example-section">
       <h3>useEffect Example - Fetching Data with Dependencies</h3>
       
-      <div>
-        <label htmlFor="post-select">Select a post: </label>
+      <div className="use-effect-container">
+        <label htmlFor="post-select" className="use-effect-label">Select a post: </label>
         <select 
           id="post-select"
           value={selectedPostId} 
           onChange={(e) => setSelectedPostId(e.target.value)}
+          className="use-effect-select"
         >
           <option value="">-- Choose a post --</option>
           {posts.map(post => (
@@ -2064,17 +2067,17 @@ function UseEffectExamples() {
       {detailsLoading && <p>Loading details...</p>}
 
       {postDetails && !detailsLoading && (
-        <div style={{ marginTop: '20px', padding: '15px', border: '1px solid #ddd' }}>
+        <div className="use-effect-details">
           <h4>{postDetails.title}</h4>
           <p><strong>Post ID:</strong> {postDetails.id}</p>
           <p><strong>Description:</strong> {postDetails.body}</p>
           
           <h5>Comments ({postDetails.comments.length}):</h5>
-          <ul>
+          <ul className="use-effect-comments">
             {postDetails.comments.map(comment => (
-              <li key={comment.id}>
-                <strong>{comment.name}</strong> ({comment.email})
-                <p>{comment.body}</p>
+              <li key={comment.id} className="use-effect-comment-item">
+                <strong>{comment.name}</strong> <span className="use-effect-comment-email">({comment.email})</span>
+                <p className="use-effect-comment-body">{comment.body}</p>
               </li>
             ))}
           </ul>
@@ -2084,7 +2087,7 @@ function UseEffectExamples() {
   );
 }
 
-export default UseEffectExamples;
+export default UseEffect;
 ```
 
 ---
@@ -2109,7 +2112,98 @@ const value = useContext(MyContext);
 **Example:**
 
 ```jsx
+import { createContext, useContext, useState } from 'react';
+import './hooks.css';
 
+// Create contexts
+const ThemeContext = createContext('light');
+const UserContext = createContext(null);
+
+// Theme Provider Component
+function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState('light');
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+// User Provider Component
+function UserProvider({ children }) {
+  const [user, setUser] = useState(null);
+
+  const login = (username) => {
+    setUser({ username, loggedIn: true });
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  return (
+    <UserContext.Provider value={{ user, login, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
+}
+
+// Component using useContext
+function ThemedButton() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
+  return (
+    <button onClick={toggleTheme} className="use-context-themed-button" data-theme={theme}>
+      Toggle Theme (Current: {theme})
+    </button>
+  );
+}
+
+// Component using multiple contexts
+function UserProfile() {
+  const { theme } = useContext(ThemeContext);
+  const { user, login, logout } = useContext(UserContext);
+
+  return (
+    <div className="use-context-user-profile" data-theme={theme}>
+      {user ? (
+        <div>
+          <h4>Welcome, {user.username}!</h4>
+          <button onClick={logout}>Logout</button>
+        </div>
+      ) : (
+        <div>
+          <h4>Please log in</h4>
+          <button onClick={() => login('JohnDoe')} className="hook-button-spacing">Login as JohnDoe</button>
+          <button onClick={() => login('JaneSmith')}>Login as JaneSmith</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Main component with providers
+function UseContext() {
+  return (
+    <ThemeProvider>
+      <UserProvider>
+        <div className="hook-example-section">
+          <h3>useContext Example</h3>
+          <p>Context allows sharing data without passing props through every level</p>
+          <ThemedButton />
+          <UserProfile />
+        </div>
+      </UserProvider>
+    </ThemeProvider>
+  );
+}
+
+export default UseContext;
 ```
 
 ---
@@ -2135,5 +2229,102 @@ const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
 **Example:**
 
 ```jsx
+import { useState, useMemo } from 'react';
+import './hooks.css';
 
+function UseMemo() {
+  const [count, setCount] = useState(0);
+  const [items] = useState(() =>
+    Array.from({ length: 1000 }, (_, i) => ({
+      id: i,
+      name: `Item ${i}`,
+      value: Math.floor(Math.random() * 1000)
+    }))
+  );
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortOrder, setSortOrder] = useState('asc');
+
+  // Expensive calculation - only runs once
+  const expensiveCalculation = useMemo(() => {
+    console.log('Running expensive calculation...');
+    let result = 0;
+    for (let i = 0; i < 1000000; i++) {
+      result += i;
+    }
+    return result;
+  }, []); // Empty array = calculate once
+
+  // Filtered and sorted list
+  const sortedAndFilteredItems = useMemo(() => {
+    console.log('Sorting and filtering...');
+    const filtered = items.filter(item =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    return filtered.sort((a, b) => {
+      if (sortOrder === 'asc') {
+        return a.value - b.value;
+      } else {
+        return b.value - a.value;
+      }
+    });
+  }, [items, searchTerm, sortOrder]);
+
+  // Derived statistics
+  const statistics = useMemo(() => {
+    console.log('Calculating statistics...');
+    const values = sortedAndFilteredItems.map(item => item.value);
+    const sum = values.reduce((acc, val) => acc + val, 0);
+    const avg = values.length > 0 ? sum / values.length : 0;
+
+    return { sum, avg, count: values.length };
+  }, [sortedAndFilteredItems]);
+
+  return (
+    <div className="hook-example-section">
+      <h3>useMemo Examples</h3>
+
+      <div className="hook-example-section">
+        <h4>Trigger Re-render</h4>
+        <p>Count: {count} (triggers re-render but not recalculation)</p>
+        <button onClick={() => setCount(count + 1)}>Increment Count</button>
+        <p><small>Check console - memoized values don't recalculate!</small></p>
+      </div>
+
+      <div className="hook-example-section">
+        <h4>Filtered & Sorted Items</h4>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search items..."
+          className="use-memo-input"
+        />
+        <button onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
+          Sort: {sortOrder === 'asc' ? '↑ Ascending' : '↓ Descending'}
+        </button>
+
+        <div className="use-memo-stats">
+          <h5>Statistics</h5>
+          <p>Count: {statistics.count}</p>
+          <p>Sum: {statistics.sum}</p>
+          <p>Average: {statistics.avg.toFixed(2)}</p>
+        </div>
+
+        <div className="use-memo-items-container">
+          {sortedAndFilteredItems.slice(0, 20).map(item => (
+            <div key={item.id} className="use-memo-item">
+              {item.name} - Value: {item.value}
+            </div>
+          ))}
+        </div>
+        <p>Showing 20 of {sortedAndFilteredItems.length} items</p>
+      </div>
+    </div>
+  );
+}
+
+export default UseMemo;
 ```
+
+#### 15. Component Lifecycle
