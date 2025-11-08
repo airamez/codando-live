@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import './hooks.css';
 
 // Create contexts
 const ThemeContext = createContext('light');
@@ -42,18 +43,8 @@ function UserProvider({ children }) {
 function ThemedButton() {
   const { theme, toggleTheme } = useContext(ThemeContext);
 
-  const styles = {
-    backgroundColor: theme === 'light' ? '#fff' : '#333',
-    color: theme === 'light' ? '#333' : '#fff',
-    padding: '10px 20px',
-    border: '1px solid',
-    borderColor: theme === 'light' ? '#333' : '#fff',
-    cursor: 'pointer',
-    borderRadius: '4px',
-  };
-
   return (
-    <button onClick={toggleTheme} style={styles}>
+    <button onClick={toggleTheme} className="use-context-themed-button" data-theme={theme}>
       Toggle Theme (Current: {theme})
     </button>
   );
@@ -64,16 +55,8 @@ function UserProfile() {
   const { theme } = useContext(ThemeContext);
   const { user, login, logout } = useContext(UserContext);
 
-  const styles = {
-    padding: '20px',
-    backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
-    color: theme === 'light' ? '#333' : '#fff',
-    borderRadius: '8px',
-    marginTop: '16px',
-  };
-
   return (
-    <div style={styles}>
+    <div className="use-context-user-profile" data-theme={theme}>
       {user ? (
         <div>
           <h4>Welcome, {user.username}!</h4>
@@ -82,7 +65,7 @@ function UserProfile() {
       ) : (
         <div>
           <h4>Please log in</h4>
-          <button onClick={() => login('JohnDoe')} style={{ marginRight: '8px' }}>Login as JohnDoe</button>
+          <button onClick={() => login('JohnDoe')} className="hook-button-spacing">Login as JohnDoe</button>
           <button onClick={() => login('JaneSmith')}>Login as JaneSmith</button>
         </div>
       )}
@@ -96,13 +79,7 @@ function NestedComponent() {
   const { user } = useContext(UserContext);
 
   return (
-    <div style={{
-      padding: '10px',
-      margin: '10px 0',
-      backgroundColor: theme === 'light' ? '#e0e0e0' : '#555',
-      color: theme === 'light' ? '#000' : '#fff',
-      borderRadius: '4px'
-    }}>
+    <div className="use-context-nested" data-theme={theme}>
       <p>This is a deeply nested component</p>
       <p>Theme: {theme}</p>
       <p>User: {user ? user.username : 'Not logged in'}</p>
@@ -112,11 +89,11 @@ function NestedComponent() {
 }
 
 // Main component with providers
-function UseContextExample() {
+function UseContext() {
   return (
     <ThemeProvider>
       <UserProvider>
-        <div>
+        <div className="hook-example-section">
           <h3>useContext Example</h3>
           <p>Context allows sharing data without passing props through every level</p>
           <ThemedButton />
@@ -128,4 +105,4 @@ function UseContextExample() {
   );
 }
 
-export default UseContextExample;
+export default UseContext;

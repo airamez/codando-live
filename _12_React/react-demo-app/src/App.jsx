@@ -19,15 +19,11 @@ import ControlledForm from './components/ControlledForm'
 import ProductCard from './components/ProductCard'
 import ProductCardImproved from './components/ProductCardImproved'
 import Parent from './components/ParentChild/Parent'
-import UseStateExamples from './components/Hooks/UseStateExamples'
-import UseEffectExamples from './components/Hooks/UseEffectExamples'
-import UseContextExample from './components/Hooks/UseContextExample'
-import UseRefExamples from './components/Hooks/UseRefExamples'
-import UseReducerExamples from './components/Hooks/UseReducerExamples'
-import UseMemoExamples from './components/Hooks/UseMemoExamples'
-import UseCallbackExamples from './components/Hooks/UseCallbackExamples'
-import UseLayoutEffectExamples from './components/Hooks/UseLayoutEffectExamples'
-import CustomHooksExample from './components/Hooks/CustomHooksExample'
+import UseState from './components/Hooks/UseState'
+import UseEffect from './components/Hooks/UseEffect'
+import UseContext from './components/Hooks/UseContext'
+import UseMemo from './components/Hooks/UseMemo'
+
 
 function App() {
 
@@ -166,15 +162,10 @@ function App() {
           <option value="dynamic">12) Dynamic attributes [Notification]</option>
           <option value="spread">13) Spread props [TextInput]</option>
           <option value="spreadImproved">13) Spread props with override [TextInputImproved]</option>
-          <option value="useState">Hooks - useState</option>
-          <option value="useEffect">Hooks - useEffect</option>
-          <option value="useContext">Hooks - useContext</option>
-          <option value="useRef">Hooks - useRef</option>
-          <option value="useReducer">Hooks - useReducer</option>
-          <option value="useMemo">Hooks - useMemo</option>
-          <option value="useCallback">Hooks - useCallback</option>
-          <option value="useLayoutEffect">Hooks - useLayoutEffect</option>
-          <option value="customHooks">Hooks - Custom Hooks</option>
+          <option value="useState">14) Hooks - useState</option>
+          <option value="useEffect">14) Hooks - useEffect</option>
+          <option value="useContext">14) Hooks - useContext</option>
+          <option value="useMemo">14) Hooks - useMemo</option>
         </select>
       </div>
 
@@ -410,40 +401,21 @@ function App() {
 
         {/* React Hooks Examples */}
         <section style={{ display: selectedExample === 'useState' ? 'block' : 'none' }}>
-          <UseStateExamples />
+          <UseState />
         </section>
 
         <section style={{ display: selectedExample === 'useEffect' ? 'block' : 'none' }}>
-          <UseEffectExamples />
+          <UseEffect />
         </section>
 
         <section style={{ display: selectedExample === 'useContext' ? 'block' : 'none' }}>
-          <UseContextExample />
-        </section>
-
-        <section style={{ display: selectedExample === 'useRef' ? 'block' : 'none' }}>
-          <UseRefExamples />
-        </section>
-
-        <section style={{ display: selectedExample === 'useReducer' ? 'block' : 'none' }}>
-          <UseReducerExamples />
+          <UseContext />
         </section>
 
         <section style={{ display: selectedExample === 'useMemo' ? 'block' : 'none' }}>
-          <UseMemoExamples />
+          <UseMemo />
         </section>
 
-        <section style={{ display: selectedExample === 'useCallback' ? 'block' : 'none' }}>
-          <UseCallbackExamples />
-        </section>
-
-        <section style={{ display: selectedExample === 'useLayoutEffect' ? 'block' : 'none' }}>
-          <UseLayoutEffectExamples />
-        </section>
-
-        <section style={{ display: selectedExample === 'customHooks' ? 'block' : 'none' }}>
-          <CustomHooksExample />
-        </section>
       </div>
     </>
   )

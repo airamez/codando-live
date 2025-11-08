@@ -1,0 +1,139 @@
+/* Common styles for all Hook examples */
+
+/* Example section container */
+.hook-example-section {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+/* UseState specific styles */
+.hook-button-spacing {
+  margin-left: 8px;
+}
+
+/* UseEffect specific styles */
+.use-effect-container {
+  margin-bottom: 20px;
+}
+
+.use-effect-label {
+  margin-right: 10px;
+}
+
+.use-effect-select {
+  padding: 5px;
+  font-size: 14px;
+}
+
+.use-effect-details {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.use-effect-details h4 {
+  margin-top: 0;
+}
+
+.use-effect-comments {
+  text-align: left;
+}
+
+.use-effect-comment-item {
+  margin-bottom: 15px;
+}
+
+.use-effect-comment-email {
+  color: #666;
+}
+
+.use-effect-comment-body {
+  margin-top: 5px;
+  color: #555;
+}
+
+/* UseMemo specific styles */
+.use-memo-input {
+  margin-right: 8px;
+  padding: 4px;
+}
+
+.use-memo-stats {
+  margin-top: 10px;
+}
+
+.use-memo-items-container {
+  max-height: 200px;
+  overflow: auto;
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.use-memo-item {
+  padding: 4px;
+  border-bottom: 1px solid #eee;
+}
+
+.use-memo-explanation {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+.use-memo-explanation ul {
+  text-align: left;
+}
+
+/* UseContext specific styles */
+.use-context-themed-button {
+  padding: 10px 20px;
+  border: 1px solid;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.use-context-themed-button[data-theme="light"] {
+  background-color: #fff;
+  color: #333;
+  border-color: #333;
+}
+
+.use-context-themed-button[data-theme="dark"] {
+  background-color: #333;
+  color: #fff;
+  border-color: #fff;
+}
+
+.use-context-user-profile {
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+.use-context-user-profile[data-theme="light"] {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.use-context-user-profile[data-theme="dark"] {
+  background-color: #444;
+  color: #fff;
+}
+
+.use-context-nested {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+}
+
+.use-context-nested[data-theme="light"] {
+  background-color: #e0e0e0;
+  color: #000;
+}
+
+.use-context-nested[data-theme="dark"] {
+  background-color: #555;
+  color: #fff;
+}

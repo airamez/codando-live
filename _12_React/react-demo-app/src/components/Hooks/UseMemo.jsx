@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
+import './hooks.css';
 
-function UseMemoExamples() {
+function UseMemo() {
   const [count, setCount] = useState(0);
   const [items] = useState(() =>
     Array.from({ length: 1000 }, (_, i) => ({
@@ -60,11 +61,11 @@ function UseMemoExamples() {
   }, [filteredItems]);
 
   return (
-    <div>
+    <div className="hook-example-section">
       <h3>useMemo Examples</h3>
 
       {/* Trigger re-renders */}
-      <div style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ddd' }}>
+      <div className="hook-example-section">
         <h4>Trigger Re-render</h4>
         <p>Count: {count} (triggers re-render but not recalculation)</p>
         <button onClick={() => setCount(count + 1)}>Increment Count</button>
@@ -72,27 +73,27 @@ function UseMemoExamples() {
       </div>
 
       {/* Expensive calculation */}
-      <div style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ddd' }}>
+      <div className="hook-example-section">
         <h4>Expensive Calculation (cached)</h4>
         <p>Result: {expensiveCalculation}</p>
         <p><small>This only calculates once, not on every render!</small></p>
       </div>
 
       {/* Filtered and sorted list */}
-      <div style={{ marginBottom: '20px', padding: '10px', border: '1px solid #ddd' }}>
+      <div className="hook-example-section">
         <h4>Filtered & Sorted Items</h4>
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search items..."
-          style={{ marginRight: '8px', padding: '4px' }}
+          className="use-memo-input"
         />
         <button onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
           Sort: {sortOrder === 'asc' ? '↑ Ascending' : '↓ Descending'}
         </button>
 
-        <div style={{ marginTop: '10px' }}>
+        <div className="use-memo-stats">
           <h5>Statistics</h5>
           <p>Count: {statistics.count}</p>
           <p>Sum: {statistics.sum}</p>
@@ -101,9 +102,9 @@ function UseMemoExamples() {
           <p>Min: {statistics.min}</p>
         </div>
 
-        <div style={{ maxHeight: '200px', overflow: 'auto', border: '1px solid #ccc', padding: '8px' }}>
+        <div className="use-memo-items-container">
           {sortedAndFilteredItems.slice(0, 20).map(item => (
-            <div key={item.id} style={{ padding: '4px', borderBottom: '1px solid #eee' }}>
+            <div key={item.id} className="use-memo-item">
               {item.name} - Value: {item.value}
             </div>
           ))}
@@ -112,7 +113,7 @@ function UseMemoExamples() {
       </div>
 
       {/* Explanation */}
-      <div style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0f0f0' }}>
+      <div className="use-memo-explanation">
         <h4>When to use useMemo?</h4>
         <ul style={{ textAlign: 'left' }}>
           <li>Expensive calculations that don't need to run every render</li>
@@ -126,4 +127,4 @@ function UseMemoExamples() {
   );
 }
 
-export default UseMemoExamples;
+export default UseMemo;

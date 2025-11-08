@@ -1828,10 +1828,15 @@ function StyledInput({ className, ...props }) {
 
 #### 14. React Hooks
 
-React Hooks are special functions that let you use state and other React features in functional components. Introduced in React 16.8, hooks revolutionized React development by eliminating the need for class components while providing a more intuitive and composable way to manage component logic.
+- React Hooks are special functions that let you use state and other React features in functional components.
+- Introduced in React 16.8, hooks revolutionized React development by eliminating the need for class components while providing a more intuitive and composable way to manage component logic.
 
-Good Video: https://www.youtube.com/watch?v=LOH1l-MP_9k
+**Documentation:**
 
+* [React Hooks Documentation](https://react.dev/reference/react/hooks) - Complete reference for all built-in hooks
+* [Introducing Hooks](https://react.dev/learn#using-hooks) - Official guide to hooks
+* [Rules of Hooks](https://react.dev/warnings/invalid-hook-call-warning) - Important rules for using hooks correctly
+* [Building Your Own Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks) - Creating custom hooks
 
 **Key Concepts:**
 
@@ -1850,23 +1855,26 @@ Good Video: https://www.youtube.com/watch?v=LOH1l-MP_9k
 * **No `this` Keyword**: Eliminates confusion about `this` binding in JavaScript
 * **Modern React**: The recommended way to write React components
 
-**Most Common Built-in Hooks:**
+**React Built-in Hooks Overview:**
 
-1. **`useState`** - Add state to functional components
-2. **`useEffect`** - Perform side effects (data fetching, subscriptions, DOM manipulation)
-3. **`useContext`** - Access React Context without nesting
-4. **`useRef`** - Access DOM elements or persist values across renders
-5. **`useReducer`** - Manage complex state logic (alternative to `useState`)
-6. **`useMemo`** - Memoize expensive calculations
-7. **`useCallback`** - Memoize callback functions
-8. **`useLayoutEffect`** - Synchronous version of `useEffect` for DOM measurements
+| Hook | Purpose | Common Use Cases |
+|------|---------|------------------|
+| **`useState`** | Add state to functional components | Interactive UI, form inputs, toggles, counters |
+| **`useEffect`** | Perform side effects after render | API calls, subscriptions, timers, event listeners |
+| **`useContext`** | Access React Context values | Global state, themes, auth, avoiding prop drilling |
+| **`useMemo`** | Memoize expensive calculations | Heavy computations, sorting/filtering large arrays |
+| **`useRef`** | Access DOM or persist mutable values | Focus management, DOM measurements, previous values |
+| **`useReducer`** | Manage complex state logic | Complex state objects, state machines, Redux-like patterns |
+| **`useCallback`** | Memoize callback functions | Optimizing child re-renders, stable function references |
+| **`useLayoutEffect`** | Synchronous DOM updates before paint | DOM measurements, preventing visual flicker |
+| **`useImperativeHandle`** | Customize ref exposure to parent | Custom component APIs, controlled imperative actions |
+| **`useDebugValue`** | Display custom hook debug info | Custom hook debugging in React DevTools |
+| **`useDeferredValue`** | Defer updating non-urgent values | Debouncing expensive renders, background updates |
+| **`useTransition`** | Mark state updates as non-urgent | Keeping UI responsive during heavy updates |
+| **`useId`** | Generate unique IDs for accessibility | Form labels, ARIA attributes, SSR-safe IDs |
+| **`useSyncExternalStore`** | Subscribe to external stores | Redux, Zustand, custom state managers |
+| **`useInsertionEffect`** | Insert styles before DOM reads | CSS-in-JS libraries (styled-components, emotion) |
 
-**Related Documentation:**
-
-* [React Hooks Documentation](https://react.dev/reference/react) - Complete reference for all built-in hooks
-* [Introducing Hooks](https://react.dev/learn#using-hooks) - Official guide to hooks
-* [Rules of Hooks](https://react.dev/warnings/invalid-hook-call-warning) - Important rules for using hooks correctly
-* [Building Your Own Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks) - Creating custom hooks
 
 ---
 
@@ -1880,84 +1888,53 @@ const [state, setState] = useState(initialValue);
 ```
 
 **Key Points:**
+* Manages component-local state that persists across re-renders
 * Initial value can be any type: string, number, boolean, object, array
 * State updates trigger component re-renders
 * State updates are asynchronous
-* Use functional updates when new state depends on previous state
+* Use functional updates when new state depends on previous state: `setState(prev => prev + 1)`
 * Each `useState` call creates independent state
+* Essential for interactive components (forms, toggles, counters, etc.)
+
+**When to use**: Any time component needs to remember data between renders
 
 **Documentation:** [useState Reference](https://react.dev/reference/react/useState)
 
-**Examples:**
+---
+
+**Syntax:**
+```jsx
+const [state, setState] = useState(initialValue);
+```
+
+**Example:**
 
 ```jsx
 import { useState } from 'react';
 
 function UseStateExamples() {
-  // Simple counter
+  // Example 1: Counter (number state)
   const [count, setCount] = useState(0);
   
-  // String state
+  // Example 2: Text input (string state)
   const [name, setName] = useState('');
   
-  // Boolean state
+  // Example 3: Toggle (boolean state)
   const [isVisible, setIsVisible] = useState(false);
-  
-  // Object state
-  const [user, setUser] = useState({ name: '', age: 0 });
-  
-  // Array state
-  const [items, setItems] = useState([]);
-
-  // Lazy initialization - function runs only once
-  const [expensiveValue] = useState(() => {
-    console.log('Computing expensive initial value...');
-    return Array.from({ length: 1000 }, (_, i) => i);
-  });
-
-  // Functional update - when new state depends on previous
-  const incrementCount = () => {
-    setCount(prevCount => prevCount + 1);
-  };
-
-  // Multiple updates in a row - use functional form
-  const incrementByThree = () => {
-    setCount(prev => prev + 1);
-    setCount(prev => prev + 1);
-    setCount(prev => prev + 1);
-  };
-
-  // Update object state immutably
-  const updateUser = () => {
-    setUser(prevUser => ({
-      ...prevUser,
-      age: prevUser.age + 1
-    }));
-  };
-
-  // Update array state immutably
-  const addItem = (newItem) => {
-    setItems(prevItems => [...prevItems, newItem]);
-  };
-
-  const removeItem = (index) => {
-    setItems(prevItems => prevItems.filter((_, i) => i !== index));
-  };
 
   return (
     <div>
       <h3>useState Examples</h3>
       
-      {/* Counter */}
+      {/* Example 1: Counter */}
       <div>
         <p>Count: {count}</p>
         <button onClick={() => setCount(count + 1)}>Increment</button>
-        <button onClick={incrementCount}>Increment (Functional)</button>
-        <button onClick={incrementByThree}>Increment by 3</button>
+        <button onClick={() => setCount(count - 1)}>Decrement</button>
         <button onClick={() => setCount(0)}>Reset</button>
       </div>
 
-      {/* String input */}
+      {/* Example 2: Text Input */}
       <div>
         <input
           type="text"
@@ -1965,39 +1942,15 @@ function UseStateExamples() {
           onChange={(e) => setName(e.target.value)}
           placeholder="Enter your name"
         />
-        <p>Hello, {name}!</p>
+        <p>Hello, {name || 'Guest'}!</p>
       </div>
 
-      {/* Toggle visibility */}
+      {/* Example 3: Toggle Visibility */}
       <div>
         <button onClick={() => setIsVisible(!isVisible)}>
-          Toggle Content
+          {isVisible ? 'Hide' : 'Show'} Content
         </button>
-        {isVisible && <p>This content is visible!</p>}
-      </div>
-
-      {/* Object state */}
-      <div>
-        <p>User: {user.name}, Age: {user.age}</p>
-        <button onClick={() => setUser({ ...user, name: 'John' })}>
-          Set Name
-        </button>
-        <button onClick={updateUser}>Increment Age</button>
-      </div>
-
-      {/* Array state */}
-      <div>
-        <button onClick={() => addItem(`Item ${items.length + 1}`)}>
-          Add Item
-        </button>
-        <ul>
-          {items.map((item, index) => (
-            <li key={index}>
-              {item}
-              <button onClick={() => removeItem(index)}>Remove</button>
-            </li>
-          ))}
-        </ul>
+        {isVisible && <p>This content is now visible!</p>}
       </div>
     </div>
   );
@@ -2010,7 +1963,7 @@ export default UseStateExamples;
 
 ##### useEffect Hook
 
-`useEffect` lets you perform side effects in functional components. Side effects include data fetching, subscriptions, timers, manual DOM manipulation, and logging.
+`useEffect` lets you perform side effects in functional components. Side effects are operations that interact with the outside world (API calls, subscriptions, timers, DOM updates).
 
 **Syntax:**
 ```jsx
@@ -2023,125 +1976,110 @@ useEffect(() => {
 ```
 
 **Key Points:**
-* Runs after render (after the DOM has been updated)
+* Runs after the component renders to the screen (after DOM updates)
+* Can return cleanup function to prevent memory leaks
+* Dependencies array controls when effect runs:
+  * Empty array `[]` - runs once after initial render
+  * No array - runs after every render
+  * `[dep1, dep2]` - runs when dependencies change
 * Cleanup function runs before component unmounts and before next effect
-* Dependencies array controls when effect runs
-* Empty array `[]` means effect runs once after initial render
-* No array means effect runs after every render
-* Common use cases: API calls, subscriptions, timers, event listeners
+* Handles operations that interact with the outside world
+
+**When to use**: Data fetching, event listeners, subscriptions, manual DOM manipulation, logging, timers
 
 **Documentation:** [useEffect Reference](https://react.dev/reference/react/useEffect)
 
-**Examples:**
+**Example:**
 
 ```jsx
 import { useState, useEffect } from 'react';
 
 function UseEffectExamples() {
-  const [count, setCount] = useState(0);
-  const [data, setData] = useState(null);
-  const [userId, setUserId] = useState(1);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [posts, setPosts] = useState([]);
+  const [selectedPostId, setSelectedPostId] = useState('');
+  const [postDetails, setPostDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [detailsLoading, setDetailsLoading] = useState(false);
 
-  // Example 1: Runs after every render (no dependency array)
+  // Effect 1: Fetch list of posts when component mounts
   useEffect(() => {
-    console.log('Component rendered or updated');
-  });
+    fetch('https://jsonplaceholder.typicode.com/posts?_limit=10')
+      .then(response => response.json())
+      .then(data => {
+        setPosts(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching posts:', err);
+        setLoading(false);
+      });
+  }, []); // Empty array = runs once when component mounts
 
-  // Example 2: Runs once after initial render (empty dependency array)
+  // Effect 2: Fetch post details when selectedPostId changes
   useEffect(() => {
-    console.log('Component mounted');
-    document.title = 'React App Loaded';
-    
-    return () => {
-      console.log('Component will unmount');
-    };
-  }, []);
-
-  // Example 3: Runs when specific dependency changes
-  useEffect(() => {
-    document.title = `Count: ${count}`;
-  }, [count]);
-
-  // Example 4: Data fetching with cleanup
-  useEffect(() => {
-    let cancelled = false;
-    
-    async function fetchData() {
-      try {
-        const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
-        const result = await response.json();
-        
-        if (!cancelled) {
-          setData(result);
-        }
-      } catch (error) {
-        console.error('Fetch error:', error);
-      }
+    if (!selectedPostId) {
+      setPostDetails(null);
+      return;
     }
-    
-    fetchData();
-    
-    // Cleanup: prevent state update if component unmounts during fetch
-    return () => {
-      cancelled = true;
-    };
-  }, [userId]);
 
-  // Example 5: Event listener with cleanup
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
+    setDetailsLoading(true);
     
-    window.addEventListener('resize', handleResize);
-    
-    // Cleanup: remove event listener
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+    // Fetch post details and comments
+    Promise.all([
+      fetch(`https://jsonplaceholder.typicode.com/posts/${selectedPostId}`).then(r => r.json()),
+      fetch(`https://jsonplaceholder.typicode.com/posts/${selectedPostId}/comments`).then(r => r.json())
+    ])
+      .then(([post, comments]) => {
+        setPostDetails({ ...post, comments });
+        setDetailsLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching details:', err);
+        setDetailsLoading(false);
+      });
+  }, [selectedPostId]); // Runs whenever selectedPostId changes
 
-  // Example 6: Timer with cleanup
-  useEffect(() => {
-    const timer = setInterval(() => {
-      console.log('Timer tick');
-    }, 1000);
-    
-    // Cleanup: clear interval
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
-  // Example 7: Local storage sync
-  useEffect(() => {
-    localStorage.setItem('count', count.toString());
-  }, [count]);
+  if (loading) return <p>Loading posts...</p>;
 
   return (
     <div>
-      <h3>useEffect Examples</h3>
+      <h3>useEffect Example - Fetching Data with Dependencies</h3>
       
       <div>
-        <p>Count: {count}</p>
-        <button onClick={() => setCount(count + 1)}>Increment</button>
+        <label htmlFor="post-select">Select a post: </label>
+        <select 
+          id="post-select"
+          value={selectedPostId} 
+          onChange={(e) => setSelectedPostId(e.target.value)}
+        >
+          <option value="">-- Choose a post --</option>
+          {posts.map(post => (
+            <option key={post.id} value={post.id}>
+              {post.title}
+            </option>
+          ))}
+        </select>
       </div>
 
-      <div>
-        <p>Window Width: {windowWidth}px</p>
-      </div>
+      {detailsLoading && <p>Loading details...</p>}
 
-      <div>
-        <button onClick={() => setUserId(userId + 1)}>Next User</button>
-        {data && (
-          <div>
-            <h4>User Data:</h4>
-            <p>Name: {data.name}</p>
-            <p>Email: {data.email}</p>
-          </div>
-        )}
-      </div>
+      {postDetails && !detailsLoading && (
+        <div style={{ marginTop: '20px', padding: '15px', border: '1px solid #ddd' }}>
+          <h4>{postDetails.title}</h4>
+          <p><strong>Post ID:</strong> {postDetails.id}</p>
+          <p><strong>Description:</strong> {postDetails.body}</p>
+          
+          <h5>Comments ({postDetails.comments.length}):</h5>
+          <ul>
+            {postDetails.comments.map(comment => (
+              <li key={comment.id}>
+                <strong>{comment.name}</strong> ({comment.email})
+                <p>{comment.body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
@@ -2168,467 +2106,10 @@ const value = useContext(MyContext);
 
 **Documentation:** [useContext Reference](https://react.dev/reference/react/useContext)
 
-**Examples:**
+**Example:**
 
 ```jsx
-import { createContext, useContext, useState } from 'react';
 
-// Create contexts
-const ThemeContext = createContext('light');
-const UserContext = createContext(null);
-
-// Theme Provider Component
-function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('light');
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
-  };
-
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-}
-
-// User Provider Component
-function UserProvider({ children }) {
-  const [user, setUser] = useState(null);
-
-  const login = (username) => {
-    setUser({ username, loggedIn: true });
-  };
-
-  const logout = () => {
-    setUser(null);
-  };
-
-  return (
-    <UserContext.Provider value={{ user, login, logout }}>
-      {children}
-    </UserContext.Provider>
-  );
-}
-
-// Component using useContext
-function ThemedButton() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
-
-  const styles = {
-    backgroundColor: theme === 'light' ? '#fff' : '#333',
-    color: theme === 'light' ? '#333' : '#fff',
-    padding: '10px 20px',
-    border: 'none',
-    cursor: 'pointer',
-  };
-
-  return (
-    <button onClick={toggleTheme} style={styles}>
-      Toggle Theme (Current: {theme})
-    </button>
-  );
-}
-
-// Component using multiple contexts
-function UserProfile() {
-  const { theme } = useContext(ThemeContext);
-  const { user, login, logout } = useContext(UserContext);
-
-  const styles = {
-    padding: '20px',
-    backgroundColor: theme === 'light' ? '#f0f0f0' : '#444',
-    color: theme === 'light' ? '#333' : '#fff',
-  };
-
-  return (
-    <div style={styles}>
-      {user ? (
-        <div>
-          <h3>Welcome, {user.username}!</h3>
-          <button onClick={logout}>Logout</button>
-        </div>
-      ) : (
-        <div>
-          <h3>Please log in</h3>
-          <button onClick={() => login('JohnDoe')}>Login as JohnDoe</button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Main component with providers
-function UseContextExample() {
-  return (
-    <ThemeProvider>
-      <UserProvider>
-        <div>
-          <h3>useContext Example</h3>
-          <ThemedButton />
-          <UserProfile />
-        </div>
-      </UserProvider>
-    </ThemeProvider>
-  );
-}
-
-export default UseContextExample;
-```
-
----
-
-##### useRef Hook
-
-`useRef` returns a mutable ref object whose `.current` property persists across renders. It's commonly used to access DOM elements directly or store mutable values that don't trigger re-renders when changed.
-
-**Syntax:**
-```jsx
-const ref = useRef(initialValue);
-```
-
-**Key Points:**
-* `.current` property can be read and written
-* Changing `.current` does NOT trigger re-render
-* Persists across re-renders (unlike regular variables)
-* Common use cases: DOM access, storing previous values, holding timers/intervals
-
-**Documentation:** [useRef Reference](https://react.dev/reference/react/useRef)
-
-**Examples:**
-
-```jsx
-import { useRef, useState, useEffect } from 'react';
-
-function UseRefExamples() {
-  // Example 1: Accessing DOM elements
-  const inputRef = useRef(null);
-  const videoRef = useRef(null);
-
-  // Example 2: Storing mutable values
-  const renderCount = useRef(0);
-  const previousValue = useRef('');
-
-  // Example 3: Storing timer ID
-  const timerRef = useRef(null);
-
-  const [count, setCount] = useState(0);
-  const [inputValue, setInputValue] = useState('');
-
-  // Track render count without causing re-renders
-  useEffect(() => {
-    renderCount.current += 1;
-  });
-
-  // Store previous value
-  useEffect(() => {
-    previousValue.current = inputValue;
-  }, [inputValue]);
-
-  // Example 1: Focus input
-  const focusInput = () => {
-    inputRef.current.focus();
-  };
-
-  // Example 1: Scroll input into view
-  const scrollToInput = () => {
-    inputRef.current.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  // Example 2: Access previous value
-  const showPreviousValue = () => {
-    alert(`Previous value was: ${previousValue.current}`);
-  };
-
-  // Example 3: Start/stop timer
-  const startTimer = () => {
-    if (timerRef.current) return; // Already running
-    
-    timerRef.current = setInterval(() => {
-      setCount(prev => prev + 1);
-    }, 1000);
-  };
-
-  const stopTimer = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
-  };
-
-  // Cleanup timer on unmount
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, []);
-
-  return (
-    <div>
-      <h3>useRef Examples</h3>
-
-      {/* DOM element access */}
-      <div>
-        <h4>DOM Access</h4>
-        <input
-          ref={inputRef}
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Type something..."
-        />
-        <button onClick={focusInput}>Focus Input</button>
-        <button onClick={scrollToInput}>Scroll to Input</button>
-      </div>
-
-      {/* Previous value tracking */}
-      <div>
-        <h4>Previous Value</h4>
-        <p>Current: {inputValue}</p>
-        <p>Previous: {previousValue.current}</p>
-        <button onClick={showPreviousValue}>Alert Previous</button>
-      </div>
-
-      {/* Render count tracking */}
-      <div>
-        <h4>Render Count</h4>
-        <p>This component has rendered {renderCount.current} times</p>
-      </div>
-
-      {/* Timer with ref */}
-      <div>
-        <h4>Timer</h4>
-        <p>Count: {count}</p>
-        <button onClick={startTimer}>Start</button>
-        <button onClick={stopTimer}>Stop</button>
-        <button onClick={() => setCount(0)}>Reset</button>
-      </div>
-    </div>
-  );
-}
-
-export default UseRefExamples;
-```
-
----
-
-##### useReducer Hook
-
-`useReducer` is an alternative to `useState` for managing complex state logic. It's similar to Redux reducers and is useful when state updates depend on previous state or involve multiple sub-values.
-
-**Syntax:**
-```jsx
-const [state, dispatch] = useReducer(reducer, initialState);
-```
-
-**Key Points:**
-* Better than `useState` for complex state logic
-* Reducer function: `(state, action) => newState`
-* Dispatch function sends actions to reducer
-* Actions typically have `type` and optional `payload`
-* Common use cases: forms, shopping carts, complex state transitions
-
-**Documentation:** [useReducer Reference](https://react.dev/reference/react/useReducer)
-
-**Examples:**
-
-```jsx
-import { useReducer } from 'react';
-
-// Example 1: Counter with reducer
-function counterReducer(state, action) {
-  switch (action.type) {
-    case 'INCREMENT':
-      return { count: state.count + 1 };
-    case 'DECREMENT':
-      return { count: state.count - 1 };
-    case 'RESET':
-      return { count: 0 };
-    case 'SET':
-      return { count: action.payload };
-    default:
-      throw new Error(`Unknown action: ${action.type}`);
-  }
-}
-
-// Example 2: Todo list with reducer
-function todoReducer(state, action) {
-  switch (action.type) {
-    case 'ADD_TODO':
-      return {
-        ...state,
-        todos: [...state.todos, { id: Date.now(), text: action.payload, completed: false }]
-      };
-    case 'TOGGLE_TODO':
-      return {
-        ...state,
-        todos: state.todos.map(todo =>
-          todo.id === action.payload ? { ...todo, completed: !todo.completed } : todo
-        )
-      };
-    case 'DELETE_TODO':
-      return {
-        ...state,
-        todos: state.todos.filter(todo => todo.id !== action.payload)
-      };
-    case 'SET_FILTER':
-      return {
-        ...state,
-        filter: action.payload
-      };
-    default:
-      return state;
-  }
-}
-
-// Example 3: Form with reducer
-function formReducer(state, action) {
-  switch (action.type) {
-    case 'UPDATE_FIELD':
-      return {
-        ...state,
-        [action.field]: action.value
-      };
-    case 'RESET':
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
-function UseReducerExamples() {
-  // Counter example
-  const [counterState, counterDispatch] = useReducer(
-    counterReducer,
-    { count: 0 }
-  );
-
-  // Todo example
-  const [todoState, todoDispatch] = useReducer(
-    todoReducer,
-    { todos: [], filter: 'all' }
-  );
-
-  // Form example
-  const initialFormState = { name: '', email: '', age: '' };
-  const [formState, formDispatch] = useReducer(formReducer, initialFormState);
-
-  const [newTodo, setNewTodo] = useReducer(
-    (state, newState) => newState,
-    ''
-  );
-
-  const handleAddTodo = () => {
-    if (newTodo.trim()) {
-      todoDispatch({ type: 'ADD_TODO', payload: newTodo });
-      setNewTodo('');
-    }
-  };
-
-  const filteredTodos = todoState.todos.filter(todo => {
-    if (todoState.filter === 'completed') return todo.completed;
-    if (todoState.filter === 'active') return !todo.completed;
-    return true;
-  });
-
-  return (
-    <div>
-      <h3>useReducer Examples</h3>
-
-      {/* Counter */}
-      <div>
-        <h4>Counter</h4>
-        <p>Count: {counterState.count}</p>
-        <button onClick={() => counterDispatch({ type: 'INCREMENT' })}>
-          +1
-        </button>
-        <button onClick={() => counterDispatch({ type: 'DECREMENT' })}>
-          -1
-        </button>
-        <button onClick={() => counterDispatch({ type: 'SET', payload: 10 })}>
-          Set to 10
-        </button>
-        <button onClick={() => counterDispatch({ type: 'RESET' })}>
-          Reset
-        </button>
-      </div>
-
-      {/* Todo List */}
-      <div>
-        <h4>Todo List</h4>
-        <input
-          type="text"
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleAddTodo()}
-          placeholder="Add a todo..."
-        />
-        <button onClick={handleAddTodo}>Add</button>
-        
-        <div>
-          <button onClick={() => todoDispatch({ type: 'SET_FILTER', payload: 'all' })}>
-            All
-          </button>
-          <button onClick={() => todoDispatch({ type: 'SET_FILTER', payload: 'active' })}>
-            Active
-          </button>
-          <button onClick={() => todoDispatch({ type: 'SET_FILTER', payload: 'completed' })}>
-            Completed
-          </button>
-        </div>
-
-        <ul>
-          {filteredTodos.map(todo => (
-            <li key={todo.id}>
-              <input
-                type="checkbox"
-                checked={todo.completed}
-                onChange={() => todoDispatch({ type: 'TOGGLE_TODO', payload: todo.id })}
-              />
-              <span style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-                {todo.text}
-              </span>
-              <button onClick={() => todoDispatch({ type: 'DELETE_TODO', payload: todo.id })}>
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Form */}
-      <div>
-        <h4>Form</h4>
-        <input
-          type="text"
-          value={formState.name}
-          onChange={(e) => formDispatch({ type: 'UPDATE_FIELD', field: 'name', value: e.target.value })}
-          placeholder="Name"
-        />
-        <input
-          type="email"
-          value={formState.email}
-          onChange={(e) => formDispatch({ type: 'UPDATE_FIELD', field: 'email', value: e.target.value })}
-          placeholder="Email"
-        />
-        <input
-          type="number"
-          value={formState.age}
-          onChange={(e) => formDispatch({ type: 'UPDATE_FIELD', field: 'age', value: e.target.value })}
-          placeholder="Age"
-        />
-        <button onClick={() => formDispatch({ type: 'RESET', payload: initialFormState })}>
-          Reset Form
-        </button>
-        <pre>{JSON.stringify(formState, null, 2)}</pre>
-      </div>
-    </div>
-  );
-}
-
-export default UseReducerExamples;
 ```
 
 ---
@@ -2651,953 +2132,8 @@ const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
 
 **Documentation:** [useMemo Reference](https://react.dev/reference/react/useMemo)
 
-**Examples:**
+**Example:**
 
 ```jsx
-import { useState, useMemo } from 'react';
 
-function UseMemoExamples() {
-  const [count, setCount] = useState(0);
-  const [items, setItems] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc');
-
-  // Generate initial items
-  useState(() => {
-    const newItems = Array.from({ length: 1000 }, (_, i) => ({
-      id: i,
-      name: `Item ${i}`,
-      value: Math.floor(Math.random() * 1000)
-    }));
-    setItems(newItems);
-  }, []);
-
-  // Example 1: Expensive calculation
-  // Without useMemo, this runs on every render (even when count changes)
-  const expensiveCalculation = useMemo(() => {
-    console.log('Running expensive calculation...');
-    let result = 0;
-    for (let i = 0; i < 1000000; i++) {
-      result += i;
-    }
-    return result;
-  }, []); // Empty array = calculate once
-
-  // Example 2: Filtered list
-  const filteredItems = useMemo(() => {
-    console.log('Filtering items...');
-    return items.filter(item =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [items, searchTerm]);
-
-  // Example 3: Sorted and filtered list
-  const sortedAndFilteredItems = useMemo(() => {
-    console.log('Sorting and filtering...');
-    const filtered = items.filter(item =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    
-    return filtered.sort((a, b) => {
-      if (sortOrder === 'asc') {
-        return a.value - b.value;
-      } else {
-        return b.value - a.value;
-      }
-    });
-  }, [items, searchTerm, sortOrder]);
-
-  // Example 4: Derived statistics
-  const statistics = useMemo(() => {
-    console.log('Calculating statistics...');
-    const values = filteredItems.map(item => item.value);
-    const sum = values.reduce((acc, val) => acc + val, 0);
-    const avg = values.length > 0 ? sum / values.length : 0;
-    const max = values.length > 0 ? Math.max(...values) : 0;
-    const min = values.length > 0 ? Math.min(...values) : 0;
-    
-    return { sum, avg, max, min, count: values.length };
-  }, [filteredItems]);
-
-  // Example 5: Complex object
-  const complexObject = useMemo(() => {
-    console.log('Creating complex object...');
-    return {
-      timestamp: Date.now(),
-      data: items.slice(0, 100),
-      metadata: {
-        total: items.length,
-        filtered: filteredItems.length
-      }
-    };
-  }, [items, filteredItems]);
-
-  return (
-    <div>
-      <h3>useMemo Examples</h3>
-
-      {/* Trigger re-renders */}
-      <div>
-        <p>Count: {count} (triggers re-render but not recalculation)</p>
-        <button onClick={() => setCount(count + 1)}>Increment Count</button>
-      </div>
-
-      {/* Expensive calculation */}
-      <div>
-        <h4>Expensive Calculation</h4>
-        <p>Result: {expensiveCalculation}</p>
-        <p>This only calculates once, not on every render!</p>
-      </div>
-
-      {/* Filtered and sorted list */}
-      <div>
-        <h4>Filtered & Sorted Items</h4>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search items..."
-        />
-        <button onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
-          Sort: {sortOrder}
-        </button>
-        
-        <div>
-          <h5>Statistics</h5>
-          <p>Count: {statistics.count}</p>
-          <p>Sum: {statistics.sum}</p>
-          <p>Average: {statistics.avg.toFixed(2)}</p>
-          <p>Max: {statistics.max}</p>
-          <p>Min: {statistics.min}</p>
-        </div>
-
-        <ul style={{ maxHeight: '200px', overflow: 'auto' }}>
-          {sortedAndFilteredItems.slice(0, 20).map(item => (
-            <li key={item.id}>
-              {item.name} - Value: {item.value}
-            </li>
-          ))}
-        </ul>
-        <p>Showing 20 of {sortedAndFilteredItems.length} items</p>
-      </div>
-    </div>
-  );
-}
-
-export default UseMemoExamples;
 ```
-
----
-
-##### useCallback Hook
-
-`useCallback` memoizes (caches) a function and only recreates it when dependencies change. It's useful for optimizing performance when passing callbacks to child components that rely on reference equality.
-
-**Syntax:**
-```jsx
-const memoizedCallback = useCallback(() => {
-  doSomething(a, b);
-}, [a, b]);
-```
-
-**Key Points:**
-* Returns memoized function, not the result
-* Prevents unnecessary re-renders of child components
-* Useful when passing callbacks to optimized children (React.memo)
-* Dependencies array controls when function is recreated
-* Common use cases: event handlers, callback props, useEffect dependencies
-
-**Documentation:** [useCallback Reference](https://react.dev/reference/react/useCallback)
-
-**Examples:**
-
-```jsx
-import { useState, useCallback, memo } from 'react';
-
-// Optimized child component that only re-renders when props change
-const ChildComponent = memo(({ onClick, title }) => {
-  console.log(`Rendering ${title}`);
-  return (
-    <div>
-      <h4>{title}</h4>
-      <button onClick={onClick}>Click Me</button>
-    </div>
-  );
-});
-
-// List item component
-const ListItem = memo(({ item, onDelete, onToggle }) => {
-  console.log(`Rendering ListItem: ${item.text}`);
-  return (
-    <li>
-      <input
-        type="checkbox"
-        checked={item.completed}
-        onChange={() => onToggle(item.id)}
-      />
-      <span style={{ textDecoration: item.completed ? 'line-through' : 'none' }}>
-        {item.text}
-      </span>
-      <button onClick={() => onDelete(item.id)}>Delete</button>
-    </li>
-  );
-});
-
-function UseCallbackExamples() {
-  const [count, setCount] = useState(0);
-  const [items, setItems] = useState([
-    { id: 1, text: 'Learn React', completed: false },
-    { id: 2, text: 'Learn Hooks', completed: false },
-    { id: 3, text: 'Build Project', completed: false }
-  ]);
-  const [inputValue, setInputValue] = useState('');
-
-  // Example 1: Without useCallback - function recreated on every render
-  // This would cause ChildComponent to re-render even when count doesn't change
-  const handleClickWithoutCallback = () => {
-    console.log('Clicked!', count);
-  };
-
-  // Example 2: With useCallback - function only recreated when count changes
-  const handleClickWithCallback = useCallback(() => {
-    console.log('Clicked!', count);
-  }, [count]);
-
-  // Example 3: Callback with no dependencies - created once
-  const handleClickStable = useCallback(() => {
-    console.log('Stable callback');
-  }, []);
-
-  // Example 4: Complex callback for list operations
-  const handleDeleteItem = useCallback((id) => {
-    setItems(prevItems => prevItems.filter(item => item.id !== id));
-  }, []); // No dependencies - uses functional state update
-
-  const handleToggleItem = useCallback((id) => {
-    setItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, completed: !item.completed } : item
-      )
-    );
-  }, []);
-
-  const handleAddItem = useCallback(() => {
-    if (inputValue.trim()) {
-      setItems(prevItems => [
-        ...prevItems,
-        { id: Date.now(), text: inputValue, completed: false }
-      ]);
-      setInputValue('');
-    }
-  }, [inputValue]); // Depends on inputValue
-
-  // Example 5: Callback with multiple dependencies
-  const handleSearch = useCallback((term) => {
-    console.log('Searching for:', term, 'Count:', count);
-    // Search logic here
-  }, [count]);
-
-  // Example 6: Callback factory
-  const createClickHandler = useCallback((message) => {
-    return () => {
-      alert(`${message} - Count: ${count}`);
-    };
-  }, [count]);
-
-  return (
-    <div>
-      <h3>useCallback Examples</h3>
-
-      {/* Trigger re-renders */}
-      <div>
-        <p>Count: {count}</p>
-        <button onClick={() => setCount(count + 1)}>Increment</button>
-      </div>
-
-      {/* Compare with/without useCallback */}
-      <div>
-        <h4>Without useCallback</h4>
-        <ChildComponent
-          onClick={handleClickWithoutCallback}
-          title="Re-renders on every parent render"
-        />
-      </div>
-
-      <div>
-        <h4>With useCallback</h4>
-        <ChildComponent
-          onClick={handleClickWithCallback}
-          title="Only re-renders when count changes"
-        />
-      </div>
-
-      <div>
-        <h4>Stable Callback</h4>
-        <ChildComponent
-          onClick={handleClickStable}
-          title="Never re-renders (stable callback)"
-        />
-      </div>
-
-      {/* Todo list with optimized callbacks */}
-      <div>
-        <h4>Optimized Todo List</h4>
-        <div>
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleAddItem()}
-            placeholder="Add item..."
-          />
-          <button onClick={handleAddItem}>Add</button>
-        </div>
-
-        <ul>
-          {items.map(item => (
-            <ListItem
-              key={item.id}
-              item={item}
-              onDelete={handleDeleteItem}
-              onToggle={handleToggleItem}
-            />
-          ))}
-        </ul>
-      </div>
-
-      {/* Callback factory example */}
-      <div>
-        <h4>Callback Factory</h4>
-        <button onClick={createClickHandler('Hello')}>Say Hello</button>
-        <button onClick={createClickHandler('Goodbye')}>Say Goodbye</button>
-      </div>
-    </div>
-  );
-}
-
-export default UseCallbackExamples;
-```
-
----
-
-##### useLayoutEffect Hook
-
-`useLayoutEffect` is identical to `useEffect`, but it fires synchronously after all DOM mutations and before the browser paints. Use this for DOM measurements or synchronous DOM updates.
-
-**Syntax:**
-```jsx
-useLayoutEffect(() => {
-  // Effect code here
-  return () => {
-    // Cleanup code here
-  };
-}, [dependencies]);
-```
-
-**Key Points:**
-* Runs synchronously after DOM updates but before browser paint
-* Blocks visual updates until effect completes
-* Use for DOM measurements, scroll positions, animations
-* Prefer `useEffect` unless you specifically need synchronous behavior
-* Can cause performance issues if overused
-
-**Documentation:** [useLayoutEffect Reference](https://react.dev/reference/react/useLayoutEffect)
-
-**Examples:**
-
-```jsx
-import { useState, useEffect, useLayoutEffect, useRef } from 'react';
-
-function UseLayoutEffectExamples() {
-  const [show, setShow] = useState(false);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  
-  const boxRef = useRef(null);
-  const tooltipRef = useRef(null);
-
-  // Example 1: useEffect vs useLayoutEffect visual comparison
-  // With useEffect, you might see a flicker
-  useEffect(() => {
-    if (show && boxRef.current) {
-      // This might cause visible flicker
-      boxRef.current.style.backgroundColor = 'blue';
-    }
-  }, [show]);
-
-  // Example 2: useLayoutEffect prevents flicker
-  useLayoutEffect(() => {
-    if (show && boxRef.current) {
-      // This happens before paint, no flicker
-      boxRef.current.style.transform = 'scale(1)';
-    }
-  }, [show]);
-
-  // Example 3: Measuring DOM elements
-  useLayoutEffect(() => {
-    if (boxRef.current) {
-      const { width, height } = boxRef.current.getBoundingClientRect();
-      setDimensions({ width, height });
-    }
-  }, [show]);
-
-  // Example 4: Positioning tooltip based on element
-  useLayoutEffect(() => {
-    if (show && boxRef.current && tooltipRef.current) {
-      const boxRect = boxRef.current.getBoundingClientRect();
-      const tooltipRect = tooltipRef.current.getBoundingClientRect();
-      
-      // Position tooltip above the box
-      setPosition({
-        top: boxRect.top - tooltipRect.height - 10,
-        left: boxRect.left + (boxRect.width - tooltipRect.width) / 2
-      });
-    }
-  }, [show]);
-
-  // Example 5: Scroll position restoration
-  const [items] = useState(Array.from({ length: 100 }, (_, i) => `Item ${i + 1}`));
-  const listRef = useRef(null);
-  const scrollPositionRef = useRef(0);
-
-  useLayoutEffect(() => {
-    if (listRef.current) {
-      // Restore scroll position before paint
-      listRef.current.scrollTop = scrollPositionRef.current;
-    }
-  });
-
-  const handleScroll = () => {
-    if (listRef.current) {
-      scrollPositionRef.current = listRef.current.scrollTop;
-    }
-  };
-
-  // Example 6: Animation initialization
-  const animBoxRef = useRef(null);
-
-  useLayoutEffect(() => {
-    if (animBoxRef.current) {
-      // Set initial state before first paint
-      animBoxRef.current.style.opacity = '0';
-      animBoxRef.current.style.transform = 'translateY(-20px)';
-      
-      // Trigger animation
-      requestAnimationFrame(() => {
-        if (animBoxRef.current) {
-          animBoxRef.current.style.transition = 'all 0.3s ease';
-          animBoxRef.current.style.opacity = '1';
-          animBoxRef.current.style.transform = 'translateY(0)';
-        }
-      });
-    }
-  }, [show]);
-
-  return (
-    <div>
-      <h3>useLayoutEffect Examples</h3>
-
-      <button onClick={() => setShow(!show)}>
-        {show ? 'Hide' : 'Show'}
-      </button>
-
-      {/* Example 1 & 2: Visual comparison */}
-      {show && (
-        <div>
-          <div
-            ref={boxRef}
-            style={{
-              width: '200px',
-              height: '100px',
-              backgroundColor: 'lightblue',
-              margin: '20px',
-              transform: 'scale(0)',
-              transition: 'transform 0.3s ease'
-            }}
-          >
-            Box Element
-          </div>
-
-          {/* Example 3: Display dimensions */}
-          <p>
-            Dimensions: {dimensions.width}px × {dimensions.height}px
-          </p>
-
-          {/* Example 4: Positioned tooltip */}
-          <div
-            ref={tooltipRef}
-            style={{
-              position: 'fixed',
-              top: `${position.top}px`,
-              left: `${position.left}px`,
-              backgroundColor: 'black',
-              color: 'white',
-              padding: '5px 10px',
-              borderRadius: '4px',
-              fontSize: '14px'
-            }}
-          >
-            Tooltip
-          </div>
-        </div>
-      )}
-
-      {/* Example 5: Scroll position */}
-      <div>
-        <h4>Scroll Position Restoration</h4>
-        <div
-          ref={listRef}
-          onScroll={handleScroll}
-          style={{
-            height: '200px',
-            overflow: 'auto',
-            border: '1px solid #ccc',
-            padding: '10px'
-          }}
-        >
-          {items.map(item => (
-            <div key={item} style={{ padding: '5px' }}>
-              {item}
-            </div>
-          ))}
-        </div>
-        <p>Scroll is preserved on re-renders</p>
-      </div>
-
-      {/* Example 6: Animation */}
-      {show && (
-        <div>
-          <h4>Smooth Animation</h4>
-          <div
-            ref={animBoxRef}
-            style={{
-              width: '150px',
-              height: '150px',
-              backgroundColor: 'coral',
-              margin: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            Animated Box
-          </div>
-        </div>
-      )}
-
-      {/* When to use which */}
-      <div style={{ marginTop: '20px', padding: '10px', backgroundColor: '#f0f0f0' }}>
-        <h4>useEffect vs useLayoutEffect</h4>
-        <ul>
-          <li><strong>useEffect:</strong> Most side effects (API calls, subscriptions, logging)</li>
-          <li><strong>useLayoutEffect:</strong> DOM measurements, scroll positions, visual adjustments</li>
-        </ul>
-      </div>
-    </div>
-  );
-}
-
-export default UseLayoutEffectExamples;
-```
-
----
-
-##### Custom Hooks
-
-Custom hooks let you extract and reuse stateful logic across multiple components. They're regular JavaScript functions that can use other hooks and follow the "use" naming convention.
-
-**Key Points:**
-* Must start with "use" prefix (e.g., `useAuth`, `useFetch`, `useLocalStorage`)
-* Can use other hooks (built-in or custom)
-* Return whatever makes sense (values, functions, objects, arrays)
-* Enable code reuse without HOCs or render props
-* Common use cases: data fetching, form handling, authentication, local storage
-
-**Documentation:** [Building Your Own Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)
-
-**Examples:**
-
-```jsx
-import { useState, useEffect, useCallback } from 'react';
-
-// Example 1: useFetch - Data fetching hook
-function useFetch(url) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function fetchData() {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const result = await response.json();
-        
-        if (!cancelled) {
-          setData(result);
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err.message);
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }
-
-    fetchData();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [url]);
-
-  return { data, loading, error };
-}
-
-// Example 2: useLocalStorage - Sync state with localStorage
-function useLocalStorage(key, initialValue) {
-  const [storedValue, setStoredValue] = useState(() => {
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.error(error);
-      return initialValue;
-    }
-  });
-
-  const setValue = useCallback((value) => {
-    try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
-      window.localStorage.setItem(key, JSON.stringify(valueToStore));
-    } catch (error) {
-      console.error(error);
-    }
-  }, [key, storedValue]);
-
-  return [storedValue, setValue];
-}
-
-// Example 3: useToggle - Boolean state toggle
-function useToggle(initialValue = false) {
-  const [value, setValue] = useState(initialValue);
-
-  const toggle = useCallback(() => {
-    setValue(v => !v);
-  }, []);
-
-  return [value, toggle, setValue];
-}
-
-// Example 4: useDebounce - Debounce a value
-function useDebounce(value, delay) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
-// Example 5: useWindowSize - Track window dimensions
-function useWindowSize() {
-  const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowSize;
-}
-
-// Example 6: useOnClickOutside - Detect clicks outside element
-function useOnClickOutside(ref, handler) {
-  useEffect(() => {
-    const listener = (event) => {
-      if (!ref.current || ref.current.contains(event.target)) {
-        return;
-      }
-      handler(event);
-    };
-
-    document.addEventListener('mousedown', listener);
-    document.addEventListener('touchstart', listener);
-
-    return () => {
-      document.removeEventListener('mousedown', listener);
-      document.removeEventListener('touchstart', listener);
-    };
-  }, [ref, handler]);
-}
-
-// Example 7: useForm - Form state management
-function useForm(initialValues) {
-  const [values, setValues] = useState(initialValues);
-  const [errors, setErrors] = useState({});
-  const [touched, setTouched] = useState({});
-
-  const handleChange = useCallback((event) => {
-    const { name, value } = event.target;
-    setValues(prev => ({ ...prev, [name]: value }));
-  }, []);
-
-  const handleBlur = useCallback((event) => {
-    const { name } = event.target;
-    setTouched(prev => ({ ...prev, [name]: true }));
-  }, []);
-
-  const resetForm = useCallback(() => {
-    setValues(initialValues);
-    setErrors({});
-    setTouched({});
-  }, [initialValues]);
-
-  return {
-    values,
-    errors,
-    touched,
-    handleChange,
-    handleBlur,
-    resetForm,
-    setValues,
-    setErrors,
-  };
-}
-
-// Using the custom hooks
-function CustomHooksExample() {
-  // useFetch example
-  const { data: users, loading, error } = useFetch('https://jsonplaceholder.typicode.com/users');
-
-  // useLocalStorage example
-  const [name, setName] = useLocalStorage('name', '');
-  const [theme, setTheme] = useLocalStorage('theme', 'light');
-
-  // useToggle example
-  const [isOpen, toggleOpen] = useToggle(false);
-
-  // useDebounce example
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
-  // useWindowSize example
-  const { width, height } = useWindowSize();
-
-  // useForm example
-  const {
-    values: formValues,
-    handleChange,
-    handleBlur,
-    resetForm,
-  } = useForm({
-    username: '',
-    email: '',
-  });
-
-  useEffect(() => {
-    if (debouncedSearchTerm) {
-      console.log('Searching for:', debouncedSearchTerm);
-      // Perform search API call here
-    }
-  }, [debouncedSearchTerm]);
-
-  return (
-    <div>
-      <h3>Custom Hooks Examples</h3>
-
-      {/* useFetch */}
-      <div>
-        <h4>useFetch</h4>
-        {loading && <p>Loading users...</p>}
-        {error && <p>Error: {error}</p>}
-        {users && (
-          <ul>
-            {users.slice(0, 5).map(user => (
-              <li key={user.id}>{user.name}</li>
-            ))}
-          </ul>
-        )}
-      </div>
-
-      {/* useLocalStorage */}
-      <div>
-        <h4>useLocalStorage</h4>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Your name (persisted)"
-        />
-        <p>Stored name: {name}</p>
-        <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
-          Toggle Theme (Current: {theme})
-        </button>
-      </div>
-
-      {/* useToggle */}
-      <div>
-        <h4>useToggle</h4>
-        <button onClick={toggleOpen}>
-          {isOpen ? 'Close' : 'Open'} Panel
-        </button>
-        {isOpen && <div style={{ padding: '10px', backgroundColor: '#f0f0f0' }}>Panel Content</div>}
-      </div>
-
-      {/* useDebounce */}
-      <div>
-        <h4>useDebounce</h4>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search (debounced)..."
-        />
-        <p>Immediate: {searchTerm}</p>
-        <p>Debounced: {debouncedSearchTerm}</p>
-      </div>
-
-      {/* useWindowSize */}
-      <div>
-        <h4>useWindowSize</h4>
-        <p>Window size: {width} × {height}</p>
-      </div>
-
-      {/* useForm */}
-      <div>
-        <h4>useForm</h4>
-        <form onSubmit={(e) => e.preventDefault()}>
-          <input
-            type="text"
-            name="username"
-            value={formValues.username}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            placeholder="Username"
-          />
-          <input
-            type="email"
-            name="email"
-            value={formValues.email}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            placeholder="Email"
-          />
-          <button type="button" onClick={resetForm}>Reset</button>
-        </form>
-        <pre>{JSON.stringify(formValues, null, 2)}</pre>
-      </div>
-    </div>
-  );
-}
-
-export default CustomHooksExample;
-```
-
-**Best Practices for Custom Hooks:**
-
-1. **Name with "use" prefix**: Always start with "use" so React knows it's a hook
-2. **Return useful values**: Return what consumers need (state, setters, functions)
-3. **Keep focused**: Each hook should have a single, clear responsibility
-4. **Document parameters**: Clearly document what arguments the hook expects
-5. **Handle cleanup**: Return cleanup functions from useEffect when needed
-6. **Make reusable**: Design hooks to work in different contexts
-7. **Test independently**: Custom hooks can be tested without components
-
----
-
-**Hook Dependency Arrays:**
-
-Understanding dependency arrays is crucial for `useEffect`, `useMemo`, and `useCallback`:
-
-```jsx
-// No dependency array - runs after EVERY render
-useEffect(() => {
-  console.log('Runs on every render');
-});
-
-// Empty dependency array - runs ONCE after initial render
-useEffect(() => {
-  console.log('Runs only once');
-}, []);
-
-// With dependencies - runs when dependencies change
-useEffect(() => {
-  console.log('Runs when count or name changes');
-}, [count, name]);
-```
-
-**Common Mistakes to Avoid:**
-
-1. **Conditional Hooks**: ❌ Don't call hooks conditionally
-   ```jsx
-   // ❌ WRONG
-   if (condition) {
-     useState(0);
-   }
-   
-   // ✅ CORRECT
-   const [value, setValue] = useState(0);
-   if (condition) {
-     setValue(10);
-   }
-   ```
-
-2. **Missing Dependencies**: ❌ Always include all dependencies
-   ```jsx
-   // ❌ WRONG - missing 'count' in dependency array
-   useEffect(() => {
-     console.log(count);
-   }, []);
-   
-   // ✅ CORRECT - include all used variables
-   useEffect(() => {
-     console.log(count);
-   }, [count]);
-   ```
-
-3. **Hooks in Loops**: ❌ Don't call hooks inside loops
-   ```jsx
-   // ❌ WRONG
-   for (let i = 0; i < 5; i++) {
-     useState(i);
-   }
-   
-   // ✅ CORRECT
-   const [values] = useState([0, 1, 2, 3, 4]);
-   ```
-
-**Best Practices:**
-
-* **Use ESLint Plugin**: Install `eslint-plugin-react-hooks` to catch hook rule violations
-* **Name Custom Hooks**: Always start custom hook names with "use"
-* **Keep Hooks at Top**: Call all hooks at the top level of your component
-* **Extract Logic**: Move complex logic into custom hooks for reusability
-* **Optimize Performance**: Use `useMemo` and `useCallback` for expensive operations
-* **Clean Up Effects**: Return cleanup functions from `useEffect` when needed
