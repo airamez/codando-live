@@ -10,6 +10,9 @@ function UseEffect() {
 
   // Effect 1: Fetch list of posts when component mounts
   useEffect(() => {
+
+    debugger;
+
     fetch('https://jsonplaceholder.typicode.com/posts?_limit=10')
       .then(response => response.json())
       .then(data => {
@@ -24,6 +27,9 @@ function UseEffect() {
 
   // Effect 2: Fetch post details when selectedPostId changes
   useEffect(() => {
+
+    debugger;
+
     if (!selectedPostId) {
       setPostDetails(null);
       return;
@@ -62,7 +68,7 @@ function UseEffect() {
           onChange={(e) => setSelectedPostId(e.target.value)}
           className="use-effect-select"
         >
-          <option value="">-- Choose a post --</option>
+          <option value="">Choose a post</option>
           {posts.map(post => (
             <option key={post.id} value={post.id}>
               {post.title}
