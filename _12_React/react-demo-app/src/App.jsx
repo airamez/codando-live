@@ -21,8 +21,9 @@ import ProductCardImproved from './components/ProductCardImproved'
 import Parent from './components/ParentChild/Parent'
 import UseState from './components/Hooks/UseState'
 import UseEffect from './components/Hooks/UseEffect'
-import UseContext from './components/Hooks/UseContext'
 import UseMemo from './components/Hooks/UseMemo'
+import WithoutUseContext from './components/Hooks/UseContext/WithoutUseContext/MainPage'
+import WithUseContext from './components/Hooks/UseContext/WithUseContext/MainPage'
 
 
 function App() {
@@ -163,9 +164,10 @@ function App() {
           <option value="spread">13) Spread props [TextInput]</option>
           <option value="spreadImproved">13) Spread props with override [TextInputImproved]</option>
           <option value="useState">14) Hooks - useState</option>
-          <option value="useEffect">14) Hooks - useEffect</option>
-          <option value="useContext">14) Hooks - useContext</option>
-          <option value="useMemo">14) Hooks - useMemo</option>
+          <option value="useEffect">15) Hooks - useEffect</option>
+          <option value="useContextWithout">16) Hooks - without useContext (Prop Drilling)</option>
+          <option value="useContextWith">17) Hooks - useContext</option>
+          <option value="useMemo">18) Hooks - useMemo</option>
         </select>
       </div>
 
@@ -408,8 +410,12 @@ function App() {
           <UseEffect />
         </section>
 
-        <section style={{ display: selectedExample === 'useContext' ? 'block' : 'none' }}>
-          <UseContext />
+        <section style={{ display: selectedExample === 'useContextWithout' ? 'block' : 'none' }}>
+          <WithoutUseContext />
+        </section>
+
+        <section style={{ display: selectedExample === 'useContextWith' ? 'block' : 'none' }}>
+          <WithUseContext />
         </section>
 
         <section style={{ display: selectedExample === 'useMemo' ? 'block' : 'none' }}>

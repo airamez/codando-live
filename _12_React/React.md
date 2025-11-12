@@ -2094,117 +2094,421 @@ export default UseEffect;
 
 ##### useContext Hook
 
-`useContext` lets you read and subscribe to context from your component without nesting. Context provides a way to pass data through the component tree without having to pass props manually at every level.
-
-**Syntax:**
-```jsx
-const value = useContext(MyContext);
-```
-
-**Key Points:**
-* Eliminates "prop drilling" (passing props through many levels)
-* Component re-renders when context value changes
-* Must be used with `createContext`
-* Common use cases: themes, user authentication, language preferences
+`useContext` is a React Hook that lets you read and subscribe to context from your component. Context provides a way to share data across the component tree without having to manually pass props through every level of components (avoiding "prop drilling").
 
 **Documentation:** [useContext Reference](https://react.dev/reference/react/useContext)
 
-**Example:**
+
+**The Problem: Prop Drilling**
+
+In React's normal data flow, data flows down from parent to child via props. This becomes cumbersome when data needs to travel through many component levels, especially when intermediate components don't use the data:
 
 ```jsx
-import { createContext, useContext, useState } from 'react';
-import './hooks.css';
+// Prop Drilling Problem
+<App user={user}>
+  // ParentComponent doesn't need user, but must receive it
+  <ParentComponent user={user}>
+    // MiddleComponent doesn't need user, but must receive it  
+    <MiddleComponent user={user}>
+      // GrandchildComponent finally uses it!
+      <GrandchildComponent user={user} />
+```
 
-// Create contexts
-const ThemeContext = createContext('light');
-const UserContext = createContext(null);
+```jsx
+// Context Solution
+import { createContext, useContext } from 'react';
 
-// Theme Provider Component
-function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState('light');
+// Context created ONCE - this object is shared across all components
+const UserContext = createContext();
 
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
-  };
-
+// App provides the data
+function App() {
+  const user = { name: "Jose", email: "jose@email.com" };
+  
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-}
-
-// User Provider Component
-function UserProvider({ children }) {
-  const [user, setUser] = useState(null);
-
-  const login = (username) => {
-    setUser({ username, loggedIn: true });
-  };
-
-  const logout = () => {
-    setUser(null);
-  };
-
-  return (
-    <UserContext.Provider value={{ user, login, logout }}>
-      {children}
+    // Provider uses UserContext to share data
+    <UserContext.Provider value={user}>
+      <ParentComponent />
     </UserContext.Provider>
   );
 }
 
-// Component using useContext
-function ThemedButton() {
-  const { theme, toggleTheme } = useContext(ThemeContext);
+function ParentComponent() {
+  // No props needed!
+  return <MiddleComponent />;
+}
 
+function MiddleComponent() {
+  // No props needed!
+  return <GrandchildComponent />;
+}
+
+function GrandchildComponent() {
+  // Consumer uses THE SAME UserContext object to access data
+  const user = useContext(UserContext);
+  return <div>Welcome, {user.name}!</div>;
+}
+```
+
+**Critical Point:** The `UserContext` object created by `createContext()` must be the **same object** used by both:
+- The `<UserContext.Provider>` (to share data)
+- The `useContext(UserContext)` (to consume data)
+
+If you create two separate contexts (even with the same name), they won't work together. This is why contexts are usually:
+1. Created in a separate file
+2. Exported: `export const UserContext = createContext()`
+3. Imported wherever needed: `import { UserContext } from './UserContext'`
+
+---
+
+**How Context Works: Three Core Concepts**
+
+**1. Create Context** - Define what data you want to share
+
+The context object itself is created using `createContext()`. This is typically done once at the module level:
+
+```jsx
+import { createContext } from 'react';
+
+// Create a context with optional default value
+const MyContext = createContext(defaultValue);
+```
+
+- **Context object**: The result of `createContext()` is a context object
+- **Default value**: Optional; used only when a component has no matching Provider above it in the tree
+- **Typically exported**: So other files can import and use it
+
+**2. Provide Context** - Make data available to components
+
+A Provider component wraps the part of your component tree that needs access to the context:
+
+```jsx
+<MyContext.Provider value={actualData}>
+  {/* All children can access actualData */}
+  <ChildComponents />
+</MyContext.Provider>
+```
+
+- **Provider component**: Every context object comes with a `Provider` component
+- **value prop**: The data you want to share (can be any type: object, array, function, primitive)
+- **Component tree**: Only components inside the Provider can access the context
+- **Value changes**: When value changes, all consuming components re-render
+
+**3. Consume Context** - Read the data in child components
+
+Any component inside the Provider can read the context using `useContext()`:
+
+```jsx
+import { useContext } from 'react';
+
+function ChildComponent() {
+  const value = useContext(MyContext);
+  // Now you can use value
+  return <div>{value.someProperty}</div>;
+}
+```
+
+**Step-by-Step: Building with Context**
+
+**Step 1: Create the Context**
+
+```jsx
+// Usually in a separate file, e.g., UserContext.js
+import { createContext } from 'react';
+
+export const UserContext = createContext(null); // null is the default value
+```
+
+---
+
+**Key Concepts to Understand**
+
+**Data Flow:**
+- Context doesn't "push" data to components
+- Components that call `useContext()` "pull" the current value
+- When value changes, React notifies subscribed components to re-render
+
+**Re-rendering Behavior:**
+- All components using `useContext()` re-render when the context value changes
+- This happens even if the component only uses part of the value
+- Optimize with `useMemo` for the value object if needed
+
+**Provider Hierarchy:**
+- You can have multiple Providers for the same context
+- Components receive value from the nearest Provider above them
+- Providers can be nested for different scopes
+
+**Multiple Contexts:**
+- Components can consume multiple contexts
+- Just call `useContext()` multiple times with different context objects
+
+```jsx
+function MyComponent() {
+  const theme = useContext(ThemeContext);
+  const user = useContext(UserContext);
+  const settings = useContext(SettingsContext);
+  
+  // Use all three contexts
+}
+```
+
+---
+
+**How Child Components Can Modify Context Data**
+
+**The Problem:**
+Child components can **read** context data, but how do they **change** it?
+
+**The Solution:**
+Pass **both data AND setter functions** through the context value!
+
+**Pattern 1: Simple - Pass setState function**
+
+The simplest approach is to pass the setState function directly through context:
+
+```jsx
+// 1. Create context
+const UserContext = createContext();
+
+// 2. Provider component with state
+function App() {
+  const [user, setUser] = useState({ name: 'Jose', email: 'jose@email.com' });
+  
+  // Pass BOTH the data AND the setter function
+  const value = { user, setUser };
+  
   return (
-    <button onClick={toggleTheme} className="use-context-themed-button" data-theme={theme}>
-      Toggle Theme (Current: {theme})
-    </button>
+    <UserContext.Provider value={value}>
+      <UserDisplay />
+      <UserControls />
+    </UserContext.Provider>
   );
 }
 
-// Component using multiple contexts
-function UserProfile() {
-  const { theme } = useContext(ThemeContext);
-  const { user, login, logout } = useContext(UserContext);
-
+// 3. Child components can modify the data
+function UserDisplay() {
+  const { user } = useContext(UserContext);
   return (
-    <div className="use-context-user-profile" data-theme={theme}>
-      {user ? (
-        <div>
-          <h4>Welcome, {user.username}!</h4>
-          <button onClick={logout}>Logout</button>
-        </div>
-      ) : (
-        <div>
-          <h4>Please log in</h4>
-          <button onClick={() => login('JohnDoe')} className="hook-button-spacing">Login as JohnDoe</button>
-          <button onClick={() => login('JaneSmith')}>Login as JaneSmith</button>
-        </div>
-      )}
+    <div>
+      <h2>Welcome, {user.name}!</h2>
+      <p>Email: {user.email}</p>
     </div>
   );
 }
 
-// Main component with providers
-function UseContext() {
+function UserControls() {
+  const { user, setUser } = useContext(UserContext);
+  
   return (
-    <ThemeProvider>
-      <UserProvider>
-        <div className="hook-example-section">
-          <h3>useContext Example</h3>
-          <p>Context allows sharing data without passing props through every level</p>
-          <ThemedButton />
-          <UserProfile />
-        </div>
-      </UserProvider>
-    </ThemeProvider>
+    <div>
+      <button onClick={() => setUser({ ...user, name: 'Maria' })}>
+        Change to Maria
+      </button>
+      <button onClick={() => setUser({ ...user, name: 'Carlos' })}>
+        Change to Carlos
+      </button>
+      <button onClick={() => setUser({ name: 'Jose', email: 'jose@email.com' })}>
+        Reset
+      </button>
+    </div>
+  );
+}
+```
+
+**Drawbacks of this approach:**
+- Children need to know **how** to update state (implementation details)
+- Duplicated logic if multiple components update the same way
+- Risk of invalid state updates
+- Harder to maintain when logic changes
+
+**Pattern 2: Better - Pass specific action functions**
+
+Instead of passing the raw setState function, create specific action functions that encapsulate the logic:
+
+```jsx
+// 1. Create context
+const UserContext = createContext();
+
+// 2. Provider component with specific actions
+function App() {
+  const [user, setUser] = useState({ name: 'Jose', email: 'jose@email.com' });
+  
+  // Specific action functions (better than passing setUser directly)
+  const updateName = (newName) => setUser(prev => ({ ...prev, name: newName }));
+  const updateEmail = (newEmail) => setUser(prev => ({ ...prev, email: newEmail }));
+  const resetUser = () => setUser({ name: 'Jose', email: 'jose@email.com' });
+  
+  // Pass data and actions
+  const value = { user, updateName, updateEmail, resetUser };
+  
+  return (
+    <UserContext.Provider value={value}>
+      <UserDisplay />
+      <UserControls />
+    </UserContext.Provider>
   );
 }
 
-export default UseContext;
+// 3. Components use specific actions
+function UserDisplay() {
+  const { user } = useContext(UserContext);
+  return (
+    <div>
+      <h2>Welcome, {user.name}!</h2>
+      <p>Email: {user.email}</p>
+    </div>
+  );
+}
+
+function UserControls() {
+  const { updateName, updateEmail, resetUser } = useContext(UserContext);
+  
+  return (
+    <div>
+      <button onClick={() => updateName('Jose Maria')}>Change to Maria</button>
+      <button onClick={() => updateName('Leila')}>Change to Leila</button>
+      <button onClick={() => resetUser()}>Reset</button>
+    </div>
+  );
+}
 ```
+
+**Why this is better:**
+- **Encapsulation**: Logic is in one place (the Provider)
+- **Intent clarity**: Function names describe what they do (`updateName` vs `setUser({ ...user, name: ... })`)
+- **Less error-prone**: Children can't accidentally set invalid state
+- **Easier to maintain**: Change implementation in one place
+---
+
+**When to Use Context vs Props**
+
+| Scenario | Use Props | Use Context |
+|----------|-----------|-------------|
+| **Data depth** | 1-2 levels | 3+ levels deep |
+| **Number of consumers** | Few components | Many components at different levels |
+| **Relationship** | Clear parent-child | Components scattered in tree |
+| **Data nature** | Component-specific | Global or semi-global |
+| **Frequency of change** | Doesn't matter | Consider performance for frequent changes |
+
+**Common Use Cases for Context:**
+- **Theme**: Light/dark mode across entire app
+- **Authentication**: Current user info and login state
+- **Localization**: Current language/translations
+- **Shopping Cart**: Cart items accessible from anywhere
+- **App Settings**: Global configuration preferences
+- **Responsive**: Screen size/device info
+
+**Best Practices:**
+
+- **Don't overuse context**: For simple parent-child communication (1-2 levels), props are simpler and more explicit
+- **Separate contexts**: Create separate contexts for different concerns (don't put everything in one giant context)
+- **Provider placement**: Place Providers only where needed, not always at the root
+- **Memoize values**: Use `useMemo` for context values to prevent unnecessary re-renders
+
+**Example:**
+
+- This example demonstrates a use case of `useContext` with a phrase analysis application that calculates word and character frequencies.
+- It shows both approaches side-by-side:
+  - **WITHOUT useContext** (prop drilling)
+  - **WITH useContext** (avoiding prop drilling).
+
+**Component Hierarchy:**
+
+```
+WITHOUT useContext (Messy - Prop Drilling Required)
+├── MainPage (owns phrase state, passes props down)
+│   ├── Phrase (receives phrase + updatePhrase as props)
+│   └── Container (receives phrase + updatePhrase as props, doesn't use them!)
+│       ├── WordsFrequency (receives phrase + updatePhrase from Container)
+│       └── CharactersFrequency (receives phrase + updatePhrase from Container)
+
+WITH useContext (Clean - No Prop Drilling)
+├── MainPage (Provider - owns phrase state, provides context)
+│   ├── Phrase (Consumer - edits phrase via context)
+│   └── Container (Wrapper - no props needed!)
+│       ├── WordsFrequency (Consumer - reads/updates via context)
+│       └── CharactersFrequency (Consumer - reads/updates via context)
+```
+
+**Key Differences:**
+
+| Aspect | WITH useContext | WITHOUT useContext |
+|--------|-----------------|---------------------|
+| **Container Component** | No props needed - just renders children | Must receive and pass props it doesn't use |
+| **Data Access** | Components pull data from context | Props must be passed through every level |
+| **Code Clarity** | Clean, direct access to needed data | Prop drilling through intermediate components |
+| **Maintenance** | Easy - change Provider, consumers work unchanged | Hard - add/remove props at every level |
+
+**How It Works:**
+
+1. **MainPage** creates `PhraseContext` and provides:
+   - `phrase` (string): The current phrase to analyze
+   - `updatePhrase` (function): Updates the phrase
+
+2. **Phrase Component** allows real-time editing via textarea
+
+3. **WordsFrequency Component**:
+   - Calculates word frequency
+   - Displays total/unique word counts
+   - Shows frequency table sorted by count
+
+4. **CharactersFrequency Component**:
+   - Calculates character frequency (letters only)
+   - Displays total/unique letter counts
+   - Shows frequency table sorted by count
+
+5. **Real-time Updates**: Typing in any textarea updates all components instantly
+
+**Example Files:**
+
+The complete implementation is available in the repository:
+
+**WITH useContext** (Recommended Approach):
+- `_12_React/react-demo-app/src/components/Hooks/UseContext/WithUseContext/MainPage.jsx`
+- `_12_React/react-demo-app/src/components/Hooks/UseContext/WithUseContext/Phrase.jsx`
+- `_12_React/react-demo-app/src/components/Hooks/UseContext/WithUseContext/Container.jsx`
+- `_12_React/react-demo-app/src/components/Hooks/UseContext/WithUseContext/WordsFrequency.jsx`
+- `_12_React/react-demo-app/src/components/Hooks/UseContext/WithUseContext/CharactersFrequency.jsx`
+
+**WITHOUT useContext** (Prop Drilling Approach):
+- `_12_React/react-demo-app/src/components/Hooks/UseContext/WithoutUseContext/MainPage.jsx`
+- `_12_React/react-demo-app/src/components/Hooks/UseContext/WithoutUseContext/Phrase.jsx`
+- `_12_React/react-demo-app/src/components/Hooks/UseContext/WithoutUseContext/Container.jsx`
+- `_12_React/react-demo-app/src/components/Hooks/UseContext/WithoutUseContext/WordsFrequency.jsx`
+- `_12_React/react-demo-app/src/components/Hooks/UseContext/WithoutUseContext/CharactersFrequency.jsx`
+
+**Shared Styling:**
+- `_12_React/react-demo-app/src/components/Hooks/UseContext/useContext.css`
+
+**The Problem Solved:**
+
+Without context, the `Container` component is forced to:
+```jsx
+// Container must receive props it doesn't use, just to pass them down
+function Container({ phrase, updatePhrase }) {
+  return (
+    <div className="frequency-container">
+      <WordsFrequency phrase={phrase} updatePhrase={updatePhrase} />
+      <CharactersFrequency phrase={phrase} updatePhrase={updatePhrase} />
+    </div>
+  );
+}
+```
+
+With context, the `Container` becomes clean:
+```jsx
+// Container doesn't need any props - children access context directly
+function Container() {
+  return (
+    <div className="frequency-container">
+      <WordsFrequency />
+      <CharactersFrequency />
+    </div>
+  );
+}
+```
+
+This demonstrates the core benefit of `useContext`: **avoiding prop drilling** by allowing deeply nested components to access shared state directly without forcing intermediate components to pass props they don't use.
 
 ---
 
