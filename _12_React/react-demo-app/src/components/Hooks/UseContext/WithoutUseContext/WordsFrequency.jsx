@@ -1,16 +1,11 @@
-import { useMemo } from 'react';
-
 // WordsFrequency - Analyzes and displays word frequency (receives props from Container)
 function WordsFrequency({ phrase, updatePhrase }) {
   // Calculate word frequency
-  const wordFrequency = useMemo(() => {
-    const words = phrase.toLowerCase().split(/\s+/).filter(w => w.length > 0);
-    const freq = {};
-    words.forEach(word => {
-      freq[word] = (freq[word] || 0) + 1;
-    });
-    return freq;
-  }, [phrase]);
+  const words = phrase.toLowerCase().split(/\s+/).filter(w => w.length > 0);
+  const wordFrequency = {};
+  words.forEach(word => {
+    wordFrequency[word] = (wordFrequency[word] || 0) + 1;
+  });
 
   const totalWords = Object.values(wordFrequency).reduce((sum, count) => sum + count, 0);
   const uniqueWords = Object.keys(wordFrequency).length;

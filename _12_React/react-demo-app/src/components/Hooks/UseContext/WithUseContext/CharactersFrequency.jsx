@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 import { PhraseContext } from './MainPage';
 
 // CharactersFrequency - Analyzes and displays character frequency
@@ -6,16 +6,13 @@ function CharactersFrequency() {
   const { phrase, updatePhrase } = useContext(PhraseContext);
 
   // Calculate character frequency (excluding spaces)
-  const charFrequency = useMemo(() => {
-    const chars = phrase.toLowerCase().replace(/\s/g, '').split('');
-    const freq = {};
-    chars.forEach(char => {
-      if (char.match(/[a-z]/)) {  // Only letters
-        freq[char] = (freq[char] || 0) + 1;
-      }
-    });
-    return freq;
-  }, [phrase]);
+  const chars = phrase.toLowerCase().replace(/\s/g, '').split('');
+  const charFrequency = {};
+  chars.forEach(char => {
+    if (char.match(/[a-z]/)) {  // Only letters
+      charFrequency[char] = (charFrequency[char] || 0) + 1;
+    }
+  });
 
   const totalChars = Object.values(charFrequency).reduce((sum, count) => sum + count, 0);
   const uniqueChars = Object.keys(charFrequency).length;

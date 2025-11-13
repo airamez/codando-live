@@ -188,7 +188,7 @@
 .frequency-card th {
   text-align: left;
   border-bottom: 1px solid #ddd;
-  padding: 5px;
+  padding: 3px 5px;
   font-size: 13px;
   color: #333;
 }
@@ -198,7 +198,7 @@
 }
 
 .frequency-card td {
-  padding: 5px;
+  padding: 2px 5px;
   font-size: 13px;
   color: #333;
 }
@@ -208,7 +208,7 @@
 }
 
 .frequency-card td.empty-state {
-  padding: 10px;
+  padding: 8px;
   text-align: center;
   color: #999;
   font-size: 13px;

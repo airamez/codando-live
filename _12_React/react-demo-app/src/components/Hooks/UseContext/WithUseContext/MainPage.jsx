@@ -22,7 +22,6 @@ function MainPage() {
   return (
     <PhraseContext.Provider value={value}>
       <div className="example-container">
-        <h4>WITH useContext</h4>
         <Phrase />
         <Container />
       </div>

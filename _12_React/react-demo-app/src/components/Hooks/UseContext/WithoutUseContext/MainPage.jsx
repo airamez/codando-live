@@ -5,7 +5,7 @@ import Container from './Container';
 
 // MainPage - Owns state and must pass props through all levels
 function MainPage() {
-  const [phrase, setPhrase] = useState('Hello World from React Context');
+  const [phrase, setPhrase] = useState('Hello World from React Context world');
 
   const updatePhrase = (newPhrase) => {
     setPhrase(newPhrase);
@@ -13,7 +13,6 @@ function MainPage() {
 
   return (
     <div className="example-container">
-      <h4>WITHOUT useContext</h4>
       <Phrase phrase={phrase} updatePhrase={updatePhrase} />
       <Container phrase={phrase} updatePhrase={updatePhrase} />
     </div>
