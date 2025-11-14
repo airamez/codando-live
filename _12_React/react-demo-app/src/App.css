@@ -48,3 +48,22 @@
 .read-the-docs {
   color: #888;
 }
+
+.routing-link-container {
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+.routing-link {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.routing-link:hover {
+  background-color: #0056b3;
+}

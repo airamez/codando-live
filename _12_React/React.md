@@ -2735,6 +2735,985 @@ export default UseMemo;
 - **"Refresh Todos" button**: Changes `refreshTrigger` → triggers useEffect → fetches new data → todos change → useMemo recalculates
 - **"Force Re-render" button**: Changes `renderCount` → component re-renders → useMemo does NOT recalculate
 
-#### 15. Component Lifecycle
+#### 15. Routing
 
-#### 16. Routing
+**React Router** is the standard library for routing in React applications. It enables navigation between different views/pages in a single-page application (SPA) without full page reloads, creating a seamless user experience.
+
+**Documentation:**
+
+* [React Router Documentation](https://reactrouter.com/) - Official React Router documentation
+* [Tutorial](https://reactrouter.com/en/main/start/tutorial) - Step-by-step guide to React Router
+* [API Reference](https://reactrouter.com/en/main/route/route) - Complete API documentation
+
+**Key Concepts:**
+
+* **Single Page Application (SPA)**: Only the initial page loads from the server; subsequent navigation updates the view without page reloads
+* **Client-Side Routing**: JavaScript handles URL changes and renders appropriate components
+* **Browser History API**: React Router uses the browser's History API to manipulate the URL
+* **Declarative Routing**: Define routes as React components using JSX
+* **Nested Routes**: Routes can be nested to create hierarchical layouts
+
+**Why Use React Router:**
+
+* **Navigation without page reloads**: Faster, smoother user experience
+* **Bookmarkable URLs**: Users can bookmark and share specific views
+* **Browser back/forward**: Standard browser navigation works
+* **URL parameters**: Pass data through URLs (e.g., `/user/123`)
+* **Nested layouts**: Reusable layouts with nested content areas
+* **Programmatic navigation**: Navigate from code (after form submission, etc.)
+
+---
+
+##### Installation
+
+Install React Router for web applications:
+
+```bash
+npm install react-router-dom
+```
+
+##### Basic Setup
+
+**Step 1: Wrap your app with BrowserRouter**
+
+The `BrowserRouter` component provides the routing context to your entire application. Wrap your app's root component:
+
+```jsx
+// main.jsx or index.jsx
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import App from './App.jsx'
+import './index.css'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>,
+)
+```
+
+**Step 2: Define routes in your App component**
+
+Use `Routes` and `Route` components to define which component renders for each URL:
+
+```jsx
+// App.jsx
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+    </Routes>
+  );
+}
+
+export default App;
+```
+
+**What each component does:**
+
+| Component | Purpose | Usage |
+|-----------|---------|-------|
+| `<BrowserRouter>` | Provides routing context | Wrap root component once |
+| `<Routes>` | Container for route definitions | Contains all `<Route>` elements |
+| `<Route>` | Defines a route | `path` + `element` pair |
+
+---
+
+##### Navigation with Link
+
+Use the `Link` component instead of `<a>` tags to navigate without page reloads:
+
+```jsx
+import { Link } from 'react-router-dom';
+
+function Navigation() {
+  return (
+    <nav>
+      <Link to="/">Home</Link>
+      <Link to="/about">About</Link>
+      <Link to="/contact">Contact</Link>
+    </nav>
+  );
+}
+```
+
+**Link vs `<a>` tag:**
+
+| Feature | `<Link>` | `<a>` tag |
+|---------|----------|-----------|
+| **Page reload** | No - SPA navigation | Yes - full reload |
+| **Speed** | Fast - only updates components | Slow - reloads everything |
+| **State preservation** | Yes - React state persists | No - state is lost |
+| **Usage** | Internal navigation | External links only |
+
+---
+
+##### Core Routing Components
+
+
+##### Routes and Route
+
+```jsx
+import { Routes, Route } from 'react-router-dom';
+
+<Routes>
+  {/* Basic route */}
+  <Route path="/" element={<Home />} />
+  
+  {/* Route with parameter */}
+  <Route path="/user/:id" element={<UserProfile />} />
+  
+  {/* Nested routes */}
+  <Route path="/products" element={<ProductsLayout />}>
+    <Route index element={<ProductList />} />
+    <Route path=":id" element={<ProductDetails />} />
+  </Route>
+  
+  {/* Catch-all route (404) */}
+  <Route path="*" element={<NotFound />} />
+</Routes>
+```
+
+##### Link and NavLink
+
+```jsx
+import { Link, NavLink } from 'react-router-dom';
+
+// Link - Basic navigation
+<Link to="/about">About Us</Link>
+<Link to="/user/123">View User</Link>
+
+// NavLink - Adds 'active' class when route matches
+<NavLink 
+  to="/about"
+  className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+>
+  About
+</NavLink>
+
+// NavLink with style function
+<NavLink
+  to="/contact"
+  style={({ isActive }) => ({
+    color: isActive ? 'red' : 'black',
+    fontWeight: isActive ? 'bold' : 'normal'
+  })}
+>
+  Contact
+</NavLink>
+```
+
+##### Navigate Component (Redirects)
+
+```jsx
+import { Navigate } from 'react-router-dom';
+
+// Redirect from one route to another
+<Route path="/old-path" element={<Navigate to="/new-path" replace />} />
+
+// Conditional redirect
+function ProtectedRoute({ isAuthenticated, children }) {
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+}
+```
+
+---
+
+##### URL Parameters
+
+**Reading URL Parameters with useParams Hook:**
+
+```jsx
+import { useParams } from 'react-router-dom';
+
+// Route definition
+<Route path="/user/:userId/post/:postId" element={<UserPost />} />
+
+// Component
+function UserPost() {
+  const { userId, postId } = useParams();
+  
+  return (
+    <div>
+      <h2>User ID: {userId}</h2>
+      <p>Post ID: {postId}</p>
+    </div>
+  );
+}
+
+// URL: /user/42/post/7
+// Result: userId = "42", postId = "7"
+```
+
+**Important:** URL parameters are always strings. Convert to numbers if needed:
+
+```jsx
+const { userId } = useParams();
+const userIdNumber = parseInt(userId);
+```
+
+---
+
+##### Query Parameters (Search Params)
+
+**Reading and Setting Query Params with useSearchParams Hook:**
+
+```jsx
+import { useSearchParams } from 'react-router-dom';
+
+function ProductList() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  
+  // Read query parameters
+  const category = searchParams.get('category'); // ?category=electronics
+  const sortBy = searchParams.get('sort'); // ?sort=price
+  const page = searchParams.get('page') || '1'; // Default to '1'
+  
+  // Set/update query parameters
+  const handleCategoryChange = (newCategory) => {
+    setSearchParams({ category: newCategory, sort: sortBy });
+  };
+  
+  return (
+    <div>
+      <h2>Products - Category: {category || 'All'}</h2>
+      <button onClick={() => handleCategoryChange('electronics')}>
+        Electronics
+      </button>
+      <button onClick={() => handleCategoryChange('books')}>
+        Books
+      </button>
+      <p>Page: {page}</p>
+    </div>
+  );
+}
+
+// URL: /products?category=electronics&sort=price&page=2
+// category = "electronics"
+// sort = "price"
+// page = "2"
+```
+
+---
+
+##### Programmatic Navigation
+
+**Navigate programmatically using the useNavigate hook:**
+
+```jsx
+import { useNavigate } from 'react-router-dom';
+
+function LoginForm() {
+  const navigate = useNavigate();
+  
+  const handleLogin = async (credentials) => {
+    const success = await loginUser(credentials);
+    
+    if (success) {
+      // Navigate to dashboard after successful login
+      navigate('/dashboard');
+    }
+  };
+  
+  const handleCancel = () => {
+    // Go back to previous page
+    navigate(-1);
+  };
+  
+  return (
+    <form onSubmit={handleLogin}>
+      {/* form fields */}
+      <button type="submit">Login</button>
+      <button type="button" onClick={handleCancel}>Cancel</button>
+    </form>
+  );
+}
+```
+
+**Navigate Options:**
+
+```jsx
+const navigate = useNavigate();
+
+// Navigate to specific path
+navigate('/home');
+
+// Navigate with state (data passed to destination)
+navigate('/user/profile', { state: { from: 'login' } });
+
+// Replace current history entry (can't go back)
+navigate('/home', { replace: true });
+
+// Go back/forward in history
+navigate(-1); // Back one page
+navigate(-2); // Back two pages
+navigate(1);  // Forward one page
+```
+
+---
+
+##### Nested Routes and Outlets
+
+**Nested routes allow you to create layouts with child routes that render inside the parent:**
+
+```jsx
+// App.jsx - Define nested routes
+import { Routes, Route } from 'react-router-dom';
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="products" element={<ProductsLayout />}>
+          <Route index element={<ProductList />} />
+          <Route path=":id" element={<ProductDetails />} />
+        </Route>
+      </Route>
+    </Routes>
+  );
+}
+```
+
+```jsx
+// Layout.jsx - Parent layout with Outlet
+import { Outlet, Link } from 'react-router-dom';
+
+function Layout() {
+  return (
+    <div>
+      <header>
+        <nav>
+          <Link to="/">Home</Link>
+          <Link to="/about">About</Link>
+          <Link to="/products">Products</Link>
+        </nav>
+      </header>
+      
+      <main>
+        {/* Child routes render here */}
+        <Outlet />
+      </main>
+      
+      <footer>
+        <p>&copy; 2025 My App</p>
+      </footer>
+    </div>
+  );
+}
+```
+
+**How Nested Routes Work:**
+
+1. **Parent Route**: Defines the layout structure (header, nav, footer)
+2. **`<Outlet />`**: Placeholder where child route components render
+3. **Child Routes**: Render inside the parent's `<Outlet />`
+4. **Index Route**: Default child route when parent path matches exactly
+
+**URL Hierarchy:**
+
+```
+/ → Layout + Home (index route)
+/about → Layout + About
+/products → Layout + ProductsLayout + ProductList (index)
+/products/123 → Layout + ProductsLayout + ProductDetails
+```
+
+---
+
+##### Protected Routes (Authentication)
+
+**Create a wrapper component to protect routes that require authentication:**
+
+```jsx
+import { Navigate, useLocation } from 'react-router-dom';
+
+function ProtectedRoute({ isAuthenticated, children }) {
+  const location = useLocation();
+  
+  if (!isAuthenticated) {
+    // Redirect to login, save attempted location
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+  
+  return children;
+}
+
+// Usage in App.jsx
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+  return (
+    <Routes>
+      <Route path="/login" element={<Login setAuth={setIsAuthenticated} />} />
+      
+      {/* Protected routes */}
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <Dashboard />
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
+        path="/profile" 
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <Profile />
+          </ProtectedRoute>
+        } 
+      />
+    </Routes>
+  );
+}
+```
+
+**Login Component with Redirect:**
+
+```jsx
+import { useNavigate, useLocation } from 'react-router-dom';
+
+function Login({ setAuth }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Get the page user tried to access
+  const from = location.state?.from?.pathname || '/dashboard';
+  
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // Perform authentication...
+    setAuth(true);
+    
+    // Redirect to original destination or dashboard
+    navigate(from, { replace: true });
+  };
+  
+  return <form onSubmit={handleLogin}>{/* login form */}</form>;
+}
+```
+
+---
+
+##### 404 Not Found Page
+
+**Catch-all route for handling non-existent paths:**
+
+```jsx
+import { Routes, Route, Link } from 'react-router-dom';
+
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      
+      {/* Catch-all route - must be last */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
+
+function NotFound() {
+  return (
+    <div style={{ textAlign: 'center', padding: '50px' }}>
+      <h1>404 - Page Not Found</h1>
+      <p>The page you're looking for doesn't exist.</p>
+      <Link to="/">Go back to Home</Link>
+    </div>
+  );
+}
+```
+
+**Important:** The `path="*"` route must be the **last** route, as it matches any unmatched path.
+
+---
+
+##### Lazy Loading Routes
+
+**Code splitting and lazy loading improve performance by loading route components only when needed:**
+
+```jsx
+import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+
+// Lazy load route components
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Products = lazy(() => import('./pages/Products'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </Suspense>
+  );
+}
+```
+
+**Benefits:**
+
+* **Smaller initial bundle**: App loads faster
+* **On-demand loading**: Components load when user navigates to them
+* **Better performance**: Especially important for large applications
+
+---
+
+##### Complete Routing Example
+
+**Example Files Location:** `_12_React/react-demo-app/src/components/routing/`
+
+The complete routing example includes all component files demonstrating multiple routing concepts. See the README.md in the routing folder for full documentation.
+
+**Quick Start - Add to Your App:**
+
+To use the routing example in your application, update your `App.jsx`:
+
+```jsx
+// App.jsx
+import RoutingApp from './components/routing/RoutingApp';
+
+function App() {
+  return (
+    <div>
+      <h1>React Demo Application</h1>
+      
+      {/* Add the routing example */}
+      <RoutingApp />
+      
+      {/* Or add other components */}
+    </div>
+  );
+}
+
+export default App;
+```
+
+**Note:** Make sure `main.jsx` wraps the app with `<BrowserRouter>`:
+
+```jsx
+// main.jsx
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import App from './App.jsx'
+import './index.css'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>,
+)
+```
+
+**Standalone Version:**
+
+The routing example can also be used as a standalone app by replacing your App.jsx completely:
+
+```jsx
+// App.jsx - Standalone routing demo
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/routing/Layout';
+import Home from './components/routing/Home';
+import About from './components/routing/About';
+import Products from './components/routing/Products';
+import ProductDetails from './components/routing/ProductDetails';
+import NotFound from './components/routing/NotFound';
+
+function App() {
+  return (
+    <Routes>
+      {/* Layout wrapper for all routes */}
+      <Route path="/" element={<Layout />}>
+        {/* Index route */}
+        <Route index element={<Home />} />
+        
+        {/* Simple routes */}
+        <Route path="about" element={<About />} />
+        
+        {/* Route with parameter */}
+        <Route path="products">
+          <Route index element={<Products />} />
+          <Route path=":id" element={<ProductDetails />} />
+        </Route>
+        
+        {/* 404 - must be last */}
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  );
+}
+
+export default App;
+```
+
+**Component Examples:**
+
+Below are simplified examples of the routing components. The complete, production-ready implementations with full styling are available in `_12_React/react-demo-app/src/components/routing/`.
+
+**Layout Component** (example: `components/routing/Layout.jsx`):
+
+```jsx
+import { Outlet, NavLink } from 'react-router-dom';
+import './Layout.css';
+
+function Layout() {
+  return (
+    <div className="layout">
+      <header>
+        <nav>
+          <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>
+            Home
+          </NavLink>
+          <NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''}>
+            About
+          </NavLink>
+          <NavLink to="/products" className={({ isActive }) => isActive ? 'active' : ''}>
+            Products
+          </NavLink>
+        </nav>
+      </header>
+      
+      <main>
+        <Outlet />
+      </main>
+      
+      <footer>
+        <p>&copy; 2025 React Router Demo</p>
+      </footer>
+    </div>
+  );
+}
+
+export default Layout;
+```
+
+**Products Component** (example: `components/routing/Products.jsx`):
+
+```jsx
+import { Link, useSearchParams } from 'react-router-dom';
+import './Products.css';
+
+function Products() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const category = searchParams.get('category') || 'all';
+  
+  const products = [
+    { id: 1, name: 'Laptop', category: 'electronics' },
+    { id: 2, name: 'Book', category: 'books' },
+    { id: 3, name: 'Phone', category: 'electronics' },
+    { id: 4, name: 'Desk', category: 'furniture' },
+  ];
+  
+  const filteredProducts = category === 'all' 
+    ? products 
+    : products.filter(p => p.category === category);
+  
+  return (
+    <div>
+      <h1>Products</h1>
+      
+      <div className="filters">
+        <button onClick={() => setSearchParams({})}>All</button>
+        <button onClick={() => setSearchParams({ category: 'electronics' })}>
+          Electronics
+        </button>
+        <button onClick={() => setSearchParams({ category: 'books' })}>
+          Books
+        </button>
+        <button onClick={() => setSearchParams({ category: 'furniture' })}>
+          Furniture
+        </button>
+      </div>
+      
+      <ul>
+        {filteredProducts.map(product => (
+          <li key={product.id}>
+            <Link to={`/products/${product.id}`}>
+              {product.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default Products;
+```
+
+**ProductDetails Component** (example: `components/routing/ProductDetails.jsx`):
+
+```jsx
+import { useParams, useNavigate } from 'react-router-dom';
+
+function ProductDetails() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  
+  // In real app, fetch product by id
+  const product = {
+    id,
+    name: 'Product ' + id,
+    description: 'This is a sample product.',
+    price: 99.99
+  };
+  
+  return (
+    <div>
+      <button onClick={() => navigate('/products')}>← Back to Products</button>
+      <h1>{product.name}</h1>
+      <p>{product.description}</p>
+      <p><strong>Price:</strong> ${product.price}</p>
+    </div>
+  );
+}
+
+export default ProductDetails;
+```
+
+---
+
+##### Best Practices
+
+**1. Route Organization:**
+```jsx
+// ✅ Good - Routes in one place, clear hierarchy
+<Routes>
+  <Route path="/" element={<Layout />}>
+    <Route index element={<Home />} />
+    <Route path="about" element={<About />} />
+    <Route path="contact" element={<Contact />} />
+  </Route>
+</Routes>
+
+// ❌ Bad - Routes scattered, hard to maintain
+function App() {
+  return (
+    <>
+      <Routes><Route path="/" element={<Home />} /></Routes>
+      {/* ... other code ... */}
+      <Routes><Route path="/about" element={<About />} /></Routes>
+    </>
+  );
+}
+```
+
+**2. Use NavLink for Navigation Menus:**
+```jsx
+// ✅ Good - Visual feedback for active route
+<NavLink to="/about" className={({ isActive }) => isActive ? 'active' : ''}>
+  About
+</NavLink>
+
+// ❌ Bad - No visual feedback
+<Link to="/about">About</Link>
+```
+
+**3. Always Use Link for Internal Navigation:**
+```jsx
+// ✅ Good - No page reload, fast SPA navigation
+<Link to="/about">About</Link>
+
+// ❌ Bad - Full page reload, loses React state
+<a href="/about">About</a>
+```
+
+**4. Handle 404s:**
+```jsx
+// ✅ Good - Catch unmatched routes
+<Route path="*" element={<NotFound />} />
+
+// ❌ Bad - No fallback, blank page on invalid URL
+```
+
+**5. Use Lazy Loading for Large Apps:**
+```jsx
+// ✅ Good - Smaller initial bundle
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+
+// ❌ Bad - Everything loaded upfront
+import Dashboard from './pages/Dashboard';
+```
+
+**6. URL Parameter Type Conversion:**
+```jsx
+// ✅ Good - Convert string to number
+const { id } = useParams();
+const userId = parseInt(id, 10);
+
+// ❌ Bad - Using string as number
+const { id } = useParams();
+fetchUser(id); // id is string "123", not number 123
+```
+
+---
+
+##### Common Patterns
+
+**Pattern 1: Breadcrumb Navigation**
+
+```jsx
+import { useLocation, Link } from 'react-router-dom';
+
+function Breadcrumbs() {
+  const location = useLocation();
+  const pathnames = location.pathname.split('/').filter(x => x);
+  
+  return (
+    <nav className="breadcrumbs">
+      <Link to="/">Home</Link>
+      {pathnames.map((name, index) => {
+        const to = `/${pathnames.slice(0, index + 1).join('/')}`;
+        const isLast = index === pathnames.length - 1;
+        
+        return isLast ? (
+          <span key={to}> / {name}</span>
+        ) : (
+          <span key={to}>
+            {' / '}
+            <Link to={to}>{name}</Link>
+          </span>
+        );
+      })}
+    </nav>
+  );
+}
+```
+
+**Pattern 2: Scroll to Top on Route Change**
+
+```jsx
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+}
+
+// Use in App.jsx
+function App() {
+  return (
+    <>
+      <ScrollToTop />
+      <Routes>
+        {/* routes */}
+      </Routes>
+    </>
+  );
+}
+```
+
+**Pattern 3: Route-based Page Titles**
+
+```jsx
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
+const routeTitles = {
+  '/': 'Home',
+  '/about': 'About Us',
+  '/products': 'Products',
+  '/contact': 'Contact Us',
+};
+
+function PageTitle() {
+  const location = useLocation();
+  
+  useEffect(() => {
+    const title = routeTitles[location.pathname] || 'Page';
+    document.title = `${title} | My App`;
+  }, [location]);
+  
+  return null;
+}
+```
+
+---
+
+##### Troubleshooting
+
+**Problem: Blank page on route change**
+```jsx
+// ❌ Missing <Routes> wrapper
+<Route path="/" element={<Home />} />
+
+// ✅ Wrap routes in <Routes>
+<Routes>
+  <Route path="/" element={<Home />} />
+</Routes>
+```
+
+**Problem: 404 on page refresh in production**
+
+This happens with `BrowserRouter` when the server doesn't handle client-side routes.
+
+**Solution:** Configure server to serve `index.html` for all routes, or use `HashRouter`:
+
+```jsx
+// Option 1: Use HashRouter (quick fix)
+import { HashRouter } from 'react-router-dom';
+<HashRouter><App /></HashRouter>
+
+// Option 2: Configure server (better solution)
+// For Apache, add .htaccess:
+// RewriteEngine On
+// RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+// RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+// RewriteRule ^ - [L]
+// RewriteRule ^ /index.html [L]
+```
+
+**Problem: useParams returns undefined**
+
+```jsx
+// ❌ Parameter name doesn't match
+<Route path="/user/:userId" element={<User />} />
+
+function User() {
+  const { id } = useParams(); // Wrong: should be 'userId'
+  // id is undefined
+}
+
+// ✅ Match parameter name
+function User() {
+  const { userId } = useParams(); // Correct
+}
+```
+
+#### React Development Tools
+
+https://react.dev/learn/react-developer-tools
+
+![React Dev Tools](./images/react-dev-tools.png)

@@ -1,0 +1,186 @@
+/* RoutingApp styles */
+.routing-container {
+  border: 2px solid #282c34;
+  padding: 20px;
+}
+
+.routing-header {
+  background-color: #282c34;
+  color: white;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.routing-header h3 {
+  margin: 0 0 5px 0;
+}
+
+.routing-header-route {
+  margin: 5px 0;
+  font-size: 0.9em;
+  color: #61dafb;
+}
+
+.routing-nav {
+  margin-top: 15px;
+}
+
+.nav-button {
+  border: 1px solid #fff;
+  padding: 8px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.nav-button-inactive {
+  background-color: transparent;
+  color: #fff;
+}
+
+.nav-button-active {
+  background-color: #61dafb;
+  color: #000;
+}
+
+.routing-content {
+  padding: 20px;
+}
+
+/* Home styles */
+.home-welcome {
+  margin-top: 30px;
+}
+
+.home-card {
+  border: 2px solid #61dafb;
+  padding: 20px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  background-color: #f0f8ff;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.home-card h3 {
+  margin: 0 0 10px 0;
+  color: #282c34;
+}
+
+.home-card p {
+  margin: 0;
+  color: #666;
+}
+
+/* Table styles */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+}
+
+.data-table thead tr {
+  background-color: #282c34;
+  color: white;
+}
+
+.data-table th {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.data-table th.center {
+  text-align: center;
+}
+
+.data-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+.data-table td.center {
+  text-align: center;
+}
+
+.data-table td.gray {
+  color: #666;
+}
+
+.data-table td.bold {
+  font-weight: bold;
+}
+
+.data-table td.small {
+  font-size: 0.9em;
+}
+
+.data-table tbody tr {
+  transition: background-color 0.2s;
+}
+
+.data-table tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* Button styles */
+.btn {
+  padding: 8px 16px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #007bff;
+}
+
+.btn-success {
+  background-color: #28a745;
+}
+
+/* User info box */
+.user-info-box {
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.user-info-box p {
+  margin: 5px 0;
+  color: #333;
+}
+
+/* Post info box */
+.post-info-box {
+  background-color: #e8f4f8;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.post-info-box h2 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.post-info-box p {
+  margin: 5px 0;
+  color: #333;
+}
+
+.post-info-box .post-body {
+  margin-top: 15px;
+  color: #333;
+}
+
+/* Comments section */
+.comments-heading {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}

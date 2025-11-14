@@ -1,4 +1,5 @@
 import { useState } from 'react' // Hook: useState for local component state
+import { Link } from 'react-router-dom'
 import './App.css'
 
 import HelloWorld from './components/HelloWorld'
@@ -24,6 +25,7 @@ import UseEffect from './components/Hooks/UseEffect'
 import UseMemo from './components/Hooks/UseMemo'
 import WithoutUseContext from './components/Hooks/UseContext/WithoutUseContext/MainPage'
 import WithUseContext from './components/Hooks/UseContext/WithUseContext/MainPage'
+import RoutingApp from './components/routing/RoutingApp'
 
 
 function App() {
@@ -97,6 +99,11 @@ function App() {
   const [textControlled, setTextControlled] = useState('Leila')
   const [cart, setCart] = useState([]);
 
+  const handleExampleChange = (e) => {
+    const value = e.target.value;
+    setSelectedExample(value);
+  };
+
   // Product objects for ProductCardImproved demonstration
   const products = [
     {
@@ -136,12 +143,18 @@ function App() {
 
   return (
     <>
+      <div className="routing-link-container">
+        <Link to="/routing" className="routing-link">
+          Routing Example
+        </Link>
+      </div>
+
       <div style={{ marginTop: 12 }}>
         <label htmlFor="exampleSelect">Show example: {selectedExample}</label>
         <select
           id="exampleSelect"
           value={selectedExample}
-          onChange={(e) => setSelectedExample(e.target.value)}
+          onChange={handleExampleChange}
           style={{ marginLeft: 8 }}
         >
           <option value="">Select an example</option>
