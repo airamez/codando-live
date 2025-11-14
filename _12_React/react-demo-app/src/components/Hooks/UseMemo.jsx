@@ -1,127 +1,125 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import './hooks.css';
 
 function UseMemo() {
-  const [count, setCount] = useState(0);
-  const [items] = useState(() =>
-    Array.from({ length: 1000 }, (_, i) => ({
-      id: i,
-      name: `Item ${i}`,
-      value: Math.floor(Math.random() * 1000)
-    }))
-  );
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [todos, setTodos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [renderCount, setRenderCount] = useState(0);
 
-  // Example 1: Expensive calculation
-  // Without useMemo, this runs on every render (even when count changes)
-  const expensiveCalculation = useMemo(() => {
-    console.log('Running expensive calculation...');
-    let result = 0;
-    for (let i = 0; i < 1000000; i++) {
-      result += i;
-    }
-    return result;
-  }, []); // Empty array = calculate once
-
-  // Example 2: Filtered list
-  const filteredItems = useMemo(() => {
-    console.log('Filtering items...');
-    return items.filter(item =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [items, searchTerm]);
-
-  // Example 3: Sorted and filtered list
-  const sortedAndFilteredItems = useMemo(() => {
-    console.log('Sorting and filtering...');
-    const filtered = items.filter(item =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    return filtered.sort((a, b) => {
-      if (sortOrder === 'asc') {
-        return a.value - b.value;
-      } else {
-        return b.value - a.value;
+  // Fetch todos from API on component mount or when refreshTrigger changes
+  useEffect(() => {
+    const fetchTodos = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+        const data = await response.json();
+        setTodos(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching todos:', error);
+        setLoading(false);
       }
-    });
-  }, [items, searchTerm, sortOrder]);
+    };
 
-  // Example 4: Derived statistics
-  const statistics = useMemo(() => {
-    console.log('Calculating statistics...');
-    const values = filteredItems.map(item => item.value);
-    const sum = values.reduce((acc, val) => acc + val, 0);
-    const avg = values.length > 0 ? sum / values.length : 0;
-    const max = values.length > 0 ? Math.max(...values) : 0;
-    const min = values.length > 0 ? Math.min(...values) : 0;
+    fetchTodos();
+  }, [refreshTrigger]); // Re-fetch when refreshTrigger changes
 
-    return { sum, avg, max, min, count: values.length };
-  }, [filteredItems]);
+  // useMemo: Process todos to generate statistics
+  // This expensive calculation only runs when todos change, not on every render
+  const todoStats = useMemo(() => {
+    console.log('📊 Processing todo statistics...');
+    const completed = todos.filter(todo => todo.completed).length;
+    const pending = todos.length - completed;
+    const completionRate = todos.length > 0 ? ((completed / todos.length) * 100).toFixed(1) : 0;
+
+    // Group todos by userId using reduce
+    // acc (accumulator) starts as an empty object {}
+    // For each todo, we create/update a user entry with their stats
+    const byUser = todos.reduce((summary, todo) => {
+      // If this user doesn't exist in accumulator yet, initialize their stats
+      if (!summary[todo.userId]) {
+        summary[todo.userId] = { completed: 0, pending: 0, total: 0 };
+      }
+      // Increment total count for this user
+      summary[todo.userId].total++;
+      // Increment either completed or pending count based on todo status
+      if (todo.completed) {
+        summary[todo.userId].completed++;
+      } else {
+        summary[todo.userId].pending++;
+      }
+      // Return accumulator for next iteration
+      return summary;
+    }, {}); // Initial value: empty object
+
+    return {
+      total: todos.length,
+      completed,
+      pending,
+      completionRate,
+      byUser
+    };
+  }, [todos]); // Only recalculate when todos change
+
+  if (loading) return <div className="hook-example-section">Loading todos...</div>;
 
   return (
     <div className="hook-example-section">
-      <h3>useMemo Examples</h3>
-
-      {/* Trigger re-renders */}
+      <h3>useMemo Example - Todo Statistics</h3>
       <div className="hook-example-section">
-        <h4>Trigger Re-render</h4>
-        <p>Count: {count} (triggers re-render but not recalculation)</p>
-        <button onClick={() => setCount(count + 1)}>Increment Count</button>
-        <p><small>Check console - memoized values don't recalculate!</small></p>
-      </div>
-
-      {/* Expensive calculation */}
-      <div className="hook-example-section">
-        <h4>Expensive Calculation (cached)</h4>
-        <p>Result: {expensiveCalculation}</p>
-        <p><small>This only calculates once, not on every render!</small></p>
-      </div>
-
-      {/* Filtered and sorted list */}
-      <div className="hook-example-section">
-        <h4>Filtered & Sorted Items</h4>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search items..."
-          className="use-memo-input"
-        />
-        <button onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
-          Sort: {sortOrder === 'asc' ? '↑ Ascending' : '↓ Descending'}
+        <button onClick={() => setRefreshTrigger(refreshTrigger + 1)}>
+          Refresh Todos
         </button>
-
-        <div className="use-memo-stats">
-          <h5>Statistics</h5>
-          <p>Count: {statistics.count}</p>
-          <p>Sum: {statistics.sum}</p>
-          <p>Average: {statistics.avg.toFixed(2)}</p>
-          <p>Max: {statistics.max}</p>
-          <p>Min: {statistics.min}</p>
+        <button onClick={() => setRenderCount(renderCount + 1)} style={{ marginLeft: '10px' }}>
+          Force Re-render ({renderCount})
+        </button>
+        <div className="use-memo-stats-grid">
+          <div className="use-memo-stat-card total">
+            <div className="use-memo-stat-value">{todoStats.total}</div>
+            <div className="use-memo-stat-label">Total Todos</div>
+          </div>
+          <div className="use-memo-stat-card completed">
+            <div className="use-memo-stat-value">{todoStats.completed}</div>
+            <div className="use-memo-stat-label">Completed</div>
+          </div>
+          <div className="use-memo-stat-card pending">
+            <div className="use-memo-stat-value">{todoStats.pending}</div>
+            <div className="use-memo-stat-label">Pending</div>
+          </div>
+          <div className="use-memo-stat-card rate">
+            <div className="use-memo-stat-value">{todoStats.completionRate}%</div>
+            <div className="use-memo-stat-label">Completion Rate</div>
+          </div>
         </div>
 
-        <div className="use-memo-items-container">
-          {sortedAndFilteredItems.slice(0, 20).map(item => (
-            <div key={item.id} className="use-memo-item">
-              {item.name} - Value: {item.value}
-            </div>
-          ))}
+        <h4>Statistics by User</h4>
+        <div className="use-memo-todos-container use-memo-table-container">
+          <table className="use-memo-table">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Total</th>
+                <th>Completed</th>
+                <th>Pending</th>
+                <th>Completion %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(todoStats.byUser).map(([userId, stats]) => (
+                <tr key={userId}>
+                  <td>User {userId}</td>
+                  <td className="center">{stats.total}</td>
+                  <td className="center completed-text">{stats.completed}</td>
+                  <td className="center pending-text">{stats.pending}</td>
+                  <td className="center">
+                    {((stats.completed / stats.total) * 100).toFixed(1)}%
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <p>Showing 20 of {sortedAndFilteredItems.length} items</p>
-      </div>
-
-      {/* Explanation */}
-      <div className="use-memo-explanation">
-        <h4>When to use useMemo?</h4>
-        <ul style={{ textAlign: 'left' }}>
-          <li>Expensive calculations that don't need to run every render</li>
-          <li>Filtering or sorting large datasets</li>
-          <li>Complex derived state calculations</li>
-          <li>Preventing unnecessary child re-renders (pass memoized objects)</li>
-          <li><strong>Don't overuse:</strong> Simple calculations are faster without useMemo</li>
-        </ul>
       </div>
     </div>
   );

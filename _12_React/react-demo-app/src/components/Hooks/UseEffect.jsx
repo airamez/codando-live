@@ -10,9 +10,6 @@ function UseEffect() {
 
   // Effect 1: Fetch list of posts when component mounts
   useEffect(() => {
-
-    debugger;
-
     fetch('https://jsonplaceholder.typicode.com/posts?_limit=10')
       .then(response => response.json())
       .then(data => {
@@ -27,9 +24,6 @@ function UseEffect() {
 
   // Effect 2: Fetch post details when selectedPostId changes
   useEffect(() => {
-
-    debugger;
-
     if (!selectedPostId) {
       setPostDetails(null);
       return;

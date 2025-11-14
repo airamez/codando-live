@@ -171,256 +171,287 @@ function App() {
         </select>
       </div>
 
-      <section style={{ display: selectedExample === 'hello' ? 'block' : 'none' }}>
-        <HelloWorld />
-      </section>
+      {selectedExample === 'hello' && (
+        <section>
+          <HelloWorld />
+        </section>
+      )}
 
-      <section style={{ display: selectedExample === 'months' ? 'block' : 'none' }}>
-        <div>
-          <label>
-            Choose month 1:{' '}
-            {
-              /* Props:
-                - value: current selected month (from parent state)
-                - onChange: callback the child calls with the new month
-              */
-            }
-            <MonthsDropdown value={month1} onChange={setMonth1} />
-            <MonthsDropdown value={month2} onChange={setMonth2} />
-          </label>
-          <p>Selected months: {month1} - {month2}</p>
-        </div>
-      </section>
+      {selectedExample === 'months' && (
+        <section>
+          <div>
+            <label>
+              Choose month 1:{' '}
+              {
+                /* Props:
+                  - value: current selected month (from parent state)
+                  - onChange: callback the child calls with the new month
+                */
+              }
+              <MonthsDropdown value={month1} onChange={setMonth1} />
+              <MonthsDropdown value={month2} onChange={setMonth2} />
+            </label>
+            <p>Selected months: {month1} - {month2}</p>
+          </div>
+        </section>
+      )}
 
-      {/* Sections toggle visibility via CSS (display) */}
+      {/* Sections toggle visibility via conditional rendering */}
       <div style={{ marginTop: 16 }}>
 
-        <section
-          style={{ display: selectedExample === 'comments' ? 'block' : 'none' }}>
-          <h3>1) Comments</h3>
-          <ExampleComments />
-        </section>
+        {selectedExample === 'comments' && (
+          <section>
+            <h3>1) Comments</h3>
+            <ExampleComments />
+          </section>
+        )}
 
-        <section
-          style={{ display: selectedExample === 'storeJSX' ? 'block' : 'none' }}>
-          <h3>2) JSX as variables</h3>
-          <SimpleLayout />
-        </section>
+        {selectedExample === 'storeJSX' && (
+          <section>
+            <h3>2) JSX as variables</h3>
+            <SimpleLayout />
+          </section>
+        )}
 
-        <section
-          style={{ display: selectedExample === 'dynamicStyles' ? 'block' : 'none' }}>
-          <h3>3) Dynamic CSS Styles</h3>
-          <DynamicStyles initialColor="white" initialSize={18} />
-        </section>
+        {selectedExample === 'dynamicStyles' && (
+          <section>
+            <h3>3) Dynamic CSS Styles</h3>
+            <DynamicStyles initialColor="white" initialSize={18} />
+          </section>
+        )}
 
-        <section
-          style={{ display: selectedExample === 'embed' ? 'block' : 'none' }}>
-          <h3>4) Embed expressions Demo</h3>
-          <Price amount={95.10} taxRate={0.35} />
-          <Price amount={29.90} taxRate={0.12} />
-          <Price amount={150.00} taxRate={0.50} />
-        </section>
+        {selectedExample === 'embed' && (
+          <section>
+            <h3>4) Embed expressions Demo</h3>
+            <Price amount={95.10} taxRate={0.35} />
+            <Price amount={29.90} taxRate={0.12} />
+            <Price amount={150.00} taxRate={0.50} />
+          </section>
+        )}
 
-        <section
-          style={{ display: selectedExample === 'conditional' ? 'block' : 'none' }}>
-          <h3>5) Conditional rendering</h3>
-          <UserStatus user={adminUser} />
-          <UserStatus user={regularUser} />
-          <UserStatus user={null} />
-        </section>
+        {selectedExample === 'conditional' && (
+          <section>
+            <h3>5) Conditional rendering</h3>
+            <UserStatus user={adminUser} />
+            <UserStatus user={regularUser} />
+            <UserStatus user={null} />
+          </section>
+        )}
 
-        <section
-          style={{ display: selectedExample === 'listsMap' ? 'block' : 'none' }}>
-          <h3>6) Render lists (map)</h3>
-          <TodoList todos={sampleTodos} />
-        </section>
+        {selectedExample === 'listsMap' && (
+          <section>
+            <h3>6) Render lists (map)</h3>
+            <TodoList todos={sampleTodos} />
+          </section>
+        )}
 
-        <section
-          style={{ marginTop: 12, display: selectedExample === 'listsLoop' ? 'block' : 'none' }}>
-          <h3>6b) Render lists (for loop)</h3>
-          <TodoListWithLoop todos={sampleTodos} />
-        </section>
+        {selectedExample === 'listsLoop' && (
+          <section style={{ marginTop: 12 }}>
+            <h3>6b) Render lists (for loop)</h3>
+            <TodoListWithLoop todos={sampleTodos} />
+          </section>
+        )}
 
-        <section
-          style={{ display: selectedExample === 'functionsReturn' ? 'block' : 'none' }}>
-          <h3>7) Functions that return JSX - PR Reviews</h3>
-          <PRsReview reviews={reviews} />
-        </section>
+        {selectedExample === 'functionsReturn' && (
+          <section>
+            <h3>7) Functions that return JSX - PR Reviews</h3>
+            <PRsReview reviews={reviews} />
+          </section>
+        )}
 
-        <section
-          style={{ display: selectedExample === 'props' ? 'block' : 'none' }}>
-          <h3>8) Props (Properties) - Product Cards</h3>
-          <p>Cart: {cart.length} items - {cart.join(', ')}</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            <ProductCard
-              name="Laptop"
-              price={999.99}
-              category="Electronics"
-              inStock={true}
-              onAddToCart={handleAddToCart}
-              imageUrl="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300&h=300&fit=crop"
-            />
-
-            <ProductCard
-              name="Coffee Mug"
-              price={12.50}
-              category="Kitchen"
-              inStock={true}
-              onAddToCart={handleAddToCart}
-              imageUrl="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=300&h=300&fit=crop"
-            />
-
-            <ProductCard
-              name="Headphones"
-              price={199.99}
-              category="Electronics"
-              inStock={false}
-              onAddToCart={handleAddToCart}
-              imageUrl="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop"
-            />
-
-            <ProductCard
-              name="Mystery Box"
-              price={49.99}
-              onAddToCart={handleAddToCart}
-              imageUrl="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=300&h=300&fit=crop"
-            />
-          </div>
-        </section>
-
-        <section
-          style={{ display: selectedExample === 'propsImproved' ? 'block' : 'none' }}>
-          <h3>8) Props (Properties) - Product Object Approach</h3>
-          <p>Cart: {cart.length} items - {cart.join(', ')}</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {products.map((product, index) => (
-              <ProductCardImproved
-                key={index}
-                product={product}
+        {selectedExample === 'props' && (
+          <section>
+            <h3>8) Props (Properties) - Product Cards</h3>
+            <p>Cart: {cart.length} items - {cart.join(', ')}</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              <ProductCard
+                name="Laptop"
+                price={999.99}
+                category="Electronics"
+                inStock={true}
                 onAddToCart={handleAddToCart}
+                imageUrl="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300&h=300&fit=crop"
               />
-            ))}
-          </div>
-        </section>
 
-        <section
-          style={{ display: selectedExample === 'events' ? 'block' : 'none' }}>
-          <h3>9) Event handlers</h3>
-          <EventHandling />
-        </section>
+              <ProductCard
+                name="Coffee Mug"
+                price={12.50}
+                category="Kitchen"
+                inStock={true}
+                onAddToCart={handleAddToCart}
+                imageUrl="https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=300&h=300&fit=crop"
+              />
 
+              <ProductCard
+                name="Headphones"
+                price={199.99}
+                category="Electronics"
+                inStock={false}
+                onAddToCart={handleAddToCart}
+                imageUrl="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop"
+              />
 
-        <section
-          style={{ display: selectedExample === 'parentChild' ? 'block' : 'none' }}>
-          <h3>10) Parent/Child</h3>
-          <Parent />
-        </section>
+              <ProductCard
+                name="Mystery Box"
+                price={49.99}
+                onAddToCart={handleAddToCart}
+                imageUrl="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=300&h=300&fit=crop"
+              />
+            </div>
+          </section>
+        )}
 
-        <section
-          style={{ display: selectedExample === 'controlled' ? 'block' : 'none' }}>
-          <h3>11) Controlled Components</h3>
-          <ControlledForm />
-        </section>
+        {selectedExample === 'propsImproved' && (
+          <section>
+            <h3>8) Props (Properties) - Product Object Approach</h3>
+            <p>Cart: {cart.length} items - {cart.join(', ')}</p>
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              {products.map((product, index) => (
+                <ProductCardImproved
+                  key={index}
+                  product={product}
+                  onAddToCart={handleAddToCart}
+                />
+              ))}
+            </div>
+          </section>
+        )}
 
-        <section
-          style={{ display: selectedExample === 'dynamic' ? 'block' : 'none' }}>
-          <h3>12) Dynamic attributes</h3>
-          <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
-            <Notification inputNotifications={notificationsList} onMarkAsRead={handleMarkAsRead} />
-            <pre style={{ flex: 1, backgroundColor: '#2d2d2d', color: '#f0f0f0', padding: '10px', borderRadius: '4px', fontSize: '12px', overflow: 'auto', margin: 0, textAlign: 'left' }}>
-              {JSON.stringify(notificationsList, null, 2)}
-            </pre>
-          </div>
-        </section>
+        {selectedExample === 'events' && (
+          <section>
+            <h3>9) Event handlers</h3>
+            <EventHandling />
+          </section>
+        )}
 
-        <section style={{ textAlign: 'left', fontSize: 25, marginTop: 12, display: selectedExample === 'spread' ? 'block' : 'none' }}>
-          <h3>13) Spread props</h3>
-          <div>
-            1. No attribute:
-            <TextInput />
-          </div>
-          <div>
-            2. Single attribute:
-            <TextInput placeholder="Type your name here" />
-          </div>
-          <div>
-            3. Disabled combo:
-            <TextInput value="Disabled value" disabled />
-          </div>
-          <div>
-            4. Controlled example:
-            <TextInput
-              value={textControlled}
-              onChange={(e) => setTextControlled(e.target.value)}
-              placeholder="Controlled input"
-              maxLength={50}
-              style={{ width: 320, padding: 6 }}
-            />
-            [{textControlled.length}]
-          </div>
-          <div>
-            5.Styled:
-            <TextInput
-              placeholder="Email or username"
-              inputMode="email"
-              className="form-input"
-              maxLength={100}
-              style={{
-                width: 250,
-                backgroundColor: '#0bea68ff',
-                border: '2px solid #4a90e2',
-                color: '#000000ff',
-                padding: '8px',
-                borderRadius: '15px',
-                fontFamily: 'monospace'
-              }}
-            />
-          </div>
-        </section>
+        {selectedExample === 'parentChild' && (
+          <section>
+            <h3>10) Parent/Child</h3>
+            <Parent />
+          </section>
+        )}
 
-        <section style={{ textAlign: 'left', fontSize: 25, marginTop: 12, display: selectedExample === 'spreadImproved' ? 'block' : 'none' }}>
-          <h3>13) Spread props combining [TextInputImproved]</h3>
-          <p>This component spreads props but overrides onChange to transform input to uppercase</p>
-          <div>
-            <TextInputImproved
-              value={textControlled}
-              onChange={(e) => setTextControlled(e.target.value)}
-              placeholder="Type something"
-              maxLength={50}
-              style={{
-                width: 250,
-                backgroundColor: '#0bea68ff',
-                border: '2px solid #4a90e2',
-                color: '#000000ff',
-                padding: '8px',
-                borderRadius: '6px',
-                fontFamily: 'monospace'
-              }}
-            />
-            <p>Value: {textControlled}</p>
-          </div>
-        </section>
+        {selectedExample === 'controlled' && (
+          <section>
+            <h3>11) Controlled Components</h3>
+            <ControlledForm />
+          </section>
+        )}
+
+        {selectedExample === 'dynamic' && (
+          <section>
+            <h3>12) Dynamic attributes</h3>
+            <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', justifyContent: 'flex-start' }}>
+              <Notification inputNotifications={notificationsList} onMarkAsRead={handleMarkAsRead} />
+              <pre style={{ flex: 1, backgroundColor: '#2d2d2d', color: '#f0f0f0', padding: '10px', borderRadius: '4px', fontSize: '12px', overflow: 'auto', margin: 0, textAlign: 'left' }}>
+                {JSON.stringify(notificationsList, null, 2)}
+              </pre>
+            </div>
+          </section>
+        )}
+
+        {selectedExample === 'spread' && (
+          <section style={{ textAlign: 'left', fontSize: 25, marginTop: 12 }}>
+            <h3>13) Spread props</h3>
+            <div>
+              1. No attribute:
+              <TextInput />
+            </div>
+            <div>
+              2. Single attribute:
+              <TextInput placeholder="Type your name here" />
+            </div>
+            <div>
+              3. Disabled combo:
+              <TextInput value="Disabled value" disabled />
+            </div>
+            <div>
+              4. Controlled example:
+              <TextInput
+                value={textControlled}
+                onChange={(e) => setTextControlled(e.target.value)}
+                placeholder="Controlled input"
+                maxLength={50}
+                style={{ width: 320, padding: 6 }}
+              />
+              [{textControlled.length}]
+            </div>
+            <div>
+              5.Styled:
+              <TextInput
+                placeholder="Email or username"
+                inputMode="email"
+                className="form-input"
+                maxLength={100}
+                style={{
+                  width: 250,
+                  backgroundColor: '#0bea68ff',
+                  border: '2px solid #4a90e2',
+                  color: '#000000ff',
+                  padding: '8px',
+                  borderRadius: '15px',
+                  fontFamily: 'monospace'
+                }}
+              />
+            </div>
+          </section>
+        )}
+
+        {selectedExample === 'spreadImproved' && (
+          <section style={{ textAlign: 'left', fontSize: 25, marginTop: 12 }}>
+            <h3>13) Spread props combining [TextInputImproved]</h3>
+            <p>This component spreads props but overrides onChange to transform input to uppercase</p>
+            <div>
+              <TextInputImproved
+                value={textControlled}
+                onChange={(e) => setTextControlled(e.target.value)}
+                placeholder="Type something"
+                maxLength={50}
+                style={{
+                  width: 250,
+                  backgroundColor: '#0bea68ff',
+                  border: '2px solid #4a90e2',
+                  color: '#000000ff',
+                  padding: '8px',
+                  borderRadius: '6px',
+                  fontFamily: 'monospace'
+                }}
+              />
+              <p>Value: {textControlled}</p>
+            </div>
+          </section>
+        )}
 
         {/* React Hooks Examples */}
-        <section style={{ display: selectedExample === 'useState' ? 'block' : 'none' }}>
-          <UseState />
-        </section>
+        {selectedExample === 'useState' && (
+          <section>
+            <UseState />
+          </section>
+        )}
 
-        <section style={{ display: selectedExample === 'useEffect' ? 'block' : 'none' }}>
-          <UseEffect />
-        </section>
+        {selectedExample === 'useEffect' && (
+          <section>
+            <UseEffect />
+          </section>
+        )}
 
-        <section style={{ display: selectedExample === 'useContextWithout' ? 'block' : 'none' }}>
-          <WithoutUseContext />
-        </section>
+        {selectedExample === 'useContextWithout' && (
+          <section>
+            <WithoutUseContext />
+          </section>
+        )}
 
-        <section style={{ display: selectedExample === 'useContextWith' ? 'block' : 'none' }}>
-          <WithUseContext />
-        </section>
+        {selectedExample === 'useContextWith' && (
+          <section>
+            <WithUseContext />
+          </section>
+        )}
 
-        <section style={{ display: selectedExample === 'useMemo' ? 'block' : 'none' }}>
-          <UseMemo />
-        </section>
+        {selectedExample === 'useMemo' && (
+          <section>
+            <UseMemo />
+          </section>
+        )}
 
       </div>
     </>

@@ -2514,115 +2514,212 @@ This demonstrates the core benefit of `useContext`: **avoiding prop drilling** b
 
 ##### useMemo Hook
 
-`useMemo` memoizes (caches) the result of an expensive calculation and only recalculates when dependencies change. It helps optimize performance by avoiding unnecessary recalculations on every render.
+`useMemo` is a React Hook that **memoizes** (caches) the result of a calculation between re-renders. It returns a cached value and only recalculates when one of its dependencies changes.
 
-**Syntax:**
-```jsx
-const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
-```
+**What is Memoization?**
 
-**Key Points:**
-* Returns memoized value, not a function
-* Only recalculates when dependencies change
-* Use for expensive calculations, not simple operations
-* Don't overuse - premature optimization can harm readability
-* Common use cases: filtering/sorting large lists, complex calculations
+Memoization is an optimization technique that stores the result of an expensive computation and returns the cached result when the same inputs occur again, instead of recalculating.
+
+**When to Use useMemo:**
+
+React components re-render when:
+- State changes
+- Props change
+- Parent component re-renders
+
+During each re-render, **all code inside the component function runs again**, including expensive calculations. `useMemo` prevents unnecessary recalculations by caching results.
 
 **Documentation:** [useMemo Reference](https://react.dev/reference/react/useMemo)
 
-**Example:**
+**Syntax:**
 
 ```jsx
-import { useState, useMemo } from 'react';
+const result = useMemo(
+  () => expensiveFunction(input), // Calculation function (returns a value)
+  [input] // Dependencies array
+);
+```
+
+- **First argument**: A function that returns the value to cache
+- **Second argument**: Array of dependencies to watch
+- **Returns**: The cached value (not a function!)
+
+1. **First render**: Executes the calculation function and caches the result
+2. **Subsequent re-renders**: 
+   - If dependencies **haven't changed** → returns cached value (fast!)
+   - If dependencies **have changed** → re-runs calculation and caches new result
+
+**Dependencies Array Behavior:**
+
+```jsx
+const cachedValue = useMemo(() => {
+  // Expensive calculation here
+  return computeExpensiveValue(a, b);
+}, [a, b]); // Dependencies array - recalculate only when a or b changes
+```
+
+| Dependencies | Behavior | Use Case |
+|--------------|----------|----------|
+| `[a, b]` | Recalculates when `a` or `b` changes | Most common - recalculate on specific changes |
+| `[]` | Calculates once, never again | One-time expensive initialization |
+| No array | Recalculates on every render | ❌ Don't do this - defeats the purpose! |
+
+**When to Use useMemo:**
+
+**Use when:**
+- Expensive calculations (complex math, large data processing)
+- Filtering/sorting/transforming large arrays
+- Creating objects/arrays passed as props to child components (prevents unnecessary re-renders)
+- Calculations that depend on specific values
+
+**Don't use when:**
+- Simple calculations (adding numbers, string concatenation)
+- Values that change on every render anyway
+- Premature optimization (measure first!)
+
+**Important Notes:**
+
+- `useMemo` returns a **value**, not a function
+- Use `useCallback` for memoizing functions instead
+- Memoization adds overhead - only use for truly expensive operations
+- React may discard memoized values during memory pressure (it's an optimization hint, not a guarantee)
+
+---
+
+**Example - Todo Statistics with Memoized Processing:**
+
+This example demonstrates `useMemo` by fetching 200 todos from JSONPlaceholder API and performing expensive statistical calculations that only run when the data actually changes.
+
+```jsx
+import { useState, useEffect, useMemo } from 'react';
 import './hooks.css';
 
 function UseMemo() {
-  const [count, setCount] = useState(0);
-  const [items] = useState(() =>
-    Array.from({ length: 1000 }, (_, i) => ({
-      id: i,
-      name: `Item ${i}`,
-      value: Math.floor(Math.random() * 1000)
-    }))
-  );
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [todos, setTodos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [renderCount, setRenderCount] = useState(0);
 
-  // Expensive calculation - only runs once
-  const expensiveCalculation = useMemo(() => {
-    console.log('Running expensive calculation...');
-    let result = 0;
-    for (let i = 0; i < 1000000; i++) {
-      result += i;
-    }
-    return result;
-  }, []); // Empty array = calculate once
-
-  // Filtered and sorted list
-  const sortedAndFilteredItems = useMemo(() => {
-    console.log('Sorting and filtering...');
-    const filtered = items.filter(item =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    return filtered.sort((a, b) => {
-      if (sortOrder === 'asc') {
-        return a.value - b.value;
-      } else {
-        return b.value - a.value;
+  // Fetch todos from API on component mount or when refreshTrigger changes
+  useEffect(() => {
+    const fetchTodos = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/todos');
+        const data = await response.json();
+        setTodos(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching todos:', error);
+        setLoading(false);
       }
-    });
-  }, [items, searchTerm, sortOrder]);
+    };
 
-  // Derived statistics
-  const statistics = useMemo(() => {
-    console.log('Calculating statistics...');
-    const values = sortedAndFilteredItems.map(item => item.value);
-    const sum = values.reduce((acc, val) => acc + val, 0);
-    const avg = values.length > 0 ? sum / values.length : 0;
+    fetchTodos();
+  }, [refreshTrigger]); // Re-fetch when refreshTrigger changes
 
-    return { sum, avg, count: values.length };
-  }, [sortedAndFilteredItems]);
+  // useMemo: Process todos to generate statistics
+  // This expensive calculation only runs when todos change, not on every render
+  const todoStats = useMemo(() => {
+    console.log('📊 Processing todo statistics...');
+    const completed = todos.filter(todo => todo.completed).length;
+    const pending = todos.length - completed;
+    const completionRate = todos.length > 0 ? ((completed / todos.length) * 100).toFixed(1) : 0;
+
+    // Group todos by userId using reduce
+    // summary starts as an empty object {}
+    // For each todo, we create/update a user entry with their stats
+    const byUser = todos.reduce((summary, todo) => {
+      // If this user doesn't exist in accumulator yet, initialize their stats
+      if (!summary[todo.userId]) {
+        summary[todo.userId] = { completed: 0, pending: 0, total: 0 };
+      }
+      // Increment total count for this user
+      summary[todo.userId].total++;
+      // Increment either completed or pending count based on todo status
+      if (todo.completed) {
+        summary[todo.userId].completed++;
+      } else {
+        summary[todo.userId].pending++;
+      }
+      // Return accumulator for next iteration
+      return summary;
+    }, {}); // Initial value: empty object
+
+    return {
+      total: todos.length,
+      completed,
+      pending,
+      completionRate,
+      byUser
+    };
+  }, [todos]); // Only recalculate when todos change
+
+  if (loading) return <div className="hook-example-section">Loading todos...</div>;
 
   return (
     <div className="hook-example-section">
-      <h3>useMemo Examples</h3>
-
+      <h3>useMemo Example - Todo Statistics</h3>
+      
       <div className="hook-example-section">
-        <h4>Trigger Re-render</h4>
-        <p>Count: {count} (triggers re-render but not recalculation)</p>
-        <button onClick={() => setCount(count + 1)}>Increment Count</button>
-        <p><small>Check console - memoized values don't recalculate!</small></p>
-      </div>
-
-      <div className="hook-example-section">
-        <h4>Filtered & Sorted Items</h4>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search items..."
-          className="use-memo-input"
-        />
-        <button onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>
-          Sort: {sortOrder === 'asc' ? '↑ Ascending' : '↓ Descending'}
+        <button onClick={() => setRefreshTrigger(refreshTrigger + 1)}>
+          Refresh Todos
         </button>
+        <button onClick={() => setRenderCount(renderCount + 1)} style={{ marginLeft: '10px' }}>
+          Force Re-render ({renderCount})
+        </button>
+        <p>
+          <small>
+            💡 "Refresh Todos" re-fetches and recalculates | "Force Re-render" just re-renders (check console)
+          </small>
+        </p>
 
-        <div className="use-memo-stats">
-          <h5>Statistics</h5>
-          <p>Count: {statistics.count}</p>
-          <p>Sum: {statistics.sum}</p>
-          <p>Average: {statistics.avg.toFixed(2)}</p>
+        <div className="use-memo-stats-grid">
+          <div className="use-memo-stat-card total">
+            <div className="use-memo-stat-value">{todoStats.total}</div>
+            <div className="use-memo-stat-label">Total Todos</div>
+          </div>
+          <div className="use-memo-stat-card completed">
+            <div className="use-memo-stat-value">{todoStats.completed}</div>
+            <div className="use-memo-stat-label">Completed</div>
+          </div>
+          <div className="use-memo-stat-card pending">
+            <div className="use-memo-stat-value">{todoStats.pending}</div>
+            <div className="use-memo-stat-label">Pending</div>
+          </div>
+          <div className="use-memo-stat-card rate">
+            <div className="use-memo-stat-value">{todoStats.completionRate}%</div>
+            <div className="use-memo-stat-label">Completion Rate</div>
+          </div>
         </div>
 
-        <div className="use-memo-items-container">
-          {sortedAndFilteredItems.slice(0, 20).map(item => (
-            <div key={item.id} className="use-memo-item">
-              {item.name} - Value: {item.value}
-            </div>
-          ))}
+        <h4>Statistics by User</h4>
+        <div className="use-memo-todos-container use-memo-table-container">
+          <table className="use-memo-table">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Total</th>
+                <th>Completed</th>
+                <th>Pending</th>
+                <th>Completion %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(todoStats.byUser).map(([userId, stats]) => (
+                <tr key={userId}>
+                  <td>User {userId}</td>
+                  <td className="center">{stats.total}</td>
+                  <td className="center completed-text">{stats.completed}</td>
+                  <td className="center pending-text">{stats.pending}</td>
+                  <td className="center">
+                    {((stats.completed / stats.total) * 100).toFixed(1)}%
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        <p>Showing 20 of {sortedAndFilteredItems.length} items</p>
       </div>
     </div>
   );
@@ -2631,4 +2728,13 @@ function UseMemo() {
 export default UseMemo;
 ```
 
+**Key Demonstration Points:**
+
+- **useEffect** handles the side effect (API fetch) and runs when `refreshTrigger` changes
+- **useMemo** handles expensive computation (filtering, grouping, calculating stats) and only runs when `todos` changes
+- **"Refresh Todos" button**: Changes `refreshTrigger` → triggers useEffect → fetches new data → todos change → useMemo recalculates
+- **"Force Re-render" button**: Changes `renderCount` → component re-renders → useMemo does NOT recalculate
+
 #### 15. Component Lifecycle
+
+#### 16. Routing

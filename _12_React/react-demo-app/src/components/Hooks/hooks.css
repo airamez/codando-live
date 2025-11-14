@@ -59,13 +59,271 @@
 }
 
 /* UseMemo specific styles */
+.use-memo-hint {
+  color: #666;
+}
+
+.use-memo-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .use-memo-input {
   margin-right: 8px;
-  padding: 4px;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.use-memo-select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.use-memo-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.use-memo-stat-card {
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.use-memo-stat-card.total {
+  background-color: #f0f0f0;
+}
+
+.use-memo-stat-card.completed {
+  background-color: #d4edda;
+}
+
+.use-memo-stat-card.pending {
+  background-color: #fff3cd;
+}
+
+.use-memo-stat-card.rate {
+  background-color: #d1ecf1;
+}
+
+.use-memo-stat-value {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.use-memo-stat-card.total .use-memo-stat-value {
+  color: #333;
+}
+
+.use-memo-stat-card.completed .use-memo-stat-value {
+  color: #28a745;
+}
+
+.use-memo-stat-card.pending .use-memo-stat-value {
+  color: #856404;
+}
+
+.use-memo-stat-card.rate .use-memo-stat-value {
+  color: #0c5460;
+}
+
+.use-memo-stat-label {
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.use-memo-stat-card.total .use-memo-stat-label {
+  color: #666;
+}
+
+.use-memo-stat-card.completed .use-memo-stat-label {
+  color: #155724;
+}
+
+.use-memo-stat-card.pending .use-memo-stat-label {
+  color: #856404;
+}
+
+.use-memo-stat-card.rate .use-memo-stat-label {
+  color: #0c5460;
+}
+
+.use-memo-table-container {
+  max-height: 400px;
+}
+
+.use-memo-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.use-memo-table thead tr {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.use-memo-table th {
+  padding: 10px;
+  text-align: left;
+  color: #000;
+}
+
+.use-memo-table th:not(:first-child) {
+  text-align: center;
+}
+
+.use-memo-table tbody tr {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.use-memo-table td {
+  padding: 10px;
+  color: #000;
+}
+
+.use-memo-table td.center {
+  text-align: center;
+}
+
+.use-memo-table td.completed-text {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.use-memo-table td.pending-text {
+  color: #ffc107;
+  font-weight: bold;
 }
 
 .use-memo-stats {
   margin-top: 10px;
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.use-memo-stats div {
+  padding: 5px 10px;
+}
+
+.use-memo-todos-container {
+  max-height: 600px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #ffffff;
+}
+
+.use-memo-todos-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.use-memo-todo-item {
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.use-memo-todo-item.completed {
+  text-decoration: line-through;
+  color: #888;
+  background-color: #f9f9f9;
+}
+
+.use-memo-todo-item.pending {
+  text-decoration: none;
+  color: #000;
+  background-color: #fff;
+}
+
+.use-memo-todo-id {
+  min-width: 50px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #555;
+}
+
+.use-memo-todo-status {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.use-memo-todo-status.done {
+  background-color: #28a745;
+}
+
+.use-memo-todo-status.pending {
+  background-color: #ffc107;
+}
+
+.use-memo-todo-title {
+  flex: 1;
+  font-size: 14px;
+  color: #000;
+}
+
+.use-memo-todo-title.completed {
+  color: #666;
+}
+
+.use-memo-todo-title.pending {
+  color: #000;
+}
+
+.use-memo-users {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.use-memo-user-card {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+  transition: box-shadow 0.2s;
+}
+
+.use-memo-user-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.use-memo-user-card h5 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.use-memo-user-card p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.use-memo-score {
+  color: #159ce4 !important;
+  font-weight: bold;
 }
 
 .use-memo-items-container {
