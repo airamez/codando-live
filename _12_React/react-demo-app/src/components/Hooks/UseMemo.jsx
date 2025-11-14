@@ -28,7 +28,6 @@ function UseMemo() {
   // useMemo: Process todos to generate statistics
   // This expensive calculation only runs when todos change, not on every render
   const todoStats = useMemo(() => {
-    console.log('📊 Processing todo statistics...');
     const completed = todos.filter(todo => todo.completed).length;
     const pending = todos.length - completed;
     const completionRate = todos.length > 0 ? ((completed / todos.length) * 100).toFixed(1) : 0;
