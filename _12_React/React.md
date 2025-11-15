@@ -3330,9 +3330,10 @@ function App() {
 
 ---
 
-##### Routing Example
+#### Routing Example
 
-This example demonstrates a complete routing implementation with authentication using React Router and the JSONPlaceholder API. The demo includes protected routes, nested routing, URL parameters, and login/logout functionality.
+* This example demonstrates a complete routing implementation with authentication using React Router and the JSONPlaceholder API.
+* The demo includes protected routes, nested routing, URL parameters, and login/logout functionality.
 
 **Features Demonstrated:**
 
@@ -3390,8 +3391,232 @@ RoutingApp (Main container with auth state)
 5. Explore user posts, view post details with comments
 6. Click Logout to clear authentication and return to home
 
+---
+
+**Key Code Snippets from the Example:**
+
+**1. ProtectedRoute Component (ProtectedRoute.jsx)**
+
+The core component that protects routes by checking authentication:
+
+```jsx
+import { Navigate, useLocation } from 'react-router-dom';
+
+function ProtectedRoute({ isAuthenticated, children }) {
+  const location = useLocation();
+  
+  // Check if user is authenticated
+  if (!isAuthenticated) {
+    // Not authenticated: Redirect to login and save attempted location
+    return <Navigate to="/routing/login" state={{ from: location }} replace />;
+  }
+  
+  // Authenticated: Render the protected component
+  return children;
+}
+```
+
+**How it works:**
+- Receives `isAuthenticated` (boolean) and `children` (the protected component)
+- If `isAuthenticated` is **false**: Returns `<Navigate>` component → redirects to login
+- If `isAuthenticated` is **true**: Returns `children` → renders the protected page
+- Saves the current location in state so user can be redirected back after login
+
+**2. Authentication State Management (RoutingApp.jsx)**
+
+Managing authentication state and logout functionality:
+
+```jsx
+function RoutingApp() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    navigate('/routing');
+  };
+
+  // Pass authentication state to routes
+  return (
+    <Routes>
+      <Route path="login" element={<Login setAuth={setIsAuthenticated} />} />
+      <Route path="dashboard" element={
+        <ProtectedRoute isAuthenticated={isAuthenticated}>
+          <Dashboard />
+        </ProtectedRoute>
+      } />
+    </Routes>
+  );
+}
+```
+
+**3. Login with Redirect (Login.jsx)**
+
+Authenticating and redirecting to the originally requested page:
+
+```jsx
+function Login({ setAuth }) {
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get the page user tried to access
+  const from = location.state?.from?.pathname || '/routing/dashboard';
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    
+    if (password === 'react') {
+      setAuth(true);
+      // Redirect to original destination
+      navigate(from, { replace: true });
+    }
+  };
+
+  return <form onSubmit={handleLogin}>{/* form fields */}</form>;
+}
+```
+
+**3. Protected Routes (RoutingApp.jsx)**
+
+Wrapping routes that require authentication:
+
+```jsx
+<Route 
+  path="users/*" 
+  element={
+    <ProtectedRoute isAuthenticated={isAuthenticated}>
+      <Users users={users} loading={loading} />
+    </ProtectedRoute>
+  } 
+/>
+
+<Route 
+  path="dashboard" 
+  element={
+    <ProtectedRoute isAuthenticated={isAuthenticated}>
+      <Dashboard />
+    </ProtectedRoute>
+  } 
+/>
+```
+
+**4. Nested Routes (Users.jsx)**
+
+Creating sub-routes within a parent route:
+
+```jsx
+function Users({ users, loading }) {
+  return (
+    <Routes>
+      {/* /routing/users - shows user list */}
+      <Route index element={<UsersList users={users} loading={loading} />} />
+      
+      {/* /routing/users/5 - shows posts for user 5 */}
+      <Route path=":userId" element={<UserPosts users={users} />} />
+    </Routes>
+  );
+}
+```
+
+**5. URL Parameters (UserPosts.jsx)**
+
+Accessing dynamic URL parameters:
+
+```jsx
+import { useParams } from 'react-router-dom';
+
+function UserPosts({ users }) {
+  const { userId } = useParams();  // Get userId from URL
+  
+  useEffect(() => {
+    // Fetch posts for specific user
+    fetch(`https://jsonplaceholder.typicode.com/users/${userId}/posts`)
+      .then(response => response.json())
+      .then(data => setPosts(data));
+  }, [userId]);
+  
+  return <div>{/* Display posts */}</div>;
+}
+```
+
+**6. Conditional Navigation (RoutingApp.jsx)**
+
+Showing different navigation based on authentication state:
+
+```jsx
+{isAuthenticated ? (
+  <button onClick={handleLogout} className="nav-button logout-button">
+    🚪 Logout
+  </button>
+) : (
+  <Link to="/routing/login">
+    <button className="nav-button">
+      🔑 Login
+    </button>
+  </Link>
+)}
+```
+
+**7. Data Fetching on Mount (RoutingApp.jsx)**
+
+Fetching data when component mounts:
+
+```jsx
+function RoutingApp() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(response => response.json())
+      .then(data => {
+        setUsers(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching users:', error);
+        setLoading(false);
+      });
+  }, []); // Empty array = run once on mount
+  
+  return <div>{/* Use users data */}</div>;
+}
+```
+
+**8. Dynamic Route Matching (PostComments.jsx)**
+
+Using URL parameters to fetch specific data:
+
+```jsx
+import { useParams } from 'react-router-dom';
+
+function PostComments({ users }) {
+  const { postId } = useParams();  // Get postId from URL
+  const [post, setPost] = useState(null);
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    // Fetch post and comments based on postId
+    Promise.all([
+      fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`).then(r => r.json()),
+      fetch(`https://jsonplaceholder.typicode.com/posts/${postId}/comments`).then(r => r.json())
+    ]).then(([postData, commentsData]) => {
+      setPost(postData);
+      setComments(commentsData);
+    });
+  }, [postId]);
+  
+  return <div>{/* Display post and comments */}</div>;
+}
+```
+
+---
+
 **Key Patterns Demonstrated:**
 
+* `useState` for managing authentication and data state
 * `useNavigate` for programmatic navigation after login/logout
 * `useLocation` to save and redirect to attempted page after login
 * `useParams` for accessing URL parameters (userId, postId)
@@ -3399,6 +3624,7 @@ RoutingApp (Main container with auth state)
 * Protected route wrapper component pattern
 * Nested routing with `<Routes>` inside child components
 * Conditional UI rendering based on authentication state
+* API integration with JSONPlaceholder
 
 ---
 

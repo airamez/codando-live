@@ -6,6 +6,7 @@ import PostComments from './PostComments';
 import Login from './Login';
 import Dashboard from './Dashboard';
 import ProtectedRoute from './ProtectedRoute';
+import NotFound from './NotFound';
 import './Routing.css';
 
 function RoutingApp() {
@@ -77,6 +78,8 @@ function RoutingApp() {
       </div>
 
       <div className="routing-content">
+        {/* Routes component is not visible itself, but it renders one of the route components below based on the URL */}
+        {/* The rendered component (Users, AllPosts, Dashboard, etc.) appears here inside this div */}
         <Routes>
           <Route index element={
             <div className="home-welcome">
@@ -133,6 +136,9 @@ function RoutingApp() {
               </ProtectedRoute>
             }
           />
+
+          {/* Catch-all route for 404 - must be last */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </div>
