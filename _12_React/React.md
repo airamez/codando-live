@@ -3127,7 +3127,7 @@ function Layout() {
           <Link to="/about">About</Link>
           <Link to="/products">Products</Link>
         </nav>
-      </header>
+      </header>https://www.youtube.com/live/zrCNTf95p7g
       
       <main>
         {/* Child routes render here */}
@@ -3628,8 +3628,430 @@ function PostComments({ users }) {
 
 ---
 
-#### 15. React Development Tools
+#### 16. React Development Tools
 
-https://react.dev/learn/react-developer-tools
+React Developer Tools is an essential browser extension for debugging and optimizing React applications. It adds React-specific debugging capabilities to your browser's developer tools, allowing you to inspect the React component tree, view and edit props/state, and identify performance issues.
 
-![React Dev Tools](./images/react-dev-tools.png)
+**Documentation:**
+
+* [React Developer Tools - Official Guide](https://react.dev/learn/react-developer-tools) - Complete guide to using React DevTools
+* [GitHub Repository](https://github.com/facebook/react/tree/main/packages/react-devtools) - Source code and detailed documentation
+
+---
+
+##### Installation
+
+**Browser Extension** (Recommended):
+
+The easiest way to debug React applications is to install the React Developer Tools browser extension:
+
+* **Chrome**: [Chrome Web Store](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi)
+* **Firefox**: [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/)
+* **Edge**: [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/react-developer-tools/gpphkfbcpidddadnkolkpfckpihlkkil)
+
+**Standalone Application**:
+
+For React Native, Safari, or other environments, you can use the standalone version:
+
+```bash
+npm install -g react-devtools
+# Then run
+react-devtools
+```
+
+**Console Warning:**
+
+When you open a React application without the extension installed, you'll see this warning in the browser console:
+
+![React Dev Tools Warning](./images/react-dev-tools.png)
+
+**Chrome Extension Install:**
+
+![React Dev Tools Chrome Extension](./images/react-dev-tools-chrome.png)
+
+---
+
+##### Using React DevTools
+
+After installing the extension, open your React app and press F12 to open browser DevTools. You'll see two new tabs:
+
+* **⚛️ Components** - Inspect component tree, props, state, and hooks
+* **⚛️ Profiler** - Analyze rendering performance
+
+---
+
+##### Components Tab
+
+**Inspecting Components:**
+
+* Browse the component tree hierarchy
+* Search for components by name
+* Click any component to view its details in the right panel:
+  * **Props** - All props passed to the component
+  * **State** - Current state values
+  * **Hooks** - All hooks (useState, useEffect, useContext, etc.)
+  * **Source** - Jump to component source code
+
+**Editing for Testing:**
+
+You can directly edit props and state values to test components:
+
+1. Select a component in the tree
+2. In the right panel, click on any state or prop value
+3. Edit the value and press Enter
+4. The component re-renders with the new value
+
+This is useful for testing edge cases without modifying code.
+
+**Other Features:**
+
+* Hover over components to highlight them on the page
+* Use the element picker icon to select components by clicking on the page
+* Selected component is available in console as `$r` (access `$r.props`, `$r.state`)
+
+---
+
+##### Profiler Tab
+
+**Analyzing Performance:**
+
+1. Click the **Record** button
+2. Interact with your app (click, type, navigate)
+3. Click **Stop**
+4. View results in three modes:
+
+**Flamegraph View:**
+* Horizontal bars show render times
+* Wider bars = slower components
+* Colors: Yellow/Red = slow, Blue/Green = fast
+
+**Ranked View:**
+* Components sorted by render time (slowest first)
+* Shows render count and identifies unnecessary re-renders
+
+**Component Chart:**
+* Timeline of when components rendered
+* Shows rendering patterns and cascading updates
+
+**Performance Tips:**
+
+For slow or frequently re-rendering components, try:
+* Wrap expensive calculations in `useMemo`
+* Wrap callback functions in `useCallback`
+* Wrap child components in `React.memo`
+* Move state closer to where it's used
+
+---
+
+#### 17. TSX: TypeScript XML
+
+TSX is the TypeScript equivalent of JSX - it allows you to write type-safe React components using TypeScript syntax. While JSX files use the `.jsx` extension, TSX files use `.tsx`.
+
+**Key Differences: JSX vs TSX**
+
+| Aspect | JSX (JavaScript) | TSX (TypeScript) |
+|--------|------------------|------------------|
+| **File Extension** | `.jsx` | `.tsx` |
+| **Type Safety** | No type checking | Full TypeScript type checking |
+| **Props Typing** | Optional (PropTypes) | Required TypeScript interfaces/types |
+| **Errors** | Runtime errors | Compile-time errors |
+| **IDE Support** | Basic autocomplete | Advanced IntelliSense with types |
+
+**Why Use TSX?**
+
+* **Type Safety**: Catch errors during development, not runtime
+* **Better IDE Support**: Autocomplete, refactoring, inline documentation
+* **Self-Documenting Code**: Types serve as documentation
+* **Refactoring Confidence**: TypeScript catches breaking changes
+* **Team Collaboration**: Clear contracts between components
+
+---
+
+##### Basic TSX Syntax
+
+**Simple Component with Props:**
+
+```tsx
+interface ProductProps {
+  id: number;
+  description: string;
+  price: number;
+  expirationDate: Date;
+  discount: number;
+}
+
+function Product(props: ProductProps) {
+  return (
+    <div>
+      <h3>Product #{props.id}</h3>
+      <p>{props.description}</p>
+      <p>Price: ${props.price.toFixed(2)}</p>
+      <p>Expires: {props.expirationDate.toLocaleDateString()}</p>
+      <p>Discount: {props.discount}%</p>
+    </div>
+  );
+}
+
+// Pass full object using spread operator
+const product: ProductProps = {
+  id: 1,
+  description: "Wireless Mouse",
+  price: 29.99,
+  expirationDate: new Date('2026-12-31'),
+  discount: 10
+};
+<Product {...product} />
+
+
+// Pass props individually
+<Product 
+  id={1} 
+  description="Wireless Mouse" 
+  price={29.99} 
+  expirationDate={new Date('2026-12-31')}
+  discount={10}
+/>
+
+```
+
+**Event Handlers with Proper Types:**
+
+```tsx
+import { useState, ChangeEvent, FormEvent } from 'react';
+
+function MyForm() {
+  const [email, setEmail] = useState<string>('');
+  
+  // Typed event handler for input
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+  
+  // Typed event handler for form submit
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('Email:', email);
+  };
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="email" value={email} onChange={handleChange} />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+**Common TypeScript Types for React**
+
+```tsx
+import {
+  ReactNode,           // Any valid React content
+  ReactElement,        // React element (JSX)
+  CSSProperties,       // Inline style object
+  ChangeEvent,         // Input change events
+  FormEvent,           // Form events
+  MouseEvent,          // Mouse events
+  KeyboardEvent,       // Keyboard events
+  HTMLInputElement,    // Input element type
+  HTMLButtonElement,   // Button element type
+  HTMLFormElement,     // Form element type
+} from 'react';
+```
+
+**Props with Optional Properties:**
+
+```tsx
+interface ProductCardProps {
+  id: number;
+  description: string;
+  price: number;
+  expirationDate?: Date;  // Optional property
+  discount?: number;      // Optional property
+}
+
+function ProductCard(props: ProductCardProps) {
+  return (
+    <div>
+      <h3>Product #{props.id}</h3>
+      <p>{props.description}</p>
+      <p>Price: ${props.price.toFixed(2)}</p>
+      
+      {/* Conditional rendering for optional properties */}
+      {props.expirationDate && (
+        <p>Expires: {props.expirationDate.toLocaleDateString()}</p>
+      )}
+      
+      {props.discount && (
+        <p>Discount: {props.discount}%</p>
+      )}
+    </div>
+  );
+}
+
+// Usage examples:
+
+// Minimal - only required props
+<ProductCard id={1} description="Mouse" price={29.99} />
+
+// With optional expiration
+<ProductCard 
+  id={2} 
+  description="Keyboard" 
+  price={89.99} 
+  expirationDate={new Date('2026-12-31')}
+/>
+
+// With all properties
+<ProductCard 
+  id={3} 
+  description="Monitor" 
+  price={299.99} 
+  expirationDate={new Date('2027-06-30')}
+  discount={15}
+/>
+
+// Using spread operator
+const product: ProductCardProps = {
+  id: 4,
+  description: "USB Hub",
+  price: 49.99,
+  discount: 10
+};
+<ProductCard {...product} />
+```
+
+##### React Hooks with TypeScript
+
+**useState with explicit types:**
+
+```tsx
+import { useState } from 'react';
+
+// Explicit type (when initial value is null/undefined)
+interface User {
+  name: string;
+  email: string;
+}
+const [user, setUser] = useState<User | null>(null);
+
+// Array state
+const [items, setItems] = useState<string[]>([]);
+
+// Object state
+interface FormData {
+  name: string;
+  email: string;
+}
+const [formData, setFormData] = useState<FormData>({
+  name: '',
+  email: ''
+});
+```
+
+**useEffect**
+
+```tsx
+import { useState, useEffect } from 'react';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+function UserList() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    // Fetch users from API
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/users');
+        const data: User[] = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []); // Empty array = runs once on mount
+
+  if (loading) return <div>Loading...</div>;
+
+  return (
+    <ul>
+      {users.map(user => (
+        <li key={user.id}>
+          {user.name} - {user.email}
+        </li>
+      ))}
+    </ul>
+  );
+}
+```
+
+**useContext**
+
+```tsx
+import { createContext, useContext, ReactNode } from 'react';
+
+interface User {
+  name: string;
+  email: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+  login: (user: User) => void;
+  logout: () => void;
+}
+
+// Create context with type
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Provider component
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User | null>(null);
+
+  const login = (user: User) => setUser(user);
+  const logout = () => setUser(null);
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+// Custom hook to use context
+function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
+}
+```
+
+---
+
+**Key Takeaways:**
+
+* TSX = JSX + TypeScript type safety
+* All React code remains the same, just add types
+* Props, state, and events need type definitions
+* TypeScript catches errors before runtime
+* Better developer experience with autocomplete and documentation
+* Gradual migration: Convert files one at a time from `.jsx` to `.tsx`
+---
+
+
