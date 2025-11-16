@@ -25,8 +25,6 @@ import UseEffect from './components/Hooks/UseEffect'
 import UseMemo from './components/Hooks/UseMemo'
 import WithoutUseContext from './components/Hooks/UseContext/WithoutUseContext/MainPage'
 import WithUseContext from './components/Hooks/UseContext/WithUseContext/MainPage'
-import RoutingApp from './components/routing/RoutingApp'
-
 
 function App() {
 

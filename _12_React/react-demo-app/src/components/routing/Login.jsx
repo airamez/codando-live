@@ -47,7 +47,7 @@ function Login({ setAuth }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            placeholder="Enter password: React"
+            placeholder="Enter password: react"
           />
         </div>
 
