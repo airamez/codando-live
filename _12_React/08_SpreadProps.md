@@ -1,4 +1,4 @@
-# 13. Spread props
+# Spread props
 
 The spread operator (`{...props}`) allows you to forward all props from a parent component to a child element or component in a single expression. This is especially useful when creating wrapper or passthrough components that need to support all the attributes of the underlying element without explicitly listing each one.
 

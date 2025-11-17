@@ -1,4 +1,4 @@
-# 17. TSX: TypeScript XML
+# TSX: TypeScript XML
 
 TSX is the TypeScript equivalent of JSX - it allows you to write type-safe React components using TypeScript syntax. While JSX files use the `.jsx` extension, TSX files use `.tsx`.
 

@@ -1,4 +1,4 @@
-# 11. Controlled Components
+# Controlled Components
 
 Controlled components are form inputs whose values are controlled by React state. The component's state becomes the "single source of truth" for the input value.
 

@@ -1,4 +1,4 @@
-# 15. Routing
+# Routing
 
 **What is Routing in Front-End Development?**
 

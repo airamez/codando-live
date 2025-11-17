@@ -1,4 +1,4 @@
-# 16. React Development Tools
+# React Development Tools
 
 React Developer Tools is an essential browser extension for debugging and optimizing React applications. It adds React-specific debugging capabilities to your browser's developer tools, allowing you to inspect the React component tree, view and edit props/state, and identify performance issues.
 

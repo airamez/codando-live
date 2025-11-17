@@ -1,4 +1,4 @@
-# 8. Props (Properties)
+# Props (Properties)
 
 **Props (properties)** are how components [receive data from their parent components](https://react.dev/learn/passing-props-to-a-component). They enable component composition, reusability, and the unidirectional data flow that makes React predictable.
 

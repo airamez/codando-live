@@ -1,4 +1,4 @@
-# 12. Dynamic attributes
+# Dynamic attributes
 
 Dynamic attributes allow you to compute `className` and inline `style` values based on props or state, enabling dynamic styling that responds to component data. Instead of hardcoding CSS classes or styles, you can calculate them using JavaScript expressions, making your UI interactive and adaptive.
 

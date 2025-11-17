@@ -1,4 +1,4 @@
-# 10. Parent/Child communication
+# Parent/Child communication
 
 Parent/Child communication demonstrates how data and functions flow between components in React's unidirectional architecture. Parents pass data and callback functions to children via props, and children notify parents of user actions by invoking those callbacks.
 

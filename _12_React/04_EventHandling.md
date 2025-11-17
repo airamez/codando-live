@@ -1,4 +1,4 @@
-# 9. Event Handling
+# Event Handling
 
 Attach handlers (onClick, onChange) and use hooks like `useState` to respond to user actions.
 
