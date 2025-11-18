@@ -43,33 +43,48 @@
 The classes are organized by module/topic for easier navigation:
 
 ### Core Programming & Fundamentals
-* [C# Programming (Classes 2-93)](./_01_Classes_CSharp_Programming.md) - Basic syntax, control flow, arrays, modularization
-* [Object-Oriented Programming (Classes 94-114)](./_02_Classes_OOP.md) - OOP concepts, inheritance, polymorphism
-* [Data Structures (Classes 137-206)](./_03_Classes_DataStructures.md) - Linked lists, trees, graphs, heaps
-* [Algorithms (Classes 207-220)](./_04_Classes_Algorithms.md) - Big O, searching, sorting
-* [Advanced C# (Classes 221-270)](./_05_Classes_CSharp_Advanced.md) - Generics, collections, LINQ, async programming
+
+| Module | Classes | Description | Link |
+|--------|---------|-------------|------|
+| C# Programming | 2-93 | Basic syntax, control flow, arrays, modularization | [View Module](./_01_CSharp_Programming.md) |
+| Object-Oriented Programming | 94-114 | OOP concepts, inheritance, polymorphism | [View Module](./_02_OOP.md) |
+| Data Structures | 137-206 | Linked lists, trees, graphs, heaps | [View Module](./_03_DataStructures.md) |
+| Algorithms | 207-220 | Big O, searching, sorting | [View Module](./_04_Algorithms.md) |
+| Advanced C# | 221-270 | Generics, collections, LINQ, async programming | [View Module](./_05_CSharp_Advanced.md) |
 
 ### Database & Data Access
-* [SQL (Classes 271-292)](./_06_Classes_SQL.md) - Database fundamentals, queries, stored procedures
-* [ADO.NET (Classes 294-311)](./_07_Classes_ADONET.md) - Data access with ADO.NET
-* [Entity Framework (Classes 310-311)](./_07_Classes_ADONET.md#entity-framework) - ORM and Entity Framework
+
+| Module | Classes | Description | Link |
+|--------|---------|-------------|------|
+| SQL | 271-292 | Database fundamentals, queries, stored procedures | [View Module](./_06_SQL.md) |
+| ADO.NET | 294-311 | Data access with ADO.NET | [View Module](./_07_ADONET.md) |
+| Entity Framework | 310-311 | ORM and Entity Framework | [View Section](./_07_ADONET.md#entity-framework) |
 
 ### Web Development
-* [ASP.NET Web API (Classes 312-321)](./_08_Classes_WebAPI.md) - RESTful APIs, authentication, controllers
-* [HTML & CSS (Class 322)](./_09_Classes_Web_Frontend.md#html--css) - Web page structure and styling
-* [JavaScript (Classes 323-332)](./_09_Classes_Web_Frontend.md#javascript) - Client-side programming
-* [TypeScript (Classes 333-337)](./_09_Classes_Web_Frontend.md#typescript) - Type-safe JavaScript
-* [Angular (Classes 338-353)](./_10_Classes_Angular.md) - Angular framework
-* [React (Classes 356-377)](./_12_Classes_React.md) - React library and hooks
+
+| Module | Classes | Description | Link |
+|--------|---------|-------------|------|
+| ASP.NET Web API | 312-321 | RESTful APIs, authentication, controllers | [View Module](./_08_WebAPI.md) |
+| HTML & CSS | 322 | Web page structure and styling | [View Section](./_09_Web_Frontend.md#html--css) |
+| JavaScript | 323-332 | Client-side programming | [View Section](./_09_Web_Frontend.md#javascript) |
+| TypeScript | 333-337 | Type-safe JavaScript | [View Section](./_09_Web_Frontend.md#typescript) |
+| Angular | 338-353 | Angular framework | [View Module](./_10_Angular.md) |
+| React | 356-377 | React library and hooks | [View Module](./_12_React.md) |
 
 ### DevOps & Tools
-* [Docker (Classes 293, 354-355)](./_11_Classes_Docker.md) - Containerization
-* [Git & Version Control (Classes 89-93)](./_01_Classes_CSharp_Programming.md#git) - Version control basics
+
+| Module | Classes | Description | Link |
+|--------|---------|-------------|------|
+| Docker | 293, 354-355 | Containerization | [View Module](./_11_Docker.md) |
+| Git & Version Control | 89-93 | Version control basics | [View Section](./_01_CSharp_Programming.md#git) |
 
 ### Career & Professional Development
-* [Software Engineering Roles (Class 210)](./_01_Classes_CSharp_Programming.md#professional-development) - Understanding different SE roles
-* [Leadership (Class 220)](./_01_Classes_CSharp_Programming.md#professional-development) - Leadership skills
-* [Finding Jobs (Class 170)](./_01_Classes_CSharp_Programming.md#professional-development) - Job search strategies
+
+| Topic | Class | Description | Link |
+|-------|-------|-------------|------|
+| Software Engineering Roles | 210 | Understanding different SE roles | [View Section](./_01_CSharp_Programming.md#professional-development) |
+| Leadership | 220 | Leadership skills | [View Section](./_01_CSharp_Programming.md#professional-development) |
+| Finding Jobs | 170 | Job search strategies | [View Section](./_01_CSharp_Programming.md#professional-development) |
 
 ---
 
