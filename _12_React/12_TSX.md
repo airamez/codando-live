@@ -1,6 +1,6 @@
 # TSX: TypeScript XML
 
-TSX is the TypeScript equivalent of JSX - it allows you to write type-safe React components using TypeScript syntax. While JSX files use the `.jsx` extension, TSX files use `.tsx`.
+[TSX is the TypeScript](https://react.dev/learn/typescript) equivalent of JSX - it allows you to write type-safe React components using TypeScript syntax. While JSX files use the `.jsx` extension, TSX files use `.tsx`.
 
 **Key Differences: JSX vs TSX**
 
@@ -22,7 +22,78 @@ TSX is the TypeScript equivalent of JSX - it allows you to write type-safe React
 
 ---
 
-##### **Simple Component with Props:**
+## Setting Up TypeScript with React
+
+### Option 1: New React Project with TypeScript
+
+**Using Vite (Recommended):**
+```bash
+npm create vite@latest my-react-app -- --template react-ts
+cd my-react-app
+npm install
+npm run dev
+```
+
+**Using Create React App:**
+```bash
+npx create-react-app my-app --template typescript
+cd my-app
+npm start
+```
+
+### Option 2: Add TypeScript to Existing React Project
+
+**1. Install TypeScript and type definitions:**
+```bash
+npm install --save-dev typescript @types/react @types/react-dom
+```
+
+**2. Create `tsconfig.json` in project root:**
+```json
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
+```
+
+**3. Rename files from `.jsx` to `.tsx` and `.js` to `.ts`:**
+```bash
+# Example: rename a component
+mv src/App.jsx src/App.tsx
+mv src/main.jsx src/main.tsx
+```
+
+**4. Update `index.html` to reference `.tsx` file:**
+```html
+<script type="module" src="/src/main.tsx"></script>
+```
+
+**5. Start adding types to your components!**
+
+---
+
+## **Simple Component with Props:**
 
 ```tsx
 interface ProductProps {
@@ -66,7 +137,7 @@ const product: ProductProps = {
 
 ```
 
-##### **Event Handlers with Proper Types:**
+## **Event Handlers with Proper Types:**
 
 ```tsx
 import { useState, ChangeEvent, FormEvent } from 'react';
@@ -94,7 +165,7 @@ function MyForm() {
 }
 ```
 
-##### **Common TypeScript Types for React**
+## **Common TypeScript Types for React**
 
 ```tsx
 import {
@@ -111,7 +182,7 @@ import {
 } from 'react';
 ```
 
-##### **Props with Optional Properties:**
+## **Props with Optional Properties:**
 
 ```tsx
 interface ProductCardProps {
@@ -173,9 +244,9 @@ const product: ProductCardProps = {
 <ProductCard {...product} />
 ```
 
-##### React Hooks with TypeScript
+## React Hooks with TypeScript
 
-**useState with explicit types:**
+### **useState**
 
 ```tsx
 import { useState } from 'react';
@@ -201,7 +272,7 @@ const [formData, setFormData] = useState<FormData>({
 });
 ```
 
-**useEffect**
+### **useEffect**
 
 ```tsx
 import { useState, useEffect } from 'react';
@@ -247,7 +318,7 @@ function UserList() {
 }
 ```
 
-**useContext**
+### **useContext**
 
 ```tsx
 import { createContext, useContext, ReactNode } from 'react';
@@ -296,7 +367,7 @@ function useAuth() {
 
 ---
 
-**Key Takeaways:**
+## **Key Takeaways:**
 
 * TSX = JSX + TypeScript type safety
 * All React code remains the same, just add types
