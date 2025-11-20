@@ -25,6 +25,7 @@ import UseEffect from './components/Hooks/UseEffect'
 import UseMemo from './components/Hooks/UseMemo'
 import WithoutUseContext from './components/Hooks/UseContext/WithoutUseContext/MainPage'
 import WithUseContext from './components/Hooks/UseContext/WithUseContext/MainPage'
+import FluentUIDemo from './components/FluentUIDemo'
 
 function App() {
 
@@ -179,6 +180,7 @@ function App() {
           <option value="useContextWithout">16) Hooks - without useContext (Prop Drilling)</option>
           <option value="useContextWith">17) Hooks - useContext</option>
           <option value="useMemo">18) Hooks - useMemo</option>
+          <option value="fluentui">19) Fluent UI Components Demo</option>
         </select>
       </div>
 
@@ -461,6 +463,12 @@ function App() {
         {selectedExample === 'useMemo' && (
           <section>
             <UseMemo />
+          </section>
+        )}
+
+        {selectedExample === 'fluentui' && (
+          <section>
+            <FluentUIDemo />
           </section>
         )}
 

@@ -258,3 +258,76 @@ While AG Grid Community is free, AG Grid Enterprise is a premium data grid solut
 - Compliance or vendor support is required by your organization
 
 **Bottom Line**: For 90% of React applications, free libraries like Material-UI, Ant Design, or Fluent UI are production-ready and more than sufficient. Major companies like Netflix and Amazon use them successfully. Premium libraries are worth the investment primarily for specialized enterprise features and guaranteed support.
+
+## Getting Started: Installation Instructions
+
+### Installing Fluent UI React 9
+
+**Step 1: Install Fluent UI packages**
+```bash
+cd /path/to/your/react-project
+npm install @fluentui/react-components
+```
+
+**Step 2: Install the icons package (optional but recommended)**
+```bash
+npm install @fluentui/react-icons
+```
+
+**Step 3: Wrap your app with FluentProvider**
+
+Update your `src/main.jsx` or `src/App.jsx`:
+
+```jsx
+import { FluentProvider, webLightTheme } from '@fluentui/react-components';
+
+function App() {
+  return (
+    <FluentProvider theme={webLightTheme}>
+      {/* Your app content */}
+    </FluentProvider>
+  );
+}
+
+export default App;
+```
+
+**Available themes:**
+- `webLightTheme` - Light theme
+- `webDarkTheme` - Dark theme
+- `teamsLightTheme` - Microsoft Teams light theme
+- `teamsDarkTheme` - Microsoft Teams dark theme
+
+**Step 4: Start using components**
+
+```jsx
+import { Button, Input, Card } from '@fluentui/react-components';
+import { CalendarMonthRegular } from '@fluentui/react-icons';
+
+function MyComponent() {
+  return (
+    <Card>
+      <h2>Welcome to Fluent UI</h2>
+      <Input placeholder="Enter your name" />
+      <Button appearance="primary" icon={<CalendarMonthRegular />}>
+        Schedule Meeting
+      </Button>
+    </Card>
+  );
+}
+
+export default MyComponent;
+```
+
+**Common Components:**
+- `Button` - Buttons with various appearances (primary, subtle, outline)
+- `Input` - Text inputs
+- `Dropdown` - Select dropdowns
+- `Dialog` - Modal dialogs
+- `Card` - Container cards
+- `Menu` - Dropdown menus
+- `Tabs` - Tab navigation
+- `Table` - Data tables
+- `Checkbox`, `Radio`, `Switch` - Form controls
+
+**Documentation**: https://react.fluentui.dev/ - Comprehensive docs with live examples for all components
