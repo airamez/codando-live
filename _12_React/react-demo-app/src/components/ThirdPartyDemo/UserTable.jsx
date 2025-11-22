@@ -20,6 +20,8 @@ import {
   PhoneRegular,
   GlobeRegular,
   EditRegular,
+  ArrowUpRegular,
+  ArrowDownRegular,
 } from '@fluentui/react-icons';
 import { useStyles } from './styles';
 
@@ -41,8 +43,8 @@ function UserTable({
   const someSelected = users.some(user => selectedUsers.has(user.id)) && !allSelected;
 
   const getSortIcon = (column) => {
-    if (sortColumn !== column) return '';
-    return sortDirection === 'ascending' ? ' ▲' : ' ▼';
+    if (sortColumn !== column) return null;
+    return sortDirection === 'ascending' ? <ArrowUpRegular /> : <ArrowDownRegular />;
   };
 
   const getInitials = (name) => {
@@ -64,7 +66,7 @@ function UserTable({
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+      <div className={styles.tableHeaderContainer}>
         <h3>Users Table ({users.length} users)</h3>
         <Button
           appearance="primary"
@@ -76,16 +78,16 @@ function UserTable({
         </Button>
       </div>
 
-      <div className={styles.table} style={{ overflowX: 'auto' }}>
+      <div className={`${styles.table} ${styles.tableWrapper}`}>
         <Table size="small">
           <colgroup>
-            <col style={{ width: '50px' }} />
-            <col style={{ width: '200px' }} />
-            <col style={{ width: '150px' }} />
-            <col style={{ width: '250px' }} />
-            <col style={{ width: '160px' }} />
-            <col style={{ width: '170px' }} />
-            <col style={{ width: '100px' }} />
+            <col className={styles.colCheckbox} />
+            <col className={styles.colName} />
+            <col className={styles.colUsername} />
+            <col className={styles.colEmail} />
+            <col className={styles.colPhone} />
+            <col className={styles.colWebsite} />
+            <col className={styles.colActions} />
           </colgroup>
           <TableHeader>
             <TableRow>
@@ -97,46 +99,41 @@ function UserTable({
                 />
               </TableHeaderCell>
               <TableHeaderCell
-                className={styles.tableHeaderCell}
+                className={`${styles.tableHeaderCell} ${styles.sortableHeader}`}
                 onClick={() => onSort('name')}
-                style={{ cursor: 'pointer' }}
               >
                 <TableCellLayout media={<PersonRegular />}>
-                  Name{getSortIcon('name')}
+                  Name {getSortIcon('name')}
                 </TableCellLayout>
               </TableHeaderCell>
               <TableHeaderCell
-                className={styles.tableHeaderCell}
+                className={`${styles.tableHeaderCell} ${styles.sortableHeader}`}
                 onClick={() => onSort('username')}
-                style={{ cursor: 'pointer' }}
               >
-                Username{getSortIcon('username')}
+                Username {getSortIcon('username')}
               </TableHeaderCell>
               <TableHeaderCell
-                className={styles.tableHeaderCell}
+                className={`${styles.tableHeaderCell} ${styles.sortableHeader}`}
                 onClick={() => onSort('email')}
-                style={{ cursor: 'pointer' }}
               >
                 <TableCellLayout media={<MailRegular />}>
-                  Email{getSortIcon('email')}
+                  Email {getSortIcon('email')}
                 </TableCellLayout>
               </TableHeaderCell>
               <TableHeaderCell
-                className={styles.tableHeaderCell}
+                className={`${styles.tableHeaderCell} ${styles.sortableHeader}`}
                 onClick={() => onSort('phone')}
-                style={{ cursor: 'pointer' }}
               >
                 <TableCellLayout media={<PhoneRegular />}>
-                  Phone{getSortIcon('phone')}
+                  Phone {getSortIcon('phone')}
                 </TableCellLayout>
               </TableHeaderCell>
               <TableHeaderCell
-                className={styles.tableHeaderCell}
+                className={`${styles.tableHeaderCell} ${styles.sortableHeader}`}
                 onClick={() => onSort('website')}
-                style={{ cursor: 'pointer' }}
               >
                 <TableCellLayout media={<GlobeRegular />}>
-                  Website{getSortIcon('website')}
+                  Website {getSortIcon('website')}
                 </TableCellLayout>
               </TableHeaderCell>
               <TableHeaderCell className={styles.tableHeaderCell}>
@@ -191,7 +188,7 @@ function UserTable({
           </TableBody>
         </Table>
         {users.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '24px' }}>
+          <div className={styles.emptyState}>
             <Body1>No users found</Body1>
           </div>
         )}

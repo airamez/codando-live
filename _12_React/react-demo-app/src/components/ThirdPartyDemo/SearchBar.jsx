@@ -12,7 +12,7 @@ function SearchBar({ searchTerm, onSearchChange }) {
         contentBefore={<SearchRegular />}
         value={searchTerm}
         onChange={(e) => onSearchChange(e.target.value)}
-        style={{ minWidth: '300px', flex: 1 }}
+        className={styles.searchInput}
       />
     </div>
   );

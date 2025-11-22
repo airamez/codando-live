@@ -78,4 +78,50 @@ export const useStyles = makeStyles({
     minWidth: '50px !important',
     padding: '8px !important',
   },
+  searchInput: {
+    minWidth: '300px',
+    flex: 1,
+  },
+  dialogFormContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+  },
+  tableHeaderContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '16px',
+  },
+  tableWrapper: {
+    overflowX: 'auto',
+  },
+  sortableHeader: {
+    cursor: 'pointer',
+  },
+  colCheckbox: {
+    width: '50px',
+  },
+  colName: {
+    width: '200px',
+  },
+  colUsername: {
+    width: '150px',
+  },
+  colEmail: {
+    width: '250px',
+  },
+  colPhone: {
+    width: '160px',
+  },
+  colWebsite: {
+    width: '170px',
+  },
+  colActions: {
+    width: '100px',
+  },
+  emptyState: {
+    textAlign: 'center',
+    padding: '24px',
+  },
 });

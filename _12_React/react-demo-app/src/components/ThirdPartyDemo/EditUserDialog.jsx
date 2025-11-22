@@ -10,8 +10,10 @@ import {
   Field,
   Input,
 } from '@fluentui/react-components';
+import { useStyles } from './styles';
 
 function EditUserDialog({ isOpen, user, onSave, onCancel }) {
+  const styles = useStyles();
   const [editUserName, setEditUserName] = useState('');
   const [editUserUsername, setEditUserUsername] = useState('');
   const [editUserEmail, setEditUserEmail] = useState('');
@@ -50,7 +52,7 @@ function EditUserDialog({ isOpen, user, onSave, onCancel }) {
         <DialogBody>
           <DialogTitle>Edit User</DialogTitle>
           <DialogContent>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className={styles.dialogFormContainer}>
               <Field label="Name" required>
                 <Input
                   value={editUserName}

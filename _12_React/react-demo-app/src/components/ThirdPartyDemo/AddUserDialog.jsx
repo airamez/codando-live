@@ -12,8 +12,10 @@ import {
   Input,
 } from '@fluentui/react-components';
 import { AddRegular } from '@fluentui/react-icons';
+import { useStyles } from './styles';
 
 function AddUserDialog({ onAddUser }) {
+  const styles = useStyles();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newUserName, setNewUserName] = useState('');
   const [newUserUsername, setNewUserUsername] = useState('');
@@ -57,7 +59,7 @@ function AddUserDialog({ onAddUser }) {
         <DialogBody>
           <DialogTitle>Add New User</DialogTitle>
           <DialogContent>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className={styles.dialogFormContainer}>
               <Field label="Name" required>
                 <Input
                   value={newUserName}
