@@ -25,7 +25,7 @@ import UseEffect from './components/Hooks/UseEffect'
 import UseMemo from './components/Hooks/UseMemo'
 import WithoutUseContext from './components/Hooks/UseContext/WithoutUseContext/MainPage'
 import WithUseContext from './components/Hooks/UseContext/WithUseContext/MainPage'
-import FluentUIDemo from './components/FluentUIDemo'
+import FluentUIDemo from './components/ThirdPartyDemo/FluentUIDemo'
 
 function App() {
 

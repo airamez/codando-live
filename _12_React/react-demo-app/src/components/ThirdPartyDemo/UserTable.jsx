@@ -20,8 +20,8 @@ import {
   PhoneRegular,
   GlobeRegular,
   EditRegular,
-  ArrowUpRegular,
-  ArrowDownRegular,
+  ArrowSortUpRegular,
+  ArrowSortDownRegular,
 } from '@fluentui/react-icons';
 import { useStyles } from './styles';
 
@@ -44,7 +44,7 @@ function UserTable({
 
   const getSortIcon = (column) => {
     if (sortColumn !== column) return null;
-    return sortDirection === 'ascending' ? <ArrowUpRegular /> : <ArrowDownRegular />;
+    return sortDirection === 'ascending' ? <ArrowSortUpRegular /> : <ArrowSortDownRegular />;
   };
 
   const getInitials = (name) => {
