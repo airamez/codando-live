@@ -36,28 +36,40 @@
 
 ## Course Content
 
-## Content
-
-* C#
-* Version Control: Git
-* Object Oriented Programming
-* Exceptions
-* Unit Testing
-* Data Structures
-* Sorting
-* Generics
-* Leetcode
-* .Net API
-* Advanced C# Topics
-* SQL
-* ADO.NET
-* Entity Framework
-* ASP.NET Web API
-* HTML + CSS
-* JavaScript
-* Docker
-* Angular
-* React
+|Topic|First class (YouTube URL)|Classes|
+|-----|-------------------------|-------|
+|C#|https://youtube.com/live/YEfi_kZcaeU|1-88|
+|Version Control: Git|https://youtube.com/live/4C2vMwHKLio|89-93|
+|Object Oriented Programming|https://youtube.com/live/x7lh9yk0zsE|94-124|
+|Exceptions|https://youtube.com/live/D-wn3EwYaZ8|125-129|
+|Unit Testing|https://youtube.com/live/OSU7h0UbdfQ|130-135|
+|Extras|https://youtube.com/live/GjYbssOcVuU|136|
+|Data Structures|https://youtube.com/live/8JaqXjNFl64|137-206|
+|Big O Notation|https://youtube.com/live/ZSjQvURU8Y0|207-208|
+|Binary Search|https://youtube.com/live/ifoK_ca3KCU|209|
+|Sorting|https://youtube.com/live/zgQ_HmCNUM4|211-219|
+|Generics|https://youtube.com/live/MQ5zRBlaZLg|221-225|
+|Generic Collections|https://youtube.com/live/P-8WX2bz1Pg|226-237|
+|Leetcode|https://youtube.com/live/kltsn2BluXg|237-242|
+|Lambda Expression|https://youtube.com/live/2HrfIn3CloA|253|
+|Delgate|https://youtube.com/live/EW-ojr1COvc|254|
+|LINQ|https://youtube.com/live/V7z7fRj7fK8|255|
+|Extension Methods|https://youtube.com/live/OnN0nAJe31w|256|
+|Regular Expression|https://youtube.com/live/9M2d8zZZkX4|257|
+|Async Programming|https://youtube.com/live/w8W8VteHIP0|258-267|
+|Functional Programming|https://youtube.com/live/MdA0iDI2oz0|268|
+|LRU - Least Recently Used|https://youtube.com/live/ZiO3IBHYYxE|269|
+|Serpent Console Game|https://youtube.com/live/ozPgE_k96pk|270|
+|SQL|https://youtube.com/live/eQ3Vwzlhkx8|271-292|
+|Intro to Containers and Docker|https://youtube.com/live/Y9WVTP-RDWY|293|
+|ADO.NET & Entity Framework|https://youtube.com/live/LKcr_8Gy8xc|294-311|
+|ASP.NET Web API|https://youtube.com/live/CtwsmXwpFUI|312-321|
+|HTML + CSS|https://youtube.com/live/aEE6lpbn3Bc|322|
+|JavaScript|https://youtube.com/live/bBsmvCYZwoY|323-332|
+|TypeScript|https://youtube.com/live/bBsmvCYZwoY|333-337|
+|Angular|https://youtube.com/live/T8kKY-l4PIk|338-353|
+|Docker|https://youtube.com/live/sYxaw7JK0L4|354-355|
+|React|https://youtube.com/live/xQzGnQwzZIg|356-381|
 
 ## Soft Skills
 
@@ -71,7 +83,6 @@
 |[Work Model (In-Person, Remote & Hybrid)](https://youtube.com/live/WiXj7NMhTD0)|
 |[Softare Engineering Roles](https://youtube.com/live/ub2gmYSeXZI)|
 |[Leadership](https://youtube.com/live/f0fDw6ERGWI)|
-|[SQL Injection](https://youtube.com/live/SoyrSa-aKPE)|
 
 ## Classes
 
